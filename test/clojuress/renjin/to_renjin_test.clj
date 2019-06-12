@@ -191,19 +191,6 @@
           ->clj)
       => ["abc" "def"])
 
-^{:refer clojuress.renjin.to-renjin/row-maps->named-columns-list :added "0.1"}
-(fact "Given a seqable of maps with the same keys,
-       considered rows of a table,
-       row-maps->named-columns-list creates a Renjin list of vectors
-       corresponding to rows of that table."
-
-      (-> [{:x 1 :y 2 :z "A"}
-           {:x 3 :y 4 :z "B"}]
-          row-maps->named-columns-list
-          ->clj)
-      => {:x [1.0 3.0], :y [2.0 4.0], :z ["A" "B"]})
-
-
 ^{:refer clojuress.renjin.to-renjin/->list-vector :added "0.1"}
 (fact "->list-vector converts a Clojure Seqable
        to a Renjin ListVector, converting elements by ->renjin."
@@ -233,3 +220,46 @@
           ->factor-vector
           ->clj)
       => [:abc :def])
+
+
+
+^{:refer clojuress.renjin.to-renjin/row-maps->named-columns-list :added "0.1"}
+(fact "Given a seqable of maps with the same keys,
+       considered rows of a table,
+       row-maps->named-columns-list creates a Renjin list of vectors
+       corresponding to columns of that table."
+
+      (-> [{:x 1 :y 2 :z "A"}
+           {:x 3 :y 4 :z "B"}]
+          row-maps->named-columns-list
+          type)
+      => ListVector
+
+      (-> [{:x 1 :y 2 :z "A"}
+           {:x 3 :y 4 :z "B"}]
+          row-maps->named-columns-list
+          ->clj)
+      => {:x [1.0 3.0],
+          :y [2.0 4.0],
+          :z ["A" "B"]})
+
+
+
+^{:refer clojuress.renjin.to-renjin/row-maps->df :added "0.1"}
+(fact "Given a seqable of maps with the same keys,
+       considered rows of a table,
+       row-maps->df creates a Renjin data.frame
+       corresponding to these data."
+
+      (-> [{:x 1 :y 2 :z "A"}
+           {:x 3 :y 4 :z "B"}]
+          row-maps->df
+          lang/->class)
+      => [:data.frame]
+
+      (-> [{:x 1 :y 2 :z "A"}
+           {:x 3 :y 4 :z "B"}]
+          row-maps->df
+          ->clj)
+      => [{:x 1.0 :y 2.0 :z "A"}
+          {:x 3.0 :y 4.0 :z "B"}])

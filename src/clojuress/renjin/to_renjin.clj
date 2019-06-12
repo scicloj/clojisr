@@ -3,7 +3,9 @@
             [clojuress.renjin.lang :refer [eval-expressions-impl ->env-impl]]
             [clojuress.renjin.util :refer [first-if-one fmap]]
             [clojure.walk :as walk]
-            [com.rpl.specter :as specter])
+            [com.rpl.specter :as specter]
+            [clojuress.renjin.lang :as lang]
+            [clojuress.renjin.engine :as engine])
   (:import (java.util List)
            (clojure.lang Named)
            org.renjin.invoke.reflection.converters.Converters
@@ -179,29 +181,6 @@
   (eval-expressions-impl ["factor(x)"]
                          (->env-impl {:x (->string-vector xs)})))
 
-(defn row-maps->named-columns-list
-  "Given a seqable of maps with the same keys,
-        considered rows of a table,
-        row-maps->named-columns-list creates a Renjin list of vectors
-        corresponding to rows of that table.
- 
-       (-> [{:x 1 :y 2 :z \"A\"}
-            {:x 3 :y 4 :z \"B\"}]
-           row-maps->named-columns-list
-           ->clj)
-       => {:x [1.0 3.0], :y [2.0 4.0], :z [\"A\" \"B\"]}"
-  {:added "0.1"}
-  [row-maps]
-  (->> row-maps
-       (mapcat keys)
-       distinct
-       (map (fn [k]
-              [(name k)
-               (map k row-maps)]))
-       ->named-list-vector))
-
-
-
 (defn ->renjin
   "->renjin converts Clojure data structures
         to corresponding Renjin objects.
@@ -346,4 +325,32 @@
         :else obj)
       (Converters/fromJava)))
 
+
+(defn row-maps->named-columns-list
+  "Given a seqable of maps with the same keys,
+        considered rows of a table,
+        row-maps->named-columns-list creates a Renjin list of vectors
+        corresponding to rows of that table.
+
+       (-> [{:x 1 :y 2 :z \"A\"}
+            {:x 3 :y 4 :z \"B\"}]
+           row-maps->named-columns-list
+           ->clj)
+       => {:x [1.0 3.0], :y [2.0 4.0], :z [\"A\" \"B\"]}"
+  {:added "0.1"}
+  [row-maps]
+  (->> row-maps
+       (mapcat keys)
+       distinct
+       (map (fn [k]
+              [(name k)
+               (map k row-maps)]))
+       ->named-list-vector))
+
+(defn row-maps->df [row-maps]
+  (lang/apply-function-impl (engine/reval
+                             "function(columns) data.frame(columns, stringsAsFactors =FALSE)")
+                            (lang/->env-impl
+                             {:columns (row-maps->named-columns-list
+                                        row-maps)})))
 
