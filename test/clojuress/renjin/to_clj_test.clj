@@ -4,8 +4,6 @@
             [clojuress.renjin.to-clj :refer :all]
             [hara.test :refer :all]))
 
-
-
 ^{:refer clojuress.renjin.to-clj/->clj :added "0.1"}
 (fact
  "->clj converts Renjin objects
@@ -15,6 +13,9 @@
  (-> #inst "2016-01-01"
      ->clj)
  => #inst "2016-01-01"
+
+ (->clj nil)
+ => nil
 
  (->clj {:a 3})
  => {:a 3}

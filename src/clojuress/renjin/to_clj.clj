@@ -25,6 +25,9 @@
       ->clj)
   => #inst \"2016-01-01\"
  
+  (->clj nil)
+  => nil
+ 
   (->clj {:a 3})
   => {:a 3}
  
@@ -130,9 +133,9 @@
   => 'abc"
   {:added "0.1"}
   [obj]
-  (-> obj
-      -->clj
-      first-if-one))
+  (some-> obj
+          -->clj
+          first-if-one))
 
 (set! *warn-on-reflection* true)
 
@@ -175,7 +178,8 @@
        reval
        (renjin-vector->clj inc))
   => {:x 2.0 :y 3.0}"
-  {:added "0.1"} [transf v]
+  {:added "0.1"}
+  [transf v]
   (case (lang/->class v)
     [:data.frame] (df->maps v)
     (let [names (lang/->names v)]
@@ -220,3 +224,5 @@
   Clojable
   (-->clj [this]
     nil))
+
+
