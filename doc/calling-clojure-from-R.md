@@ -10,12 +10,27 @@ Demo
 
 ### Setup
 
+    library(magrittr) # for the %>% "pipe" operator
     options(java.parameters = c("-Xmx1g")) # Set your JVM options before running the JVM
     library(rJava)
     library(renjin) # Loading this library actually runs the JVM already.
 
     # Add the Clojuress JAR to the classpath.
     .jaddClassPath("../target/clojuress-0.1.0-SNAPSHOT-standalone.jar")
+
+Is there anything missing in the classpath?
+
+    jars_in_classpath <- renjin({
+      import(java.lang.Thread)
+      import(java.util.Arrays)
+      Arrays$asList(Thread$currentThread()$getContextClassLoader()$getURLs()) %>%
+        sapply(as.character)
+    }) %>%
+      gsub(pattern="file:", replacement="")
+
+    jars_in_classpath[!file.exists(jars_in_classpath)]
+
+    ## character(0)
 
 ### Running code
 
@@ -27,7 +42,8 @@ about this way of using Renjin, look
 [here](http://docs.renjin.org/en/latest/package/index.html) at the
 Renjin docs.
 
-    clj <- function(code) renjin({ # This block runs on the JVM through Renjin.
+    ## This function will be run on the JVM through Renjin.
+    clj_impl <- function(code) {
       import(clojure.java.api.Clojure)
       ## Given a qualified name of a clojure var, we can get its value.
       clj_get <- (function(name) Clojure$var(name))
@@ -42,9 +58,9 @@ Renjin docs.
       ##
       ## For example, let us invoke the clojure function 'comp':
       eval_read_string <-
-          comp$invoke(
-                   clj_eval,
-                   read_string)
+        comp$invoke(
+          clj_eval,
+          read_string)
       ## Using 'comp', we just composed two Clojure functions and got a new one, that:
       ## It reads a given string of clojure code,
       ## evaluates the corresponding form
@@ -56,10 +72,10 @@ Renjin docs.
       to_renjin <- clj_get("clojuress.renjin.to-renjin/->renjin")
       ## Let us create yet another function composition:
       eval_read_string_to_renjin <-
-          comp$invoke(
-                   to_renjin,
-                   clj_eval,
-                   read_string)
+        comp$invoke(
+          to_renjin,
+          clj_eval,
+          read_string)
       ## We just created a Clojure function that does the following:
       ## Reads a given string of clojure code,
       ## evaluates the corresponding form,
@@ -69,9 +85,12 @@ Renjin docs.
       ## Let us use this function to read, evaluate and convert the code we got:
       eval_read_string_to_renjin$invoke(code)
       ## The returned value of this block is the result of this evaluated.
-      ## It will be converted to an R object, if Renjin knows how.
-      ## For many datatypes, Renjin does know how.
-    })
+      # It will be converted to an R object, if Renjin knows how.
+      # For many datatypes, Renjin does know how.
+    }
+
+    #' @export
+    clj <- function(code) renjin(clj_impl(code))
 
 Let us try it:
 
@@ -94,38 +113,37 @@ The following function will allow us to use a clojure function as an R
 function. The R arguments are be converted to a Clojure data structure,
 and the return value is covnerted back from Clojure to R.
 
-    clj_fn <- function(fn_code) function(args) {
-        renjin({
-            import(clojure.java.api.Clojure)
-            clj_get <- (function(name) Clojure$var(name))
-            clj_core_get <- (function(name) Clojure$var("clojure.core", name))
-            clj_eval <- clj_core_get("eval")
-            require <- clj_core_get("require")
-            read_string <- clj_core_get("read-string")
-            comp <- clj_core_get("comp")
-            eval_read_string <-
-                comp$invoke(
-                         clj_eval,
-                         read_string)
-            eval_read_string$invoke("(require 'clojuress.renjin.to-renjin)")
-            to_renjin <- clj_get("clojuress.renjin.to-renjin/->renjin")
-            eval_read_string$invoke("(require 'clojuress.renjin.to-clj)")
-            to_clj <- clj_get("clojuress.renjin.to-clj/->clj")
-            eval_read_string_to_renjin <-
-                comp$invoke(
-                         to_renjin,
-                         clj_eval,
-                         read_string)
-            import(clojure.java.api.Clojure)
-            clj_core_get <- (function(name) Clojure$var("clojure.core", name))
-            fn_from_code <- eval_read_string_to_renjin$invoke(fn_code)
-            f <- comp$invoke(
-                          to_renjin,
-                          fn_from_code,
-                          to_clj)
-            f$invoke(args)
-        })
-    }
+    clj_fn_impl <-
+      function(fn_code) function(args) {
+        import(clojure.java.api.Clojure)
+        clj_get <- (function(name) Clojure$var(name))
+        clj_core_get <- (function(name) Clojure$var("clojure.core", name))
+        clj_eval <- clj_core_get("eval")
+        require <- clj_core_get("require")
+        read_string <- clj_core_get("read-string")
+        comp <- clj_core_get("comp")
+        eval_read_string <-
+          comp$invoke(
+            clj_eval,
+            read_string)
+        eval_read_string$invoke("(require 'clojuress.renjin.to-renjin)")
+        to_renjin <- clj_get("clojuress.renjin.to-renjin/->renjin")
+        eval_read_string$invoke("(require 'clojuress.renjin.to-clj)")
+        to_clj <- clj_get("clojuress.renjin.to-clj/->clj")
+        eval_read_string_to_renjin <-
+          comp$invoke(
+            clj_eval,
+            read_string)
+        fn_from_code <- eval_read_string$invoke(fn_code)
+        f <- comp$invoke(
+          to_renjin,
+          fn_from_code,
+          to_clj)
+        f$invoke(args)
+      }
+
+    #' @export
+    clj_fn <- function(fn_code) function(args) renjin(clj_fn_impl(fn_code)(args))
 
 Let us use it:
 
@@ -168,3 +186,5 @@ Let us use it:
 
 Discussion
 ----------
+
+TODO: Explain in detail the data conversion flow in the above examples.
