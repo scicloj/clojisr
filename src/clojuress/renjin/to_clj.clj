@@ -177,7 +177,7 @@
        reval
        (renjin-vector->clj inc))
   => [2.0 3.0]
-  
+ 
   (->> \"c(x=1,y=2)\"
        reval
        (renjin-vector->clj inc))

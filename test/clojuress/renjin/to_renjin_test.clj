@@ -178,33 +178,33 @@
       => {:a [1]
           :b ["A"]})
 
-^{:refer clojuress.renjin.to-renjin/->double-vector :added "0.1"}
+^{:refer clojuress.renjin.to-renjin/->numeric-vector :added "0.1"}
 (fact "Given a seqable of numbers,
-       ->double-vector creates a corresponding Renjin DoubleArrayVector
+       ->numeric-vector creates a corresponding Renjin DoubleArrayVector
        (representing an R vector)."
 
       (-> (range 4)
-          ->double-vector
+          ->numeric-vector
           type)
       => DoubleArrayVector
 
       (-> (range 4)
-          ->double-vector
+          ->numeric-vector
            ->clj)
       => [0.0 1.0 2.0 3.0])
 
-^{:refer clojuress.renjin.to-renjin/->int-vector :added "0.1"}
+^{:refer clojuress.renjin.to-renjin/->integer-vector :added "0.1"}
 (fact "Given a seqable of integers,
-       ->int-vector creates a corresponding Renjin IntArrayVector
+       ->integer-vector creates a corresponding Renjin IntArrayVector
        (representing an R vector)."
 
       (-> (range 4)
-          ->int-vector
+          ->integer-vector
           type)
       => IntArrayVector
 
       (-> (range 4)
-          ->int-vector
+          ->integer-vector
           ->clj)
       => (range 4))
 
@@ -223,18 +223,18 @@
           ->clj)
       => [true false false])
 
-^{:refer clojuress.renjin.to-renjin/->string-vector :added "0.1"}
+^{:refer clojuress.renjin.to-renjin/->character-vector :added "0.1"}
 (fact "Given a Seqable of Clojure strings/keywords,
-       ->string-vector creates a corresponding Renjin StringArrayVector
+       ->character-vector creates a corresponding Renjin StringArrayVector
        of their corresponding names."
 
       (-> ["abc" :def]
-          ->string-vector
+          ->character-vector
           type)
       => StringArrayVector
 
       (-> ["abc" :def]
-          ->string-vector
+          ->character-vector
           ->clj)
       => ["abc" "def"])
 
