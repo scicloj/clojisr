@@ -177,14 +177,14 @@
        reval
        (renjin-vector->clj inc))
   => [2.0 3.0]
- 
+  
   (->> \"c(x=1,y=2)\"
        reval
        (renjin-vector->clj inc))
   => {:x 2.0 :y 3.0}"
   {:added "0.1"}
   [transf v]
-  (if (= (lang/->class v) [:data.frame])
+  (if (some #(= % :data.frame) (lang/->class v))
     (df->maps v)
     (let [names (lang/->names v)
           dim   (lang/->attr v :dim)]
