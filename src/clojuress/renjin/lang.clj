@@ -201,7 +201,9 @@
   (-> sexp
        (.getAttribute (Symbol/get (name attr-name)))
        NULL->nil
-      (->> (mapv keyword))))
+       (->> (mapv #(if (string? %)
+                     (keyword %)
+                     %)))))
 
 (defn ->names
   "->names extracts the names attribute of a Renjin object

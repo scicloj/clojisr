@@ -34,16 +34,6 @@
   (->clj [:a :b])
   => [:a :b]
  
-  \"If the result of conversion is a single-element vector,
-   then as a last step, it is converted to its single object.\"
-  (->clj [:a])
-  => :a
- 
-  (-> \"1\"
-      reval
-      ->clj)
-  => 1.0
- 
   \"A Renjin data frame is converted to a sequence of maps.\"
   (-> \"data.frame(x=0:3,y=(0:3)^2)\"
       reval
@@ -53,13 +43,21 @@
       {:x 2, :y 4.0}
       {:x 3, :y 9.0}]
  
+  \"A Renjin matrix frame is converted to a vector of vectors\"
+   (-> \"matrix(1:6, 2)\"
+       reval
+      ->clj)
+   => [[1 2 3]
+       [4 5 6]]
+ 
   \"A named Renjin vector or list that is not a data frame
    is converted to a Clojure map,
-   whose values are converted recursively.\"
+   whose values are converted recursively.
+   Primitive values are always wrapped with a vector.\"
   (-> \"list(a=12, b='abc')\"
       reval
       ->clj)
-  => {:a 12.0 :b \"abc\"}
+  => {:a [12.0] :b [\"abc\"]}
  
   (-> \"c(a='abc', b='def')\"
       reval
@@ -69,11 +67,18 @@
   (-> \"list(a=c(1,2), b='abc')\"
       reval
       ->clj)
-  => {:a [1.0 2.0] :b \"abc\"}
+  => {:a [1.0 2.0] :b [\"abc\"]}
  
   \"An unnamed Renjin vector or list
    is converted to a Clojure vector,
-   whose elements are coverted recursively.\"
+   whose elements are converted recursively.
+   NA values are converted to nil.\"
+ 
+  (-> \"c(1L,NA)\"
+      reval
+      ->clj)
+  => [1 nil]
+ 
   (-> \"c(1,2)\"
       reval
       ->clj)
@@ -82,7 +87,7 @@
   (-> \"list(12, 'abc')\"
       reval
       ->clj)
-  => [12.0 \"abc\"]
+  => [[12.0] [\"abc\"]]
  
   (-> \"c('abc', 'def')\"
       reval
@@ -97,11 +102,11 @@
   (-> \"list(c(1,2), 'abc')\"
       reval
       ->clj)
-  => [[1.0 2.0] \"abc\"]
+  => [[1.0 2.0] [\"abc\"]]
  
-  \"A Renjin IntVector that is numeric is handled like any vector.
-   Otherwise, it represents a so called R 'factor',
-   so its values are converted to keywords
+  \"If a Renjin IntVector is not numeric,
+   it means that it represents a so called R 'factor'.
+   Its values are converted to keywords
    corresponding to its so called 'levels'.\"
  
   (-> \"factor(c('b','b','a'), levels=c('a','b'))\"
@@ -120,11 +125,11 @@
   (-> \"TRUE\"
       reval
       ->clj)
-  => true
+  => [true]
   (-> \"FALSE\"
       reval
       ->clj)
-  => false
+  => [false]
  
   \"Renjin symbols are converted to Clojure symbols.\"
   (-> \"abc\"
@@ -134,8 +139,7 @@
   {:added "0.1"}
   [obj]
   (some-> obj
-          -->clj
-          first-if-one))
+          -->clj))
 
 (set! *warn-on-reflection* true)
 
@@ -173,24 +177,35 @@
        reval
        (renjin-vector->clj inc))
   => [2.0 3.0]
- 
+  
   (->> \"c(x=1,y=2)\"
        reval
        (renjin-vector->clj inc))
   => {:x 2.0 :y 3.0}"
   {:added "0.1"}
   [transf v]
-  (case (lang/->class v)
-    [:data.frame] (df->maps v)
-    (let [names (lang/->names v)]
-      (if (seq names)
-        ;; A named list or vector will be translated to a map.
-        (->> v
-             (map (comp transf ->clj))
-             (zipmap names))
-        ;; An unnamed list or vector will be translated to a vector.
-        (->> v
-             (mapv (comp transf ->clj)))))))
+  (if (= (lang/->class v) [:data.frame])
+    (df->maps v)
+    (let [names (lang/->names v)
+          dim   (lang/->attr v :dim)]
+      (->> v
+           (map-indexed (fn [i x]
+                          (when (not (.isElementNA ^Vector v ^int i))
+                            (-> x
+                                ->clj
+                                transf))))
+           ((if (seq names)
+              ;; A named list or vector will be translated to a map.
+              (partial zipmap names)
+              (if (seq dim)
+                ;; A matrix will be translated to a vector of vectors
+                (fn [values]
+                  (->> values
+                       (partition (second dim))
+                       (#(do (println %) %))
+                       (mapv vec)))
+                ;; A regular list or vector will be translated to a vector.
+                vec)))))))
 
 (extend-type Vector
   Clojable
@@ -202,7 +217,8 @@
   Clojable
   (-->clj [this]
     (if (.isNumeric this)
-      (vec this)
+      (renjin-vector->clj identity
+                          this)
       ;; else - a factor
       (renjin-vector->clj  (comp (lang/->attr this :levels)
                                  dec)
@@ -224,5 +240,6 @@
   Clojable
   (-->clj [this]
     nil))
+
 
 

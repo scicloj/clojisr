@@ -165,6 +165,8 @@
              reval
              (->attr :class))))
 
+
+
 ^{:refer clojuress.renjin.lang/->names :added "0.1"}
 (fact "->names extracts the names attribute of a Renjin object"
       (-> "list(a=1, b=2)"

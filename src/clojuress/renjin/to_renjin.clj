@@ -23,35 +23,40 @@
 (declare ->renjin)
 
 
-(defn ->string-vector
+(defn ->character-vector
   "Given a Seqable of Clojure strings/keywords,
-        ->string-vector creates a corresponding Renjin StringArrayVector
+        ->character-vector creates a corresponding Renjin StringArrayVector
         of their corresponding names.
- 
+  
        (-> [\"abc\" :def]
-           ->string-vector
+           ->character-vector
            type)
        => StringArrayVector
- 
+  
        (-> [\"abc\" :def]
-           ->string-vector
+           ->character-vector
            ->clj)
        => [\"abc\" \"def\"]"
   {:added "0.1"}
   [xs]
   (StringArrayVector.
    ^Iterable
-   (map (comp str name) xs)))
+   (map (fn [x]
+          (cond (nil? x)            nil
+                (instance? Named x) (name x)
+                :else               (str x)))
+        xs)))
 
 (defn ->list-vector
   "->list-vector converts a Clojure Seqable
         to a Renjin ListVector, converting elements by ->renjin.
- 
+  
        (-> [[1 2] \"abc\"]
            ->list-vector
            (.toString))
        => \"list(c(1, 2), abc)\""
-  {:added "0.1"} [xs]
+  {:added "0.1"}
+  [xs]
   (ListVector.
    ^List
    (map ->renjin xs)))
@@ -84,18 +89,18 @@
             ^SEXP (->renjin value)))
     (.build builder)))
 
-(defn ->double-vector
+(defn ->numeric-vector
   "Given a seqable of numbers,
-        ->double-vector creates a corresponding Renjin DoubleArrayVector
+        ->numeric-vector creates a corresponding Renjin DoubleArrayVector
         (representing an R vector).
- 
+  
        (-> (range 4)
-           ->double-vector
+           ->numeric-vector
            type)
        => DoubleArrayVector
- 
+  
        (-> (range 4)
-           ->double-vector
+           ->numeric-vector
             ->clj)
        => [0.0 1.0 2.0 3.0]"
   {:added "0.1"}
@@ -108,18 +113,18 @@
        double-array
        (DoubleArrayVector.)))
 
-(defn ->int-vector
+(defn ->integer-vector
   "Given a seqable of integers,
-        ->int-vector creates a corresponding Renjin IntArrayVector
+        ->integer-vector creates a corresponding Renjin IntArrayVector
         (representing an R vector).
- 
+  
        (-> (range 4)
-           ->int-vector
+           ->integer-vector
            type)
        => IntArrayVector
- 
+  
        (-> (range 4)
-           ->int-vector
+           ->integer-vector
            ->clj)
        => (range 4)"
   {:added "0.1"}
@@ -162,195 +167,172 @@
   "Given a Seqable of Clojure strings/keywords,
         ->factor-vector creates a corresponding Renjin factor
         of their corresponding names.
- 
+  
        (-> [\"abc\" :def]
            ->factor-vector
            type)
        => IntArrayVector
- 
+  
        (-> [\"abc\" :def]
            ->factor-vector
            lang/->class)
        => [:factor]
- 
+  
        (-> [\"abc\" :def]
            ->factor-vector
            ->clj)
        => [:abc :def]"
-  {:added "0.1"} [xs]
-  (eval-expressions-impl ["factor(x)"]
-                         (->env-impl {:x (->string-vector xs)})))
-
-(defn ->renjin
-  "->renjin converts Clojure data structures
-        to corresponding Renjin objects.
- 
-       \"nil is converted to Renjin's NULL\"
-       (-> nil
-           ->renjin)
-       => Null/INSTANCE
- 
-       \"Basic data elements are first wrapped by a (singleton) vector,
-   and then ->renjin is applied to that vecto .\"
-       (-> 1
-           ->renjin
-           (.toString))
-       => \"1.0\"
- 
-       (-> \"abc\"
-           ->renjin
-           (.toString))
-       => \"abc\"
- 
-       (-> :a
-           ->renjin
-           lang/->class)
-       => [:factor]
- 
-       (-> :a
-           ->renjin
-           ->clj)
-       => :a
- 
-       (-> false
-           ->renjin
-           (.toString))
-       => \"FALSE\"
- 
-       \"A sequential is converted to a Renjin vector
-   of type corresponding to the first element,
-   if that element is of one of the types handled by ->renjin.\"
-       (-> [2 1]
-           ->renjin
-           (.toString))
-       => \"c(2, 1)\"
- 
-       (-> [\"abc\" \"def\"]
-           ->renjin
-           (.toString))
-       => \"c(abc, def)\"
- 
-       (-> [\"abc\" \"def\"]
-           ->renjin
-           ->clj)
-       => [\"abc\" \"def\"]
- 
-       (-> [:abc :def]
-           ->renjin
-           lang/->class)
-       => [:factor]
- 
-       (-> [:abc :def]
-           ->renjin
-           ->clj)
-       => [:abc :def]
- 
-       (-> [false true]
-           ->renjin
-           (.toString))
-       => \"c(FALSE, TRUE)\"
- 
-       \"A sequential whose first element's type
-   is not one of the types handled by ->renjin
-   is converted to a Renjin list,
-   handling elements recursively.\"
-       (-> [[1 2] 3]
-           ->renjin
-           (.toString))
-       => \"list(c(1, 2), 3.0)\"
- 
-       \"->renjin converts maps to Renjin named ListVectors
-   (representing R named lists),
-   handling values recursively.\"
-       (-> {:a 1
-            :b \"A\"}
-           ->renjin
-           type)
-       => ListVector
- 
-       (-> {:a 1
-            :b \"A\"}
-           ->renjin
-           ->clj)
-       =>  {:a 1.0
-            :b \"A\"}
- 
-       (-> {:a 1
-            :b \"A\"}
-           ->renjin
-           (.toString))
-       => \"list(a = 1.0, b = A)\"
- 
-       (-> {:a [1 2]
-            :b \"A\"}
-           ->renjin
-           (.toString))
-       => \"list(a = c(1, 2), b = A)\""
   {:added "0.1"}
-  [obj]
-  (-> (cond
-        ;; nil
-        (nil? obj)
-        Null/INSTANCE
-        ;; basic types
-        (and (not (instance? clojure.lang.Seqable obj))
-             (or (number? obj)
-                 (string? obj)
-                 (keyword? obj)
-                 (instance? Boolean obj)))
-        (->renjin [obj])
-        ;; a sequential structure
-        (sequential? obj)
-        (let [elem1 (first obj)]
-          (cond
-            ;; numbers
-            (number? elem1)
-            (->double-vector obj)
-            ;; strings
-            (string? elem1)
-            (->string-vector obj)
-            ;; keywords
-            (keyword? elem1)
-            (->factor-vector obj)
-            ;; booleans
-            (instance? Boolean elem1)
-            (->logical-vector obj)
-            ;; else
-            :else
-            (->list-vector (map ->renjin obj))))
-        ;; a map
-        (map? obj)
-        (->named-list-vector obj)
-        ;; else
-        :else obj)
-      (Converters/fromJava)))
+  [xs]
+  (eval-expressions-impl ["factor(x)"]
+                         (->env-impl {:x (->character-vector xs)})))
 
+
+
+
+(defn primitive-type [obj]
+  (cond (nil? obj)              :na
+        (integer? obj)          :integer
+        (number? obj)           :numeric
+        (string? obj)           :character
+        (keyword? obj)          :factor
+        (instance? Boolean obj) :logical
+        :else                   nil))
+
+(def valid-interpretations {:na        [:integer :numeric :character :factor :logical]
+                            :integer   [:integer :numeric :character]
+                            :numeric   [:numeric :character]
+                            :character [:character]
+                            :factor    [:factor :character]
+                            :logical   [:logical :character]})
+
+(def interpretations-priorities
+  (->> valid-interpretations
+       (mapcat val)
+       frequencies))
+
+(defn finest-primitive-type [sequential]
+  (let [n-elements (count sequential)]
+    (->> sequential
+         (mapcat (fn [elem]
+                   (-> elem primitive-type valid-interpretations)))
+         frequencies
+         (filter (fn [[interpration n]]
+                   (= n n-elements)))
+         (map key)
+         (sort-by interpretations-priorities)
+         first)))
+
+
+
+(def primitive-vector-ctors
+  {:integer   ->integer-vector
+   :numeric   ->numeric-vector
+   :character ->character-vector
+   :factor    ->factor-vector
+   :logical   ->logical-vector})
+
+(defn ->primitive-vector [sequential]
+  (when-let [primitive-type (finest-primitive-type sequential)]
+    ((primitive-vector-ctors primitive-type) sequential)))
 
 (defn row-maps->named-columns-list
   "Given a seqable of maps with the same keys,
         considered rows of a table,
         row-maps->named-columns-list creates a Renjin list of vectors
-        corresponding to rows of that table.
-
+        corresponding to columns of that table.
+  
+       (-> [{:x 1 :y 2 :z \"A\"}
+            {:x 3 :y 4 :z \"B\"}]
+           row-maps->named-columns-list
+           type)
+       => ListVector
+  
        (-> [{:x 1 :y 2 :z \"A\"}
             {:x 3 :y 4 :z \"B\"}]
            row-maps->named-columns-list
            ->clj)
-       => {:x [1.0 3.0], :y [2.0 4.0], :z [\"A\" \"B\"]}"
+       => {:x [1.0 3.0],
+           :y [2.0 4.0],
+           :z [\"A\" \"B\"]}"
   {:added "0.1"}
   [row-maps]
-  (->> row-maps
-       (mapcat keys)
-       distinct
-       (map (fn [k]
-              [(name k)
-               (map k row-maps)]))
-       ->named-list-vector))
+  (and (sequential? row-maps)
+       (every? map? row-maps)
+       (let [attempt (->> row-maps
+                          (mapcat keys)
+                          distinct
+                          (mapcat (fn [k]
+                                    [(name k)
+                                     (->> row-maps
+                                          (map k)
+                                          ->primitive-vector)]))
+                          (apply array-map))]
+         (if (->> attempt
+                  vals
+                  (some nil?))
+           nil
+           (->named-list-vector attempt)))))
 
-(defn row-maps->df [row-maps]
-  (lang/apply-function-impl (engine/reval
-                             "function(columns) data.frame(columns, stringsAsFactors =FALSE)")
-                            (lang/->env-impl
-                             {:columns (row-maps->named-columns-list
-                                        row-maps)})))
+(defn row-maps->df
+  "Given a seqable of maps with the same keys,
+        considered rows of a table,
+        row-maps->df creates a Renjin data.frame
+        corresponding to these data.
+  
+       (-> [{:x 1 :y 2 :z \"A\"}
+            {:x 3 :y 4 :z \"B\"}]
+           row-maps->df
+           lang/->class)
+       => [:data.frame]
+  
+       (-> [{:x 1 :y 2 :z \"A\"}
+            {:x 3 :y 4 :z \"B\"}]
+           row-maps->df
+           ->clj)
+       => [{:x 1.0 :y 2.0 :z \"A\"}
+           {:x 3.0 :y 4.0 :z \"B\"}]"
+  {:added "0.1"} [row-maps]
+  (when-let [named-columns-list (row-maps->named-columns-list row-maps)]
+    (lang/apply-function-impl (engine/reval
+                               "function(columns) data.frame(columns, stringsAsFactors =FALSE)")
+                              (lang/->env-impl
+                               {:columns named-columns-list}))))
 
+
+
+(defn row-vectors->matrix
+  [row-vectors]
+  (and (sequential? row-vectors)
+       (every? sequential? row-vectors)
+       (->> row-vectors (map count) distinct count (= 1))
+       (when-let [one-primitive-vector (->> row-vectors
+                                            (apply concat)
+                                            ->primitive-vector)]
+         (lang/apply-function-impl (engine/reval
+                                    "function(v,nr) matrix(v,nr)")
+                                   (lang/->env-impl
+                                    {:v  one-primitive-vector
+                                     :nr (->renjin (count row-vectors))})))))
+
+(defn ->renjin
+  {:added "0.1"}
+  [obj]
+  (cond
+    ;; nil
+    (nil? obj)
+    Null/INSTANCE
+    ;; basic types
+    (primitive? obj)
+    (->renjin [obj])
+    ;; a sequential structure
+    (sequential? obj)
+    (or (->primitive-vector obj)
+        (row-maps->df obj)
+        (row-vectors->matrix obj)
+        (->list-vector obj))
+    ;; a map
+    (map? obj)
+    (->named-list-vector obj)
+    ;; else
+    :else (Converters/fromJava obj)))
