@@ -1,10 +1,7 @@
 (ns clojuress.renjin.engine
-  (:import javax.script.ScriptEngineManager
-           org.renjin.script.RenjinScriptEngine))
+  (:import (org.renjin.script RenjinScriptEngine RenjinScriptEngineFactory)))
 
-(def manager (ScriptEngineManager.))
-
-(def engine ^RenjinScriptEngine (.getEngineByName ^ScriptEngineManager manager "Renjin"))
+(def engine ^RenjinScriptEngine (.getScriptEngine ^RenjinScriptEngineFactory (RenjinScriptEngineFactory.)))
 
 (defn reval
   "reval runs R code in Renjin
