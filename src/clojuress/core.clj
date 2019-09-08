@@ -96,6 +96,7 @@
   (doseq [s function-symbols]
     (let [d (delay (r (format "library(%s)"
                               (name package-symbol)))
-                   (r (name s)))]
-      (eval (list 'def s (function @d))))))
-
+                   (function (r (name s))))
+          f (fn [& args]
+              (apply @d args))]
+      (eval (list 'def s f)))))
