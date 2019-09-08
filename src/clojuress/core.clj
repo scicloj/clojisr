@@ -1,11 +1,9 @@
 (ns clojuress.core
   (:require [clojuress.session :as session]
-            [clojuress.r.core :as r]
+            [clojuress.rlang.core :as rlang]
             [clojuress.protocols :as prot]
-            [clojure.pprint :as pp]
-            [clojuress.util :refer [with-ns]]
-            [clojuress.core :as r])
-  (:import clojuress.r.core.RObject))
+            [clojure.pprint :as pp])
+  (:import clojuress.rlang.core.RObject))
 
 (defmacro defn-optional-session [f args & body]
   (concat (list 'defn
@@ -20,38 +18,38 @@
 ;; and otherwise use the default session.
 ;;
 ;; (macroexpand-1 '(defn-optional-session r [r-code]
-;;                   (r/eval r-code session)))
+;;                   (rlang/eval r-code session)))
 ;; => (defn
 ;;     r
 ;;     [r-code & {:keys [session], :or {session (session/get {})}}]
-;;     (r/eval r-code session))
+;;     (rlang/eval r-code session))
 
 (defn-optional-session init []
-  (r/init session))
+  (rlang/init session))
 
 (defn-optional-session r [r-code]
-  (r/eval r-code session))
+  (rlang/eval r-code session))
 
-(defn-optional-session evalr->java [r-code]
-  (prot/evalr->java session r-code))
+(defn-optional-session eval-r->java [r-code]
+  (prot/eval-r->java session r-code))
 
-(defn-optional-session evalr->java [r-code]
-  (prot/evalr->java session r-code))
+(defn-optional-session eval-r->java [r-code]
+  (prot/eval-r->java session r-code))
 
 (defn-optional-session class [r-object]
-  (r/class r-object session))
+  (rlang/class r-object session))
 
 (defn-optional-session names [r-object]
-  (r/names r-object session))
+  (rlang/names r-object session))
 
 (defn-optional-session shape [r-object]
-  (r/shape r-object session))
+  (rlang/shape r-object session))
 
 (defn-optional-session r->java [r-object]
-  (r/r->java r-object session))
+  (rlang/r->java r-object session))
 
 (defn-optional-session java->r [java-object]
-  (r/java->r java-object session))
+  (rlang/java->r java-object session))
 
 (defn-optional-session java->clj [java-object]
   (prot/java->clj session java-object))
@@ -64,7 +62,7 @@
 (def r->java->rclj (comp java->clj r->java))
 
 (defn-optional-session apply-function [r-function args named-args]
-  (r/apply-function
+  (rlang/apply-function
    r-function
    (->> args
         (map clj->javajava->r))

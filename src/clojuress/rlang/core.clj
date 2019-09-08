@@ -1,4 +1,4 @@
-(ns clojuress.r.core
+(ns clojuress.rlang.core
   (:require [clojure.string :as string]
             [clojuress.protocols :as prot]))
 
@@ -19,7 +19,7 @@
           r-code))
 
 (defn init-memory [session]
-  (prot/evalr->java session ".memory <- list()"))
+  (prot/eval-r->java session ".memory <- list()"))
 
 (defn init [session]
   (init-memory session))
@@ -28,22 +28,22 @@
   (let [obj-name (rand-name)
         returned    (->> r-code
                          (r-code-that-remembers obj-name)
-                         (prot/evalr->java session))]
-    (assert (-> (prot/java->rspecified-type session returned :strings)
+                         (prot/eval-r->java session))]
+    (assert (-> (prot/java->r-specified-type session returned :strings)
                 vec
                 (= ["ok"])))
     (->RObject obj-name session)))
 
-(defn java->rspecified-type [java-object type session]
-  (prot/java->rspecified-type session java-object type))
+(defn java->r-specified-type [java-object type session]
+  (prot/java->r-specified-type session java-object type))
 
 (defn r-function-on-obj [r-object function-name return-type  session]
   (->> r-object
        :object-name
        object-name->memory-place
        (format "%s(%s)" function-name)
-       (prot/evalr->java session)
-       (#(prot/java->rspecified-type session % return-type))
+       (prot/eval-r->java session)
+       (#(prot/java->r-specified-type session % return-type))
        ((case return-type :java->rstrings) session)))
 
 (defn class [r-object session]
@@ -65,11 +65,11 @@
   (->> r-object
        :object-name
        object-name->memory-place
-       (prot/getr->java session)))
+       (prot/get-r->java session)))
 
 (defn java->r [java-object session]
   (let [obj-name (rand-name)]
-    (prot/java->rset session
+    (prot/java->r-set session
                    (object-name->memory-place
                     obj-name)
                    java-object)

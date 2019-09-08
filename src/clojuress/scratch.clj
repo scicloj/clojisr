@@ -1,11 +1,8 @@
 (ns clojuress.scratch
-  (:require [clojuress.protocols :refer [evalr->java]]
+  (:require [clojuress.protocols :refer [eval-r->java]]
             [clojuress.session :as session]
             [clojuress.core :as r :refer [r]]
             [clojuress.impl.rserve.java :as java]
-            #_[clojuress.functions :as f]
-            #_[clojuress.ggplot :as g]
-            [clojuress.r.core :as r]
             [clojuress.protocols :as prot]
             [clojuress.packages.base :as base]
             [clojuress.packages.stats :as stats])
@@ -157,7 +154,7 @@
         (.asDoubles))
 
     (setvar (session/get {})
-            "l" (evalr->java (session/get {}) "list(a=1)"))
+            "l" (eval-r->java (session/get {}) "list(a=1)"))
 
     (setvar (session/get {})
             "l$b" (java/doubles [4 5 6]))
