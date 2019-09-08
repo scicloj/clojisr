@@ -3,6 +3,8 @@
 
 - socket-based, multi-session [Rserve](https://github.com/s-u/Rserve) - used in [forks](https://github.com/svarcheg/rincanter) [of](https://github.com/skm-ice/rincanter) Rincanter, and in the subsequent [Rojure](https://github.com/behrica/rojure)
 
+- Note that the last two enjoy a common abstraction on the JVM side: [REngine](https://github.com/s-u/REngine)
+
 - REST-based, JSON-based, multi session, secure, slow-for-large-datasets [opencpu](https://www.opencpu.org) - used in [opencpu-clj](https://github.com/behrica/opencpu-clj)
 
 - pure-JVM, multi-session [Renjin](https://www.renjin.org)
