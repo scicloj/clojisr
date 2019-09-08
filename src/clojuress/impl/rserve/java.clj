@@ -1,4 +1,4 @@
-(ns clojuress.rserve.jvm
+(ns clojuress.impl.rserve.java
   (:import (org.rosuda.REngine REXP REXPString REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util List Collection)
            (clojure.lang Named)))
@@ -27,34 +27,34 @@
   (REXP/asCall op (into-array REXP args)))
 
 (defprotocol Clojable
-  (-->clj [this]))
+  (-java->clj [this]))
 
-(defn ->clj
-  [jvm-obj]
-  (some-> jvm-obj
-          -->clj))
+(defn java->clj
+  [java-obj]
+  (some-> java-obj
+          -java->clj))
 
 (extend-type Object
   Clojable
-  (-->clj [this] this))
+  (-java->clj [this] this))
 
 (extend-type REXPDouble
   Clojable
-  (-->clj [this]
+  (-java->clj [this]
     (vec (.asDoubles this))))
 
 (extend-type REXPInteger
   Clojable
-  (-->clj [this]
+  (-java->clj [this]
     (vec (.asIntegers this))))
 
 (extend-type REXPString
   Clojable
-  (-->clj [this]
+  (-java->clj [this]
     (vec (.asStrings this))))
 
 
-(declare clj->)
+(declare clj->java)
 
 (defn ->rexp-string
   [xs]
@@ -134,7 +134,7 @@
     ((primitive-vector-ctors primitive-type) sequential)))
 
 
-(defn clj->
+(defn clj->java
   [obj]
   (cond
     ;; nil
@@ -142,7 +142,7 @@
     (REXPNull.)
     ;; basic types
     (primitive-type obj)
-    (clj-> [obj])
+    (clj->java [obj])
     ;; a sequential structure
     (sequential? obj)
     (->primitive-vector obj)))

@@ -1,11 +1,11 @@
 (ns clojuress.scratch
-  (:require [clojuress.protocols :refer [eval->jvm]]
+  (:require [clojuress.protocols :refer [evalr->java]]
             [clojuress.session :as session]
             [clojuress.core :as r :refer [r]]
-            [clojuress.rserve.jvm :as jvm]
+            [clojuress.impl.rserve.java :as java]
             #_[clojuress.functions :as f]
             #_[clojuress.ggplot :as g]
-            [clojuress.native.core :as native]
+            [clojuress.r.core :as r]
             [clojuress.protocols :as prot]
             [clojuress.packages.base :as base]
             [clojuress.packages.stats :as stats])
@@ -37,16 +37,16 @@
         time))
 
   (->> result1
-       r/->jvm
+       r/r->java
        (.asDoubles)
        (take 9)
        (= (map #(double (* % %)) (range 9)))
        time)
 
   (->> result1
-       r/->jvm
-       r/jvm->
-       r/->jvm
+       r/r->java
+       r/java->r
+       r/r->java
        (.asDoubles)
        (take 9)
        (= (map #(double (* % %)) (range 9)))
@@ -88,7 +88,7 @@
                     (session/get {}))
 
   (->> [(r "-5:5")]
-       (native/apply-function (r "abs")))
+       (r/apply-function (r "abs")))
 
   (r "library(ggplot2)")
 
@@ -137,19 +137,19 @@
        (r/eval "(1:10000000)^2")))
 
     (time
-     (def jvm-result1
-       (r/->jvm result1)))
+     (def java-result1
+       (r/r->java result1)))
 
     (-> result1
-        r/->jvm
-        r/jvm->
-        r/->jvm
+        r/r->java
+        r/java->r
+        r/r->java
         (.asDoubles)
         (->> (take 9)))
 
 
     (setvar (session/get {})
-            "x" (jvm/doubles [1 2 3]))
+            "x" (java/doubles [1 2 3]))
 
 
     (-> (getvar (session/get {})
@@ -157,10 +157,10 @@
         (.asDoubles))
 
     (setvar (session/get {})
-            "l" (eval->jvm (session/get {}) "list(a=1)"))
+            "l" (evalr->java (session/get {}) "list(a=1)"))
 
     (setvar (session/get {})
-            "l$b" (jvm/doubles [4 5 6]))
+            "l$b" (java/doubles [4 5 6]))
 
     (-> (getvar (session/get {})
                 "l$a")
@@ -205,13 +205,13 @@
                    :r-connection)]
       (.eval
        conn
-       (jvm/call "<-"
+       (java/call "<-"
                  {}
-                 [(jvm/call "$"
+                 [(java/call "$"
                             {}
-                            [(jvm/symbol ".memory")
-                             (jvm/symbol "abcd")])
-                  (jvm/doubles [1 2 3 4 5])])
+                            [(java/symbol ".memory")
+                             (java/symbol "abcd")])
+                  (java/doubles [1 2 3 4 5])])
        nil
        true))
 

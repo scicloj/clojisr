@@ -33,16 +33,3 @@
                      f
                      m))
 
-;; Adpoted and adapted from clojure-contrib
-;; https://github.com/clojure/clojure-contrib/blob/a6a92b9b3d2bfd9a56e1e5e9cfba706d1aeeaae5/modules/with-ns/src/main/clojure/clojure/contrib/with_ns.clj#L20
-(defmacro with-ns
-  "Evaluates body in another namespace.  ns is either a namespace
-  object or a symbol.  This makes it possible to define functions in
-  namespaces other than the current one."
-  [ns & body]
-  `(do
-     (if (not (find-ns ~ns))
-       (create-ns ~ns))
-     (binding [*ns* (the-ns ~ns)]
-     ~@(map (fn [form] `(eval '~form)) body))))
-

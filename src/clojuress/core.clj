@@ -1,11 +1,11 @@
 (ns clojuress.core
   (:require [clojuress.session :as session]
-            [clojuress.native.core :as native]
+            [clojuress.r.core :as r]
             [clojuress.protocols :as prot]
             [clojure.pprint :as pp]
             [clojuress.util :refer [with-ns]]
             [clojuress.core :as r])
-  (:import clojuress.native.core.NativeObject))
+  (:import clojuress.r.core.RObject))
 
 (defmacro defn-optional-session [f args & body]
   (concat (list 'defn
@@ -20,78 +20,78 @@
 ;; and otherwise use the default session.
 ;;
 ;; (macroexpand-1 '(defn-optional-session r [r-code]
-;;                   (native/eval r-code session)))
+;;                   (r/eval r-code session)))
 ;; => (defn
 ;;     r
 ;;     [r-code & {:keys [session], :or {session (session/get {})}}]
-;;     (native/eval r-code session))
+;;     (r/eval r-code session))
 
 (defn-optional-session init []
-  (native/init session))
+  (r/init session))
 
 (defn-optional-session r [r-code]
-  (native/eval r-code session))
+  (r/eval r-code session))
 
-(defn-optional-session eval->jvm [r-code]
-  (prot/eval->jvm session r-code))
+(defn-optional-session evalr->java [r-code]
+  (prot/evalr->java session r-code))
 
-(defn-optional-session eval->jvm [r-code]
-  (prot/eval->jvm session r-code))
+(defn-optional-session evalr->java [r-code]
+  (prot/evalr->java session r-code))
 
-(defn-optional-session class [native-object]
-  (native/class native-object session))
+(defn-optional-session class [r-object]
+  (r/class r-object session))
 
-(defn-optional-session names [native-object]
-  (native/names native-object session))
+(defn-optional-session names [r-object]
+  (r/names r-object session))
 
-(defn-optional-session shape [native-object]
-  (native/shape native-object session))
+(defn-optional-session shape [r-object]
+  (r/shape r-object session))
 
-(defn-optional-session ->jvm [native-object]
-  (native/->jvm native-object session))
+(defn-optional-session r->java [r-object]
+  (r/r->java r-object session))
 
-(defn-optional-session jvm-> [jvm-object]
-  (native/jvm-> jvm-object session))
+(defn-optional-session java->r [java-object]
+  (r/java->r java-object session))
 
-(defn-optional-session ->clj [jvm-object]
-  (prot/->clj session jvm-object))
+(defn-optional-session java->clj [java-object]
+  (prot/java->clj session java-object))
 
-(defn-optional-session clj-> [clj-object]
-  (prot/clj-> session clj-object))
+(defn-optional-session clj->java [clj-object]
+  (prot/clj->java session clj-object))
 
-(def clj->jvm-> (comp jvm-> clj->))
+(def clj->javajava->r (comp java->r clj->java))
 
-(def ->jvm->clj (comp ->clj ->jvm))
+(def r->java->rclj (comp java->clj r->java))
 
-(defn-optional-session apply-function [native-function args named-args]
-  (native/apply-function
-   native-function
+(defn-optional-session apply-function [r-function args named-args]
+  (r/apply-function
+   r-function
    (->> args
-        (map clj->jvm->))
+        (map clj->javajava->r))
    (->> named-args
         (map (fn [[arg-name arg]]
-               [arg-name (clj->jvm-> arg)])) )
+               [arg-name (clj->javajava->r arg)])) )
    session))
 
-(defn-optional-session function [native-function]
+(defn-optional-session function [r-function]
   (fn f
     ([first-arg rest-args named-args]
      (f (cons first-arg rest-args)
         named-args))
     ([args named-args]
      (apply-function
-      native-function
+      r-function
       args
       named-args
       :session session))))
 
 ;; Pretty printing relies on the default session
-;; for conversion native->jvm->clj.
+;; for conversion r->javajava->clj.
 
-(defmethod pp/simple-dispatch NativeObject [obj]
+(defmethod pp/simple-dispatch RObject [obj]
   (->> obj
-       ->jvm
-       (prot/->clj (session/get {}))
+       r->java
+       (prot/java->clj (session/get {}))
        pp/pprint))
 
 (defn add-functions-to-this-ns [package-symbol function-symbols]

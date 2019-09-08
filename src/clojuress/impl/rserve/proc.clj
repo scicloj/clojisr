@@ -1,7 +1,7 @@
 ;; copied from Rincanter https://github.com/skm-ice/rincanter/blob/master/src/rincanter/proc.clj
 ;; originally from https://gist.github.com/codification/1984857
 
-(ns clojuress.rserve.proc
+(ns clojuress.impl.rserve.proc
   (:require [clojure.java.io :refer [reader writer]])
   (:import [java.lang ProcessBuilder]))
 
