@@ -3,16 +3,11 @@
             [clojuress.packages.stats :as stats]
             [clojuress.session :as session]
             [clojuress.protocols :as prot]
-            [clojuress.rlang.core :as rlang]
-            [clojuress.core :as r :refer [r]]
-            [clojure.pprint :as pp])
+            [clojuress.core :as r :refer [r]])
   (:import (org.rosuda.REngine REXP REXPSymbol REXPDouble REXPInteger)
            (org.rosuda.REngine.Rserve RConnection)))
 
-
 (comment
-
-  (r/init-session)
 
   (-> "1+2"
       r/eval-r->java
@@ -68,21 +63,11 @@
           ["a" "b"]
           [10000000 2]]))
 
-
   (session/clean-all)
 
-  (let [s (session/fetch {:port 5555})]
-    (prot/eval-r->java s "1"))
+  (r "1+2" :session-args {:port 5555})
 
-  (r/init-session :session-args {:port 5555})
-
-  (.asDoubles (r/eval-r->java "1" :session-args {:port 5555}))
-
-  (r "1" :session-args {:port 5555})
-
-  (r/init-session :session-args {:port 8888})
-
-  (r "1"  :session-args {:port 8888})
+  (r "1+2"  :session-args {:port 6666})
 
 )
 

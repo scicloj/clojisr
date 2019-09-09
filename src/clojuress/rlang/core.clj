@@ -5,7 +5,6 @@
 
 (defrecord RObject [object-name session])
 
-
 (defn- rand-name []
   (-> (java.util.UUID/randomUUID)
       (string/replace "-" "_")
@@ -18,7 +17,6 @@
   (format "%s <- {%s}; 'ok'"
           (object-name->memory-place obj-name)
           r-code))
-
 
 (defn init-session-memory [session]
   (prot/eval-r->java session ".memory <- list()"))

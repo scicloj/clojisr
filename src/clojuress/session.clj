@@ -1,7 +1,8 @@
 (ns clojuress.session
   (:refer-clojure :exclude [time])
   (:require [clojuress.protocols :as prot]
-            [clojuress.impl.rserve.session]))
+            [clojuress.impl.rserve.session]
+            [clojuress.rlang.core :as rlang]))
 
 (def sessions (atom {}))
 
@@ -17,9 +18,12 @@
 
 (defn make [session-args]
   (let [{:keys [session-type]} (merge @defaults
-                                      session-args)]
-    (case session-type
-      :rserve (clojuress.impl.rserve.session/make session-args))))
+                                      session-args)
+        session (case session-type
+                  :rserve (clojuress.impl.rserve.session/make
+                           session-args))]
+    (rlang/init-session session)
+    session))
 
 (defn fetch [session-args]
   (or (@sessions session-args)
