@@ -2,6 +2,8 @@
   (:require [clojuress.protocols :as prot]
             [clojuress.impl.rserve.proc :as proc]
             [clojuress.impl.rserve.java :as java]
+            [clojuress.impl.rserve.java-to-clj :refer [java->clj]]
+            [clojuress.impl.rserve.clj-to-java :refer [clj->java]]
             [clojure.string :as string]
             [clojure.core.async :as async])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
@@ -49,9 +51,9 @@
       :doubles (.asDoubles ^REXP java-object)
       :strings (.asStrings ^REXP java-object)))
   (java->clj [session java-object]
-    (java/java->clj java-object))
+    (java->clj java-object))
   (clj->java [session clj-object]
-    (java/clj->java clj-object)))
+    (clj->java clj-object)))
 
 (def stop-loops? (atom false))
 
