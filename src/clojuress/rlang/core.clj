@@ -1,6 +1,7 @@
 (ns clojuress.rlang.core
   (:require [clojure.string :as string]
-            [clojuress.protocols :as prot]))
+            [clojuress.protocols :as prot]
+            [clojuress.util :refer [starts-with?]]))
 
 (defrecord RObject [object-name session])
 
@@ -18,50 +19,53 @@
           (object-name->memory-place obj-name)
           r-code))
 
-(defn init-memory [session]
+
+(defn init-session-memory [session]
   (prot/eval-r->java session ".memory <- list()"))
 
-(defn init [session]
-  (init-memory session))
+(defn init-session [session]
+  (init-session-memory session)
+  session)
 
-(defn eval [r-code session]
+(defn eval-r [r-code session]
   (let [obj-name (rand-name)
         returned    (->> r-code
                          (r-code-that-remembers obj-name)
                          (prot/eval-r->java session))]
-    (assert (-> (prot/java->r-specified-type session returned :strings)
+    (assert (-> (prot/java->specified-type session returned :strings)
                 vec
                 (= ["ok"])))
     (->RObject obj-name session)))
 
-(defn java->r-specified-type [java-object type session]
-  (prot/java->r-specified-type session java-object type))
 
-(defn r-function-on-obj [r-object function-name return-type  session]
+(defn java->r-specified-type [java-object type session]
+  (prot/java->specified-type session java-object type))
+
+(defn r-function-on-obj [{:keys [session] :as r-object}
+                         function-name return-type]
   (->> r-object
        :object-name
        object-name->memory-place
        (format "%s(%s)" function-name)
        (prot/eval-r->java session)
-       (#(prot/java->r-specified-type session % return-type))
-       ((case return-type :java->rstrings) session)))
+       (#(prot/java->specified-type session % return-type))))
 
-(defn class [r-object session]
+(defn r-class [r-object]
   (vec
    (r-function-on-obj
-    r-object "class" :strings session)))
+    r-object "class" :strings)))
 
-(defn names [r-object session]
+(defn names [r-object]
   (vec
    (r-function-on-obj
-    r-object "names" :strings session)))
+    r-object "names" :strings)))
 
-(defn shape [r-object session]
+(defn shape [r-object]
   (vec
    (r-function-on-obj
-    r-object "dim" :ints session)))
+    r-object "dim" :ints)))
 
-(defn r->java [r-object session]
+(defn r->java [{:keys [session] :as r-object}]
   (->> r-object
        :object-name
        object-name->memory-place
@@ -77,7 +81,6 @@
 
 (defn apply-function [r-function
                       r-args
-                      r-named-args
                       session]
   (let [code
         (format
@@ -85,15 +88,18 @@
          (-> r-function
              :object-name
              object-name->memory-place)
-         (->> (concat (->> r-args
-                           (map (fn [arg]
-                                  [nil arg])))
-                      r-named-args)
-              (map (fn [[arg-name r-object]]
-                     (when arg-name
-                       (str arg-name "="))
-                     (-> r-object
-                         :object-name
-                         object-name->memory-place)))
+         (->> r-args
+              (map (fn [arg]
+                     (let [[arg-name arg-value]
+                           (if (starts-with? arg :=)
+                             (rest arg)
+                             [nil arg])]
+                       (str (when arg-name
+                              (str (name arg-name) "="))
+                            (-> arg-value
+                                (->> (prot/clj->java session))
+                                (java->r session)
+                                :object-name
+                                object-name->memory-place)))))
               (string/join ", ")))]
-    (eval code session)))
+    (eval-r code session)))

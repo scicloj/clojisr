@@ -3,4 +3,4 @@
 
 (add-functions-to-this-ns
  'stats
- '[median])
+ '[median rnorm])

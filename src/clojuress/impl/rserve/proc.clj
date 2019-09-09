@@ -2,10 +2,13 @@
 ;; originally from https://gist.github.com/codification/1984857
 
 (ns clojuress.impl.rserve.proc
-  (:require [clojure.java.io :refer [reader writer]])
+  (:require [clojure.java.io :refer [reader writer]]
+            [clojure.java.shell :refer [sh]]
+            [clojure.string :as string])
   (:import [java.lang ProcessBuilder]))
 
 (defn spawn [& args]
+  (println (string/join " " args))
  (let [process (-> (ProcessBuilder. ^java.util.List args)
                    (.start))]
   {:out (-> process
@@ -18,3 +21,41 @@
            (.getOutputStream)
            (writer))
    :process process}))
+
+
+
+;; Running Rserve -- copied from Rojure:
+;; https://github.com/behrica/rojure
+
+(defn- r-path
+  "Find path to R executable"
+  []
+  {:post [(not= % "")]}
+  (apply str
+         (-> (sh "which" "R")
+             (get :out)
+             (butlast)))) ; avoid trailing newline
+
+(defn start-rserve
+  "Boot up RServe in another process.
+   Returns a map with a java.lang.Process that can be 'destroy'ed"
+  [{:keys [port init-r sleep]
+    :or {init-r ""
+         sleep 0}}]
+  (let [rstr-temp (format "library(Rserve); run.Rserve(port=%s);"
+                          port)
+        rstr      (if (empty? init-r )
+                    rstr-temp
+                    (str init-r ";" rstr-temp ))]
+    (prn rstr)
+    (let [rserve (spawn (r-path)
+                        "--no-save" ; don't save workspace when quitting
+                        "--slave"
+                        "-e" ; evaluate (boot server)
+                        rstr)]
+      (println [:sleeping sleep])
+      (Thread/sleep sleep)
+      rserve)))
+
+(defn close [rserve]
+  (.destroy ^Process (:process rserve)))

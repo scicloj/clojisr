@@ -33,3 +33,7 @@
                      f
                      m))
 
+
+(defn starts-with? [s v]
+  (and (sequential? s)
+       (-> s first (= v))))
