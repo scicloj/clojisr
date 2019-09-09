@@ -53,7 +53,7 @@
   (clj->java [session clj-object]
     (java/clj->java clj-object)))
 
-(def abc (atom true))
+(def stop-loops? (atom false))
 
 (defn make [session-args]
   (let [{:keys
@@ -69,34 +69,27 @@
                                            (RConnection. host port)
                                            rserve)]
     (async/go-loop []
-      (Thread/sleep 100)
       (doseq [^BufferedReader reader
               (-> rserve
                   ((juxt :out :err)))]
         (loop []
           (when (.ready reader)
-            (println (.readLine reader))
+            (let [line (.readLine reader)]
+              (when-not (re-find
+                         ;; Just avoidingg this confusing message.
+                         #"(This session will block until Rserve is shut down)" line)
+                (println line)))
             (recur))))
-      (if @abc (recur)))
+      (Thread/sleep 100)
+      (if (not @stop-loops?)
+        (recur)))
     session))
 
 (comment
 
-  (reset! abc true)
+  (reset! stop-loops? true)
 
-  (reset! abc false)
-
-
-  (def rserve1
-    (proc/start-rserve {:port  2222
-                        :sleep 500}))
-
-  rserve1
-
-  (some-> rserve1 :out (.ready))
-  (some-> rserve1 :out (.readLine))
-
-  (some-> rserve1 :out)
+  (reset! stop-loops? false)
 
   )
 
