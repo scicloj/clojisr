@@ -54,6 +54,9 @@
 (defn-implicit-session java->r [java-object]
   (rlang/java->r java-object session))
 
+(defn-implicit-session java->naive-clj [java-object]
+  (prot/java->naive-clj session java-object))
+
 (defn-implicit-session java->clj [java-object]
   (prot/java->clj session java-object))
 
@@ -82,12 +85,6 @@
           args)
         :session (session/fetch explicit-session-args))))))
 
-(defmethod pp/simple-dispatch RObject [obj]
-  (->> obj
-       r->java
-       (prot/java->clj (:session obj))
-       pp/pprint))
-
 (defn add-functions-to-this-ns [package-symbol function-symbols]
   (doseq [s function-symbols]
     (let [d (delay (r (format "library(%s)"
@@ -96,4 +93,14 @@
           f (fn [& args]
               (apply @d args))]
       (eval (list 'def s f)))))
+
+
+(defmethod pp/simple-dispatch RObject [obj]
+  (let [java-object (r->java obj)]
+    (pp/pprint [['R
+                 :object-name (:object-name obj)
+                 :session-args (-> obj :session :session-args)
+                 :r-class (r-class obj)]
+                ['->Java java-object]])))
+
 

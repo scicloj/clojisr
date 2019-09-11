@@ -16,6 +16,7 @@
                  [com.rpl/specter "1.1.2"]
                  [techascent/tech.datatype "4.5"]
                  [techascent/tech.resource "4.5"]
+                 [techascent/tech.ml.dataset "1.23"]
                  [org.rosuda.REngine/REngine "2.1.0"]
                  [org.rosuda.REngine/Rserve "1.8.1"]
                  [alembic "0.3.2"]]

@@ -2,12 +2,23 @@
   (:require [clojuress.packages.base :as base]
             [clojuress.packages.stats :as stats]
             [clojuress.session :as session]
-            [clojuress.protocols :as prot]
-            [clojuress.core :as r :refer [r]])
+            [clojuress.core :as r :refer [r]]
+            [com.rpl.specter :as specter]
+            [clojure.walk :as walk])
   (:import (org.rosuda.REngine REXP REXPSymbol REXPDouble REXPInteger)
            (org.rosuda.REngine.Rserve RConnection)))
 
 (comment
+
+  (->> "1:9"
+       r)
+
+  (->> "data.frame(x=c(1,NA),y=c('hi','hello'),z=c(NA,2.3))"
+       r
+       r/r->java
+       r/java->naive-clj)
+
+  (r "class(list(a=1))")
 
   (-> "1+2"
       r/eval-r->java
@@ -68,6 +79,20 @@
   (r "1+2" :session-args {:port 5555})
 
   (r "1+2"  :session-args {:port 6666})
+
+  (-> "data.frame(a=1:9, b=rnorm(9))"
+      r
+      r/r->java
+      ((fn [j]
+         (->> (->> j
+                   (.asList)
+                   (map r/java->clj))
+              (interleave
+               (-> j
+                   (.getAttribute "names")
+                   (.asStrings)
+                   (->> (map keyword))))
+              (apply array-map)))))
 
 )
 

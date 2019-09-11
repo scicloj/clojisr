@@ -4,7 +4,6 @@
            (clojure.lang Named)))
 
 
-
 (declare clj->java)
 
 (defn ->rexp-string

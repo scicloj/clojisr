@@ -70,12 +70,14 @@
        (prot/get-r->java session)))
 
 (defn java->r [java-object session]
-  (let [obj-name (rand-name)]
-    (prot/java->r-set session
-                   (object-name->memory-place
-                    obj-name)
-                   java-object)
-    (->RObject obj-name session)))
+  (if (instance? RObject java-object)
+    java-object
+    (let [obj-name (rand-name)]
+      (prot/java->r-set session
+                        (object-name->memory-place
+                         obj-name)
+                        java-object)
+      (->RObject obj-name session))))
 
 (defn apply-function [r-function
                       r-args

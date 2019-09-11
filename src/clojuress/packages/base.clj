@@ -3,5 +3,5 @@
 
 (add-functions-to-this-ns
  'base
- '[mean])
+ '[mean class dim])
 
