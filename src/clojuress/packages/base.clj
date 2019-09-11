@@ -1,5 +1,5 @@
 (ns clojuress.packages.base
-  (:require [clojuress.core :refer [add-functions-to-this-ns]]))
+  (:require [clojuress :refer [add-functions-to-this-ns]]))
 
 (add-functions-to-this-ns
  'base

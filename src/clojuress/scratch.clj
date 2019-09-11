@@ -2,7 +2,7 @@
   (:require [clojuress.packages.base :as base]
             [clojuress.packages.stats :as stats]
             [clojuress.session :as session]
-            [clojuress.core :as r :refer [r]]
+            [clojuress :as r :refer [r]]
             [com.rpl.specter :as specter]
             [clojure.walk :as walk]
             [clojuress.impl.rserve.java-to-clj :as java-to-clj]
@@ -19,25 +19,6 @@
   (->> "with(list(x=1:9, y=(1:9)+rnorm(9)), lm(y~x))"
        r)
 
-  (->> "list(x=1, 2, y='hi')"
-       r
-       r/r->java
-       class)
-
-  (-> "list(1,2)"
-       r
-       r/r->java
-       (.getAttribute "names"))
-
-  (r "class(list(a=1))")
-
-  (-> "1+2"
-      r/eval-r->java
-      r/java->clj
-      (= [3.0]))
-
-  (-> "1+2"
-      r)
 
   (-> [1 2 3]
       base/mean)
@@ -91,19 +72,6 @@
 
   (r "1+2"  :session-args {:port 6666})
 
-  (-> "data.frame(a=1:9, b=rnorm(9))"
-      r
-      r/r->java
-      ((fn [j]
-         (->> (->> j
-                   (.asList)
-                   (map r/java->clj))
-              (interleave
-               (-> j
-                   (.getAttribute "names")
-                   (.asStrings)
-                   (->> (map keyword))))
-              (apply array-map)))))
 
 )
 

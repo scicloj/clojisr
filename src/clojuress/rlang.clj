@@ -1,4 +1,4 @@
-(ns clojuress.rlang.core
+(ns clojuress.rlang
   (:require [clojure.string :as string]
             [clojuress.protocols :as prot]
             [clojuress.util :refer [starts-with?]]))

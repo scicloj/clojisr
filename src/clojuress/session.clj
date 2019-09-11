@@ -2,7 +2,7 @@
   (:refer-clojure :exclude [time])
   (:require [clojuress.protocols :as prot]
             [clojuress.impl.rserve.session]
-            [clojuress.rlang.core :as rlang]))
+            [clojuress.rlang :as rlang]))
 
 (def sessions (atom {}))
 

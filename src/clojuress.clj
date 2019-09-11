@@ -1,9 +1,9 @@
-(ns clojuress.core
+(ns clojuress
   (:require [clojuress.session :as session]
-            [clojuress.rlang.core :as rlang]
+            [clojuress.rlang :as rlang]
             [clojuress.protocols :as prot]
             [clojure.pprint :as pp])
-  (:import clojuress.rlang.core.RObject))
+  (:import clojuress.rlang.RObject))
 
 
 (defmacro defn-implicit-session [f args & body]
