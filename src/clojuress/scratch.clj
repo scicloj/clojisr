@@ -2,16 +2,38 @@
   (:require [clojuress.packages.base :as base]
             [clojuress.packages.stats :as stats]
             [clojuress.session :as session]
+            [clojuress.util :refer [fmap]]
             [clojuress :as r :refer [r]]
             [com.rpl.specter :as specter]
             [clojure.walk :as walk]
             [clojuress.impl.rserve.java-to-clj :as java-to-clj]
             [clojuress.impl.rserve.java :as java]
-            [tech.ml.dataset :as dataset])
+            [tech.ml.dataset :as dataset]
+            [tech.v2.datatype.protocols :as dtype-prot]
+            [tech.ml.protocols.dataset :as ds-prot])
   (:import (org.rosuda.REngine REXP REXPSymbol REXPDouble REXPInteger)
            (org.rosuda.REngine.Rserve RConnection)))
 
 (comment
+
+  (-> "data.frame(a=1:9)"
+      r
+      r/r->java
+      (._attr))
+
+  (->> {:a [1 2 3]
+        :b [4 5 6]}
+       dataset/name-values-seq->dataset
+       r/clj->java)
+
+
+
+
+  dataset/column-map
+  (fmap (comp clj->java ; recursively
+              dtype-prot/->array-copy))
+  ->named-list
+
 
   (->> "data.frame(x=c(1:4),y=paste0('hello',1:4),z=(1:4)^2, stringsAsFactors=FALSE)"
        r)

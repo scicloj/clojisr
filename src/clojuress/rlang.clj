@@ -1,7 +1,8 @@
 (ns clojuress.rlang
   (:require [clojure.string :as string]
             [clojuress.protocols :as prot]
-            [clojuress.util :refer [starts-with?]]))
+            [clojuress.util :refer [starts-with?]]
+            [tech.resource :as resource]))
 
 (defrecord RObject [object-name session])
 
@@ -18,6 +19,10 @@
           (object-name->memory-place obj-name)
           r-code))
 
+(defn- r-code-to-forget [obj-name]
+  (format "%s <- NULL; 'ok'"
+          (object-name->memory-place obj-name)))
+
 (defn init-session-memory [session]
   (prot/eval-r->java session ".memory <- list()"))
 
@@ -25,16 +30,27 @@
   (init-session-memory session)
   session)
 
+(defn forget [obj-name session]
+  (let [returned (->> obj-name
+                      r-code-to-forget
+                      (prot/eval-r->java session))]
+    (assert (->> returned
+                (prot/java->clj session)
+                (= ["ok"])))))
+
 (defn eval-r [r-code session]
   (let [obj-name (rand-name)
         returned    (->> r-code
                          (r-code-that-remembers obj-name)
                          (prot/eval-r->java session))]
-    (assert (-> (prot/java->specified-type session returned :strings)
-                vec
-                (= ["ok"])))
-    (->RObject obj-name session)))
-
+    (assert (->> returned
+                 (prot/java->clj session)
+                 (= ["ok"])))
+    (-> (->RObject obj-name session)
+        (resource/track
+         #(do (println [:releasing obj-name])
+              (forget obj-name session))
+         :gc))))
 
 (defn java->r-specified-type [java-object type session]
   (prot/java->specified-type session java-object type))
@@ -103,3 +119,7 @@
                                 object-name->memory-place)))))
               (string/join ", ")))]
     (eval-r code session)))
+
+
+
+

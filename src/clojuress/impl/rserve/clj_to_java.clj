@@ -1,5 +1,10 @@
 (ns clojuress.impl.rserve.clj-to-java
-  (:import (org.rosuda.REngine REXP REXPString REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
+  (:require [clojuress.util :refer [fmap]]
+            [tech.ml.dataset :as dataset]
+            [tech.ml.protocols.dataset :as ds-prot]
+            [tech.v2.datatype.protocols :as dtype-prot]
+            [clojuress :as r])
+  (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPSymbol REXPLogical REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util List Collection)
            (clojure.lang Named)))
 
@@ -16,7 +21,7 @@
                  :else               (str x)))
          xs))))
 
-(defn ->numeric-vector
+(defn ->rexp-double
   [xs]
   (->> xs
        (map (fn [x]
@@ -26,7 +31,7 @@
        double-array
        (REXPDouble.)))
 
-(defn ->integer-vector
+(defn ->rexp-integer
   [xs]
   (->> xs
        (map (fn [x]
@@ -36,8 +41,21 @@
        int-array
        (REXPInteger.)))
 
+(defn ->rexp-factor
+  [xs]
+  (throw (ex-info "Factors are not supported yet.")))
 
-
+(defn ->rexp-logical
+  [xs]
+  (->> xs
+       (map (fn [x]
+              (if (nil? x)
+                REXPLogical/NA
+                (if x
+                  REXPLogical/TRUE
+                  REXPLogical/FALSE))))
+       byte-array
+       (REXPLogical.)))
 
 (defn primitive-type [obj]
   (cond (nil? obj)              :na
@@ -73,29 +91,66 @@
          first)))
 
 
-
 (def primitive-vector-ctors
-  {:integer   ->integer-vector
-   :numeric   ->numeric-vector
-   :character nil
-   :factor    nil
-   :logical   nil})
+  {:integer   ->rexp-integer
+   :numeric   ->rexp-double
+   :character ->rexp-string
+   :factor    ->rexp-factor
+   :logical   ->rexp-logical})
 
 (defn ->primitive-vector [sequential]
   (when-let [primitive-type (finest-primitive-type sequential)]
     ((primitive-vector-ctors primitive-type) sequential)))
 
+(defn ->list [values]
+  (->> values
+      ;; recursively
+      (map clj->java)
+      (RList.)
+      (REXPGenericVector.)))
+
+(defn ->named-list [amap]
+  (-> (RList. (->> amap
+                   vals
+                   ;; recursively
+                   (map clj->java))
+              (->> amap
+                   keys
+                   (map name)))
+      (REXPGenericVector.)))
+
+(defn ->data-frame [dataset]
+  (->> dataset
+       dataset/column-map
+       (fmap (comp clj->java ; recursively
+                   seq ; TODO: avoid this wasteful conversion
+                   dtype-prot/->array-copy))
+       ->named-list
+       (.asList)
+       (REXP/createDataFrame)))
 
 
 (defn clj->java
   [obj]
-  (cond
-    ;; nil
-    (nil? obj)
-    (REXPNull.)
-    ;; basic types
-    (primitive-type obj)
-    (clj->java [obj])
-    ;; a sequential structure
-    (sequential? obj)
-    (->primitive-vector obj)))
+  (or (cond
+        ;; identity on java REXP objects
+        (instance? REXP obj)
+        obj
+        ;; nil
+        (nil? obj)
+        (REXPNull.)
+        ;; basic types
+        (primitive-type obj)
+        (clj->java [obj])
+        ;; a sequential or array of elements of inferrable primitive type
+        (sequential? obj)
+        (->primitive-vector obj))
+      (cond ;; a dataset
+        (satisfies? ds-prot/PColumnarDataset obj)
+        (->data-frame obj)
+        ;; a named list
+        (map? obj)
+        (->named-list obj)
+        ;; an unnamed list
+        (sequential? obj)
+        (->list obj))))

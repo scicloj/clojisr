@@ -5,7 +5,7 @@
             [tech.ml.dataset :as dataset]
             [tech.v2.datatype :as dtype]
             [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]])
-  (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
+  (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util Map List Collection)
            (clojure.lang Named)))
 
@@ -61,6 +61,22 @@
   (->array-copy [item]
     ;; NA maps to nil.
     (.asStrings item)))
+
+(extend-type REXPLogical
+  dtype-prot/PToArray
+  (->array-copy [item]
+    ;; NA,TRUE,FALSE have to be handled explicitly.
+    (let [n      (.length item)
+          na? (.isNA item)
+          true? (.isTRUE item)
+          target (make-array Boolean (.length item))]
+      (dotimes [i n]
+        (aset target i
+              (or (aget true? i)
+                  (if (aget na? i)
+                    nil
+                    false))))
+      target)))
 
 
 (defn java-factor? [^REXP java-obj]
@@ -119,6 +135,11 @@
     (-> java-obj ->array-copy vec)))
 
 (extend-type REXPString
+  Clojable
+  (-java->clj [java-obj]
+    (-> java-obj ->array-copy vec)))
+
+(extend-type REXPLogical
   Clojable
   (-java->clj [java-obj]
     (-> java-obj ->array-copy vec)))
