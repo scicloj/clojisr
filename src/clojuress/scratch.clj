@@ -4,19 +4,30 @@
             [clojuress.session :as session]
             [clojuress.core :as r :refer [r]]
             [com.rpl.specter :as specter]
-            [clojure.walk :as walk])
+            [clojure.walk :as walk]
+            [clojuress.impl.rserve.java-to-clj :as java-to-clj]
+            [clojuress.impl.rserve.java :as java]
+            [tech.ml.dataset :as dataset])
   (:import (org.rosuda.REngine REXP REXPSymbol REXPDouble REXPInteger)
            (org.rosuda.REngine.Rserve RConnection)))
 
 (comment
 
-  (->> "1:9"
+  (->> "data.frame(x=c(1:4),y=paste0('hello',1:4),z=(1:4)^2, stringsAsFactors=FALSE)"
        r)
 
-  (->> "data.frame(x=c(1,NA),y=c('hi','hello'),z=c(NA,2.3))"
+  (->> "with(list(x=1:9, y=(1:9)+rnorm(9)), lm(y~x))"
+       r)
+
+  (->> "list(x=1, 2, y='hi')"
        r
        r/r->java
-       r/java->naive-clj)
+       class)
+
+  (-> "list(1,2)"
+       r
+       r/r->java
+       (.getAttribute "names"))
 
   (r "class(list(a=1))")
 
