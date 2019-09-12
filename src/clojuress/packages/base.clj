@@ -3,5 +3,5 @@
 
 (add-functions-to-this-ns
  'base
- '[mean class dim])
+ '[mean cbind rbind names class dim])
 
