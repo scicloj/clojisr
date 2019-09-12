@@ -16,17 +16,15 @@
 
 (comment
 
-  (-> "data.frame(a=1:9)"
-      r
-      r/r->java
-      (._attr))
+  (r "library(tidyverse)")
 
-  (->> {:a [1 2 3]
-        :b [4 5 6]}
-       dataset/name-values-seq->dataset
-       r/clj->java)
-
-
+  (let [f (r/function (r "function(df) df %>% mutate(z=x+y)"))
+        g (r/function (r "function(df) {print(class(df)); df %>% filter(z>5)}"))]
+    (->> {:x [1 2 3]
+          :y [4 5 6]}
+         dataset/name-values-seq->dataset
+         f
+         g))
 
 
   dataset/column-map

@@ -3,7 +3,7 @@
             [clojuress.rlang :as rlang]
             [clojuress.protocols :as prot]
             [clojure.pprint :as pp])
-  (:import clojuress.rlang.RObject))
+  (:import clojuress.robject.RObject))
 
 
 (defmacro defn-implicit-session [f args & body]

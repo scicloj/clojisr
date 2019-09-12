@@ -3,10 +3,11 @@
             [tech.ml.dataset :as dataset]
             [tech.ml.protocols.dataset :as ds-prot]
             [tech.v2.datatype.protocols :as dtype-prot]
-            [clojuress :as r])
+            [clojuress.robject])
   (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPSymbol REXPLogical REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util List Collection)
-           (clojure.lang Named)))
+           (clojure.lang Named)
+           clojuress.robject.RObject))
 
 
 (declare clj->java)
@@ -133,7 +134,10 @@
 (defn clj->java
   [obj]
   (or (cond
-        ;; identity on java REXP objects
+        ;; an r object
+        (instance? RObject obj)
+        obj
+        ;; a java REXP object
         (instance? REXP obj)
         obj
         ;; nil

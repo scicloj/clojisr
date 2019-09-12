@@ -2,9 +2,9 @@
   (:require [clojure.string :as string]
             [clojuress.protocols :as prot]
             [clojuress.util :refer [starts-with?]]
-            [tech.resource :as resource]))
-
-(defrecord RObject [object-name session])
+            [tech.resource :as resource]
+            [clojuress.robject :refer [->RObject]])
+  (:import clojuress.robject.RObject))
 
 (defn- rand-name []
   (-> (java.util.UUID/randomUUID)
