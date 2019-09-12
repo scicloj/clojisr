@@ -4,6 +4,7 @@ Clojure speaks statistics - a library for Clojure<->R interop
 
 This is a draft, not announced yet. Everything is alpha.
 
+This README will be detailed soon. For now, look at the [presentation](./doc/presentation20190912.html).
 
 ## License
 
