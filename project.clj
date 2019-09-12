@@ -20,6 +20,7 @@
                  [techascent/tech.ml.dataset "1.24"]
                  [org.rosuda.REngine/REngine "2.1.0"]
                  [org.rosuda.REngine/Rserve "1.8.1"]
+                 [hiccup "1.0.5"]
                  [alembic "0.3.2"]]
   :injections [(require 'hara.tool)]
   ;; :repl-options {:init-ns clojuress.core}
