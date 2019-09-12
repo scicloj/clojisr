@@ -1,0 +1,172 @@
+---
+title: "Clojure-R interop"
+output: slidy_presentation
+
+---
+
+# Background
+
+We already have Clojure-R interop solutions, for almost 10 years.
+
+# Goals
+
+  * experiment with function-centric API 
+
+  * support zero-copy interop
+
+  * achieve compatibility with common data abstractions such as [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset)
+
+  * include some practical usage lessons
+    * mixing Clojure Hiccup with RMarkdown
+
+  * abstract over additional runtimes (Renjin, FastR)
+
+  * comfortable multi-session support
+
+# History
+
+ * R history
+
+   * [A recent article](https://rss.onlinelibrary.wiley.com/doi/10.1111/j.1740-9713.2018.01169.x) by Nick Thieme
+
+   * [R. Ihaka's talks](https://www.stat.auckland.ac.nz/~ihaka/%3FPapers_and_Talks)
+
+ * [Rincanter](http://www.joelboehland.com/posts/all-your-datasets-r-belong-to-us.html) by J. Boehland
+   * based on JRI (R through JNI)
+   * compatible with Incanter datasets
+ 
+ * [Rincanter fork](https://github.com/svarcheg/rincanter) by Vladimir Kadychevski
+   * based on Rserve (R through sockets) 
+
+ * [Further work](https://github.com/skm-ice/rincanter) by the skm-ice group
+
+ * [Rojure](https://groups.google.com/forum/#!topic/numerical-clojure/fQSJiL8QfB0) by Carsten Behring
+   * compatible with core.matrix
+
+# Possible ways of interop (partial list)
+
+* JNI-based, single-session [JRI](https://www.rforge.net/JRI/) - used in the original [Rincanter](https://github.com/jolby/rincanter)
+
+* socket-based, multi-session [Rserve](https://github.com/s-u/Rserve) - used in [forks](https://github.com/svarcheg/rincanter) [of](https://github.com/skm-ice/rincanter) Rincanter, and in the subsequent [Rojure](https://github.com/behrica/rojure)
+
+* [REngine](https://github.com/s-u/REngine) - a common abstration of the two above
+
+* http-based, multi session, secure, slow-for-large-datasets [opencpu](https://www.opencpu.org) - used in [opencpu-clj](https://github.com/behrica/opencpu-clj)
+
+* pure-JVM, multi-session [Renjin](https://www.renjin.org)
+
+* a wrapper of several, such as [Rsession](https://github.com/yannrichet/rsession)
+
+* a new JNA-based solution (along the lines of Libpython-clj)
+
+* shelling out - used in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and in [huri](https://github.com/sbelak/huri)
+
+* GraalVM-based [FastR](https://www.rforge.net/Rserve/doc.html)
+
+
+# Suggested priorities
+
+* GNU-R through Rserve+REngine
+
+* Renjin
+
+* FastR
+    
+
+# Abstration
+
+Seeking a common API wrapping different backends.
+
+Currently considering Rserve+REngine, Renjin.
+
+A large part of the library code is backend-agnostic.
+
+
+# Question
+
+The Java layer (REngine REXP, Renjin SEXP) is an implementation detail. But controlling it seems useful. 
+
+Should we include it in the API?
+
+# Answer
+
+For now, yes.
+
+# Question
+
+The Java libraries we use (REngine, Renjin) automatically convert R returned values to Java objects.
+
+What to do?
+
+# Answer
+
+Do not return the R objects.
+
+Keep them in R memory, and return a handle.
+
+# Question
+
+How to release all that memory responsively?
+
+# Answer
+
+ [tech.resource](http://techascent.com/blog/generalized-resource-management.html)
+
+# Running code
+
+# Data conversions
+
+R <-> Java
+
+Java <-> Clojure
+
+Both depend on the backend, of course.
+
+
+# Functions
+
+# Sessions
+
+Easy to create and to release.
+
+# Datasets
+
+R data.frame <-> Clojure tech.ml.dataset
+
+* through data conversion
+
+* through protocols -- zero copy (under construction)
+
+# Rmarkdown
+
+# Using Clojure from R 
+
+* work in progress
+
+* R users -- potential Clojure users ?
+  * (hopefully) open to hear about Lisp and FP
+  * suffering with nested data structures
+    * may enjoy the joy of Clojure
+
+* R tooling -- potential Clojure tooling ?
+
+# Learning from the R ecosystem and community
+
+# Thanks
+
+ * [tech.resource](http://techascent.com/blog/generalized-resource-management.html) for getting resources free
+ 
+ * [hara.test](https://cljdoc.org/d/hara/test/3.0.7) for automated docs by tests -- see [minimal usage example](https://github.com/scicloj/hara-test-example)
+
+ * [clj-kondo](https://github.com/borkdude/clj-kondo) for code quality control
+
+# Open questions
+
+* What protocols are important to support?
+
+* A common abstraction with Libpython-clj, Panthera
+
+* Relation to existing libraries
+
+* Priorities
+
