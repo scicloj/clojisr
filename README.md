@@ -47,9 +47,9 @@ For now, see the [tests](tests/clojuress_test.clj) of the `clojuress` namespace.
 
 # Background
 
-1. [Lisp for statistical computing](doc/lisp_for_stat.md)
+1. [Lisp for statistical computing](doc/lisp_for_stats.md)
 
-2. [Calling R from Clojure: existing libraries](doc/extisting_libraries.md)
+2. [Calling R from Clojure: existing libraries](doc/existing_libraries.md)
 
 3. [R backends](doc/r_backends.md)
 
