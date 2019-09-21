@@ -2,13 +2,13 @@
 
 Clojure speaks statistics - a library for Clojure-R interop
 
-[This README is intensivey edited these days.]
+[This README is being intensivey edited these days.]
 
 ## Scope of the project
 
-At the moment, this project suggests an experimental way to use R from Clojure. Everything is alpha, and will keep changing.
+There are already stable libraries for Clojure-R interop -- see [this list](doc/existing_libraries.md).
 
-There are already stable solutions for Clojure-R interop, that you may wish to look into: [Rincanter](http://www.joelboehland.com/posts/all-your-datasets-r-belong-to-us.html), [its](https://github.com/svarcheg/rincanter) [forks](https://github.com/skm-ice/rincanter), or [Rojure](https://groups.google.com/forum/#!topic/numerical-clojure/fQSJiL8QfB0). 
+This project suggests yet another way to use R from Clojure. At the moment, everything is alpha, and will keep changing.
 
 Currently we target only JVM Clojure, but we are interested in generalizing the work to Clojurescript.
 
