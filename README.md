@@ -20,26 +20,19 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 ## Goals
 
-  * experiment with function-centric API 
-    * status: a draft exists, it will change
+  * experiment with function-centric API  (status: a draft exists, it will change)
 
-  * experiment with syntax -- e.g., using and extending the EDN-based syntax inroducted in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and [used](https://github.com/sbelak/huri/blob/master/src/huri/plot.clj#L299) in [huri](https://github.com/sbelak/huri)
-    * status: not here yet
+  * experiment with syntax -- e.g., using and extending the EDN-based syntax inroducted in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and [used](https://github.com/sbelak/huri/blob/master/src/huri/plot.clj#L299) in [huri](https://github.com/sbelak/huri) (status: not here yet)
 
-  * support interop with minimal copying of data
-    * status: supported
+  * support interop with minimal copying of data (status: supported)
 
-  * achieve compatibility with common data abstractions such as [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset)
-    * status: partial support
+  * achieve compatibility with common data abstractions such as [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) (status: partial support) 
 
-  * create convenient wrappers for common use cases -- e.g., data visualization
-    * status: planning to add something soon
+  * create convenient wrappers for common use cases -- e.g., data visualization (status: planning to add something soon)
  
-  * abstract over additional runtimes (Renjin, FastR)
-    * status: not there yet; planning to look into Renjin in the near future
+  * abstract over additional runtimes (Renjin, FastR) (status: not there yet; planning to look into Renjin in the near future)
 
-  * provide some convenience around multi-session support
-    * status: a draft exists, needs some polish
+  * provide some convenience around multi-session support (status: a draft exists, needs some polish)
 
 ## Requirements
 
@@ -82,7 +75,12 @@ For now, see the [tests](test/clojuress_test.clj) of the `clojuress` namespace.
 
 Please share your comments, thoughts, ideas and questions at the [Issues Page](https://github.com/scicloj/clojuress/issues) of this project and at the [r-interop streamm](https://clojurians.zulipchat.com/#narrow/stream/204621-r-interop) of the Clojurians Zulip.
 
+## Tools used for developing this repo
 
+ * [hara.test](https://cljdoc.org/d/hara/test/3.0.7) for automated docstrings by tests -- see [a minimal usage example](https://github.com/scicloj/hara-test-example)
+
+ * [clj-kondo](https://github.com/borkdude/clj-kondo) for code quality control
+ 
 ## License
 
 Copyright © 2019 Scicloj 

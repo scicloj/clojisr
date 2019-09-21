@@ -37,6 +37,14 @@ This is one of situations that the [tech.resource](LINK) library takes care of, 
 
 ### The Java layer in between
 
+At the moment, all the backends we consider, and in particular Rserve+REngine and Renjin, have a Java layer that represents R types, and our use of the backend passes through that layer. That is, when one evaluates R code, the data and the possible return values are communicated as Java datatypes of that layer.
+
+All that could be considered as an implementation detail. If we wish our API to support different backends in a transparent way, then probably this kinds of details would rather be abstracted away. On the other hand, exposing this implementation detail as part of the API has some benefits of performance. Moreover, an object at the Java layer could poetentially be converted to different Clojure interpretations of that object (e.g., a named list could be converted to a list, as well as to an array-map), and could implement some protocols/interfaces, and thus be used from Clojure in a neat way.
+
+This seems to justify exposing the Java layer at this experimental stage.
+
+Thus, for example, conversion functions `clj->java`, `java->R`, `R->java`, `java->clj`, are part of the API, for now.
+
 ### Data abstrations
 
 We plan to use mainly the data abstractions of the tech.datatype and `tech.ml.dataset` mentioned above, in addition to basic Java/Clojure notions such as Map, Sequence, etc.
@@ -48,4 +56,17 @@ We experiment with two main ways of using an abstraction layer in interop:
 Regarding conversion, at the moment we support converting of `tech.ml.dataset` datasets to/from R data frames. Soon we should be able to supprt also conversion of tech.datatype tensors to/from R matrices, and of `tech.ml.dataset` categorical columns to/from R factors.
 
 In principle, all these could also be exposed through protocol implementation as well. This will allow one to use `tech.ml.dataset`'s data manipulation capabilities directly with (handles of) R objects, without copying anything to the Clojure side.
+
+### Sessions
+
+Supporting multiple R sessions is one of our goals.
+
+It has to be simple, easy and quick to spawn new R sessions, discard them, and use them in parallel.
+
+On the other hand, the session concept should be transparent if the user does not care about multiple sessions.
+
+Each session can have its own backend. 
+
+We achive that by defining a `Session` protocol, that each backend implementation would implement (e.g., `RserveSession`). We keep a catalogue of all the live sessions. The API functions allow for specifying the desired session to be used (e.g., "an Rserve session at port 4444"), and if that session does not exists, it is created. If a session is not specified, then everything should work with the default session. The default definition can be overridedn by the user.
+
 
