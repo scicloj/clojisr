@@ -27,12 +27,6 @@
          g))
 
 
-  dataset/column-map
-  (fmap (comp clj->java ; recursively
-              dtype-prot/->array-copy))
-  ->named-list
-
-
   (->> "data.frame(x=c(1:4),y=paste0('hello',1:4),z=(1:4)^2, stringsAsFactors=FALSE)"
        r)
 
