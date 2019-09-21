@@ -19,14 +19,13 @@ In one of its late versions, it started supporting a notion of a [dataset](https
 
 As mention above, Rojure uses the dataset abstraction of core.matrix, and thus supports Incanter, too.
 
-### Spork's Incanter forks and extensions
-The Spork project by Joinr is a collection of libraries for data science and operations researck. Among other things, it continues the work of Incanter and offers its own notion of typed columnar table. See some comments [here](https://clojureverse.org/t/online-meeting-clojure-data-science/3503/35).
-
-
 ### Neanderthal and Denisovan
 [Neanderthal](https://neanderthal.uncomplicate.org) by Dragan Djuric is one of the popular Clojure matrix libraries, and surely the most active and comprehensive one nowadays. It focuses on high-performance computation.
 
 [Denisovan](https://github.com/cailuno/denisovan) is a partial implementation of core.matrix that uses Neanderthal as its engine.
+
+### Spork's Incanter forks and extensions
+The Spork project by Joinr is a collection of libraries for data science and operations researck. Among other things, it continues the work of Incanter and offers its own notion of typed columnar table. See some comments [here](https://clojureverse.org/t/online-meeting-clojure-data-science/3503/35).
 
 
 ### The Tech stack
