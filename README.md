@@ -53,7 +53,7 @@ For now, see the [tests](test/clojuress_test.clj) of the `clojuress` namespace.
 
 3. [R backends](doc/r_backends.md)
 
-4. [Some of R's data abstractions](doc/r_data_absractions.md)
+4. [Some of R's data abstractions](doc/r_data_abstractions.md)
 
 5. [Clojure's counterparts of R's data abstractions](doc/clojure_counterparts.md)
 
