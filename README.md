@@ -34,11 +34,16 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
   * provide some convenience around multi-session support (status: a draft exists, needs some polish)
 
+
+
 ## Requirements
 
 * [R](https://www.r-project.org)
 
 * The [Rserve](https://cran.r-project.org/web/packages/Rserve/index.html) R package (`install.packages("Rserve")`)
+
+[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojuress.svg)](https://clojars.org/scicloj/clojuress)
+
 
 ## Usage
 [Coming soon]
