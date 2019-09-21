@@ -3,9 +3,9 @@
 All of the following projects are quite useful and have inspired the work here.
 
 They differ in in several aspects:
-- the API and syntactic sugar offered
-- the kind of R backend used: JRI+REngine / Rserve+REngine / Opencpu / just running R from shell (see [R backends](r_backends.md))
-- the Clojure notions used as the equivalent of R's "data frames" and "matrices": Incanter / core.matrix (see [Clojure's counterparts of R's data abstractions](clojure_counterparts.md))
+  - the API and syntactic sugar offered
+  - the kind of R backend used: JRI+REngine / Rserve+REngine / Opencpu / just running R from shell (see [R backends](r_backends.md))
+  - the Clojure notions used as the equivalent of R's "data frames" and "matrices": Incanter / core.matrix (see [Clojure's counterparts of R's data abstractions](clojure_counterparts.md))
 
 
 * [Rincanter](https://github.com/jolby/rincanter) was [announced](http://www.joelboehland.com/posts/all-your-datasets-r-belong-to-us.html) by Joel Boehland allows in early 2010. It was based on JRI (R from Java using JNI) as the R backend, and for data-abstractions used Incanter, an R-inspired library for Clojure, which was popular back then.
