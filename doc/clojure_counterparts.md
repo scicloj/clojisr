@@ -1,7 +1,7 @@
 
-## Clojure's counterparts
+## Clojure's counterparts of common R data abstractions
 
-Several Clojure libraries have offered counterparts of the above notions.
+Several Clojure libraries have offered counterparts of common [R data abstractions](r_data_abstractions.md).
 
 Here we'll mention a few of those libraries.
 
@@ -28,7 +28,17 @@ The Spork project by Joinr is a collection of libraries for data science and ope
 
 [Denisovan](https://github.com/cailuno/denisovan) is a partial implementation of core.matrix that uses Neanderthal as its engine.
 
-### Other libraries worth mentioning
+
+### The Tech stack
+
+The 'tech' collection of libraries by Chris Nuernberger offers a new set of abstractions relevant for data science work. One of the main ideas behind this stack is to [build bridges rather than islands](https://clojureverse.org/t/online-meeting-clojure-data-science/3503/17) - that is, the goal is not to create a specific toolset, but rather to create a platform that can connect to any other relevant toolset, thus enjoying the growth and development of any relevant ecosystem in the field.
+
+Two relevant libraries of this stack are the following:
+  * [tech.datatype](https://github.com/techascent/tech.datatype) library offers a set of abstractions for working with various sequential and array-like structures (including tensors of arbitrary dimension, and in particular, matrices).
+  * [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) grew out of some discussion following the above-mentioned work of Spork, and other relevant experiences. It offers a 'dataset' abstraction (data frame, in R's language) of typed-columns tabular structires, that allows for different implementations. It has one specific comprehensive implementation based on the [Tablesaw](https://github.com/jtablesaw/tablesaw) java library. It also offers its own notion of categorical variables (similar to R's factors).
+
+
+### Other libraries offering a data-frame-like notions
 
 Here are some other Clojure libraries that offer some data-frame-like notions. Some of them are strongly inspired by the Python Pandas library.
 
@@ -38,13 +48,4 @@ Here are some other Clojure libraries that offer some data-frame-like notions. S
 - [panthera](https://github.com/alanmarazzi/panthera) by Alan Marazzi actually wraps Pandas through [Libpython-clj](https://github.com/cnuernber/libpython-clj).
 - [huri](https://github.com/sbelak/huri) by Simon Belak offers data-frame-like experience by processing simple sequences-of-maps.
 - [kixi.stats](https://github.com/MastodonC/kixi.stats) by Henri Garner, Simon Belak and Elise Huard offers a large composable toolset of statistical functionality on sequences-of-maps, based on transducers.
-
-
-### The Tech stack
-
-The 'tech' collection of libraries by Chris Nuernberger offers a new set of abstractions relevant for data science work. One of the main ideas behind this stack is to [build bridges rather than islands](https://clojureverse.org/t/online-meeting-clojure-data-science/3503/17) - that is, the goal is not to create a specific toolset, but rather to create a platform that can connect to any other relevant toolset, thus enjoying the growth and development of any relevant ecosystem in the field.
-
-Two relevant libraries of this stack are the following:
-  * [tech.datatype](https://github.com/techascent/tech.datatype) library offers a set of abstractions for working with various sequential and array-like structures (including tensors of arbitrary dimension, and in particular, matrices).
-  * [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) grew out of some discussion following the above-mentioned work of Spork, and other relevant experiences. It offers a 'dataset' abstraction (data frame, in R's language) of typed-columns tabular structires, that allows for different implementations. It has one specific comprehensive implementation based on the [Tablesaw](https://github.com/jtablesaw/tablesaw) java library. It also offers its own notion of categorical variables (similar to R's factors).
 
