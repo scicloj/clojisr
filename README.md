@@ -43,7 +43,7 @@ The related problem, of calling Cojure from R, may be addressed too in the futur
 [Coming soon]
 
 # API Draft
-For now, see the [tests](tests/clojuress_test.clj) of the `clojuress` namespace.
+For now, see the [tests](test/clojuress_test.clj) of the `clojuress` namespace.
 
 # Background
 
