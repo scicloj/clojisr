@@ -20,20 +20,19 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 ## Goals
 
-  * experiment with function-centric API  (status: a draft exists, it will change)
+  * A Function-centric API, where the default mode of usage is calling R functions on R objects, from Clojure (Status: a draft exists, it will change)
 
-  * experiment with syntax -- e.g., using and extending the EDN-based syntax inroducted in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and [used](https://github.com/sbelak/huri/blob/master/src/huri/plot.clj#L299) in [huri](https://github.com/sbelak/huri) (status: not here yet)
+  * "R code as Clojure data", using and extending the EDN-based syntax inroducted in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and [used](https://github.com/sbelak/huri/blob/master/src/huri/plot.clj#L299) in [huri](https://github.com/sbelak/huri) (Status: currently experimenting with the original gg4clj syntax)
 
-  * support interop with minimal copying of data (status: supported)
+  * Interop with minimal copying of data (Status: supported)
 
-  * achieve compatibility with common data abstractions such as [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) (status: partial support) 
+  * Compatibility with common data abstractions such as [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) datasets (Status: partial support) 
 
-  * create convenient wrappers for common use cases -- e.g., data visualization (status: planning to add something soon)
+  * Convenient wrappers for common use cases, such as visualization (Status: wrote a basic wrapper to Rmarkdown)
  
-  * abstract over additional runtimes (Renjin, FastR) (status: not there yet; planning to look into Renjin in the near future)
+  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: only GNU R is supported to the momentnot there yet; planning to look into Renjin soon)
 
-  * provide some convenience around multi-session support (status: a draft exists, needs some polish)
-
+  * Convenient multi-session support (Status: a draft exists, needs some polish)
 
 
 ## Requirements
