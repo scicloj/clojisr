@@ -52,7 +52,7 @@ See:
 
 * [basic example](examples/basic_example.clj)
 
-* [data visualization using rmarkdown](examples/basic_example.clj)
+* [data visualization using rmarkdown](examples/rmarkdown_example.clj)
 
 ## API Draft
 For now, see the [basic example](examples/basic_example.clj) and the [tests](test/clojuress_test.clj) of the `clojuress` namespace.
