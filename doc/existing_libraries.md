@@ -20,7 +20,8 @@ They differ in in several aspects: (a) the API and syntactic sugar offered; (b) 
 * [Opencpu-clj](https://github.com/behrica/opencpu-clj) is another, earlier project by Carsten Behring. It uses Opencpu as the R backend. 
   * Some experiment to generalize to Clojuresctipt has been done [here](https://www.reddit.com/r/Clojure/comments/8zn0zk/1_some_experiments_in_calling_r_from/) (currently broken).
 
-* [gg4clj](https://github.com/JonyEpsilon/gg4clj) by Jony Hudson [appeared](https://grokbase.com/t/gg/clojure/14ct8ahd1e/ann-gg4clj-0-1-0-ggplot2-in-clojure-and-gorilla-repl) shortly after Opencpu-clj. Its main purpose is wrapping R's famouse "Grammer of Graphics" ggplot2 library (but it actually introduces some ideas that are applicable for more general use). It does so by running any R computation as a brand new process. One interesting innovation of this libraaary is an EDN-like syntax that translates to R.
-  
+* [gg4clj](https://github.com/JonyEpsilon/gg4clj) by Jony Hudson [appeared](https://grokbase.com/t/gg/clojure/14ct8ahd1e/ann-gg4clj-0-1-0-ggplot2-in-clojure-and-gorilla-repl) shortly after Opencpu-clj. Its main purpose is wrapping R's famouse "Grammer of Graphics" ggplot2 library (but it actually introduces some ideas that are applicable for more general use). It does so by running any R computation as a brand new process. One interesting innovation of this libraaary is an EDN-like syntax that translates to R. We actually use gg4clj for code generation inside this project.
+
+ 
 * [huri](https://github.com/sbelak/huri) by Simon Belak is a general library for data science, that does a lot more than calling R. One of its components is a collection of functions for data visualization, that build upon the way gg4clj offers, and add simple, composable ways to create ggplot2 plots in Clojure.
 

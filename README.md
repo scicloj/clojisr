@@ -48,13 +48,16 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 ## Usage
 
-See [basic example](examples/basic.clj).
+See:
 
-## More examples
-[Coming soon]
+* [basic example](examples/basic_example.clj)
+
+* [data visualization using rmarkdown](examples/basic_example.clj)
 
 ## API Draft
-For now, see the [tests](test/clojuress_test.clj) of the `clojuress` namespace.
+For now, see the [basic example](examples/basic_example.clj) and the [tests](test/clojuress_test.clj) of the `clojuress` namespace.
+
+The API may still change, hopefully after some good ideas in community discussions.
 
 ## Background
 
