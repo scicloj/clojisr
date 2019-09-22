@@ -84,12 +84,15 @@ The API may still change, hopefully after some good ideas in community discussio
 
 Please share your comments, thoughts, ideas and questions at the [Issues Page](https://github.com/scicloj/clojuress/issues) of this project and at the [r-interop streamm](https://clojurians.zulipchat.com/#narrow/stream/204621-r-interop) of the Clojurians Zulip.
 
-## Tools used for developing this repo
+## Tools used
 
- * [hara.test](https://cljdoc.org/d/hara/test/3.0.7) for automated docstrings by tests -- see [a minimal usage example](https://github.com/scicloj/hara-test-example)
+Working on this project, we enjoyed the following tools (partial list):
 
- * [clj-kondo](https://github.com/borkdude/clj-kondo) for code quality control
- 
+* [hara.test](https://cljdoc.org/d/hara/test/3.0.7) for automated docstrings by tests -- see [a minimal usage example](https://github.com/scicloj/hara-test-example)
+
+* [clj-kondo](https://github.com/borkdude/clj-kondo** for code quality control
+
+
 ## License
 
 Copyright © 2019 Scicloj 
