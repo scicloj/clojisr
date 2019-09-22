@@ -1,6 +1,4 @@
 (ns clojuress.packages.stats
-  (:require [clojuress :refer [add-functions-to-this-ns]]))
+  (:require [clojuress :refer [add-package-to-this-ns]]))
 
-(add-functions-to-this-ns
- 'stats
- '[median rnorm])
+(add-package-to-this-ns 'stats)

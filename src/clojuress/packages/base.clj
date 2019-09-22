@@ -1,7 +1,6 @@
 (ns clojuress.packages.base
-  (:require [clojuress :refer [add-functions-to-this-ns]]))
+  (:require [clojuress :refer [add-package-to-this-ns]]))
 
-(add-functions-to-this-ns
- 'base
- '[mean cbind rbind names class dim deparse])
+(add-package-to-this-ns 'base)
+
 

@@ -260,6 +260,23 @@
               (apply @d args))]
       (eval (list 'def s f)))))
 
+
+(defn add-package-to-this-ns
+  [package-symbol]
+  (->> package-symbol
+       name
+       (format "library(%s)")
+       r)
+  (->> package-symbol
+       name
+       vector
+       (apply-function (r "function(package_name) as.character(unlist(lsf.str(paste0('package:', package_name))))"))
+       r->java->clj
+       (filter (fn [function-name]
+                 (re-matches #"[A-Za-z][A-Za-z\\.\\_].*" function-name)))
+       (map symbol)
+       (add-functions-to-this-ns package-symbol)))
+
 ;; Overriding pprint
 (defmethod pp/simple-dispatch RObject [obj]
   (let [java-object (r->java obj)]
