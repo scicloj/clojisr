@@ -14,12 +14,12 @@
 (defn- object-name->memory-place [obj-name]
   (format ".memory$%s" obj-name))
 
-(defn- r-code-that-remembers [obj-name r-code]
+(defn- code-that-remembers [obj-name code]
   (format "%s <- {%s}; 'ok'"
           (object-name->memory-place obj-name)
-          r-code))
+          code))
 
-(defn- r-code-to-forget [obj-name]
+(defn- code-to-forget [obj-name]
   (format "%s <- NULL; 'ok'"
           (object-name->memory-place obj-name)))
 
@@ -32,21 +32,21 @@
 
 (defn forget [obj-name session]
   (let [returned (->> obj-name
-                      r-code-to-forget
+                      code-to-forget
                       (prot/eval-r->java session))]
     (assert (->> returned
                 (prot/java->clj session)
                 (= ["ok"])))))
 
-(defn eval-r [r-code session]
+(defn eval-r [code session]
   (let [obj-name (rand-name)
-        returned    (->> r-code
-                         (r-code-that-remembers obj-name)
+        returned    (->> code
+                         (code-that-remembers obj-name)
                          (prot/eval-r->java session))]
     (assert (->> returned
                  (prot/java->clj session)
                  (= ["ok"])))
-    (-> (->RObject obj-name session)
+    (-> (->RObject obj-name session code)
         (resource/track
          #(do (println [:releasing obj-name])
               (forget obj-name session))
@@ -93,7 +93,7 @@
                         (object-name->memory-place
                          obj-name)
                         java-object)
-      (->RObject obj-name session))))
+      (->RObject obj-name session nil))))
 
 (defn apply-function [r-function
                       r-args
@@ -119,7 +119,3 @@
                                 object-name->memory-place)))))
               (string/join ", ")))]
     (eval-r code session)))
-
-
-
-

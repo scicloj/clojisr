@@ -15,7 +15,7 @@
     (rlang/eval-r r-code session))
   =expands-to=>
   (defn r [r-code & {:keys [session-args]}]
-    (let [session (session/fetch session-args)]
+    (let [session (session/fetch-or-make session-args)]
      (rlang/eval-r r-code session)))"
   {:added "0.1"}
   [f args & body]
@@ -23,14 +23,14 @@
                 f
                 (into args '[& {:keys [session-args]}]))
           (list (concat (list 'let
-                              '[session (session/fetch session-args)]
+                              '[session (session/fetch-or-make session-args)]
                               )
                         body))))
 
 (defn init-session
   "TODO"
   {:added "0.1"} [& {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (rlang/init-session session)))
 
 (defn r
@@ -47,8 +47,10 @@
             r->java->clj)
        => [3.0]"
   {:added "0.1"} [r-code & {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (rlang/eval-r r-code session)))
+
+
 
 (defn eval-r->java
   "eval-r->java runs r code and returns the corresponding java object
@@ -65,7 +67,7 @@
            vec)
        => [3.0]"
   {:added "0.1"} [r-code & {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (prot/eval-r->java session r-code)))
 
 (defn eval-r->java
@@ -83,7 +85,7 @@
            vec)
        => [3.0]"
   {:added "0.1"} [r-code & {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (prot/eval-r->java session r-code)))
 
 (defn r-class
@@ -143,7 +145,7 @@
            r->java->clj)
        => [1]"
   {:added "0.1"} [java-object & {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (rlang/java->r java-object session)))
 
 (defn java->naive-clj
@@ -151,7 +153,7 @@
  java r-interop engine (precise definition depending on session)
  into clojure, but in a naive way (e.g., not taking care of missing values)."
   {:added "0.1"} [java-object & {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (prot/java->naive-clj session java-object)))
 
 (defn java->clj
@@ -165,7 +167,7 @@
            java->clj)
        => {:a [1 2] :b [\"hi!\"]}"
   {:added "0.1"} [java-object & {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (prot/java->clj session java-object)))
 
 (defn clj->java
@@ -186,12 +188,45 @@
            r->java->clj)
        => [\"list(a = 1:2, b = \\\"hi!\\\")\"]"
   {:added "0.1"} [clj-object & {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (prot/clj->java session clj-object)))
 
 (def clj->java->r (comp java->r clj->java))
 
 (def r->java->clj (comp java->clj r->java))
+
+
+(defn discard-session [session-args]
+  (session/discard session-args))
+
+(defn discard-default-session []
+  (session/discard-default))
+
+(defn fresh-object? [r-object]
+  (-> r-object
+      :session
+      session/fresh?))
+
+(defn refreshed-object [r-object]
+  (if (fresh-object? r-object)
+    ;; The object is refresh -- just return it.
+    r-object
+    ;; Try to return a refreshed object.
+    (if-let [code (:code r-object)]
+      ;; The object has code information -- rerun the code with the same session-args.
+      (r code
+         :session-args (:session-args r-object))
+      ;; No code information.
+      (ex-info "Cannot refresh an object with no code info." {:r-object r-object}))))
+
+(defn auto-refresing-object [r-object]
+  (let [mem (atom r-object)]
+    (reify clojure.lang.IDeref
+      (deref [_]
+        (when (-> @mem fresh-object? not)
+          (reset! mem (refreshed-object r-object)))
+        @mem))))
+
 
 (defn apply-function
   "apply-function applies an R function to given arguments.
@@ -213,7 +248,7 @@
                           r->java->clj)))))
        => [[33.0] [123.0] [113.0]]"
   {:added "0.1"} [r-function args & {:keys [session-args]}]
-  (let [session (session/fetch session-args)]
+  (let [session (session/fetch-or-make session-args)]
     (rlang/apply-function r-function args session)))
 
 (defn function
@@ -235,17 +270,19 @@
        => [[33.0] [123.0] [113.0]]"
   {:added "0.1"}
   [r-function]
-  (fn f
-    ([& args]
-     (let [explicit-session-args
-           (when (some-> args butlast last (= :session-args))
-             (last args))]
-       (apply-function
-        r-function
-        (if explicit-session-args
-          (-> args butlast butlast)
-          args)
-        :session (session/fetch explicit-session-args))))))
+  (let [autorefreshing (auto-refresing-object
+                        r-function)]
+    (fn f
+      ([& args]
+       (let [explicit-session-args
+             (when (some-> args butlast last (= :session-args))
+               (last args))]
+         (apply-function
+          @autorefreshing
+          (if explicit-session-args
+            (-> args butlast butlast)
+            args)
+          :session (session/fetch-or-make explicit-session-args)))))))
 
 (defn add-functions-to-this-ns
   "add-functions-to-this-ns adds to the current namespace
@@ -253,9 +290,10 @@
   {:added "0.1"}
   [package-symbol function-symbols]
   (doseq [s function-symbols]
-    (let [d (delay (r (format "library(%s)"
-                              (name package-symbol)))
-                   (function (r (name s))))
+    (let [d (delay (function
+                    (r (format "{library(%s); %s}"
+                               (name package-symbol)
+                               (name s)))))
           f (fn [& args]
               (apply @d args))]
       (eval (list 'def s f)))))
@@ -285,4 +323,5 @@
                  :session-args (-> obj :session :session-args)
                  :r-class (r-class obj)]
                 ['->Java java-object]])))
+
 

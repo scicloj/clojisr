@@ -2,6 +2,7 @@
 
 (defprotocol Session
   (close [session])
+  (session-args [session])
   (desc [session])
   (eval-r->java [session code])
   (java->r-set [session varname java-object])

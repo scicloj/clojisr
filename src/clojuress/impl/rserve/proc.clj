@@ -4,7 +4,8 @@
 (ns clojuress.impl.rserve.proc
   (:require [clojure.java.io :refer [reader writer]]
             [clojure.java.shell :refer [sh]]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [clojuress.util :refer [private-field]])
   (:import [java.lang ProcessBuilder]))
 
 (defn spawn [& args]
@@ -59,3 +60,4 @@
 
 (defn close [rserve]
   (.destroy ^Process (:process rserve)))
+

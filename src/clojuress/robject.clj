@@ -1,3 +1,3 @@
 (ns clojuress.robject)
 
-(defrecord RObject [object-name session])
+(defrecord RObject [object-name session code])

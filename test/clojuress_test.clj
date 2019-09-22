@@ -15,7 +15,7 @@ and otherwise use the default session. "
    (rlang/eval-r r-code session))
  =expands-to=>
  (defn r [r-code & {:keys [session-args]}]
-   (let [session (session/fetch session-args)]
+   (let [session (session/fetch-or-make session-args)]
      (rlang/eval-r r-code session))))
 
 ^{:refer clojuress/r-class :added "0.1"}

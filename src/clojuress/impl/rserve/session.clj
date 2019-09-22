@@ -5,7 +5,8 @@
             [clojuress.impl.rserve.java-to-clj :as java-to-clj]
             [clojuress.impl.rserve.clj-to-java :as clj-to-java]
             [clojure.string :as string]
-            [clojure.core.async :as async])
+            [clojure.core.async :as async]
+            [clojuress.util :refer [private-field]])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)
            clojuress.protocols.Session
@@ -23,8 +24,12 @@
                           rserve]
   Session
   (close [session]
+    (when r-connection
+      (.close r-connection))
     (when rserve
       (proc/close rserve)))
+  (session-args [session]
+    session-args)
   (desc [session]
     session-args)
   (eval-r->java [session code]
@@ -82,6 +87,8 @@
     (->RserveSession session-args
                      (RConnection. host port)
                      rserve)))
+
+
 
 (comment
 

@@ -76,3 +76,8 @@
   (and (sequential? s)
        (-> s first (= v))))
 
+
+(defn private-field [^Object obj field-name]
+  (let [m (.. obj getClass (getDeclaredField field-name))]
+    (. m (setAccessible true))
+    (. m (get obj))))

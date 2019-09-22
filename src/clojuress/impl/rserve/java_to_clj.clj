@@ -87,7 +87,10 @@
 
 (defn java-factor->clj-info [^REXPFactor java-factor]
   (when (not (java-factor? java-factor))
-    (throw (ex-info "Expected a factor, got something else.")))
+    (throw (ex-info "Expected a factor, got something else." {:class (-> java-factor
+                                                                         (.getAttribute "class")
+                                                                         ->array-copy
+                                                                         vec)})))
   (let [levels  (-> java-factor
                     (.getAttribute "levels")
                     ->array-copy)
@@ -160,7 +163,7 @@
         (vec values)
         ;; else -- assume all names are available
         (do (if (some (partial = "") names)
-              (throw (ex-info "Partially named lists are not supported yet. ")))
+              (throw (ex-info "Partially named lists are not supported yet. " {:names names})))
             (let [list-as-map
                   (->> values
                        (interleave names)

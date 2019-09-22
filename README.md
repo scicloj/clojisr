@@ -37,6 +37,8 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 ## Requirements
 
+* Linux or MacOS
+
 * [R](https://www.r-project.org)
 
 * The [Rserve](https://cran.r-project.org/web/packages/Rserve/index.html) R package (`install.packages("Rserve")`)
@@ -51,7 +53,10 @@ See:
 
 * [basic example](examples/basic_example.clj)
 
-* [data visualization using rmarkdown](examples/rmarkdown_example.clj)
+* [literate programming using rmarkdown](examples/rmarkdown_example.clj)
+
+* [interactive data visualization using shiny](examples/shiny_example.clj)
+
 
 ## API Draft
 For now, see the [basic example](examples/basic_example.clj) and the [tests](test/clojuress_test.clj) of the `clojuress` namespace.

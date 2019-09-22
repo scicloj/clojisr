@@ -18,15 +18,35 @@
 
 (defn make [session-args]
   (let [{:keys [session-type]} (merge @defaults
-                                      session-args)
-        session (case session-type
-                  :rserve (clojuress.impl.rserve.session/make
-                           session-args))]
+                                      session-args)]
+    (case session-type
+      :rserve (clojuress.impl.rserve.session/make
+               session-args))))
+
+
+(defn fetch [session-args]
+  (@sessions session-args))
+
+(defn discard [session-args]
+  (when-let [session (fetch session-args)]
+    (prot/close session)
+    (swap! sessions dissoc session-args)))
+
+(defn discard-default []
+  (discard nil))
+
+(defn make-and-init [session-args]
+  (let [session (make session-args)]
+    (swap! sessions assoc session-args session)
     (rlang/init-session session)
     session))
 
-(defn fetch [session-args]
-  (or (@sessions session-args)
-      (let [asession (make session-args)]
-        (swap! sessions assoc session-args asession)
-        asession)))
+(defn fetch-or-make [session-args]
+  (or (fetch session-args)
+      (make-and-init session-args)))
+
+(defn fresh? [session]
+  (-> session
+      prot/session-args
+      fetch
+      (= session)))
