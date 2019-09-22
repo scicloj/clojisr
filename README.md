@@ -90,7 +90,7 @@ Working on this project, we enjoyed the following tools (partial list):
 
 * [hara.test](https://cljdoc.org/d/hara/test/3.0.7) for automated docstrings by tests -- see [a minimal usage example](https://github.com/scicloj/hara-test-example)
 
-* [clj-kondo](https://github.com/borkdude/clj-kondo** for code quality control
+* [clj-kondo](https://github.com/borkdude/clj-kondo) for code quality control
 
 
 ## License
