@@ -44,7 +44,7 @@
 
 (defn ->rexp-factor
   [xs]
-  (throw (ex-info "Factors are not supported yet.")))
+  (throw (ex-info "Factors are not supported yet." {:xs xs})))
 
 (defn ->rexp-logical
   [xs]
