@@ -1,15 +1,15 @@
 (ns clojuress.packages.rmarkdown
-  (:require [clojuress :as r :refer [r]]
+  (:require [clojuress :as r :refer [r add-package-to-this-ns]]
             [clojuress.util :refer [starts-with?]]
             [hiccup.core :as hiccup]
             [tech.resource :as resource]
             [clojure.string :as string]
-            [clojure.java.browse :as browse]
             [gg4clj.core :as gg]
-            [clojure.walk :as walk]
-            [tech.ml.dataset :as dataset])
+            [clojure.walk :as walk])
   (:import (java.io File)
            (java.lang Math)))
+
+(add-package-to-this-ns 'rmarkdown)
 
 (defn r-code-block [r-codes]
   (println [:r-codes r-codes])
@@ -56,81 +56,3 @@
      html-path)))
 
 
-(comment
-
-  (let [x (repeatedly 1000 rand)
-        y (map +
-               x
-               (repeatedly rand))
-        data {:x x
-              :y y}]
-    (-> [:body
-        {:style "background-color:#aaaaaa"}
-        [:div
-         [:h1 "hi!"]
-         [:r-edn
-          [:library :ggplot2]
-          [:qplot :x :y]]]]
-       hiccup->rmd
-       (render-rmd data)
-       browse/browse-url))
-
-
-  (let [x    (repeatedly 1000 rand)
-        y    (map +
-                  x
-                  (repeatedly rand))
-        data {:df (dataset/name-values-seq->dataset
-                   {:x x
-                    :y y})}]
-    (-> [:body
-         {:style "background-color:#aaaaaa"}
-         [:div
-          [:h1 "hi!"]
-          [:r-edn
-           [:library :ggplot2]
-           [:head :df]
-           (gg/r+
-            [:ggplot {:data :df}]
-            [:geom_point [:aes {:x :x :y :y}]])]]]
-        hiccup->rmd
-        (render-rmd data)
-        browse/browse-url))
-
-
-
-  (let [x    (repeatedly 9999 rand)
-        y    (->> x
-                  (map #(+ (* %
-                              (Math/sin (* 99 %))
-                              (Math/tan %))
-                           (rand))))
-        z    (->> x
-                  (map #(* % (Math/cos (* 9 %)))))
-        data {:df (dataset/name-values-seq->dataset
-                   {:x x
-                    :y y
-                    :z z})}]
-    (-> [:body
-         {:style "background-color:#aaaaaa"}
-         (into
-          [:div]
-          (for [n (->> (range 7)
-                       (map #(Math/round
-                              (Math/pow 4 %))))]
-            [:div
-             [:h1 n " samples"]
-             [:r-edn
-              [:library :ggplot2]
-              [:head :df]
-              (gg/r+
-               [:ggplot {:data [:head :df n]}]
-               [:geom_point [:aes {:x :x
-                                   :y :y
-                                   :color :z}]])]]))]
-        hiccup->rmd
-        (render-rmd data)
-        browse/browse-url))
-
-
-)
