@@ -76,8 +76,44 @@
   (and (sequential? s)
        (-> s first (= v))))
 
-
+;; Thanks https://gist.github.com/sunng87/13700d3356d5514d35ad
 (defn private-field [^Object obj field-name]
   (let [m (.. obj getClass (getDeclaredField field-name))]
     (. m (setAccessible true))
     (. m (get obj))))
+
+;; Thanks https://blog.michielborkent.nl/2018/01/17/transducing-text/
+(defn lines-reducible
+  [^java.io.BufferedReader rdr]
+  (reify clojure.lang.IReduceInit
+    (reduce [this f init]
+      (try
+        (loop [state init]
+          (if (reduced? state)
+            @state
+            (if-let [line (.readLine rdr)]
+              (recur (f state line))
+              state)))
+        (finally
+          (.close rdr))))))
+
+(defn -|>
+  "A transformation analogous to the -> threading macro,
+  but for vectors."
+  [x & forms]
+  (loop [x x, forms forms]
+    (if forms
+      (let [form     (first forms)
+            threaded (if (vector? form)
+                       (into [(first form) x]
+                             (next form))
+                       [form x])]
+        (recur threaded (next forms)))
+      x)))
+
+(comment
+  (-|> 4
+       :+
+       [:* 10])
+;; => [:* [:+ 4] 10]
+  )
