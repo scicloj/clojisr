@@ -4,10 +4,11 @@
             [tech.ml.protocols.dataset :as ds-prot]
             [tech.v2.datatype.protocols :as dtype-prot]
             [clojuress.robject])
-  (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPSymbol REXPLogical REXPDouble REXPInteger REXPLanguage RList REXPNull)
+  (:import (org.rosuda.REngine REXP REXPList REXPGenericVector REXPString REXPSymbol REXPLogical REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util List Collection)
            (clojure.lang Named)
-           clojuress.robject.RObject))
+           clojuress.robject.RObject
+           java.util.Date))
 
 
 (declare clj->java)
@@ -58,21 +59,36 @@
        byte-array
        (REXPLogical.)))
 
+(defn ->r-time [xs]
+  (-> xs
+       (->> (map (fn [^Date d]
+                   (some-> d (.getTime)))))
+       ->rexp-double
+       (.asDoubles)
+       (REXPDouble. (REXPList.
+                     (RList. [(->rexp-string [""])
+                              (->rexp-string ["POSIXct" "POSIXt"])]
+                             ["tzone"
+                              "class"])))))
+
+
 (defn primitive-type [obj]
   (cond (nil? obj)              :na
         (integer? obj)          :integer
         (number? obj)           :numeric
         (string? obj)           :character
         (keyword? obj)          :factor
+        (inst? obj)             :time
         (instance? Boolean obj) :logical
         :else                   nil))
 
-(def valid-interpretations {:na        [:integer :numeric :character :factor :logical]
+(def valid-interpretations {:na        [:integer :numeric :character :factor :logical :time]
                             :integer   [:integer :numeric :character]
                             :numeric   [:numeric :character]
                             :character [:character]
                             :factor    [:factor :character]
-                            :logical   [:logical :character]})
+                            :logical   [:logical :character]
+                            :time      [:time]})
 
 (def interpretations-priorities
   (->> valid-interpretations
@@ -91,13 +107,13 @@
          (sort-by interpretations-priorities)
          first)))
 
-
 (def primitive-vector-ctors
   {:integer   ->rexp-integer
    :numeric   ->rexp-double
    :character ->rexp-string
    :factor    ->rexp-factor
-   :logical   ->rexp-logical})
+   :logical   ->rexp-logical
+   :time      ->r-time})
 
 (defn ->primitive-vector [sequential]
   (when-let [primitive-type (finest-primitive-type sequential)]
