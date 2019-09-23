@@ -4,9 +4,7 @@
             [clojuress.impl.rserve.java :as java]
             [clojuress.impl.rserve.java-to-clj :as java-to-clj]
             [clojuress.impl.rserve.clj-to-java :as clj-to-java]
-            [clojure.string :as string]
-            [clojure.core.async :as async]
-            [clojuress.util :refer [private-field]])
+            [clojure.core.async :as async])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)
            clojuress.protocols.Session

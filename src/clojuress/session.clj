@@ -10,11 +10,6 @@
   (atom
    {:session-type :rserve}))
 
-(defn clean-all []
-  (doseq [[session-args session] @sessions]
-    (println [:closing session-args])
-    (prot/close session))
-  (reset! sessions {}))
 
 (defn make [session-args]
   (let [{:keys [session-type]} (merge @defaults
@@ -34,6 +29,12 @@
 
 (defn discard-default []
   (discard nil))
+
+(defn discard-all []
+  (doseq [[session-args session] @sessions]
+    (println [:discarding session-args])
+    (prot/close session))
+  (reset! sessions {}))
 
 (defn make-and-init [session-args]
   (let [session (make session-args)]

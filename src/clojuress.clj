@@ -202,6 +202,9 @@
 (defn discard-default-session []
   (session/discard-default))
 
+(defn discard-all-sessions []
+  (session/discard-all))
+
 (defn fresh-object? [r-object]
   (-> r-object
       :session
@@ -297,7 +300,6 @@
           f (fn [& args]
               (apply @d args))]
       (eval (list 'def s f)))))
-
 
 (defn add-package-to-this-ns
   [package-symbol]
