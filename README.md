@@ -51,11 +51,11 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 See:
 
-* [basic example](examples/basic_example.clj)
+* [basic example](examples/src/examples/basic.clj)
 
-* [literate programming using rmarkdown](examples/rmarkdown_example.clj)
+* [literate programming using rmarkdown](examples/src/examples/rmarkdown.clj)
 
-* [interactive data visualization using shiny](examples/shiny_example.clj)
+* [interactive data visualization using shiny](examples/src/examples/shiny.clj)
 
 
 ## API Draft

@@ -1,4 +1,4 @@
-(ns shiny-example
+(ns examples.shiny
   (:require [clojuress :as r :refer [r]]
             [clojuress.packages.shiny :as s]
             [clojuress.packages.base :as base]))

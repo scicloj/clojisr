@@ -1,4 +1,4 @@
-(ns basic-example
+(ns examples.basic
   (:require [clojuress :as r :refer [r]]
             [tech.ml.dataset :as dataset]))
 
@@ -10,6 +10,13 @@
 
 (r/r->java->clj x)
 ;; => [3.0]
+
+;; Run some code on a separate session
+;; (specified Rserve port, rather than the default one).
+
+(-> "1+2"
+    (r :session-args {:port 4444})
+    r/r->java->clj)
 
 ;; Define a Clojure function wrapping an R function.
 

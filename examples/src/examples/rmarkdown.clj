@@ -1,4 +1,4 @@
-(ns rmarkdown-example
+(ns examples.rmarkdown
   (:require [tech.ml.dataset :as dataset]
             [clojure.java.browse :as browse]
             [clojuress.packages.rmarkdown :refer [hiccup->rmd render-rmd]]
