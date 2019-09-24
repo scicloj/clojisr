@@ -8,7 +8,9 @@ Clojure speaks statistics - a library for Clojure-R interop
 
 There are already stable libraries for Clojure-R interop -- see [this list](doc/existing_libraries.md).
 
-This project suggests yet another way to use R from Clojure. At the moment, everything is alpha, and will keep changing.
+This project suggests yet another way to use R from Clojure.
+
+At the moment, everything is alpha, and will keep changing. We find it important to experiment with the API for some time, and go through several community discussions till anything stabilizes.
 
 Currently we target only JVM Clojure, but we are interested in generalizing the work to Clojurescript.
 
