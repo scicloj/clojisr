@@ -15,7 +15,7 @@ They differ in in several aspects: (a) the API and syntactic sugar offered; (b) 
 
 * [clj-jri](https://github.com/fanannan/clj-jri) by SAWADA Takahiro / Gugen Koubou LLC is another, simple, wrapper of R through JRI. It does not support a data-frame-like structure on the Clojure side.
 
-* [rashinban](https://github.com/tnoda/rashinban) by Takahiro Noda is another simple Clojure library for calling R through Rserve, with a clean and simple API. It does not support a data-frame-like notion either.
+* [rashinban](https://github.com/tnoda/rashinban) by Takahiro Noda is another simple Clojure library for calling R through Rserve, with a clean and simple API, based on wrapping R functions with Clojure functions. It does not support a data-frame-like notion either.
 
 * [Opencpu-clj](https://github.com/behrica/opencpu-clj) is another, earlier project by Carsten Behring. It uses Opencpu as the R backend. 
   * Some experiment to generalize to Clojuresctipt has been done [here](https://www.reddit.com/r/Clojure/comments/8zn0zk/1_some_experiments_in_calling_r_from/) (currently broken).
