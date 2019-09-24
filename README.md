@@ -14,6 +14,10 @@ Currently we target only JVM Clojure, but we are interested in generalizing the 
 
 The related problem, of calling Cojure from R, may be addressed too in the future. We are experimenting with that.
 
+## Video presentation
+
+[Scicloj Web meeting #7](https://www.youtube.com/watch?v=XoVX2Ezi_YM)
+
 ## Why this name?
 
 Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r-project.org).
