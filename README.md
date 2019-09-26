@@ -2,7 +2,6 @@
 
 Clojure speaks statistics - a library for Clojure-R interop
 
-[This README is being intensivey edited these days.]
 
 ## Scope of the project
 
