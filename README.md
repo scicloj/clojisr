@@ -24,9 +24,9 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 ## Meta Goals
 
-  * Realize what is essential for Clojure to become a viable solution for data science.
+  * Realize what is essential for Clojure to become a beginner-friendly solution for data science.
   
-  * Expose the Clojure ecosystem to a different culture and to different audiences of users/programmers.
+  * Expose the Clojure ecosystem to a different culture and to more diverse groups of users/programmers.
 
 ## Technical Goals
 
