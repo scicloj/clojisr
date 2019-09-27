@@ -1,8 +1,6 @@
 # clojuress
 
-Clojure speaks statistics - a library for Clojure-R interop
-
-[This README is being intensivey edited these days.]
+Clojure speaks statistics - a library for connecting Clojure to R
 
 ## Scope of the project
 
@@ -24,7 +22,13 @@ The related problem, of calling Cojure from R, may be addressed too in the futur
 
 Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r-project.org).
 
-## Goals
+## Meta Goals
+
+  * Realize what is essential for Clojure to become a viable solution for data science.
+  
+  * Expose the Clojure ecosystem to a different culture and to different audiences of users/programmers.
+
+## Technical Goals
 
   * A Function-centric API, where the default mode of usage is calling R functions on R objects, from Clojure (Status: a draft exists, it will change)
 
