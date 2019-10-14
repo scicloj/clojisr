@@ -192,9 +192,10 @@
     (prot/clj->java session clj-object)))
 
 (def clj->java->r (comp java->r clj->java))
+(def clj->r clj->java->r)
 
 (def r->java->clj (comp java->clj r->java))
-
+(def r->clj r->java->clj)
 
 (defn discard-session [session-args]
   (session/discard session-args))
