@@ -3,7 +3,8 @@
             [clojuress.protocols :as prot]
             [clojuress.util :refer [starts-with?]]
             [tech.resource :as resource]
-            [clojuress.robject :refer [->RObject]])
+            [clojuress.robject :refer [->RObject]]
+            [clojure.pprint :as pp])
   (:import clojuress.robject.RObject))
 
 (defn- rand-name []
@@ -31,12 +32,13 @@
   session)
 
 (defn forget [obj-name session]
-  (let [returned (->> obj-name
-                      code-to-forget
-                      (prot/eval-r->java session))]
-    (assert (->> returned
-                (prot/java->clj session)
-                (= ["ok"])))))
+  (when (not (prot/closed? session))
+    (let [returned (->> obj-name
+                        code-to-forget
+                        (prot/eval-r->java session))]
+      (assert (->> returned
+                   (prot/java->clj session)
+                   (= ["ok"]))))))
 
 (defn eval-r [code session]
   (let [obj-name (rand-name)
@@ -95,27 +97,81 @@
                         java-object)
       (->RObject obj-name session nil))))
 
+(defn r-function->r-code [r-function]
+  (if (symbol? r-function)
+    (name r-function)
+    (-> r-function
+        :object-name
+        object-name->memory-place)))
+
+(declare args->r-code)
+
+(def binary-operators
+  '#{+ - / * & && | || == != <= >= < >})
+
+(defn form->r-code [form session]
+  (cond (seq? form) (if (-> form first (= 'function))
+                       ;; a function declaration
+                       (let [[_ [& arg-symbols] & body] form]
+                         (format
+                          "function(%s) {%s}"
+                          (->> arg-symbols
+                               (map name)
+                               (string/join ", "))
+                          (->> body
+                               (map #(form->r-code % session))
+                               (string/join "; "))))
+                       ;; else -- a function call
+                       (let [[r-function & args] form]
+                         (if (binary-operators r-function)
+                           (->> args
+                                (map #(form->r-code % session))
+                                (interleave (repeat (name r-function)))
+                                rest
+                                (string/join " "))
+                           ;; else
+                           (format
+                            "%s(%s)"
+                            (r-function->r-code r-function)
+                            (args->r-code args session)))))
+        (symbol? form) (name form)
+        :else
+        (-> form
+            (->> (prot/clj->java session))
+            (java->r session)
+            :object-name
+            object-name->memory-place)))
+
+(defn arg->arg-name-and-value [arg]
+  (if (starts-with? arg :=)
+    (rest arg)
+    [nil arg]))
+
+(defn arg-name-and-value->r-code [[arg-name value] session]
+  (str (when arg-name
+         (str (name arg-name) "="))
+       (form->r-code value session)))
+
+(defn args->r-code [args session]
+  (->> args
+       (map (fn [arg]
+              (-> arg
+                  arg->arg-name-and-value
+                  (arg-name-and-value->r-code session))))
+       (string/join ", ")))
+
 (defn apply-function [r-function
-                      r-args
+                      args
                       session]
-  (let [code
-        (format
-         "%s(%s)"
-         (-> r-function
-             :object-name
-             object-name->memory-place)
-         (->> r-args
-              (map (fn [arg]
-                     (let [[arg-name arg-value]
-                           (if (starts-with? arg :=)
-                             (rest arg)
-                             [nil arg])]
-                       (str (when arg-name
-                              (str (name arg-name) "="))
-                            (-> arg-value
-                                (->> (prot/clj->java session))
-                                (java->r session)
-                                :object-name
-                                object-name->memory-place)))))
-              (string/join ", ")))]
-    (eval-r code session)))
+  (-> r-function
+      list
+      (concat args)
+      (form->r-code session)
+      (eval-r session)))
+
+(defn eval-form [form session]
+  (-> form
+      (form->r-code session)
+      (eval-r session)))
+
+
