@@ -111,7 +111,14 @@ into clojure."
           r
           r->java
           java->clj)
-      => {:a [1 2] :b ["hi!"]})
+      => {:a [1 2] :b ["hi!"]}
+
+
+      (-> "table(c('a','b','a','b','a','b','a','b'), c(1,1,2,2,3,3,1,1))"
+          r
+          r->java
+          java->clj)
+      => {["1" "a"] 2 ["1" "b"] 2 ["2" "a"] 1 ["2" "b"] 1 ["3" "a"] 1 ["3" "b"] 1})
 
 ^{:refer clojuress/clj->java :added "0.1"}
 (fact "clj->java converts a clojure data structure
