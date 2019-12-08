@@ -2,6 +2,7 @@
 
 (defprotocol Session
   (close [session])
+  (closed? [session])
   (session-args [session])
   (desc [session])
   (eval-r->java [session code])
@@ -12,5 +13,4 @@
   (java->clj [session java-object])
   (clj->java [session clj-object]))
 
-(defprotocol Listlike
-  (as-list [session]))
+
