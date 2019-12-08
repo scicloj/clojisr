@@ -2,7 +2,9 @@
   (:require [clojuress.session :as session]
             [clojuress.rlang :as rlang]
             [clojuress.protocols :as prot]
-            [clojure.pprint :as pp])
+            [clojure.pprint :as pp]
+            [clojure.string :as string]
+            [clojuress :as r])
   (:import clojuress.robject.RObject))
 
 
@@ -295,12 +297,16 @@
   [package-symbol function-symbols]
   (doseq [s function-symbols]
     (let [d (delay (function
-                    (r (format "{library(%s); %s}"
+                    (r (format "{library(%s); `%s`}"
                                (name package-symbol)
                                (name s)))))
           f (fn [& args]
-              (apply @d args))]
-      (eval (list 'def s f)))))
+              (apply @d args))
+          clojurized-symbol (-> s
+                                name
+                                (string/replace #"\." "-")
+                                symbol)]
+      (eval (list 'def clojurized-symbol f)))))
 
 (defn add-package-to-this-ns
   [package-symbol]
@@ -328,3 +334,16 @@
                 ['->Java java-object]])))
 
 
+
+(defn r-object? [obj]
+  (instance? RObject obj))
+
+
+(defn eval-form
+  [form & {:keys [session-args]}]
+  (let [session (session/fetch-or-make session-args)]
+    (rlang/eval-form form session)))
+
+
+(defn NA []
+  (r "NA"))
