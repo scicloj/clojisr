@@ -15,7 +15,7 @@
   (println [:r-codes r-codes])
   (->> r-codes
        (string/join "\n")
-       (format "\n```{r}\n%s\n```\n")))
+       (format "\n```{r echo=F, warning=F, message=F}\n%s\n```\n")))
 
 (defn r-edn-code-block [r-edn-codes]
   (->> r-edn-codes
