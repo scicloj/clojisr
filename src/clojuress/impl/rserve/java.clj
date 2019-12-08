@@ -1,5 +1,6 @@
 (ns clojuress.impl.rserve.java
-  (:import (org.rosuda.REngine REXP REXPString REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
+  (:import (org.rosuda.REngine REXP REXPString REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull REngineException REXPMismatchException)
+           (org.rosuda.REngine.Rserve RConnection)
            (java.util List Collection)
            (clojure.lang Named))
   (:require [clojure.pprint :as pp]
@@ -37,3 +38,21 @@
                 (call "$"))
            (rexp-symbol varname))
          java-obj]))
+
+(defn try-eval-catching-errors [expression ^RConnection r-connection]
+  ;; Using the technique of https://stackoverflow.com/a/40447542/1723677, the way it is used in Rojure.
+  (locking r-connection
+    (try
+      (let [rexp (-> expression
+                     (string/replace "\"" "\\\"")
+                     (->> (format "try(eval(parse(text=\"%s\")),silent=TRUE)")
+                          (.parseAndEval r-connection)))]
+        (if (.inherits rexp "try-error")
+          (throw (Exception.
+                  (format "Error in R evaluating expression:\n %s.\nR exception: %s"
+                          expression (.asString rexp))))
+          rexp))
+      (catch REngineException ex
+        (println (format "Caught exception evaluating expression: %s\n: %s" expression ex)))
+      (catch REXPMismatchException ex
+        (println (format "Caught exception evaluating expression: %s\n: %s" expression ex))))))
