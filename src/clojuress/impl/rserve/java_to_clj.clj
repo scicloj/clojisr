@@ -4,7 +4,8 @@
             [com.rpl.specter :as specter]
             [tech.ml.dataset :as dataset]
             [tech.v2.datatype :as dtype]
-            [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]])
+            [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]]
+            [clojure.math.combinatorics :refer [cartesian-product]])
   (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util Map List Collection)
            (clojure.lang Named)))
@@ -48,13 +49,16 @@
     ;; NA has to be handled explicitly.
     (let [n      (.length item)
           values (.asIntegers item)
-          na?    (.isNA item)
-          target (make-array Integer (.length item))]
-      (dotimes [i n]
-        (aset target i
-              (when-not (aget na? i)
-                (aget values i))))
-      target)))
+          na?    (.isNA item)]
+      (if (every? false? na?)
+        values
+        (let [target (make-array Double (.length item))]
+          (dotimes [i n]
+            (aset target i
+                  (if (aget na? i)
+                    REXPDouble/NA
+                    (double (aget values i)))))
+          target)))))
 
 (extend-type REXPString
   dtype-prot/PToArray
@@ -132,10 +136,31 @@
   (-java->clj [java-obj]
     (-> java-obj ->array-copy vec)))
 
+(defn table? [^REXP java-obj]
+  (some-> java-obj
+          (.getAttribute "class")
+          -java->clj
+          (= ["table"])))
+
+(defn table->clj [^REXPInteger java-obj]
+  (let [dimnames (-> java-obj
+                     (.getAttribute "dimnames")
+                     (.asList)
+                     (->> (map -java->clj)))
+        counts   (->array-copy java-obj)]
+    (-> dimnames
+         (->> reverse
+              (apply cartesian-product)
+              (map vec))
+         (interleave counts)
+         (->> (apply array-map)))))
+
 (extend-type REXPInteger
   Clojable
   (-java->clj [java-obj]
-    (-> java-obj ->array-copy vec)))
+    (if (table? java-obj)
+      (table->clj java-obj)
+      (-> java-obj ->array-copy vec))))
 
 (extend-type REXPString
   Clojable
@@ -146,6 +171,21 @@
   Clojable
   (-java->clj [java-obj]
     (-> java-obj ->array-copy vec)))
+
+(extend-type REXPFactor
+  Clojable
+  (-java->clj [java-factor]
+    (let [{:keys [levels indices]}
+          (java-factor->clj-info
+           java-factor)]
+      (mapv (fn [i]
+              (when-not
+                  (= i Integer/MIN_VALUE) ; which means a missing value
+                (->> i
+                     dec
+                     (aget levels))))
+            indices))))
+
 
 (extend-type REXPGenericVector
   Clojable
