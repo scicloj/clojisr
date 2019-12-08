@@ -4,7 +4,8 @@
             [clojuress.impl.rserve.java :as java]
             [clojuress.impl.rserve.java-to-clj :as java-to-clj]
             [clojuress.impl.rserve.clj-to-java :as clj-to-java]
-            [clojure.core.async :as async])
+            [clojure.core.async :as async]
+            [clojure.pprint :as pp])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)
            clojuress.protocols.Session
@@ -19,19 +20,25 @@
 
 (defrecord RserveSession [session-args
                           ^RConnection r-connection
-                          rserve]
+                          rserve
+                          closed]
   Session
   (close [session]
     (when r-connection
       (.close r-connection))
     (when rserve
-      (proc/close rserve)))
+      (proc/close rserve))
+    (reset! closed true))
+  (closed? [session]
+    @closed)
   (session-args [session]
     session-args)
   (desc [session]
     session-args)
   (eval-r->java [session code]
-    (.parseAndEval r-connection code))
+    (pp/pprint [:eval {:code         code
+                       :session-args (:session-args session)}])
+    (java/try-eval-catching-errors code r-connection))
   (java->r-set [session varname java-obj]
     ;; Unlike (.assign r-connection ...), the following approach
     ;; allows for a varname like "abc$xyz".
@@ -84,7 +91,8 @@
     (rserve-print-loop rserve)
     (->RserveSession session-args
                      (RConnection. host port)
-                     rserve)))
+                     rserve
+                     (atom false))))
 
 
 
