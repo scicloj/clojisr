@@ -1,5 +1,6 @@
 (ns clojuress.util
-  (:require [com.rpl.specter :as specter]))
+  (:require [com.rpl.specter :as specter])
+  (:import [java.io File]))
 
 (defn first-if-one
   "Given a vector with a single element, first-if-one extracts that element; acts as identity otherwise.
@@ -124,3 +125,7 @@
       name
       (str "~")
       keyword))
+
+
+(defn file-exists? [path]
+  (.exists (File. path)))
