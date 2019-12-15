@@ -4,16 +4,19 @@
             [clojuress.util :refer [starts-with?]]
             [tech.resource :as resource]
             [clojuress.robject :refer [->RObject]]
-            [clojure.pprint :as pp])
+            [clojure.pprint :as pp]
+            [clojure.string :as str])
   (:import clojuress.robject.RObject))
 
 (defn- rand-name []
   (-> (java.util.UUID/randomUUID)
-      (string/replace "-" "_")
-      (->> (str "x"))))
+      (string/replace "-" "")
+      (->> (take 16)
+           (cons \x)
+           (apply str))))
 
 (defn- object-name->memory-place [obj-name]
-  (format ".memory$%s" obj-name))
+  (format ".MEM$%s" obj-name))
 
 (defn- code-that-remembers [obj-name code]
   (format "%s <- {%s}; 'ok'"
@@ -25,7 +28,7 @@
           (object-name->memory-place obj-name)))
 
 (defn init-session-memory [session]
-  (prot/eval-r->java session ".memory <- list()"))
+  (prot/eval-r->java session ".MEM <- list()"))
 
 (defn init-session [session]
   (init-session-memory session)
@@ -110,30 +113,38 @@
   '#{+ - / * & && | || == != <= >= < >})
 
 (defn form->r-code [form session]
-  (cond (seq? form) (if (-> form first (= 'function))
-                       ;; a function declaration
-                       (let [[_ [& arg-symbols] & body] form]
-                         (format
-                          "function(%s) {%s}"
-                          (->> arg-symbols
-                               (map name)
-                               (string/join ", "))
-                          (->> body
+  (cond (seq? form) (cond
+                      ;; a function declaration
+                      (-> form first (= 'function))
+                      (let [[_ [& arg-symbols] & body] form]
+                        (format
+                         "function(%s) {%s}"
+                         (->> arg-symbols
+                              (map name)
+                              (string/join ", "))
+                         (->> body
+                              (map #(form->r-code % session))
+                              (string/join "; "))))
+                      ;; a ~ formula
+                      (-> form first (= 'tilde))
+                      (let [[_ lhs rhs] form]
+                        (->> [lhs rhs]
+                             (map #(form->r-code % session))
+                             (apply format "%s ~ %s")))
+                      ;; else -- a function call
+                      :else
+                      (let [[r-function & args] form]
+                        (if (binary-operators r-function)
+                          (->> args
                                (map #(form->r-code % session))
-                               (string/join "; "))))
-                       ;; else -- a function call
-                       (let [[r-function & args] form]
-                         (if (binary-operators r-function)
-                           (->> args
-                                (map #(form->r-code % session))
-                                (interleave (repeat (name r-function)))
-                                rest
-                                (string/join " "))
-                           ;; else
-                           (format
-                            "%s(%s)"
-                            (r-function->r-code r-function)
-                            (args->r-code args session)))))
+                               (interleave (repeat (name r-function)))
+                               rest
+                               (string/join " "))
+                          ;; else
+                          (format
+                           "%s(%s)"
+                           (r-function->r-code r-function)
+                           (args->r-code args session)))))
         (symbol? form) (name form)
         :else
         (-> form
@@ -152,8 +163,18 @@
          (str (name arg-name) "="))
        (form->r-code value session)))
 
+(defn mark-named-args [result args]
+  (if (empty? args)
+    result
+    (if (keyword? (first args))
+      (recur (conj result [:= (first args) (second args)])
+             (rest (rest args)))
+      (recur (conj result (first args))
+             (rest args)))))
+
 (defn args->r-code [args session]
   (->> args
+       (mark-named-args [])
        (map (fn [arg]
               (-> arg
                   arg->arg-name-and-value

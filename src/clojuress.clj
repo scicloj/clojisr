@@ -338,6 +338,10 @@
 (defn r-object? [obj]
   (instance? RObject obj))
 
+(defn form->r-code
+  [form & {:keys [session-args]}]
+  (let [session (session/fetch-or-make session-args)]
+    (rlang/form->r-code form session)))
 
 (defn eval-form
   [form & {:keys [session-args]}]
@@ -347,3 +351,4 @@
 
 (defn NA []
   (r "NA"))
+
