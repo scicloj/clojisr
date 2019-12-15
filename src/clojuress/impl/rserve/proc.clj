@@ -5,8 +5,9 @@
   (:require [clojure.java.io :refer [reader writer]]
             [clojure.java.shell :refer [sh]]
             [clojure.string :as string]
-            [clojuress.util :refer [private-field]])
-  (:import [java.lang ProcessBuilder]))
+            [clojuress.util :refer [file-exists? private-field]])
+  (:import [java.lang ProcessBuilder]
+           [java.io File]))
 
 (defn spawn [& args]
   (println (string/join " " args))
@@ -43,8 +44,11 @@
   [{:keys [port init-r sleep]
     :or {init-r ""
          sleep 0}}]
-  (let [rstr-temp (format "library(Rserve); run.Rserve(port=%s);"
-                          port)
+  (let [rstr-temp (format
+                   (if (file-exists? "/etc/Rserv.conf")
+                     "library(Rserve); run.Rserve(port=%s, config.file='/etc/Rserv.conf');"
+                     "library(Rserve); run.Rserve(port=%s);")
+                   port)
         rstr      (if (empty? init-r )
                     rstr-temp
                     (str init-r ";" rstr-temp ))]
@@ -60,4 +64,5 @@
 
 (defn close [rserve]
   (.destroy ^Process (:process rserve)))
+
 
