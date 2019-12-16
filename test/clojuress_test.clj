@@ -5,19 +5,6 @@
             [clojuress.packages.base :as base])
   (:import (org.rosuda.REngine REXP REXPInteger REXPDouble)))
 
-^{:refer clojuress/defn-implicit-session :added "0.1"}
-(fact 
- "This is just some syntactic sugar to define functions
-that may optionally get session as an argument,
-and otherwise use the default session. "
-
- (defn-implicit-session r [r-code]
-   (rlang/eval-r r-code session))
- =expands-to=>
- (defn r [r-code & {:keys [session-args]}]
-   (let [session (session/fetch-or-make session-args)]
-     (rlang/eval-r r-code session))))
-
 ^{:refer clojuress/r-class :added "0.1"}
 (fact "r-class gets the class of an R object."
 

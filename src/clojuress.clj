@@ -8,27 +8,6 @@
   (:import clojuress.robject.RObject))
 
 
-(defmacro defn-implicit-session
-  "This is just some syntactic sugar to define functions
- that may optionally get session as an argument,
- and otherwise use the default session. 
- 
-  (defn-implicit-session r [r-code]
-    (rlang/eval-r r-code session))
-  =expands-to=>
-  (defn r [r-code & {:keys [session-args]}]
-    (let [session (session/fetch-or-make session-args)]
-     (rlang/eval-r r-code session)))"
-  {:added "0.1"}
-  [f args & body]
-  (concat (list 'defn
-                f
-                (into args '[& {:keys [session-args]}]))
-          (list (concat (list 'let
-                              '[session (session/fetch-or-make session-args)]
-                              )
-                        body))))
-
 (defn init-session
   "TODO"
   {:added "0.1"} [& {:keys [session-args]}]
