@@ -1,6 +1,6 @@
 (defproject scicloj/clojuress "0.2.0-SNAPSHOT"
   :description "Clojure<->R interop"
-  :url "http://example.com/FIXME"
+  :url "https://github.com/scicloj/clojuress"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :repositories [["bedatadriven" {:url "https://nexus.bedatadriven.com/content/groups/public/"}]]
@@ -18,5 +18,7 @@
                  [techascent/tech.ml.dataset "1.60"]
                  [org.rosuda.REngine/REngine "2.1.0"]
                  [org.rosuda.REngine/Rserve "1.8.1"]
-                 [hiccup "1.0.5"]]
+                 [hiccup "1.0.5"]
+                 [org.clojure/tools.logging "0.5.0"]
+                 [scicloj/notespace "1.0.0"]]
   :injections [(require 'hara.tool)])

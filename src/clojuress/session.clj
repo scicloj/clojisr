@@ -2,7 +2,7 @@
   (:refer-clojure :exclude [time])
   (:require [clojuress.protocols :as prot]
             [clojuress.impl.rserve.session]
-            [clojuress.rlang :as rlang]))
+            [clojuress.objects-memory :as mem]))
 
 (def sessions (atom {}))
 
@@ -36,11 +36,17 @@
     (prot/close session))
   (reset! sessions {}))
 
+(defn init-memory [session]
+  (prot/eval-r->java session mem/init-session-memory-code)
+  session)
+
+(defn init [session]
+  (init-memory session))
+
 (defn make-and-init [session-args]
   (let [session (make session-args)]
     (swap! sessions assoc session-args session)
-    (rlang/init-session session)
-    session))
+    (init session)))
 
 (defn fetch-or-make [session-args]
   (or (fetch session-args)
@@ -51,3 +57,8 @@
       prot/session-args
       fetch
       (= session)))
+
+(defn fetch-or-make-and-init [session-args]
+  (-> session-args
+      fetch-or-make
+      init))

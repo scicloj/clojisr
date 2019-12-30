@@ -165,6 +165,7 @@
         ;; a sequential or array of elements of inferrable primitive type
         (sequential? obj)
         (->primitive-vector obj))
+      ;; we get here if ->primitive-vetor returned nil, which means: no inferrable primitive type
       (cond ;; a dataset
         (satisfies? ds-prot/PColumnarDataset obj)
         (->data-frame obj)

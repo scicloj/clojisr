@@ -1,5 +1,7 @@
 (ns clojuress.util
-  (:require [com.rpl.specter :as specter])
+  (:require [com.rpl.specter :as specter]
+            [clojure.string :as string]
+            [clojure.walk :as walk])
   (:import [java.io File]))
 
 (defn first-if-one
@@ -129,3 +131,13 @@
 
 (defn file-exists? [path]
   (.exists (File. path)))
+
+(defn rand-name []
+  (-> (java.util.UUID/randomUUID)
+      (string/replace "-" "")
+      (->> (take 16)
+           (cons \x)
+           (apply str))))
+
+(def l list)
+

@@ -36,8 +36,8 @@
   (desc [session]
     session-args)
   (eval-r->java [session code]
-    #_(pp/pprint [:eval {:code         code
-                         :session-args (:session-args session)}])
+    (pp/pprint [:eval {:code         code
+                       :session-args (:session-args session)}])
     (java/try-eval-catching-errors code r-connection))
   (java->r-set [session varname java-obj]
     ;; Unlike (.assign r-connection ...), the following approach
