@@ -20,11 +20,6 @@
               (mem/forget obj-name session))
          :gc))))
 
-(comment
-  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
-    (init-memory s)
-    (eval-r "1+2" s)))
-
 (defn java->r-specified-type [java-object type session]
   (prot/java->specified-type session java-object type))
 
@@ -38,28 +33,11 @@
        (prot/eval-r->java session)
        (#(prot/java->specified-type session % return-type))))
 
-(comment
-  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
-    (init-memory s)
-    [(r-function-on-obj
-     (eval-r "1+2" s)
-     "sin"
-     :doubles)
-    (r-function-on-obj
-     (eval-r "1+2" s)
-     "sin"
-     :strings)]))
-
 (defn r->java [{:keys [session] :as r-object}]
   (->> r-object
        :object-name
        mem/object-name->memory-place
        (prot/get-r->java session)))
-
-(comment
-  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
-    (init-memory s)
-    (r->java (eval-r "1+2" s))))
 
 (defn java->r [java-object session]
   (if (instance? RObject java-object)
@@ -71,9 +49,3 @@
                         java-object)
       (->RObject obj-name session nil))))
 
-(comment
-  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
-    (init-memory s)
-    (-> (eval-r "1+2" s)
-        r->java
-        (java->r s))))
