@@ -1,4 +1,4 @@
-(ns clojuress.util
+(ns clojuress.v0.util
   (:require [com.rpl.specter :as specter]
             [clojure.string :as string]
             [clojure.walk :as walk])

@@ -1,14 +1,14 @@
-(ns clojuress.impl.rserve.session
-  (:require [clojuress.protocols :as prot]
-            [clojuress.impl.rserve.proc :as proc]
-            [clojuress.impl.rserve.java :as java]
-            [clojuress.impl.rserve.java-to-clj :as java-to-clj]
-            [clojuress.impl.rserve.clj-to-java :as clj-to-java]
+(ns clojuress.v0.impl.rserve.session
+  (:require [clojuress.v0.protocols :as prot]
+            [clojuress.v0.impl.rserve.proc :as proc]
+            [clojuress.v0.impl.rserve.java :as java]
+            [clojuress.v0.impl.rserve.java-to-clj :as java-to-clj]
+            [clojuress.v0.impl.rserve.clj-to-java :as clj-to-java]
             [clojure.core.async :as async]
             [clojure.pprint :as pp])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)
-           clojuress.protocols.Session
+           clojuress.v0.protocols.Session
            java.lang.Process
            java.io.BufferedReader))
 

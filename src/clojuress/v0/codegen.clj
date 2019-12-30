@@ -1,9 +1,9 @@
-(ns clojuress.codegen
-  (:require [clojuress.objects-memory :as mem]
-            [clojuress.using-sessions :as using-sessions]
+(ns clojuress.v0.codegen
+  (:require [clojuress.v0.objects-memory :as mem]
+            [clojuress.v0.using-sessions :as using-sessions]
             [clojure.string :as string]
-            [clojuress.protocols :as prot]
-            [clojuress.util :as util :refer [l]]))
+            [clojuress.v0.protocols :as prot]
+            [clojuress.v0.util :as util :refer [l]]))
 
 (defn r-object->code [r-object]
   (-> r-object
@@ -11,9 +11,9 @@
       mem/object-name->memory-place))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})]
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
      (using-sessions/init-session-memory s)
-     [(-> (clojuress.robject/->RObject "dummy" s "dummycode")
+     [(-> (clojuress.v0.robject/->RObject "dummy" s "dummycode")
           r-object->code)
      (-> "3"
          (using-sessions/eval-r s)
@@ -27,7 +27,7 @@
       r-object->code))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})]
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
     (using-sessions/init-session-memory s)
     (->> [(-> "3"
               (using-sessions/eval-r s))
@@ -46,7 +46,7 @@
 
 (comment
   [(r-function->code 'sin)
-   (let [s (clojuress.using-sessions/fetch-or-make-and-init {})]
+   (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
      (using-sessions/init-session-memory s)
      (-> "sin"
          (using-sessions/eval-r s)
@@ -68,7 +68,7 @@
         (string/join "; "))))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})
         _ (using-sessions/init-session-memory s)
         sin (-> "sin"
                 (using-sessions/eval-r s))]
@@ -86,7 +86,7 @@
        (apply format "%s ~ %s")))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})
         _ (using-sessions/init-session-memory s)]
     (-> ['tilde 'x 'y]
         (->formula-code s))))
@@ -99,7 +99,7 @@
        (string/join " ")))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})
         _ (using-sessions/init-session-memory s)
         x  (-> "3"
                (using-sessions/eval-r s))]
@@ -117,7 +117,7 @@
    (args->code args session)))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})
         _ (using-sessions/init-session-memory s)
         x (-> "3"
               (using-sessions/eval-r s))
@@ -140,7 +140,7 @@
 
 
 (comment
-  (let [s   (clojuress.session/fetch-or-make {})
+  (let [s   (clojuress.v0.session/fetch-or-make {})
         _   (using-sessions/init-session-memory s)
         x   (-> "3"
                 (using-sessions/eval-r s))
@@ -178,7 +178,7 @@
     (->funcall-code form session)))
 
 (comment
-  (let [s   (clojuress.session/fetch-or-make {})
+  (let [s   (clojuress.v0.session/fetch-or-make {})
         _   (using-sessions/init-session-memory s)
         x   (-> "3"
                 (using-sessions/eval-r s))
@@ -206,7 +206,7 @@
         :else          (value->code form session)))
 
 (comment
-  (let [s   (clojuress.session/fetch-or-make {})
+  (let [s   (clojuress.v0.session/fetch-or-make {})
         _   (using-sessions/init-session-memory s)
         x   (-> "3"
                 (using-sessions/eval-r s))
@@ -244,7 +244,7 @@
        (form->code value session)))
 
 (comment
-  (let [s   (clojuress.session/fetch-or-make {})
+  (let [s   (clojuress.v0.session/fetch-or-make {})
         _   (using-sessions/init-session-memory s)]
     (->> ['(+ x y)
           4
@@ -283,7 +283,7 @@
        (string/join ", ")))
 
 (comment
-  (let [s   (clojuress.session/fetch-or-make {})
+  (let [s   (clojuress.v0.session/fetch-or-make {})
          _   (using-sessions/init-session-memory s)]
     (-> ['(+ x y)
          [:= :a '(+ x y)]

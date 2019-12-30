@@ -1,4 +1,4 @@
-(ns clojuress.impl.rserve.java-to-clj
+(ns clojuress.v0.impl.rserve.java-to-clj
   (:require [clojure.pprint :as pp]
             [clojure.walk :as walk]
             [com.rpl.specter :as specter]

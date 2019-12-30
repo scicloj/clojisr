@@ -1,11 +1,11 @@
 ;; copied from Rincanter https://github.com/skm-ice/rincanter/blob/master/src/rincanter/proc.clj
 ;; originally from https://gist.github.com/codification/1984857
 
-(ns clojuress.impl.rserve.proc
+(ns clojuress.v0.impl.rserve.proc
   (:require [clojure.java.io :refer [reader writer]]
             [clojure.java.shell :refer [sh]]
             [clojure.string :as string]
-            [clojuress.util :refer [file-exists? private-field]])
+            [clojuress.v0.util :refer [file-exists? private-field]])
   (:import [java.lang ProcessBuilder]
            [java.io File]))
 

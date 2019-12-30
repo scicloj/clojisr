@@ -1,4 +1,4 @@
-(ns clojuress.protocols)
+(ns clojuress.v0.protocols)
 
 (defprotocol Session
   (close [session])

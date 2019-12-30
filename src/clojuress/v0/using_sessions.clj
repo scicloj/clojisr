@@ -1,10 +1,10 @@
-(ns clojuress.using-sessions
+(ns clojuress.v0.using-sessions
   (:require [tech.resource :as resource]
-            [clojuress.protocols :as prot]
-            [clojuress.objects-memory :as mem]
-            [clojuress.util :as util]
-            [clojuress.robject :refer [->RObject]])
-  (:import clojuress.robject.RObject))
+            [clojuress.v0.protocols :as prot]
+            [clojuress.v0.objects-memory :as mem]
+            [clojuress.v0.util :as util]
+            [clojuress.v0.robject :refer [->RObject]])
+  (:import clojuress.v0.robject.RObject))
 
 (defn eval-r [code session]
   (let [obj-name (util/rand-name)
@@ -21,7 +21,7 @@
          :gc))))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})]
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
     (init-memory s)
     (eval-r "1+2" s)))
 
@@ -39,7 +39,7 @@
        (#(prot/java->specified-type session % return-type))))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})]
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
     (init-memory s)
     [(r-function-on-obj
      (eval-r "1+2" s)
@@ -57,7 +57,7 @@
        (prot/get-r->java session)))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})]
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
     (init-memory s)
     (r->java (eval-r "1+2" s))))
 
@@ -72,7 +72,7 @@
       (->RObject obj-name session nil))))
 
 (comment
-  (let [s (clojuress.using-sessions/fetch-or-make-and-init {})]
+  (let [s (clojuress.v0.using-sessions/fetch-or-make-and-init {})]
     (init-memory s)
     (-> (eval-r "1+2" s)
         r->java
