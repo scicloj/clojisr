@@ -1,7 +1,7 @@
 (ns clojuress.v0.note
   (:require [notespace.v0.note :as note]
             [clojure.walk :as walk]
-            [clojuress.v0 :as r]))
+            [clojuress.v0.r :as r]))
 
 (note/defkind note-r
   :r  {:render-src?    true

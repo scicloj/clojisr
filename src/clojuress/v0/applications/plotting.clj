@@ -1,4 +1,4 @@
-(ns clojuress.v0.plotting
+(ns clojuress.v0.applications.plotting
   (:require [clojuress.v0.require :refer [require-r]])
   (:import [java.io File]))
 

@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [alembic "0.3.2"]
                  [cheshire "5.9.0"]
-                 [scicloj/clojuress "1.0.0"]
+                 [scicloj/clojuress "1.0.0-SNAPSHOT"]
                  [net.cgrand/xforms "0.19.1"]
                  [clj-time "0.15.2"]
                  [metosin/jsonista "0.2.4"]])

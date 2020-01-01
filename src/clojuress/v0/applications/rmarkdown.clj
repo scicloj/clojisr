@@ -1,5 +1,5 @@
 (ns clojuress.v0.packages.rmarkdown
-  (:require [clojuress.v0 :as r :refer [r add-package-to-this-ns]]
+  (:require [clojuress.v0.r :as r :refer [r add-package-to-this-ns]]
             [clojuress.v0.util :refer [starts-with?]]
             [hiccup.core :as hiccup]
             [tech.resource :as resource]

@@ -1,13 +1,12 @@
 (ns examples.titanic0
-  (:require [clojuress.v0 :as r :refer [r r->clj]]
+  (:require [clojuress.v0.r :as r :refer [r r->clj]]
             [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
             [clojuress.v0.note :refer [note-r]]
-            [clojuress.v0.plotting :refer [plotting-function->svg
+            [clojuress.v0.applications.plotting :refer [plotting-function->svg
                                            ggplot->svg]]
             [clojuress.v0.require :refer [require-r]]
             [clojure.java.shell :refer [sh]]
-            [clojure.string :as string]
-            [clojure.walk :as walk]))
+            [clojure.string :as string]))
 
 (r/discard-all-sessions)
 
