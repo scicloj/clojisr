@@ -1,5 +1,5 @@
-(ns clojuress.v0.packages.rmarkdown
-  (:require [clojuress.v0.r :as r :refer [r add-package-to-this-ns]]
+(ns clojuress.v0.applications.rmarkdown
+  (:require [clojuress.v0.r :as r :refer [r]]
             [clojuress.v0.util :refer [starts-with?]]
             [hiccup.core :as hiccup]
             [tech.resource :as resource]
@@ -8,8 +8,6 @@
             [clojure.walk :as walk])
   (:import (java.io File)
            (java.lang Math)))
-
-(add-package-to-this-ns 'rmarkdown)
 
 (defn r-code-block [r-codes]
   (println [:r-codes r-codes])

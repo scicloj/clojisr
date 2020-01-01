@@ -1,7 +1,7 @@
 (ns examples.rmarkdown
   (:require [tech.ml.dataset :as dataset]
             [clojure.java.browse :as browse]
-            [clojuress.packages.rmarkdown :refer [hiccup->rmd render-rmd]]
+            [clojuress.v0.applications.rmarkdown :refer [hiccup->rmd render-rmd]]
             [gg4clj.core :as gg]))
 
 
