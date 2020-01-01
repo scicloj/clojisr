@@ -6,6 +6,7 @@
             [clojuress.v0.using-sessions :as using-sessions]
             [clojuress.v0.protocols :as prot]
             [clojuress.v0.codegen :as codegen]
+            [clojuress.v0.printing]
             [clojure.pprint :as pp]
             [clojure.string :as string])
   (:import clojuress.v0.robject.RObject))
@@ -67,15 +68,6 @@
 
 (def function functions/function)
 
-;; Overriding pprint
-(defmethod pp/simple-dispatch RObject [obj]
-  (let [java-object (r->java obj)]
-    (pp/pprint [['R
-                 :object-name (:object-name obj)
-                 :session-args (-> obj :session :session-args)
-                 :r-class (inspection/r-class obj)]
-                ['->Java java-object]])))
-
 (defn r-object? [obj]
   (instance? RObject obj))
 
@@ -129,3 +121,5 @@
 (def brabra (function (r "`[[`")))
 (def brabra<- (function (r "`[[<-`")))
 (def colon (function (r "`:`")))
+
+

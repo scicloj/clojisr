@@ -2,14 +2,14 @@
   (:refer-clojure :exclude [time])
   (:require [clojuress.v0.protocols :as prot]
             [clojuress.v0.impl.rserve.session]
-            [clojuress.v0.objects-memory :as mem]))
+            [clojuress.v0.objects-memory :as mem]
+            [cambium.core  :as log]))
 
 (def sessions (atom {}))
 
 (def defaults
   (atom
    {:session-type :rserve}))
-
 
 (defn make [session-args]
   (let [{:keys [session-type]} (merge @defaults
@@ -32,7 +32,7 @@
 
 (defn discard-all []
   (doseq [[session-args session] @sessions]
-    (println [:discarding session-args])
+    (log/info [::discarding session-args])
     (prot/close session))
   (reset! sessions {}))
 

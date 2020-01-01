@@ -26,14 +26,10 @@
                     (.asNativeJavaObject))}
        (walk/prewalk (fn [v]
                        (if (instance? Map v)
-                         (do
-                           (println [:v v
-                                     :cv (class v)
-                                     :cv1 (->> (into {}) class)])
-                           (->> v
-                                (into {})
-                                (specter/transform [specter/MAP-KEYS]
-                                                   keyword)))
+                         (->> v
+                              (into {})
+                              (specter/transform [specter/MAP-KEYS]
+                                                 keyword))
                          v)))))
 
 
@@ -229,9 +225,3 @@
          (mapv java->clj))))
 
 
-(defmethod pp/simple-dispatch REXP [obj]
-  (let [clj-obj (java->clj obj)]
-    (pp/pprint
-     (into [(symbol (.toDebugString obj))]
-           (when (not= clj-obj obj)
-             [['->Clj clj-obj]])))))

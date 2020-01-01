@@ -4,13 +4,12 @@
            (java.util List Collection)
            (clojure.lang Named))
   (:require [clojure.pprint :as pp]
-            [clojure.string :as string]))
+            [clojure.string :as string]
+            [cambium.core :as log]))
 
 
 (defn r-list [^Collection names
               ^Collection contents]
-  (println [:names names
-            :contents contents])
   (RList. contents names))
 
 (defn rexp-language [^List alist]
@@ -53,6 +52,6 @@
                           expression (.asString rexp))))
           rexp))
       (catch REngineException ex
-        (println (format "Caught exception evaluating expression: %s\n: %s" expression ex)))
+        (log/error (format "Caught exception evaluating expression: %s\n: %s" expression ex)))
       (catch REXPMismatchException ex
-        (println (format "Caught exception evaluating expression: %s\n: %s" expression ex))))))
+        (log/error (format "Caught exception evaluating expression: %s\n: %s" expression ex))))))

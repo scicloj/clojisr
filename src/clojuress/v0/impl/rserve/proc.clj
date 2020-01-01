@@ -5,12 +5,13 @@
   (:require [clojure.java.io :refer [reader writer]]
             [clojure.java.shell :refer [sh]]
             [clojure.string :as string]
-            [clojuress.v0.util :refer [file-exists? private-field]])
+            [clojuress.v0.util :refer [file-exists? private-field]]
+            [cambium.core :as log])
   (:import [java.lang ProcessBuilder]
            [java.io File]))
 
 (defn spawn [& args]
-  (println (string/join " " args))
+  (log/info [::spawning (string/join " " args)])
  (let [process (-> (ProcessBuilder. ^java.util.List args)
                    (.start))]
   {:out (-> process

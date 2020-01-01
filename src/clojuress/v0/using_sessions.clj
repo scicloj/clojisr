@@ -3,7 +3,8 @@
             [clojuress.v0.protocols :as prot]
             [clojuress.v0.objects-memory :as mem]
             [clojuress.v0.util :as util]
-            [clojuress.v0.robject :refer [->RObject]])
+            [clojuress.v0.robject :refer [->RObject]]
+            [cambium.core :as log])
   (:import clojuress.v0.robject.RObject))
 
 (defn eval-code [code session]
@@ -16,7 +17,7 @@
                  (= ["ok"])))
     (-> (->RObject obj-name session code)
         (resource/track
-         #(do (println [:releasing obj-name])
+         #(do (log/info [::releasing obj-name])
               (mem/forget obj-name session))
          :gc))))
 

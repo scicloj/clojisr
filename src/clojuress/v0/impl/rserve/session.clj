@@ -4,8 +4,10 @@
             [clojuress.v0.impl.rserve.java :as java]
             [clojuress.v0.impl.rserve.java-to-clj :as java-to-clj]
             [clojuress.v0.impl.rserve.clj-to-java :as clj-to-java]
+            [clojuress.v0.impl.rserve.printing]
             [clojure.core.async :as async]
-            [clojure.pprint :as pp])
+            [clojure.pprint :as pp]
+            [cambium.core :as log])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)
            clojuress.v0.protocols.Session
@@ -36,8 +38,8 @@
   (desc [session]
     session-args)
   (eval-r->java [session code]
-    (pp/pprint [:eval {:code         code
-                       :session-args (:session-args session)}])
+    (log/info [::eval {:code         code
+                      :session-args (:session-args session)}])
     (java/try-eval-catching-errors code r-connection))
   (java->r-set [session varname java-obj]
     ;; Unlike (.assign r-connection ...), the following approach
