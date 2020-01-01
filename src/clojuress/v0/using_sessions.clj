@@ -6,7 +6,7 @@
             [clojuress.v0.robject :refer [->RObject]])
   (:import clojuress.v0.robject.RObject))
 
-(defn eval-r [code session]
+(defn eval-code [code session]
   (let [obj-name (util/rand-name)
         returned (->> code
                       (mem/code-that-remembers obj-name)
@@ -22,7 +22,6 @@
 
 (defn java->r-specified-type [java-object type session]
   (prot/java->specified-type session java-object type))
-
 
 (defn r-function-on-obj [{:keys [session] :as r-object}
                          function-name return-type]

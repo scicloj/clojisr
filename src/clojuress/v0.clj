@@ -1,13 +1,13 @@
 (ns clojuress.v0
   (:require [clojuress.v0.session :as session]
-            [clojuress.v0.execution :as execution]
+            [clojuress.v0.eval :as evl]
+            [clojuress.v0.functions :as functions]
             [clojuress.v0.inspection :as inspection]
             [clojuress.v0.using-sessions :as using-sessions]
             [clojuress.v0.protocols :as prot]
+            [clojuress.v0.codegen :as codegen]
             [clojure.pprint :as pp]
-            [clojure.string :as string]
-            [clojuress.v0 :as r]
-            [clojuress.v0.codegen :as codegen])
+            [clojure.string :as string])
   (:import clojuress.v0.robject.RObject))
 
 
@@ -15,9 +15,9 @@
   (let [session (session/fetch-or-make session-args)]
     (session/init session)))
 
-(defn r [r-code & {:keys [session-args]}]
+(defn r [form-or-code & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
-    (using-sessions/eval-r r-code session)))
+    (evl/r form-or-code session)))
 
 (defn eval-r->java [r-code & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
@@ -61,81 +61,11 @@
 (defn discard-all-sessions []
   (session/discard-all))
 
-(defn fresh-object? [r-object]
-  (-> r-object
-      :session
-      session/fresh?))
-
-(defn refreshed-object [r-object]
-  (if (fresh-object? r-object)
-    ;; The object is refresh -- just return it.
-    r-object
-    ;; Try to return a refreshed object.
-    (if-let [code (:code r-object)]
-      ;; The object has code information -- rerun the code with the same session-args.
-      (r code
-         :session-args (:session-args r-object))
-      ;; No code information.
-      (ex-info "Cannot refresh an object with no code info." {:r-object r-object}))))
-
-(defn auto-refresing-object [r-object]
-  (let [mem (atom r-object)]
-    (reify clojure.lang.IDeref
-      (deref [_]
-        (when (-> @mem fresh-object? not)
-          (reset! mem (refreshed-object r-object)))
-        @mem))))
-
-
 (defn apply-function [r-function args & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
-    (execution/apply-function r-function args session)))
+    (functions/apply-function r-function args session)))
 
-(defn function
-  [r-function]
-  (let [autorefreshing (auto-refresing-object
-                        r-function)]
-    (fn f
-      ([& args]
-       (let [explicit-session-args
-             (when (some-> args butlast last (= :session-args))
-               (last args))]
-         (apply-function
-          @autorefreshing
-          (if explicit-session-args
-            (-> args butlast butlast)
-            args)
-          :session (session/fetch-or-make explicit-session-args)))))))
-
-(defn add-functions-to-this-ns [package-symbol function-symbols]
-  (doseq [s function-symbols]
-    (let [d (delay (function
-                    (r (format "{library(%s); `%s`}"
-                               (name package-symbol)
-                               (name s)))))
-          f (fn [& args]
-              (apply @d args))
-          clojurized-symbol (-> s
-                                name
-                                (string/replace #"\." "-")
-                                symbol)]
-      (eval (list 'def clojurized-symbol f)))))
-
-(defn add-package-to-this-ns
-  [package-symbol]
-  (->> package-symbol
-       name
-       (format "library(%s)")
-       r)
-  (->> package-symbol
-       name
-       vector
-       (apply-function (r "function(package_name) as.character(unlist(lsf.str(paste0('package:', package_name))))"))
-       r->java->clj
-       (filter (fn [function-name]
-                 (re-matches #"[A-Za-z][A-Za-z\\.\\_].*" function-name)))
-       (map symbol)
-       (add-functions-to-this-ns package-symbol)))
+(def function functions/function)
 
 ;; Overriding pprint
 (defmethod pp/simple-dispatch RObject [obj]
@@ -145,16 +75,6 @@
                  :session-args (-> obj :session :session-args)
                  :r-class (inspection/r-class obj)]
                 ['->Java java-object]])))
-
-(defn form->r-code
-  [form & {:keys [session-args]}]
-  (let [session (session/fetch-or-make session-args)]
-    (codegen/form->code form session)))
-
-(defn eval-form
-  [form & {:keys [session-args]}]
-  (let [session (session/fetch-or-make session-args)]
-    (execution/eval-form form session)))
 
 (defn na [& {:keys [session-args]}]
   (r "NA" :session-args session-args))
