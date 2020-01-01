@@ -141,3 +141,8 @@
 
 (def l list)
 
+(defn clojurize-r-symbol [s]
+  (-> s
+      name
+      (string/replace #"\." "-")
+      symbol))
