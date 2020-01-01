@@ -6,7 +6,6 @@
             [clojuress.v0.impl.rserve.clj-to-java :as clj-to-java]
             [clojuress.v0.impl.rserve.printing]
             [clojure.core.async :as async]
-            [clojure.pprint :as pp]
             [cambium.core :as log])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)

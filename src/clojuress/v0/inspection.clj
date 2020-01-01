@@ -1,6 +1,5 @@
 (ns clojuress.v0.inspection
-  (:require [clojuress.v0.codegen :as codegen]
-            [clojuress.v0.using-sessions :as using-sessions]))
+  (:require [clojuress.v0.using-sessions :as using-sessions]))
 
 (defn r-class [r-object]
   (vec

@@ -1,9 +1,7 @@
 (ns clojuress.v0.impl.rserve.java-to-clj
-  (:require [clojure.pprint :as pp]
-            [clojure.walk :as walk]
+  (:require [clojure.walk :as walk]
             [com.rpl.specter :as specter]
             [tech.ml.dataset :as dataset]
-            [tech.v2.datatype :as dtype]
             [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]]
             [clojure.math.combinatorics :refer [cartesian-product]])
   (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)

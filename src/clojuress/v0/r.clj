@@ -2,13 +2,9 @@
   (:require [clojuress.v0.session :as session]
             [clojuress.v0.eval :as evl]
             [clojuress.v0.functions :as functions]
-            [clojuress.v0.inspection :as inspection]
             [clojuress.v0.using-sessions :as using-sessions]
             [clojuress.v0.protocols :as prot]
-            [clojuress.v0.codegen :as codegen]
-            [clojuress.v0.printing]
-            [clojure.pprint :as pp]
-            [clojure.string :as string])
+            [clojuress.v0.printing])
   (:import clojuress.v0.robject.RObject))
 
 

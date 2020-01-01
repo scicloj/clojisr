@@ -1,7 +1,6 @@
 (ns clojuress.v0.util
   (:require [com.rpl.specter :as specter]
-            [clojure.string :as string]
-            [clojure.walk :as walk])
+            [clojure.string :as string])
   (:import [java.io File]))
 
 (defn first-if-one

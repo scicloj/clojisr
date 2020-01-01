@@ -5,7 +5,7 @@
   (:require [clojure.java.io :refer [reader writer]]
             [clojure.java.shell :refer [sh]]
             [clojure.string :as string]
-            [clojuress.v0.util :refer [file-exists? private-field]]
+            [clojuress.v0.util :refer [file-exists?]]
             [cambium.core :as log])
   (:import [java.lang ProcessBuilder]
            [java.io File]))
