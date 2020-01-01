@@ -19,6 +19,8 @@
                  [org.rosuda.REngine/REngine "2.1.0"]
                  [org.rosuda.REngine/Rserve "1.8.1"]
                  [hiccup "1.0.5"]
-                 [org.clojure/tools.logging "0.5.0"]
+                 [cambium/cambium.core         "0.9.3"]
+                 [cambium/cambium.codec-simple "0.9.3"]
+                 [cambium/cambium.logback.core "0.4.3"]
                  [scicloj/notespace "1.0.1"]]
   :injections [(require 'hara.tool)])
