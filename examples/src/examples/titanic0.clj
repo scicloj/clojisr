@@ -1,6 +1,6 @@
 (ns examples.titanic0
   (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
-            [clojuress.v0.note :refer [note-r]]))
+            [clojuress.v0.note :refer [note-r r-lines->md]]))
 
 (note-md "
 #Clouress example: Titanic #0 - naive function wrappers
@@ -525,7 +525,7 @@ titanic%>%
 (note-r
  (-> titanic
      (group_by 'Embarked 'Pclass)
-     (r-filter '(== Pclass "1"))
+     (r.dplyr/filter '(== Pclass "1"))
      (summarise :mfare '(median Fare)
                 :n '(n))))
 
@@ -550,7 +550,7 @@ embark_fare
 (note-r
  (def embark_fare
    (-> titanic
-       (r-filter '(& (!= PassengerId 62)
+       (r.dplyr/filter '(& (!= PassengerId 62)
                      (!= PassengerId 830))))))
 
 
@@ -656,7 +656,7 @@ titanic%>%
 
 (note-r
  (-> titanic
-     (r-filter '(& (== Pclass "3")
+     (r.dplyr/filter '(& (== Pclass "3")
                    (== Embarked "S")))
      (summarise :missing_fare '(median Fare :na.rm true))))
 
@@ -811,6 +811,8 @@ hist(titanic$Age, freq=F, main='Age: Original Data',
 hist(mice_output$Age, freq=F, main='Age: MICE Output',
      col='lightgreen', ylim=c(0,0.04))
 ```")
+
+
 
 (note-as-hiccup
  (plotting-function->svg
@@ -1162,4 +1164,6 @@ Tripathi: Thank you for taking the time to read through my first
 exploration of a Titanic Kaggle dataset. Again, this newbie welcomes comments and suggestions!")
 
 (note/render-this-ns!)
+
+
 
