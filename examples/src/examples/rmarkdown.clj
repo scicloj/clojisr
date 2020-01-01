@@ -2,6 +2,8 @@
   (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
             [clojuress.v0.note :refer [note-r r-lines->md]]))
 
+(note-md "This document shows the potential of generating [R Markdown](https://rmarkdown.rstudio.com) from Clojure [Hiccup](https://github.com/weavejester/hiccup), while binding R data to values passed from Clojure.")
+
 (note-void
  (require '[tech.ml.dataset :as dataset]
           '[clojuress.v0.applications.rmarkdown :refer [hiccup->rmd render-rmd]]
@@ -13,7 +15,7 @@
 Then we create a Hiccup structure with a special block of R-as-EDN code,
 that is translated by [gg4clj](https://github.com/JonyEpsilon/gg4clj) to R code.
 
-We convert it to Rmarkdown, taking care of the code block, and then we render that Rmarkdown wth our data added to the R environment.")
+We convert it to R Markdown, taking care of the code block, and then we render that R Markdown wth our data added to the R environment.")
 
 (note-as-hiccup
  (let [;; Create x as a random sequence.
@@ -35,9 +37,9 @@ We convert it to Rmarkdown, taking care of the code block, and then we render th
       [:r-edn
        [:library :ggplot2]
        [:qplot :x :y]]]]
-    ;; Convert it to Rmarkdown, taking care of the code block.
+    ;; Convert it to R Markdown, taking care of the code block.
     hiccup->rmd
-    ;; Render the Rmarkdown to an html file, with our data added to
+    ;; Render the R Markdown to an html file, with our data added to
     ;; the environment.
     (render-rmd data)
     slurp)))
