@@ -1157,8 +1157,8 @@ write.csv(Output, file = 'pradeep_titanic_output.csv', row.names = F)
             :row.names 'F))
 
 
-(note-md "Tripathi:
-Conclusion: Thank you for taking the time to read through my first
+(note-md "## Conclusion
+Tripathi: Thank you for taking the time to read through my first
 exploration of a Titanic Kaggle dataset. Again, this newbie welcomes comments and suggestions!")
 
 (note/render-this-ns!)
