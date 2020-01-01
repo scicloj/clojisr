@@ -37,8 +37,8 @@
   (desc [session]
     session-args)
   (eval-r->java [session code]
-    (log/info [::eval {:code         code
-                      :session-args (:session-args session)}])
+    (log/debug [::eval {:code         code
+                        :session-args (:session-args session)}])
     (java/try-eval-catching-errors code r-connection))
   (java->r-set [session varname java-obj]
     ;; Unlike (.assign r-connection ...), the following approach
