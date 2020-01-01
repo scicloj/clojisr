@@ -33,7 +33,7 @@
                    (re-matches #"[A-Za-z][A-Za-z\\.\\_].*" function-name)))
          (map symbol))))
 
-(defn- find-or-create-ns [ns-symbol]
+(defn find-or-create-ns [ns-symbol]
  (or (find-ns ns-symbol)
      (create-ns ns-symbol)))
 
@@ -42,7 +42,7 @@
           (clojurize-r-symbol function-symbol)
           (package-function package-symbol function-symbol)))
 
-(defn- ->this-ns-symbol []
+(defn ->this-ns-symbol []
   (-> *ns* str symbol))
 
 (defn require-r-package [[package-symbol
