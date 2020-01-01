@@ -20,5 +20,5 @@
                  [org.rosuda.REngine/Rserve "1.8.1"]
                  [hiccup "1.0.5"]
                  [org.clojure/tools.logging "0.5.0"]
-                 [scicloj/notespace "1.0.0"]]
+                 [scicloj/notespace "1.0.1"]]
   :injections [(require 'hara.tool)])
