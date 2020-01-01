@@ -76,14 +76,56 @@
                  :r-class (inspection/r-class obj)]
                 ['->Java java-object]])))
 
+(defn r-object? [obj]
+  (instance? RObject obj))
+
+
 (defn na [& {:keys [session-args]}]
   (r "NA" :session-args session-args))
 
-(defn r-object? [obj]
-  (instance? RObject obj))
+(defn empty-symbol [& {:keys [session-args]}]
+  "The empty symbol.
+  See https://stackoverflow.com/a/20906150/1723677."
+  (r "(quote(f(,)))[[2]]" :session-args session-args))
 
 (defn library [libname]
   (->> libname
        (format "library(%s)")
        r))
 
+(def r== (function (r "`==`")))
+(def r!= (function (r "`!=`")))
+(def r< (function (r "`<`")))
+(def r> (function (r "`>`")))
+(def r<= (function (r "`<=`")))
+(def r>= (function (r "`>=`")))
+(def r& (function (r "`&`")))
+(def r&& (function (r "`&&`")))
+(def r| (function (r "`||`")))
+(def r|| (function (r "`||`")))
+
+
+(def r-str
+  "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
+  (function (r "function(x) capture.output(str(x))")))
+
+(def print-summary
+  "For the R function [summary](https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/summary), we could get its return value, but we prefer to capture way it is printed by R."
+  (function (r "function(x) capture.output(print(summary(x)))")))
+
+(def print-table
+  "Sometimes, it is also convenient get the print result of the R function [table](https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/table)."
+  (function (r "function(...) capture.output(print(table(...)))")))
+
+
+(defn r+
+  "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments."
+  [& args]
+  (reduce (function (r "`+`")) args))
+
+;; Some special characters will get a name in letters.
+(def bra (function (r "`[`")))
+(def bra<- (function (r "`[<-`")))
+(def brabra (function (r "`[[`")))
+(def brabra<- (function (r "`[[<-`")))
+(def colon (function (r "`:`")))

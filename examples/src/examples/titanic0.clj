@@ -1,14 +1,6 @@
 (ns examples.titanic0
-  (:require [clojuress.v0.r :as r :refer [r r->clj]]
-            [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
-            [clojuress.v0.note :refer [note-r]]
-            [clojuress.v0.applications.plotting :refer [plotting-function->svg
-                                           ggplot->svg]]
-            [clojuress.v0.require :refer [require-r]]
-            [clojure.java.shell :refer [sh]]
-            [clojure.string :as string]))
-
-(r/discard-all-sessions)
+  (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
+            [clojuress.v0.note :refer [note-r]]))
 
 (note-md "
 #Clouress example: Titanic #0 - naive function wrappers
@@ -33,6 +25,23 @@ daslu, Jan. 2020")
 (note-md "## Bringing the neecessary R functions
 Here are most of the functions that we need, brought by the standard `require-r` mechanism, inspired by [libpython-clj](https://github.com/cnuernber/libpython-clj])'s `require-python` (though not as sophisticated at the moment). In function names, dots are changed to hyphens.")
 
+(note-void
+ (require
+  '[clojuress.v0.r :as r
+    :refer [r r->clj
+            na empty-symbol
+            r== r!= r< r> r<= r>= r& r&& r| r||
+            r-str print-summary print-table
+            r+
+            bra bra<- brabra brabra<- colon]]
+  '[clojuress.v0.applications.plotting :refer [plotting-function->svg
+                                               ggplot->svg]]
+  '[clojuress.v0.require :refer [require-r]]
+  '[clojure.java.shell :refer [sh]]
+  '[clojure.string :as string]))
+
+(note-void
+ (r/discard-all-sessions))
 
 (note-void
  (require-r
@@ -47,108 +56,6 @@ Here are most of the functions that we need, brought by the standard `require-r`
   '[mice :refer [mice complete]]
   '[randomForest :refer [randomForest importance]]))
 
-
-(note-md
- "Some functions will get different names, to avoid conflicts with usual Clojure functions.")
-
-(note-void (def r== (r/function (r "`==`"))))
-(note-void (def r!= (r/function (r "`!=`"))))
-(note-void (def r< (r/function (r "`<`"))))
-(note-void (def r> (r/function (r "`>`"))))
-(note-void (def r<= (r/function (r "`<=`"))))
-(note-void (def r>= (r/function (r "`>=`"))))
-(note-void (def r& (r/function (r "`&`"))))
-(note-void (def r&& (r/function (r "`&&`"))))
-(note-void (def r| (r/function (r "`||`"))))
-(note-void (def r|| (r/function (r "`||`"))))
-
-(note-void (def r-names (r/function (r "names"))))
-(note-void (def r-print (r/function (r "print"))))
-(note-void (def r-filter (r/function (r "filter")))) ; of dplyr
-
-(note-md
- "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string.")
-
-(note-void
- (def r-str (r/function (r "function(x) capture.output(str(x))"))))
-
-(note-md 2 "For example:")
-
-(note-r
- (r-str {:a {:b [1 2] :c {:d [3 4]}}}))
-
-(note-md
- "For the R function [summary](https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/summary), we could get its return value, but we prefer to capture way it is printed by R. Sometimes, it is also convenient to have the same for the R function [table](https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/table).")
-
-(note-void
- (def print-summary (r/function (r "function(x) capture.output(print(summary(x)))")))
- (def print-table (r/function (r "function(...) capture.output(print(table(...)))"))))
-
-(note-md 3 "For example:")
-
-(note-r
- (->> {:a [1 2 4] :b [4 5 6]}
-      data-frame
-      print-summary))
-
-(note-md
- "Such functions return a vector sequence of strings, corresponding to the lines of printed text. The following clojure function will help viewing it nicely in markdown, with a fixed-width font.")
-
-(note-void
- (defn r-lines->md [r-lines]
-   (->> r-lines
-        r->clj
-        (string/join "\n")
-        (format "```\n%s\n```"))))
-
-(note-md 4 "For example:")
-
-(note-as-md
- (->> {:a [1 2 4] :b [4 5 6]}
-      data-frame
-      print-summary
-      r-lines->md))
-
-(note-md
- "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments.")
-
-(note-void
- (defn r+ [& args]
-   (reduce (r/function (r "`+`")) args)))
-
-(note-md 5 "For example:")
-
-(note-r
- (r+ 1 2 3 4))
-
-(note-md
- "Some special characters will get a name in letters.")
-
-(note
- (def bra (r/function (r "`[`")))
- (def bra<- (r/function (r "`[<-`")))
- (def brabra (r/function (r "`[[`")))
- (def brabra<- (r/function (r "`[[<-`")))
- (def colon (r/function (r "`:`"))))
-
-(note-md "We will also need the empty symbol:")
-
-(note-void
- ;; See https://stackoverflow.com/a/20906150/1723677
- (def empty-symbol
-   (r "(quote(f(,)))[[2]]")))
-
-(note-md 6 "For example, mimicking the R code:
-```
-data.frame(a=1:5, b=6:10)[c(1,4,5), ]
-```
-one could write:")
-
-(note-r
- (-> (data-frame :a (colon 1 5)
-                 :b (colon 6 10))
-     (bra [1 4 5]
-          empty-symbol)))
 
 (note-md
  "
@@ -419,7 +326,7 @@ titanic$family <- paste(titanic$surname, titanic$famsize, sep='_')
 (note-as-hiccup
  (-> titanic
      (bra (colon 1 891)
-          empty-symbol)
+          (empty-symbol))
      (ggplot (aes :x 'famsize
                   :fill '(factor Survived)))
      (r+ (geom_bar :stat "count"
@@ -734,7 +641,7 @@ titanic[1044, ]
 
 (note-r
  (-> titanic
-     (bra 1044 empty-symbol)))
+     (bra 1044 (empty-symbol))))
 
 (note-md "Thripathi's explanation:
 Looks like he left from 'S' (Southampton) as a 3rd class passenger.
@@ -776,7 +683,7 @@ ggplot(titanic[titanic$Pclass == '3' & titanic$Embarked == 'S', ],
  (-> titanic
      (bra (r& (r== ($ titanic 'Pclass) 3)
                  (r== ($ titanic 'Embarked) "S"))
-          empty-symbol)
+          (empty-symbol))
      (ggplot (aes :x 'Fare))
      (r+ (geom_density :fill "#99d6ff"
                        :alpha 0.4)
@@ -872,7 +779,7 @@ mice_mod <- mice(titanic[, !names(titanic) %in% c('PassengerId','Name','Ticket',
 (note-void
  (def mice-mod
    (-> titanic
-       (bra empty-symbol
+       (bra (empty-symbol)
             (-> titanic
                 names
                 (%in% ["PassengerId","Name","Ticket","Cabin","Family","Surname","Survived"])
@@ -973,7 +880,7 @@ ggplot(titanic[1:891,], aes(Age, fill = factor(Survived))) +
 
 (note-as-hiccup
    (-> titanic
-       (bra (colon 1 891) empty-symbol)
+       (bra (colon 1 891) (empty-symbol))
        (ggplot (aes 'Age :fill '(factor Survived)))
        (r+ (geom_histogram)
            (facet_grid '(tilde . Sex))
@@ -1077,9 +984,9 @@ test <- titanic[892:1309,]
 
 (note-void
  (def train
-   (bra titanic (colon 1 891) empty-symbol))
+   (bra titanic (colon 1 891) (empty-symbol)))
  (def test
-   (bra titanic (colon 892 1309) empty-symbol)))
+   (bra titanic (colon 892 1309) (empty-symbol))))
 
 (note-md "Building the model:
 
@@ -1154,7 +1061,7 @@ varImportance <- data.frame(Variables = row.names(importance),
  (def var-importance
    (data-frame :Variables (row-names importance-info)
                :Importance (-> importance-info
-                               (bra empty-symbol "MeanDecreaseGini")
+                               (bra (empty-symbol) "MeanDecreaseGini")
                                round))))
 
 (note-r importance-info)
