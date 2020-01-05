@@ -1,35 +1,42 @@
 (ns examples.basic
-  (:require [clojuress :as r :refer [r]]
-            [tech.ml.dataset :as dataset]))
+  (:require [clojuress.v0.r :as r :refer [r]]
+            [clojuress.v0.require :refer [require-r]]
+            [tech.ml.dataset :as dataset]
+            [notespace.v0.note :as note
+             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
-;; Run some R code, and keep a Clojure handle to the return value.
+(note-md "# R interop -- basic examples")
 
-(def x (r "1+2"))
+(note-md "Run some R code, and keep a Clojure handle to the return value.")
 
-;; Convert the R object to Java, then to Clojure:
+(note-void
+ (def x (r "1+2")))
 
-(r/r->java->clj x)
-;; => [3.0]
+(note-md "Convert the R object to Java, then to Clojure:")
 
-;; Run some code on a separate session
-;; (specified Rserve port, rather than the default one).
+(note
+ (r/r->clj x))
 
-(-> "1+2"
-    (r :session-args {:port 4444})
-    r/r->java->clj)
+(note-md "Run some code on a separate session (specified Rserve port, rather than the default one).")
 
-;; Define a Clojure function wrapping an R function.
+(note
+ (-> "1+2"
+     (r :session-args {:port 4444})
+     r/r->java->clj))
 
-(def f (r/function (r "function(x) x*10")))
+(note-md "Define a Clojure function wrapping an R function.")
 
-;; Apply it to Clojure data (implicitly converting that data to R).
+(note-void
+ (def f (r/function (r "function(x) x*10"))))
 
-(-> 5
-    f
-    r/r->java->clj)
-;; => [50.0]
+(note-md "Apply it to Clojure data (implicitly converting that data to R).")
 
-;; Apply it to R data.
+(note
+ (-> 5
+     f
+     r/r->java->clj))
+
+(note-md "Apply it to R data.")
 
 (-> "5*5"
     r
@@ -37,48 +44,40 @@
     r/r->java->clj)
 ;; => [250.0]
 
-;; Fdgg
 
+(note-md "Create a tech.ml.dataset dataset object,
+pass it to an R function to compute the row means,
+and convert the return value to Clojure.")
 
-;; Create a tech.ml.dataset dataset object,
-;; pass it to an R function to compute the row means,
-;; and convert the return value to Clojure.
+(note
+ (let [row-means (-> "function(data) rowMeans(data)"
+                     r
+                     r/function)]
+   (->> {:x [1 2 3]
+         :y [4 5 6]}
+        dataset/name-values-seq->dataset
+        row-means
+        r/r->java->clj)))
 
-(let [row-means (-> "function(data) rowMeans(data)"
-                    r
-                    r/function)]
-  (->> {:x [1 2 3]
-        :y [4 5 6]}
-       dataset/name-values-seq->dataset
-       row-means
-       r/r->java->clj))
-;; => [2.5 3.5 4.5]
+(note-md "Load the R package 'dplyr' (assuming it is installed).")
 
-;; Load the R package 'dplyr' (assuming it is installed).
+(note-void
+ (r "library(dplyr)"))
 
-(r "library(dplyr)")
+(note-md "Use dplyr to process some Clojure dataset, and convert back to the resulting dataset.")
 
-;; Use dplyr to process some Clojure dataset,
-;; and convert back to the resulting dataset.
+(note
+ (let [filter-by-x  (-> "function(data) filter(data, x>=2)"
+                        r
+                        r/function)
+       add-z-column (-> "function(data) mutate(data, z=x+y)"
+                        r
+                        r/function)]
+   (->> {:x [1 2 3]
+         :y [4 5 6]}
+        dataset/name-values-seq->dataset
+        filter-by-x
+        add-z-column
+        r/r->java->clj)))
 
-(let [filter-by-x (-> "function(data) filter(data, x>=2)"
-                          r
-                          r/function)
-      add-z-column (-> "function(data) mutate(data, z=x+y)"
-                       r
-                       r/function)]
-  (->> {:x [1 2 3]
-        :y [4 5 6]}
-       dataset/name-values-seq->dataset
-       filter-by-x
-       add-z-column
-       r/r->java->clj))
-;; =>
-;; _unnamed [2 3]:
-;;
-;; |    :x |    :y |    :z |
-;; |-------+-------+-------|
-;; | 2.000 | 5.000 | 7.000 |
-;; | 3.000 | 6.000 | 9.000 |
-
-
+(note/render-this-ns!)
