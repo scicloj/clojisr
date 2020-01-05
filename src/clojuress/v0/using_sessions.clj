@@ -25,11 +25,11 @@
   (prot/java->specified-type session java-object type))
 
 (defn r-function-on-obj [{:keys [session] :as r-object}
-                         function-name return-type]
+                         function-code return-type]
   (->> r-object
        :object-name
        mem/object-name->memory-place
-       (format "%s(%s)" function-name)
+       (format "%s(%s)" function-code)
        (prot/eval-r->java session)
        (#(prot/java->specified-type session % return-type))))
 

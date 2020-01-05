@@ -2,16 +2,15 @@
   (:import clojuress.v0.robject.RObject)
   (:require [clojuress.v0.using-sessions :as using-sessions]
             [clojure.pprint :as pp]
-            [clojuress.v0.inspection :as inspection]))
+            [clojuress.v0.inspection :as inspection]
+            [clojure.string :as string]))
 
 (defn r-object->string-to-print [obj]
-  (let [java-object (using-sessions/r->java obj)]
-    (with-out-str
-      (pp/pprint [['R
-                   :object-name (:object-name obj)
-                   :session-args (-> obj :session :session-args)
-                   :r-class (inspection/r-class obj)]
-                  ['->Java java-object]]))))
+  (->> (using-sessions/r-function-on-obj
+        obj
+        "(function (o) capture.output(print(o)))"
+        :strings)
+       (string/join "\n")))
 
 ;; Overriding print
 (defmethod print-method RObject [obj ^java.io.Writer w]
