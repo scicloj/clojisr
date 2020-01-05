@@ -4,13 +4,18 @@
             [clojuress.v0.functions :as functions]
             [clojuress.v0.using-sessions :as using-sessions]
             [clojuress.v0.protocols :as prot]
-            [clojuress.v0.printing])
+            [clojuress.v0.printing]
+            [clojuress.v0.codegen :as codegen])
   (:import clojuress.v0.robject.RObject))
 
 
 (defn init [& {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
     (session/init session)))
+
+(defn ->code [form & {:keys [session-args]}]
+  (let [session (session/fetch-or-make session-args)]
+    (codegen/form->code form session)))
 
 (defn r [form-or-code & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
@@ -63,6 +68,8 @@
     (functions/apply-function r-function args session)))
 
 (def function functions/function)
+
+
 
 (defn r-object? [obj]
   (instance? RObject obj))
