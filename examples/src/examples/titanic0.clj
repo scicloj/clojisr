@@ -1,6 +1,6 @@
 (ns examples.titanic0
   (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
-            [clojuress.v0.note :refer [note-r r-lines->md]]))
+            [cambium.logback.core.strategy :as strategy]))
 
 (note-md "
 #Clouress example: Titanic #0 - naive function wrappers
@@ -31,7 +31,7 @@ Here are most of the functions that we need, brought by the standard `require-r`
     :refer [r r->clj
             na empty-symbol
             r== r!= r< r> r<= r>= r& r&& r| r||
-            r-str print-summary print-table
+            r-str-md
             r+
             bra bra<- brabra brabra<- colon]]
   '[clojuress.v0.applications.plotting :refer [plotting-function->svg
@@ -45,7 +45,7 @@ Here are most of the functions that we need, brought by the standard `require-r`
 
 (note-void
  (require-r
-  '[base :refer [round names ! set.seed sum which rnorm lapply sapply %in% table list.files c paste colnames row.names cbind gsub <- $ $<- as.data.frame data.frame nlevels factor expression is.na strsplit as.character]]
+  '[base :refer [round names ! set.seed sum which rnorm lapply sapply %in% table list.files c paste colnames row.names cbind gsub <- $ $<- as.data.frame data.frame nlevels factor expression is.na strsplit as.character summary table]]
   '[stats :refer [median predict]]
   '[ggplot2 :refer [ggsave qplot ggplot aes facet_grid geom_density geom_text geom_histogram geom_bar scale_x_continuous scale_y_continuous labs coord_flip geom_vline geom_hline geom_boxplot]]
   '[ggthemes :refer [theme_few]]
@@ -87,7 +87,7 @@ list.files('../input')
 ```
 ")
 
-(note-r
+(note
  (list-files data-path))
 
 (note-md
@@ -138,9 +138,9 @@ head(titanic)
 ```
 ")
 
-(note-r (r-str titanic))
-(note-r (print-summary titanic))
-(note-r (head titanic))
+(note-as-md (r-str-md titanic))
+(note (summary titanic))
+(note (head titanic))
 
 (note-md "Tripathi:
 We've got a sense of our variables, their class type,
@@ -161,7 +161,7 @@ name variable and we can use surname to represent families.
 colnames(titanic)
 ```")
 
-(note-r
+(note
  (colnames titanic))
 
 (note-md "
@@ -189,23 +189,23 @@ table(titanic$Sex, titanic$title)
 
 (note-md "Clojuress can covert an R frequency table to a Clojure data structure:")
 
-(note-r
- (table ($ titanic 'Sex)
-        ($ titanic 'title)))
+(note
+ (-> (table ($ titanic 'Sex)
+            ($ titanic 'title))
+     r->clj))
 
 (note-md "Sometimes, it is convenient to first convert it to an R data frame:")
 
-(note-r
+(note
  (as-data-frame
   (table ($ titanic 'Sex)
          ($ titanic 'title))))
 
 (note-md "Sometimes, it is convenient to use the way R prints a frequency table.")
 
-(note-as-md
- (->> (print-table ($ titanic 'Sex)
-                   ($ titanic 'title))
-      r-lines->md))
+(note
+ (table ($ titanic 'Sex)
+        ($ titanic 'title)))
 
 (note-md "Convert titles with low count into a new title, and rename/reassign Mlle, Ms and Mme.
 ```
@@ -251,11 +251,10 @@ titanic$title[titanic$title %in% unusual_title]<-'Unusual Title'
 table(titanic$Sex, titanic$title)
 ```")
 
-(note-as-md
+(note
  "trying again:"
- (->> (print-table ($ titanic 'Sex)
-                   ($ titanic 'title))
-      r-lines->md))
+ (table ($ titanic 'Sex)
+        ($ titanic 'title)))
 
 
 (note-md
@@ -273,7 +272,7 @@ nlevels(factor(titanic$surname)) ## 875 unique surnames
         (sapply ($ titanic 'Name)
                 (r "function(x) strsplit(x,split='[,.]')[[1]][1]")))))
 
-(note-r
+(note
  (-> titanic
      ($ 'surname)
      factor
@@ -364,14 +363,14 @@ titanic$fsizeD[titanic$famsize> 4] <- 'large'
 
 (note-md "Let us check if it makes sense:")
 
-(note-r
+(note
  (-> titanic
      ($ 'fsizeD)
      table))
 
 (note-md "And let us make sure there are no missing values:")
 
-(note-r
+(note
  (-> titanic
      ($ 'fsizeD)
      is-na
@@ -386,7 +385,7 @@ including about their deck, so Retrieve deck from Cabin variable.
 titanic$Cabin[1:28]
 ```")
 
-(note-r
+(note
  (-> titanic
      (bra (colon 1 28)
           "Cabin")))
@@ -399,7 +398,7 @@ The first character is the deck:
 strsplit(titanic$Cabin[2], NULL) [[1]]
 ```")
 
-(note-r
+(note
  (-> titanic
      ($ 'Cabin)
      (bra 2)
@@ -420,14 +419,14 @@ titanic$deck<-factor(sapply(titanic$Cabin, function(x) strsplit(x, NULL)[[1]][1]
 
 (note-md "Let us check:")
 
-(note-r
+(note
  (-> titanic
      ($ 'deck)
      table))
 
 (note-md "## Missing values")
 
-(note-r "updated summary" (print-summary titanic))
+(note "updated summary" (summary titanic))
 
 (note-md "Thripathi's explanation, following the summary:
 - Age : 263 missing values
@@ -463,7 +462,7 @@ titanic[(which(is.na(titanic$Embarked))), 1]
 
 (note-md "Checking which has missing port:")
 
-(note-r
+(note
  (-> titanic
      (bra (-> titanic
               ($ 'Embarked)
@@ -479,7 +478,7 @@ titanic[(which(is.na(titanic$Embarked))), 1]
 titanic[c(62, 830), 'Embarked']
 ```")
 
-(note-r
+(note
  (-> titanic
      (bra [62 830]
           "Embarked")))
@@ -493,14 +492,14 @@ Let's look at their class of ticket and their fare.
 titanic[c(62, 830), c(1,3,10)]
 ```")
 
-(note-r
+(note
  (-> titanic
      (bra [62 830]
           [1 3 10])))
 
 (note-md "Alternatively:")
 
-(note-r
+(note
  (-> titanic
      (bra [62 830]
           ["PassengerId" "Pclass" "Fare"])))
@@ -522,7 +521,7 @@ titanic%>%
   summarise(mfare = median(Fare),n = n())
 ```")
 
-(note-r
+(note
  (-> titanic
      (group_by 'Embarked 'Pclass)
      (r.dplyr/filter '(== Pclass "1"))
@@ -547,11 +546,12 @@ embark_fare <- titanic %>%
 embark_fare
 ```")
 
-(note-r
+(note
  (def embark_fare
    (-> titanic
        (r.dplyr/filter '(& (!= PassengerId 62)
-                     (!= PassengerId 830))))))
+                     (!= PassengerId 830)))
+       r->clj)))
 
 
 (note-md "Use ggplot2 to visualize embarkment, passenger class, & median fare:
@@ -609,7 +609,7 @@ titanic[(which(is.na(titanic$Fare))) , 1]
 ```
 ")
 
-(note-r
+(note
  (-> titanic
      (bra (-> titanic
               ($ 'Fare)
@@ -628,7 +628,7 @@ titanic[(which(is.na(titanic$Fare))) , 1]
  titanic[1044, c(3, 12)]
 ```")
 
-(note-r
+(note
  (-> titanic
      (bra 1044 [3 12])))
 
@@ -639,7 +639,7 @@ Another way to know about passenger id 1044 :Show row 1044
 titanic[1044, ]
 ```")
 
-(note-r
+(note
  (-> titanic
      (bra 1044 (empty-symbol))))
 
@@ -654,7 +654,7 @@ titanic%>%
   summarise(missing_fare = median(Fare, na.rm = TRUE))
 ")
 
-(note-r
+(note
  (-> titanic
      (r.dplyr/filter '(& (== Pclass "3")
                    (== Embarked "S")))
@@ -707,13 +707,13 @@ titanic$Fare[1044] <- 8.05
 summary(titanic$Fare)
 ```")
 
-(note-r
+(note
  (def titanic
    (bra<- titanic 1044 "Fare"
           8.05))
  (-> titanic
      ($ 'Fare)
-     print-summary))
+     summary))
 
 (note-md "Tripathi:
 Another way of Replace missing fare value with median fare for class/embarkment:
@@ -742,7 +742,7 @@ Tripathi: Show number of missing Age values.
 sum(is.na(titanic$Age)) ```")
 
 
-(note-r
+(note
  "before"
  (-> titanic
      ($ 'Age)
@@ -855,7 +855,7 @@ titanic$Age <- mice_output$Age
 sum(is.na(titanic$Age))
 ```")
 
-(note-r
+(note
  "after"
  (-> titanic
      ($ 'Age)
@@ -911,10 +911,9 @@ ggplot(titanic[1:891,], aes(Age, fill = factor(Survived))) +
 table(titanic$Child, titanic$Survived)
 ```")
 
-(note-as-md
- (-> (print-table ($ titanic 'Child)
-                  ($ titanic 'Survived))
-     r-lines->md))
+(note
+ (table ($ titanic 'Child)
+        ($ titanic 'Survived)))
 
 (note-md "Adding Mother variable:
 ```
@@ -942,10 +941,9 @@ titanic$Mother[titanic$Sex == 'female' & titanic$Parch >0 & titanic$Age > 18 & t
 table(titanic$Mother, titanic$Survived)
 ```")
 
-(note-as-md
- (-> (print-table ($ titanic 'Mother)
-                  ($ titanic 'Survived))
-     r-lines->md))
+(note
+ (table ($ titanic 'Mother)
+        ($ titanic 'Survived)))
 
 
 (note-md "Factorizing variables:
@@ -972,7 +970,7 @@ titanic$fsizeD <- factor(titanic$fsizeD)
 
 (note-md "Check classes of all columns:")
 
-(note-r
+(note
  (lapply titanic (r "class")))
 
 (note-md "# Prediction
@@ -1066,9 +1064,9 @@ varImportance <- data.frame(Variables = row.names(importance),
                                (bra (empty-symbol) "MeanDecreaseGini")
                                round))))
 
-(note-r importance-info)
+(note importance-info)
 
-(note-r var-importance)
+(note var-importance)
 
 (note-md "## Variable importance
 
@@ -1084,7 +1082,7 @@ rankImportance <- varImportance %>%
    (-> var-importance
        (mutate :Rank '(paste0 "#" (dense_rank (desc Importance)))))))
 
-(note-r rank-importance)
+(note rank-importance)
 
 (note-md "Tripathi: Use ggplot2 to visualize the relative importance of variables
 
@@ -1131,7 +1129,7 @@ prediction <- predict(titanic_model, test)
 prediction
 ```")
 
-(note-r
+(note
  (def prediction
    (predict titanic-model test)))
 
@@ -1143,7 +1141,7 @@ Output<- data.frame(PassengerID = test$PassengerId, Survived = prediction)
 Output
 ```")
 
-(note-r
+(note
  (def output (data-frame :PassengerId ($ test 'PassengerId)
                          :Survived prediction)))
 

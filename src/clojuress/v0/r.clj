@@ -5,7 +5,8 @@
             [clojuress.v0.using-sessions :as using-sessions]
             [clojuress.v0.protocols :as prot]
             [clojuress.v0.printing]
-            [clojuress.v0.codegen :as codegen])
+            [clojuress.v0.codegen :as codegen]
+            [clojure.string :as string])
   (:import clojuress.v0.robject.RObject))
 
 
@@ -69,7 +70,18 @@
 
 (def function functions/function)
 
+(defn println-r-lines [r-lines]
+  "Get a sequence of strings, typically corresponding to lines captured from the standard output of R functions, println them sequentially."
+  (doseq [line r-lines]
+    (println line)))
 
+(defn r-lines->md
+  "Get a sequence of strings, typically corresponding to lines captured from the standard output of R functions, format them as markdown."
+  [r-lines]
+  (->> r-lines
+       r->clj
+       (string/join "\n")
+       (format "```\n%s\n```")))
 
 (defn r-object? [obj]
   (instance? RObject obj))
@@ -100,17 +112,13 @@
 (def r|| (function (r "`||`")))
 
 
-(def r-str
+(def captured-str
   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
   (function (r "function(x) capture.output(str(x))")))
 
-(def print-summary
-  "For the R function [summary](https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/summary), we could get its return value, but we prefer to capture way it is printed by R."
-  (function (r "function(x) capture.output(print(summary(x)))")))
+(def println-captured-str (comp println-r-lines captured-str))
 
-(def print-table
-  "Sometimes, it is also convenient get the print result of the R function [table](https://www.rdocumentation.org/packages/base/versions/3.6.1/topics/table)."
-  (function (r "function(...) capture.output(print(table(...)))")))
+(def captured-str-md (comp r-lines->md captured-str))
 
 
 (defn r+
