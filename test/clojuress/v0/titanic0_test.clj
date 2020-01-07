@@ -1,9 +1,9 @@
-(ns clojuress.v0.titanic-test
+(ns clojuress.v0.titanic0-test
   (:require [notespace.v0.note :as note
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
 (note-md "
-#Clouress example: Titanic
+#Clouress example: Titanic #0
 
 This notebook is a variation of Pradeep Tripathi's Titanic [Kaggle solution](https://www.kaggle.com/pradeeptripathi/prediction-of-titanic-survival-using-r/code) in R. Instead of writing it in R as the original, we write it in Clojure, and call R from Clojure.
 
