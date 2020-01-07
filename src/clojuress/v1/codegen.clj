@@ -1,9 +1,9 @@
-(ns clojuress.v0.codegen
-  (:require [clojuress.v0.objects-memory :as mem]
-            [clojuress.v0.using-sessions :as using-sessions]
+(ns clojuress.v1.codegen
+  (:require [clojuress.v1.objects-memory :as mem]
+            [clojuress.v1.using-sessions :as using-sessions]
             [clojure.string :as string]
-            [clojuress.v0.protocols :as prot]
-            [clojuress.v0.util :as util :refer [l]]))
+            [clojuress.v1.protocols :as prot]
+            [clojuress.v1.util :as util :refer [l]]))
 
 (defn r-object->code [r-object]
   (-> r-object

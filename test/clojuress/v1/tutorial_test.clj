@@ -1,20 +1,20 @@
-(ns clojuress.v0.tutorial-test
-  (:require [notespace.v0.note :as note
+(ns clojuress.v1.tutorial-test
+  (:require [notespace.v1.note :as note
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
             [tech.ml.dataset :as dataset]
-            [clojuress.v0.r :as r]))
+            [clojuress.v1.r :as r]))
 
 (note-md "## Basic examples")
 
 (note-md "Let us start by some basic usage examples of Clojuress.")
 
 (note-void
- (require '[clojuress.v0.r :as r :refer [r eval-r->java r->java java->r java->clj clj->java r->clj clj->r ->code r+ colon function]]
-          '[clojuress.v0.require :refer [require-r]]
-          '[clojuress.v0.robject :as robject]
-          '[clojuress.v0.session :as session]
+ (require '[clojuress.v1.r :as r :refer [r eval-r->java r->java java->r java->clj clj->java r->clj clj->r ->code r+ colon function]]
+          '[clojuress.v1.require :refer [require-r]]
+          '[clojuress.v1.robject :as robject]
+          '[clojuress.v1.session :as session]
           '[tech.ml.dataset :as dataset]
-          '[notespace.v0.util :refer [check]]))
+          '[notespace.v1.util :refer [check]]))
 
 (note-md "First, let us make sure there are no R sessions currently running.")
 
@@ -170,7 +170,7 @@ and convert the return value to Clojure.")
 (note
  (->> one+two
       class
-      (check = clojuress.v0.robject.RObject)))
+      (check = clojuress.v1.robject.RObject)))
 
 (note
  (:object-name one+two))
@@ -180,7 +180,7 @@ and convert the return value to Clojure.")
 (note
  (-> one+two
      :object-name
-     clojuress.v0.objects-memory/object-name->memory-place))
+     clojuress.v1.objects-memory/object-name->memory-place))
 
 (note-md "## Generating code")
 
@@ -388,7 +388,7 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
 (note-void
  (require-r '[graphics :refer [plot]])
  (require-r '[ggplot2 :refer [ggplot aes geom_point xlab ylab labs]])
- (require '[clojuress.v0.applications.plotting :refer [plotting-function->svg
+ (require '[clojuress.v1.applications.plotting :refer [plotting-function->svg
                                                        ggplot->svg]]))
 (note-as-hiccup
  (plotting-function->svg

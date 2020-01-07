@@ -1,6 +1,6 @@
-(ns clojuress.v0.eval
-  (:require [clojuress.v0.codegen :as codegen]
-            [clojuress.v0.using-sessions :as using-sessions]))
+(ns clojuress.v1.eval
+  (:require [clojuress.v1.codegen :as codegen]
+            [clojuress.v1.using-sessions :as using-sessions]))
 
 (defn eval-form [form session]
   (-> form

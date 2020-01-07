@@ -1,5 +1,5 @@
-(ns clojuress.v0.objects-memory
-  (:require [clojuress.v0.protocols :as prot]))
+(ns clojuress.v1.objects-memory
+  (:require [clojuress.v1.protocols :as prot]))
 
 (defn object-name->memory-place [obj-name]
   (format ".MEM$%s" obj-name))

@@ -1,6 +1,6 @@
-(ns clojuress.v0.refresh
-  (:require [clojuress.v0.session :as session]
-            [clojuress.v0.eval :as evl]))
+(ns clojuress.v1.refresh
+  (:require [clojuress.v1.session :as session]
+            [clojuress.v1.eval :as evl]))
 
 (defn fresh-object? [r-object]
   (-> r-object

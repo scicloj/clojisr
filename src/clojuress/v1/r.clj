@@ -1,13 +1,13 @@
-(ns clojuress.v0.r
-  (:require [clojuress.v0.session :as session]
-            [clojuress.v0.eval :as evl]
-            [clojuress.v0.functions :as functions]
-            [clojuress.v0.using-sessions :as using-sessions]
-            [clojuress.v0.protocols :as prot]
-            [clojuress.v0.printing]
-            [clojuress.v0.codegen :as codegen]
+(ns clojuress.v1.r
+  (:require [clojuress.v1.session :as session]
+            [clojuress.v1.eval :as evl]
+            [clojuress.v1.functions :as functions]
+            [clojuress.v1.using-sessions :as using-sessions]
+            [clojuress.v1.protocols :as prot]
+            [clojuress.v1.printing]
+            [clojuress.v1.codegen :as codegen]
             [clojure.string :as string])
-  (:import clojuress.v0.robject.RObject))
+  (:import clojuress.v1.robject.RObject))
 
 
 (defn init [& {:keys [session-args]}]

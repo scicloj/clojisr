@@ -1,8 +1,8 @@
-(ns clojuress.v0.session
+(ns clojuress.v1.session
   (:refer-clojure :exclude [time])
-  (:require [clojuress.v0.protocols :as prot]
-            [clojuress.v0.impl.rserve.session]
-            [clojuress.v0.objects-memory :as mem]
+  (:require [clojuress.v1.protocols :as prot]
+            [clojuress.v1.impl.rserve.session]
+            [clojuress.v1.objects-memory :as mem]
             [cambium.core  :as log]))
 
 (def sessions (atom {}))
@@ -15,7 +15,7 @@
   (let [{:keys [session-type]} (merge @defaults
                                       session-args)]
     (case session-type
-      :rserve (clojuress.v0.impl.rserve.session/make
+      :rserve (clojuress.v1.impl.rserve.session/make
                session-args))))
 
 

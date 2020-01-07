@@ -1,5 +1,5 @@
-(ns clojuress.v0.applications.plotting
-  (:require [clojuress.v0.require :refer [require-r]])
+(ns clojuress.v1.applications.plotting
+  (:require [clojuress.v1.require :refer [require-r]])
   (:import [java.io File]))
 
 (require-r '[grDevices :refer [svg png dev.off]]

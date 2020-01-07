@@ -1,8 +1,8 @@
-(ns clojuress.v0.printing
-  (:import clojuress.v0.robject.RObject)
-  (:require [clojuress.v0.using-sessions :as using-sessions]
+(ns clojuress.v1.printing
+  (:import clojuress.v1.robject.RObject)
+  (:require [clojuress.v1.using-sessions :as using-sessions]
             [clojure.pprint :as pp]
-            [clojuress.v0.inspection :as inspection]
+            [clojuress.v1.inspection :as inspection]
             [clojure.string :as string]))
 
 (defn r-object->string-to-print [obj]

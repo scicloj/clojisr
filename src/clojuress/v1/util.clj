@@ -1,4 +1,4 @@
-(ns clojuress.v0.util
+(ns clojuress.v1.util
   (:require [com.rpl.specter :as specter]
             [clojure.string :as string])
   (:import [java.io File]))

@@ -1,10 +1,10 @@
-(ns clojuress.v0.require
-  (:require [clojuress.v0.session :as session]
-            [clojuress.v0.functions :as functions]
-            [clojuress.v0.eval :as evl]
-            [clojuress.v0.using-sessions :as using-sessions]
-            [clojuress.v0.protocols :as prot]
-            [clojuress.v0.util :as util
+(ns clojuress.v1.require
+  (:require [clojuress.v1.session :as session]
+            [clojuress.v1.functions :as functions]
+            [clojuress.v1.eval :as evl]
+            [clojuress.v1.using-sessions :as using-sessions]
+            [clojuress.v1.protocols :as prot]
+            [clojuress.v1.util :as util
              :refer [l clojurize-r-symbol]]))
 
 (defn package-function

@@ -1,5 +1,5 @@
-(ns clojuress.v0.titanic0-test
-  (:require [notespace.v0.note :as note
+(ns clojuress.v1.titanic0-test
+  (:require [notespace.v1.note :as note
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
 (note-md "
@@ -27,16 +27,16 @@ Here are most of the functions that we need, brought by the standard `require-r`
 
 (note-void
  (require
-  '[clojuress.v0.r :as r
+  '[clojuress.v1.r :as r
     :refer [r r->clj
             na empty-symbol
             r== r!= r< r> r<= r>= r& r&& r| r||
             str-md
             r+
             bra bra<- brabra brabra<- colon]]
-  '[clojuress.v0.applications.plotting :refer [plotting-function->svg
+  '[clojuress.v1.applications.plotting :refer [plotting-function->svg
                                                ggplot->svg]]
-  '[clojuress.v0.require :refer [require-r]]
+  '[clojuress.v1.require :refer [require-r]]
   '[clojure.java.shell :refer [sh]]
   '[clojure.string :as string]))
 

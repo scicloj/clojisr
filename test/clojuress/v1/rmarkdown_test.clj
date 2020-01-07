@@ -1,11 +1,11 @@
-(ns clojuress.v0.rmarkdown-test
-  (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]))
+(ns clojuress.v1.rmarkdown-test
+  (:require [notespace.v1.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]))
 
 (note-md "This document shows the potential of generating [R Markdown](https://rmarkdown.rstudio.com) from Clojure [Hiccup](https://github.com/weavejester/hiccup), while binding R data to values passed from Clojure.")
 
 (note-void
  (require '[tech.ml.dataset :as dataset]
-          '[clojuress.v0.applications.rmarkdown :refer [hiccup->rmd render-rmd]]))
+          '[clojuress.v1.applications.rmarkdown :refer [hiccup->rmd render-rmd]]))
 
 (note-md "We create some random data.
 
@@ -94,7 +94,7 @@ with a genrateted Hiccup structure, containing a sequence of code blocks.")
         {:style "background-color:#aaaaaa"}
         (into
          [:div]
-         (for [n (->> (range 7)
+         (for [n (->> (range 3)
                       (map (fn [i]
                              (Math/round
                               (Math/pow 4 i)))))]

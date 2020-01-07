@@ -1,6 +1,6 @@
-(ns clojuress.v0.applications.rmarkdown
-  (:require [clojuress.v0.r :as r :refer [r]]
-            [clojuress.v0.util :refer [starts-with?]]
+(ns clojuress.v1.applications.rmarkdown
+  (:require [clojuress.v1.r :as r :refer [r]]
+            [clojuress.v1.util :refer [starts-with?]]
             [hiccup.core :as hiccup]
             [tech.resource :as resource]
             [clojure.string :as string]

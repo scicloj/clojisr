@@ -1,9 +1,9 @@
-(ns clojuress.v0.functions
-  (:require [clojuress.v0.using-sessions :as using-sessions]
-            [clojuress.v0.codegen :as codegen]
-            [clojuress.v0.session :as session]
-            [clojuress.v0.refresh :as refresh]
-            [clojuress.v0.eval :as evl]))
+(ns clojuress.v1.functions
+  (:require [clojuress.v1.using-sessions :as using-sessions]
+            [clojuress.v1.codegen :as codegen]
+            [clojuress.v1.session :as session]
+            [clojuress.v1.refresh :as refresh]
+            [clojuress.v1.eval :as evl]))
 
 (defn apply-function [r-function
                       args

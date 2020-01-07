@@ -1,11 +1,11 @@
-(ns clojuress.v0.using-sessions
+(ns clojuress.v1.using-sessions
   (:require [tech.resource :as resource]
-            [clojuress.v0.protocols :as prot]
-            [clojuress.v0.objects-memory :as mem]
-            [clojuress.v0.util :as util]
-            [clojuress.v0.robject :refer [->RObject]]
+            [clojuress.v1.protocols :as prot]
+            [clojuress.v1.objects-memory :as mem]
+            [clojuress.v1.util :as util]
+            [clojuress.v1.robject :refer [->RObject]]
             [cambium.core :as log])
-  (:import clojuress.v0.robject.RObject))
+  (:import clojuress.v1.robject.RObject))
 
 (defn eval-code [code session]
   (let [obj-name (util/rand-name)

@@ -1,13 +1,13 @@
-(ns clojuress.v0.impl.rserve.clj-to-java
-  (:require [clojuress.v0.util :refer [fmap]]
+(ns clojuress.v1.impl.rserve.clj-to-java
+  (:require [clojuress.v1.util :refer [fmap]]
             [tech.ml.dataset :as dataset]
             [tech.ml.protocols.dataset :as ds-prot]
             [tech.v2.datatype.protocols :as dtype-prot]
-            [clojuress.v0.robject])
+            [clojuress.v1.robject])
   (:import (org.rosuda.REngine REXP REXPList REXPGenericVector REXPString REXPSymbol REXPLogical REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util List Collection)
            (clojure.lang Named)
-           clojuress.v0.robject.RObject
+           clojuress.v1.robject.RObject
            java.util.Date))
 
 
