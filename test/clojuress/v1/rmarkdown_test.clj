@@ -1,6 +1,10 @@
 (ns clojuress.v1.rmarkdown-test
   (:require [notespace.v1.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]))
 
+;; This namespace is a notespace -- a notebook in a namespace.
+;; If you evaluate the whole namespace, it will create a rendered html with the notes.
+;; If you evaluate and print any note, it will create an html rendering of that note, and open it in the browser.
+
 (note-md "This document shows the potential of generating [R Markdown](https://rmarkdown.rstudio.com) from Clojure [Hiccup](https://github.com/weavejester/hiccup), while binding R data to values passed from Clojure.")
 
 (note-void
