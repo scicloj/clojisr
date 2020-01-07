@@ -114,9 +114,6 @@
               (-> arg
                   arg->arg-name-and-value
                   (arg-name-and-value->code session))))
-       (string/join ", ")
-       ((fn [x]
-          (println [:dbggg x])
-          x))))
+       (string/join ", ")))
 
 
