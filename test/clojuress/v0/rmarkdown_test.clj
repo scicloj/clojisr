@@ -1,19 +1,15 @@
-(ns clojuress.rmarkdown-test
-  (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
-            [clojuress.v0.note :refer [note-r r-lines->md]]))
+(ns clojuress.v0.rmarkdown-test
+  (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]))
 
 (note-md "This document shows the potential of generating [R Markdown](https://rmarkdown.rstudio.com) from Clojure [Hiccup](https://github.com/weavejester/hiccup), while binding R data to values passed from Clojure.")
 
 (note-void
  (require '[tech.ml.dataset :as dataset]
-          '[clojuress.v0.applications.rmarkdown :refer [hiccup->rmd render-rmd]]
-          '[gg4clj.core :as gg]))
-
+          '[clojuress.v0.applications.rmarkdown :refer [hiccup->rmd render-rmd]]))
 
 (note-md "We create some random data.
 
-Then we create a Hiccup structure with a special block of R-as-EDN code,
-that is translated by [gg4clj](https://github.com/JonyEpsilon/gg4clj) to R code.
+Then we create a Hiccup structure with a special block of R code.
 
 We convert it to R Markdown, taking care of the code block, and then we render that R Markdown wth our data added to the R environment.")
 
@@ -34,9 +30,9 @@ We convert it to R Markdown, taking care of the code block, and then we render t
      {:style "background-color:#aaaaaa"}
      [:div
       [:h1 "hi!"]
-      [:r-edn
-       [:library :ggplot2]
-       [:qplot :x :y]]]]
+      '[:r-forms
+       [library ggplot2]
+       [qplot x y]]]]
     ;; Convert it to R Markdown, taking care of the code block.
     hiccup->rmd
     ;; Render the R Markdown to an html file, with our data added to
@@ -65,12 +61,11 @@ converted to an R data.frame.")
      {:style "background-color:#aaaaaa"}
      [:div
       [:h1 "hi!"]
-      [:r-edn
-       [:library :ggplot2]
-       [:head :df]
-       (gg/r+
-        [:ggplot {:data :df}]
-        [:geom_point [:aes {:x :x :y :y}]])]]]
+      '[:r-forms
+       [library ggplot2]
+       [head df]
+        (+ [ggplot :data df]
+           [geom_point [aes :x x :y y]])]]]
     hiccup->rmd
     (render-rmd data)
     slurp)))
@@ -105,14 +100,15 @@ with a genrateted Hiccup structure, containing a sequence of code blocks.")
                               (Math/pow 4 i)))))]
            [:div
             [:h1 n " samples"]
-            [:r-edn
-             [:library :ggplot2]
-             [:head :df]
-             (gg/r+
-              [:ggplot {:data [:head :df n]}]
-              [:geom_point [:aes {:x     :x
-                                  :y     :y
-                                  :color :z}]])]]))]
+            [:r-forms
+             '[library ggplot2]
+             '[head df]
+             ['+
+              ['ggplot :data ['head 'df n]]
+              '[geom_point [aes
+                            :x     x
+                            :y     y
+                            :color z]]]]]))]
        hiccup->rmd
        (render-rmd data)
        slurp

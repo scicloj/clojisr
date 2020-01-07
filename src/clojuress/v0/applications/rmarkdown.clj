@@ -4,21 +4,21 @@
             [hiccup.core :as hiccup]
             [tech.resource :as resource]
             [clojure.string :as string]
-            [gg4clj.core :as gg]
             [clojure.walk :as walk]
             [cambium.core :as log])
   (:import (java.io File)
            (java.lang Math)))
 
 (defn r-code-block [r-codes]
-  (log/debug [::r-codes r-codes])
+  (log/info [::r-codes r-codes])
   (->> r-codes
        (string/join "\n")
        (format "\n```{r echo=F, warning=F, message=F}\n%s\n```\n")))
 
-(defn r-edn-code-block [r-edn-codes]
-  (->> r-edn-codes
-       (map gg/to-r)
+(defn r-forms-code-block [forms & {:keys [session-args]}]
+  (->> forms
+       (map (fn [form]
+              (r/->code form :session-args session-args)))
        r-code-block))
 
 (defn hiccup->rmd [hiccup]
@@ -29,10 +29,10 @@
                 (-> form
                     rest
                     r-code-block)
-                (starts-with? form :r-edn)
+                (starts-with? form :r-forms)
                 (-> form
                     rest
-                    r-edn-code-block)
+                    r-forms-code-block)
                 :else
                 form)))
        hiccup/html))
