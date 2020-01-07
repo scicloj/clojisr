@@ -118,7 +118,7 @@
 
 (def println-captured-str (comp println-r-lines captured-str))
 
-(def captured-str-md (comp r-lines->md captured-str))
+(def str-md (comp r-lines->md captured-str))
 
 
 (defn r+
