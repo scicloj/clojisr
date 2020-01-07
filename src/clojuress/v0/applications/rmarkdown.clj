@@ -5,12 +5,13 @@
             [tech.resource :as resource]
             [clojure.string :as string]
             [gg4clj.core :as gg]
-            [clojure.walk :as walk])
+            [clojure.walk :as walk]
+            [cambium.core :as log])
   (:import (java.io File)
            (java.lang Math)))
 
 (defn r-code-block [r-codes]
-  (println [:r-codes r-codes])
+  (log/debug [::r-codes r-codes])
   (->> r-codes
        (string/join "\n")
        (format "\n```{r echo=F, warning=F, message=F}\n%s\n```\n")))
