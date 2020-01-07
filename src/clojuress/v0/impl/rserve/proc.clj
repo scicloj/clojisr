@@ -59,7 +59,7 @@
                         "--slave"
                         "-e" ; evaluate (boot server)
                         rstr)]
-      (println [:sleeping sleep])
+      (log/info [::sleeping sleep])
       (Thread/sleep sleep)
       rserve)))
 
