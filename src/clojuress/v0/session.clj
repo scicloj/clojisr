@@ -41,7 +41,12 @@
   session)
 
 (defn init [session]
-  (init-memory session))
+  (init-memory session)
+  ;; TODO: Why is this necessary?
+  (try
+    (prot/eval-r->java session "print('dummy')")
+    (catch Exception e nil))
+  session)
 
 (defn make-and-init [session-args]
   (let [session (make session-args)]
@@ -62,3 +67,4 @@
   (-> session-args
       fetch-or-make
       init))
+
