@@ -6,23 +6,25 @@ Clojure speaks statistics - a library for connecting Clojure to R
 
 ## Status
 
-At the moment, everything is alpha, and will keep changing. We find it important to experiment with the API for some time, and go through several community discussions till anything stabilizes.
-
-However, in few days we will stabilize a first version of the API.
+Not tested in production, stil evolving.
 
 ## Scope of the project
 
-There are already stable libraries for Clojure-R interop -- see [this list](doc/existing_libraries.md).
+There are already stable libraries for Clojure-R interop - see [this list](doc/existing_libraries.md).
 
 This project suggests yet another way to use R from Clojure.
 
 Currently we target only JVM Clojure, but we are interested in generalizing the work to Clojurescript.
 
-The related problem, of calling Cojure from R, may be addressed too in the future. We are experimenting with that.
+The related problem, of calling Clojure from R, may be addressed too in the future. We are experimenting with that.
 
-## Video presentation
+## Video presentations
 
-[Scicloj Web meeting #7](https://www.youtube.com/watch?v=XoVX2Ezi_YM)
+The main ideas were discussed at [Scicloj Web meeting #7](https://www.youtube.com/watch?v=XoVX2Ezi_YM) and [ClojuTRE 2019](https://www.youtube.com/watch?v=A55jO02ZKcg).
+
+Note however that:
+- The API has changed since then (mainly data visualization support, clear code generation rules - see the tutorial below).
+- On the meeting, there is some careless use of the term 'zero copy'. Actually, what is usually meant by this term is not supported at the moment.
 
 ## Why this name?
 
@@ -50,8 +52,7 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
   * Convenient multi-session support (Status: a draft exists, needs some polish)
 
-
-## Requirements
+## Usage requirements
 
 * Linux or MacOS
 
@@ -59,7 +60,7 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 * The [Rserve](https://cran.r-project.org/web/packages/Rserve/index.html) R package (`install.packages("Rserve")`)
 
-* This project (currently changing)
+* This project
 
 [![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojuress.svg)](https://clojars.org/scicloj/clojuress)
 
@@ -72,12 +73,6 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 * [Literate programming using rmarkdown](test/clojuress/v1/rmarkdown_test.clj)
 
 * [Interactive data visualization using shiny](test/clojuress/v1/shiny_test.clj)
-
-
-## API Draft
-For now, see the [basic example](examples/basic_example.clj) and the [tests](test/clojuress_test.clj) of the `clojuress` namespace.
-
-The API may still change, hopefully after some good ideas in community discussions.
 
 ## Background
 
@@ -109,10 +104,11 @@ Please share your comments, thoughts, ideas and questions at the [Issues Page](h
 
 Working on this project, we enjoyed the following tools (partial list):
 
-* [hara.test](https://cljdoc.org/d/hara/test/3.0.7) for automated docstrings by tests -- see [a minimal usage example](https://github.com/scicloj/hara-test-example)
+* In early versions, [hara.test](https://cljdoc.org/d/hara/test/3.0.7) was used for automated docstrings by tests. We may come back to using it.
 
 * [clj-kondo](https://github.com/borkdude/clj-kondo) for code quality control
 
+* [notespace](https://github.com/scicloj/notespace) for documentation and tests
 
 ## License
 
