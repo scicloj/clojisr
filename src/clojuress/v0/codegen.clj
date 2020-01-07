@@ -24,7 +24,7 @@
 (declare form->code)
 
 (def binary-operators
-  '#{<- + - / * & && | || == != <= >= < >})
+  '#{= <<- <- + - / * & && | || == != <= >= < >})
 
 (defn ->function-def-code [[_ [& arg-symbols] & body] session]
   (format
@@ -40,14 +40,15 @@
   [[_ lhs rhs] session]
   (->> [lhs rhs]
        (map #(form->code % session))
-       (apply format "%s ~ %s")))
+       (apply format "(%s ~ %s)")))
 
 (defn ->binary-funcall-code [[op-symbol & args] session]
   (->> args
        (map #(form->code % session))
        (interleave (repeat (name op-symbol)))
        rest
-       (string/join " ")))
+       (string/join " ")
+       (format "(%s)")))
 
 (declare args->code)
 
@@ -64,21 +65,26 @@
     (->usual-funcall-code (cons r-function args) session)))
 
 (defn seq-form->code [form session]
-  (cond
-    ;; a function declaration
-    (-> form first (= 'function))
-    (->function-def-code form session)
-    ;; a lhs~rhs formula
-    (-> form first (= 'tilde))
-    (->formula-code form session)
-    ;; else -- a function call
-    :else
-    (->funcall-code form session)))
+  (let [f (first form)]
+    (cond
+      ;; a function declaration
+      (= f 'function)
+      (->function-def-code form session)
+      ;; a lhs~rhs formula
+      (= f 'tilde)
+      (->formula-code form session)
+      ;; a function call
+      (or (symbol? f)
+          (using-sessions/function? f))
+      (->funcall-code form session)
+      ;; else - treat as a value
+      :else
+      (value->code form session))))
 
 (defn form->code [form session]
-  (cond (seq? form)    (seq-form->code form session)
-        (symbol? form) (name form)
-        :else          (value->code form session)))
+  (cond (sequential? form) (seq-form->code form session)
+        (symbol? form)     (name form)
+        :else              (value->code form session)))
 
 (defn arg->arg-name-and-value [arg]
   (if (util/starts-with? arg :=)
@@ -108,6 +114,9 @@
               (-> arg
                   arg->arg-name-and-value
                   (arg-name-and-value->code session))))
-       (string/join ", ")))
+       (string/join ", ")
+       ((fn [x]
+          (println [:dbggg x])
+          x))))
 
 
