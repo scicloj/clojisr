@@ -67,9 +67,9 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 * [Titanic tutorial #0](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/titanic0-test/index.html)
 
-* [Literate programming using rmarkdown](test/src/clojuress/v1/rmarkdown_test.clj)
+* [Literate programming using rmarkdown](test/clojuress/v1/rmarkdown_test.clj)
 
-* [Interactive data visualization using shiny](test/src/clojuress/v1/shiny_test.clj)
+* [Interactive data visualization using shiny](test/clojuress/v1/shiny_test.clj)
 
 
 ## API Draft
