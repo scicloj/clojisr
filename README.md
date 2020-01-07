@@ -61,15 +61,15 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 [![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojuress.svg)](https://clojars.org/scicloj/clojuress)
 
-## Usage
+## Tutorials
 
-See:
+* [tutorial](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/tutorial-test/index.html
 
-* [basic example](examples/src/examples/basic.clj)
+* [titanic tutorial #0](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/titanic0-test/index.html)
 
-* [literate programming using rmarkdown](examples/src/examples/rmarkdown.clj)
+* [literate programming using rmarkdown](test/src/clojuress/v1/rmarkdown_test.clj)
 
-* [interactive data visualization using shiny](examples/src/examples/shiny.clj)
+* [interactive data visualization using shiny](test/src/clojuress/v1/shiny_test.clj)
 
 
 ## API Draft
