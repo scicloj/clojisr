@@ -1,4 +1,4 @@
-(ns clojuress.shiny-test
+(ns clojuress.v0.shiny-test
   (:require [clojuress.v0.r :as r :refer [r]]
             [clojuress.v0.util :refer [l]]
             [clojuress.v0.require :refer [require-r]]))
