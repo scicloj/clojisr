@@ -38,9 +38,9 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 ## Technical Goals
 
-  * A Function-centric API, where the default mode of usage is calling R functions on R objects, from Clojure (Status: a draft exists, it will change)
+  * A Function-centric API, where the default mode of usage is calling R functions on R objects, from Clojure (Status: supported)
 
-  * "R code as Clojure data", using and extending the EDN-based syntax inroducted in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and [used](https://github.com/sbelak/huri/blob/master/src/huri/plot.clj#L299) in [huri](https://github.com/sbelak/huri) (Status: currently experimenting with the original gg4clj syntax)
+  * "R code as Clojure data", inspired by but extending the EDN-based syntax inroducted in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and [used](https://github.com/sbelak/huri/blob/master/src/huri/plot.clj#L299) in [huri](https://github.com/sbelak/huri) (Status: supported)
 
   * Interop with minimal copying of data (Status: supported)
 
@@ -48,7 +48,7 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
   * Convenient wrappers for common use cases, such as visualization (Status: wrote a basic wrapper to Rmarkdown)
  
-  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: only GNU R is supported to the momentnot there yet; planning to look into Renjin soon)
+  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: only GNU R is supported at the moment)
 
   * Convenient multi-session support (Status: a draft exists, needs some polish)
 
