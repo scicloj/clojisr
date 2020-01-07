@@ -2,6 +2,8 @@
 
 Clojure speaks statistics - a library for connecting Clojure to R
 
+[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojuress.svg)](https://clojars.org/scicloj/clojuress)
+
 ## Status
 
 At the moment, everything is alpha, and will keep changing. We find it important to experiment with the API for some time, and go through several community discussions till anything stabilizes.
