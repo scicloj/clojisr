@@ -25,3 +25,5 @@ They differ in in several aspects: (a) the API and syntactic sugar offered; (b) 
  
 * [huri](https://github.com/sbelak/huri) by Simon Belak is a general library for data science, that does a lot more than calling R. One of its components is a collection of functions for data visualization, that build upon the way gg4clj offers, and add simple, composable ways to create ggplot2 plots in Clojure.
 
+* [graalvm-interop](https://github.com/davidpham87/graalvm-rinterop) is an **active** project by David Pham, that allows to interoperate with [FastR](https://github.com/oracle/fastr) at [GraalVM](https://www.graalvm.org).
+
