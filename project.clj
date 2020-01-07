@@ -6,11 +6,6 @@
   :repositories [["bedatadriven" {:url "https://nexus.bedatadriven.com/content/groups/public/"}]]
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [gg4clj "0.1.0"]
-                 [hara/test "3.0.7"]
-                 [hara/code "3.0.7"]
-                 [hara/tool "3.0.7"]
-                 [hara/module.namespace "3.0.7"]
-                 [hara/deploy "3.0.7"]
                  [nrepl "0.6.0"]
                  [com.rpl/specter "1.1.3"]
                  [techascent/tech.datatype "4.66"]
@@ -22,5 +17,4 @@
                  [cambium/cambium.core         "0.9.3"]
                  [cambium/cambium.codec-simple "0.9.3"]
                  [cambium/cambium.logback.core "0.4.3"]
-                 [scicloj/notespace "1.0.2-SNAPSHOT"]]
-  :injections [(require 'hara.tool)])
+                 [scicloj/notespace "1.0.2-SNAPSHOT"]])
