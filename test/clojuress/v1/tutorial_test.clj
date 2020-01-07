@@ -297,11 +297,15 @@ and convert the return value to Clojure.")
 
 (note (->code '(function [x y] (+ x y))))
 
-(note (->code ['function '[x y] ('+ 'x y)]))
+(note (->code ['function '[x y] ['+ 'x y]]))
 
 (note (->code '(function [x y] (print x) (f x))))
 
-(note (->code ['function '[x y] [f 'x]]))
+(note (->code ['function '[x y] [abs 'x]]))
+
+(note (->code [abs minus-eleven]))
+
+(note (->code [abs -11]))
 
 (note-md "## Running generated code")
 
