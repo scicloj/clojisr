@@ -6,7 +6,7 @@ Clojure speaks statistics - a library for connecting Clojure to R
 
 ## Status
 
-Not tested in production, stil evolving.
+Not tested in production, still evolving.
 
 ## Scope of the project
 
