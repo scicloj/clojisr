@@ -49,3 +49,9 @@
                         java-object)
       (->RObject obj-name session nil))))
 
+(defn function? [r-object]
+  (and (instance? RObject r-object)
+       (-> r-object
+           (r-function-on-obj "class" :strings)
+           vec
+           (= ["function"]))))
