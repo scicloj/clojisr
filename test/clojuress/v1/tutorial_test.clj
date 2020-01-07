@@ -4,6 +4,8 @@
             [tech.ml.dataset :as dataset]
             [clojuress.v1.r :as r]))
 
+(note-md "# Clojuress tutorial")
+
 (note-md "## Basic examples")
 
 (note-md "Let us start by some basic usage examples of Clojuress.")
