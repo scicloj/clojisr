@@ -17,4 +17,4 @@
                  [cambium/cambium.core         "0.9.3"]
                  [cambium/cambium.codec-simple "0.9.3"]
                  [cambium/cambium.logback.core "0.4.3"]
-                 [scicloj/notespace "1.0.2-SNAPSHOT"]])
+                 [scicloj/notespace "1.0.3"]])
