@@ -1,4 +1,4 @@
-(ns clojuress.tutorial-test
+(ns clojuress.v0.tutorial-test
   (:require [notespace.v0.note :as note
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
             [tech.ml.dataset :as dataset]
@@ -494,6 +494,5 @@ To stress this, we write it explicitly in the following examples.")
       java->clj
       (check = ["list(a = 1:2, b = \"hi!\")"])))
 
-
-
 (note/render-this-ns!)
+

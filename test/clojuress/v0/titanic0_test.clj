@@ -1,9 +1,9 @@
-(ns examples.titanic0
-  (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
-            [cambium.logback.core.strategy :as strategy]))
+(ns clojuress.v0.titanic-test
+  (:require [notespace.v0.note :as note
+             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
 (note-md "
-#Clouress example: Titanic #0 - naive function wrappers
+#Clouress example: Titanic
 
 This notebook is a variation of Pradeep Tripathi's Titanic [Kaggle solution](https://www.kaggle.com/pradeeptripathi/prediction-of-titanic-survival-using-r/code) in R. Instead of writing it in R as the original, we write it in Clojure, and call R from Clojure.
 
@@ -31,7 +31,7 @@ Here are most of the functions that we need, brought by the standard `require-r`
     :refer [r r->clj
             na empty-symbol
             r== r!= r< r> r<= r>= r& r&& r| r||
-            r-str-md
+            str-md
             r+
             bra bra<- brabra brabra<- colon]]
   '[clojuress.v0.applications.plotting :refer [plotting-function->svg
@@ -138,7 +138,7 @@ head(titanic)
 ```
 ")
 
-(note-as-md (r-str-md titanic))
+(note-as-md (str-md titanic))
 (note (summary titanic))
 (note (head titanic))
 
@@ -1143,7 +1143,8 @@ Output
 
 (note
  (def output (data-frame :PassengerId ($ test 'PassengerId)
-                         :Survived prediction)))
+                         :Survived prediction))
+ (r->clj output))
 
 (note-md "Write the Output to file:
 ```

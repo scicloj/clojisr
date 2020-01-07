@@ -1,4 +1,4 @@
-(ns examples.rmarkdown
+(ns clojuress.rmarkdown-test
   (:require [notespace.v0.note :as note :refer [note note-md note-as-md note-hiccup note-as-hiccup note-void]]
             [clojuress.v0.note :refer [note-r r-lines->md]]))
 
