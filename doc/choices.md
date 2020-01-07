@@ -13,7 +13,7 @@ In the near future, we plan to add Renjin support. There are several reasons for
 
 Later, we may possibly try FastR. After some [basic exerperiments](https://github.com/scicloj/fastr-examples), this seems to be a more difficult story. As Clojure is not one of the [Truffle](https://github.com/oracle/graal/tree/master/truffle)-based languages of GraalVM, it is kind of a second-class citizen in terms of interop possibilities -- some data-conversion steps are required to communicate with other languages, and to support decent interaction with R's type system, some work will be required.
 
-### Almost-zero-copy
+### Minimal copying
 
 We wish to be able to use R with the a little amount of data copying necessary. That is, applying an R function on an R object should not involve conversion of the whole data between Clojure (or Java) and R. The cases where conversion is considered acceptable are where we actually want to use both R and Clojure to process the data.
 
