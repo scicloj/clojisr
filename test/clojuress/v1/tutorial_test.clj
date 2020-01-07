@@ -160,6 +160,29 @@ and convert the return value to Clojure.")
                      (= [{:x 2.0 :y 5.0 :z 7.0}
                          {:x 3.0 :y 6.0 :z 9.0}])))))))
 
+(note-md "Tibbles are also supported, as a special case of data frames.")
+
+(note-void
+ (r "library(tibble)"))
+
+(note
+ (let [tibble (function (r "tibble"))]
+   (tibble
+    :x [1 2 3]
+    :y [4 5 6])))
+
+(note
+ (let [tibble (function (r "tibble"))]
+   (->> (tibble
+         :x [1 2 3]
+         :y [4 5 6])
+        r->clj
+        dataset/->flyweight
+        (check = [{:x 1.0 :y 4.0}
+                  {:x 2.0 :y 5.0}
+                  {:x 3.0 :y 6.0}]))))
+
+
 (note-md "## R objects")
 
 (note-md "Clojuress holds handles to R objects, that are stored in memory at the R session, where they are assigned random names.")
