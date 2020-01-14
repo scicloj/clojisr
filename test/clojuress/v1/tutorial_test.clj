@@ -360,9 +360,6 @@ this time generating code rather than writing it as Strings.")
 (note-void
  (r '(library dplyr)))
 
-(->code
- '(function [data] (mutate data (= z (+ x y)))))
-
 (note
  (let [filter-by-x  (-> '(function [data] (filter data (>= x 2)))
                         r
@@ -524,4 +521,5 @@ To stress this, we write it explicitly in the following examples.")
       (check = ["list(a = 1:2, b = \"hi!\")"])))
 
 (note/render-this-ns!)
+
 
