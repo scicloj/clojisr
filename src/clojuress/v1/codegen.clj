@@ -24,7 +24,7 @@
 (declare form->code)
 
 (def binary-operators
-  '#{= <<- <- + - / * & && | || == != <= >= < >})
+  '#{$ = <<- <- + - / * & && | || == != <= >= < >})
 
 (defn ->function-def-code [[_ [& arg-symbols] & body] session]
   (format
