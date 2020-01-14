@@ -46,12 +46,13 @@
           na?    (.isNA item)]
       (if (every? false? na?)
         values
-        (let [target (make-array Double (.length item))]
+        (let [target (double-array (.length item))]
           (dotimes [i n]
-            (aset target i
-                  (if (aget na? i)
-                    REXPDouble/NA
-                    (double (aget values i)))))
+            (aset ^doubles target
+                  i
+                  ^double (if (aget na? i)
+                            REXPDouble/NA
+                            (double (aget values i)))))
           target)))))
 
 (extend-type REXPString
