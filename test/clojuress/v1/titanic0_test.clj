@@ -1053,7 +1053,8 @@ varImportance <- data.frame(Variables = row.names(importance),
                             Importance = round(importance[ ,'MeanDecreaseGini'],2))
 ```")
 
-(importance titanic-model)
+(note
+ (importance titanic-model))
 
 (note-void
  (def importance-info
