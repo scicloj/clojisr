@@ -77,7 +77,7 @@ This step assumes that the [Titanic data](https://www.kaggle.com/c/titanic/data)
        sh
        :out
        string/trim
-       (str "/resources/data/"))))
+       (str "/resources/data/titanic/"))))
 
 (note-md
  "
