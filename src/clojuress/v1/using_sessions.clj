@@ -54,4 +54,6 @@
        (-> r-object
            (r-function-on-obj "class" :strings)
            vec
-           (= ["function"]))))
+           (#{["function"]
+              ["python.builtin.function" "python.builtin.object"]
+              ["python.builtin.builtin_function_or_method" "python.builtin.object"]}))))
