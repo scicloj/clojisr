@@ -12,11 +12,11 @@
    {:session-type :rserve}))
 
 (defn make [session-args]
-  (let [{:keys [session-type]} (merge @defaults
-                                      session-args)]
+  (let [{:keys [session-type] :as merged-session-args}
+        (merge @defaults session-args)]
     (case session-type
       :rserve (clojuress.v1.impl.rserve.session/make
-               session-args))))
+               merged-session-args))))
 
 
 (defn fetch [session-args]
