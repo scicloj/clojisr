@@ -5,7 +5,7 @@
             [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]]
             [clojure.math.combinatorics :refer [cartesian-product]])
   (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
-           (java.util Map List Collection)
+           (java.util Map List Collection Vector)
            (clojure.lang Named)))
 
 (defn java->specified-type
@@ -17,18 +17,19 @@
 
 (defn java->naive-clj
   [^REXP java-obj]
-  (->> {:attr  (->> java-obj
-                    (._attr)
-                    (.asNativeJavaObject))
+  (->> {:attr  (some->> java-obj
+                        (._attr)
+                        (.asNativeJavaObject))
         :value (->> java-obj
                     (.asNativeJavaObject))}
        (walk/prewalk (fn [v]
-                       (if (instance? Map v)
-                         (->> v
-                              (into {})
-                              (specter/transform [specter/MAP-KEYS]
-                                                 keyword))
-                         v)))))
+                       (cond
+                         (instance? Map v)    (->> v
+                                                   (into {})
+                                                   (specter/transform [specter/MAP-KEYS]
+                                                                      keyword))
+                         (instance? Vector v) (vec v)
+                         :else                v)))))
 
 
 (extend-type REXPDouble
