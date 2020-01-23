@@ -3,7 +3,8 @@
             [tech.ml.dataset :as dataset]
             [tech.ml.protocols.dataset :as ds-prot]
             [tech.v2.datatype.protocols :as dtype-prot]
-            [clojuress.v1.robject])
+            [clojuress.v1.robject]
+            [clojuress.v1.impl.types :as types])
   (:import (org.rosuda.REngine REXP REXPList REXPGenericVector REXPString REXPSymbol REXPLogical REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util List Collection)
            (clojure.lang Named)
@@ -71,42 +72,6 @@
                              ["tzone"
                               "class"])))))
 
-
-(defn primitive-type [obj]
-  (cond (nil? obj)              :na
-        (integer? obj)          :integer
-        (number? obj)           :numeric
-        (string? obj)           :character
-        (keyword? obj)          :factor
-        (inst? obj)             :time
-        (instance? Boolean obj) :logical
-        :else                   nil))
-
-(def valid-interpretations {:na        [:integer :numeric :character :factor :logical :time]
-                            :integer   [:integer :numeric :character]
-                            :numeric   [:numeric :character]
-                            :character [:character]
-                            :factor    [:factor :character]
-                            :logical   [:logical :character]
-                            :time      [:time]})
-
-(def interpretations-priorities
-  (->> valid-interpretations
-       (mapcat val)
-       frequencies))
-
-(defn finest-primitive-type [sequential]
-  (let [n-elements (count sequential)]
-    (->> sequential
-         (mapcat (fn [elem]
-                   (-> elem primitive-type valid-interpretations)))
-         frequencies
-         (filter (fn [[_ n]]
-                   (= n n-elements)))
-         (map key)
-         (sort-by interpretations-priorities)
-         first)))
-
 (def primitive-vector-ctors
   {:integer   ->rexp-integer
    :numeric   ->rexp-double
@@ -116,7 +81,7 @@
    :time      ->r-time})
 
 (defn ->primitive-vector [sequential]
-  (when-let [primitive-type (finest-primitive-type sequential)]
+  (when-let [primitive-type (types/finest-primitive-r-type sequential)]
     ((primitive-vector-ctors primitive-type) sequential)))
 
 (defn ->list [values]
@@ -160,7 +125,7 @@
         (nil? obj)
         (REXPNull.)
         ;; basic types
-        (primitive-type obj)
+        (types/primitive-r-type obj)
         (clj->java [obj])
         ;; a sequential or array of elements of inferrable primitive type
         (sequential? obj)
