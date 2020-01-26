@@ -7,22 +7,22 @@
             [clojuress.v1.util :as util
              :refer [l clojurize-r-symbol]]))
 
-(defn package-object [package-symbol object-symbol]
+(defn package-r-symbol [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
                  (name package-symbol)
                  (name object-symbol))
          (session/fetch-or-make nil)))
 
 (defn package-function [package-symbol function-symbol]
-  (let [delayed (delay (functions/function (package-object package-symbol function-symbol)))]
+  (let [delayed (delay (functions/function (package-r-symbol package-symbol function-symbol)))]
     (fn [& args]
       (apply @delayed args))))
 
-(defn package-dataset [package-symbol dataset-symbol]
-  (package-object package-symbol dataset-symbol))
-
-(defn package-symbol->r-symbols [r-selector-function package-symbol]
-  (let [session (session/fetch-or-make nil)]
+(defn package-symbol->r-symbols [package-symbol functions-only?]
+  (let [session (session/fetch-or-make nil)
+        r-selector-function (str "function(package_name) as.character(unlist(ls"
+                                 (if functions-only? "f")
+                                 ".str(paste0('package:', package_name))))")]
     (->> package-symbol
          name
          ((fn [package-name] (functions/apply-function
@@ -33,29 +33,28 @@
          (prot/java->clj session)
          (filter (fn [function-name]
                    (re-matches #"[A-Za-z][A-Za-z\\.\\_].*" function-name)))
-         (map symbol)
-         (set))))
+         (map symbol))))
 
-(def package-symbol->all-functions-symbols
-  (partial package-symbol->r-symbols "function(package_name) as.character(unlist(lsf.str(paste0('package:', package_name))))"))
-
-(def package-symbol->all-datasets-symbols
-  (partial package-symbol->r-symbols "function(package_name) data(package=package_name)$results[,'Item']"))
+(defn all-r-symbols-map [package-symbol]
+  (let [function-symbols (set (package-symbol->r-symbols package-symbol true))]
+    (into {} (map (fn [r-symbol]
+                    [r-symbol (if (function-symbols r-symbol)
+                                (package-function package-symbol r-symbol)
+                                (package-r-symbol package-symbol r-symbol))])
+                  (package-symbol->r-symbols package-symbol false)))))
 
 (defn find-or-create-ns [ns-symbol]
   (or (find-ns ns-symbol)
       (create-ns ns-symbol)))
 
-(defn add-to-ns [wrapper ns-symbol package-symbol r-symbol]
+(defn add-to-ns [ns-symbol r-symbol r-object]
   (intern ns-symbol
           (clojurize-r-symbol r-symbol)
-          (wrapper package-symbol r-symbol)))
+          r-object))
 
-(defn symbols->add-to-ns [ns-symbol package-symbol dataset-symbols function-symbols]
-  (doseq [function-symbol function-symbols]
-    (add-to-ns package-function ns-symbol package-symbol function-symbol))
-  (doseq [dataset-symbol dataset-symbols]
-    (add-to-ns package-dataset ns-symbol package-symbol dataset-symbol)))
+(defn symbols->add-to-ns [ns-symbol r-symbols]
+  (doseq [[r-symbol r-object] r-symbols]
+    (add-to-ns ns-symbol r-symbol r-object)))
 
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (let [session (session/fetch-or-make nil)]
@@ -65,25 +64,22 @@
   (let [r-ns-symbol (->> package-symbol
                          (str "r.")
                          symbol)
-        dataset-symbols (package-symbol->all-datasets-symbols package-symbol)
-        function-symbols (package-symbol->all-functions-symbols package-symbol)]
+        r-symbols (all-r-symbols-map package-symbol)]
 
     ;; r.package namespace
     (find-or-create-ns r-ns-symbol)
-    (symbols->add-to-ns r-ns-symbol package-symbol dataset-symbols function-symbols)
+    (symbols->add-to-ns r-ns-symbol r-symbols)
 
     ;; alias namespace
     (when as
       (find-or-create-ns as)
-      (symbols->add-to-ns as package-symbol dataset-symbols function-symbols))
+      (symbols->add-to-ns as r-symbols))
 
     ;; inject symbol into current namespace
     (when refer
-      (let [refer-set (set refer)
-            this-ns-symbol (-> *ns* str symbol)]
-        (symbols->add-to-ns this-ns-symbol package-symbol
-                            (clojure.set/intersection refer-set dataset-symbols)
-                            (clojure.set/intersection refer-set function-symbols))))))
+      (let [this-ns-symbol (-> *ns* str symbol)]
+        (symbols->add-to-ns this-ns-symbol
+                            (select-keys r-symbols refer))))))
 
 (defn require-r [& packages]
   (run! require-r-package packages))
