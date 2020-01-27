@@ -35,6 +35,11 @@
       r->clj
       (check = [3.0])))
 
+(note
+ (->> "list(A=1,B=2,'#123strange<text> ()'=3)"
+      r
+      r->clj))
+
 (note-md "Run some code on a separate session (specified Rserve port, rather than the default one).")
 
 (note
@@ -156,7 +161,8 @@ and convert the return value to Clojure.")
         filter-by-x
         add-z-column
         r->clj
-        (check (fn [d]
+        dataset/->flyweight
+        #_(check (fn [d]
                  (-> d
                      dataset/->flyweight
                      (= [{:x 2.0 :y 5.0 :z 7.0}
@@ -378,8 +384,7 @@ this time generating code rather than writing it as Strings.")
 
 (note-md "## Requiring R packages")
 
-(note-md "We have seen earlier, that R functions can be wrapped by Clojure functions.
-Sometimes, we want to bring to the Clojure world functions from R packages.
+(note-md "Sometimes, we want to bring to the Clojure world functions and data from R packages.
 Here, we try to follow the [require-python](https://github.com/cnuernber/libpython-clj/blob/master/test/libpython_clj/require_python_test.clj) syntax
 of [libpython-clj](https://github.com/cnuernber/libpython-clj)
 (though currently in a less sophisticated way.)")
@@ -404,6 +409,23 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
       median
       r->clj
       (check = [2])))
+
+(note-void
+ (require-r '[datasets :as datasetz :refer [euro]]))
+
+(note (->> [r.datasets/euro
+            datasetz/euro
+            euro]
+           (check apply =)))
+
+(note-void
+ (require-r '[base :refer [$]]))
+
+(note
+ (-> {:a 1 :b 2}
+     ($ 'a)
+     r->clj
+     (->> (check = [1]))))
 
 (note-md "## Data visualization")
 
@@ -558,4 +580,5 @@ To stress this, we write it explicitly in the following examples.")
       (check = ["list(a = 1:2, b = \"hi!\")"])))
 
 (note/render-this-ns!)
+
 
