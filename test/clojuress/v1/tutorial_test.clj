@@ -28,7 +28,8 @@
 (note-void
  (def x (r "1+2")))
 
-(note-md "Convert the R to Clojure:")
+(note-md "Convert the R to Clojure:
+This part requires more thorough documentation.")
 
 (note
  (->> x
@@ -38,7 +39,8 @@
 (note
  (->> "list(A=1,B=2,'#123strange<text> ()'=3)"
       r
-      r->clj))
+      r->clj
+      (check = {:A [1.0], :B [2.0], "#123strange<text> ()" [3.0]})))
 
 (note-md "Run some code on a separate session (specified Rserve port, rather than the default one).")
 
@@ -161,8 +163,7 @@ and convert the return value to Clojure.")
         filter-by-x
         add-z-column
         r->clj
-        dataset/->flyweight
-        #_(check (fn [d]
+        (check (fn [d]
                  (-> d
                      dataset/->flyweight
                      (= [{:x 2.0 :y 5.0 :z 7.0}
