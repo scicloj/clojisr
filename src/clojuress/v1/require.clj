@@ -5,7 +5,9 @@
             [clojuress.v1.using-sessions :as using-sessions]
             [clojuress.v1.protocols :as prot]
             [clojuress.v1.util :as util
-             :refer [l clojurize-r-symbol]]))
+             :refer [l clojurize-r-symbol]]
+            [clojuress.v1.impl.common
+             :refer [strange-name?]]))
 
 (defn package-r-symbol [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
@@ -31,8 +33,7 @@
                              session)))
          using-sessions/r->java
          (prot/java->clj session)
-         (remove (fn [function-name]
-                   (re-matches #"[\Q[](){}#@;:,\/`^'~\"\E].*" function-name)))
+         (remove strange-name?)
          (map symbol))))
 
 (defn all-r-symbols-map [package-symbol]

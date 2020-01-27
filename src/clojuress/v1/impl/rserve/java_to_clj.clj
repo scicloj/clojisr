@@ -3,7 +3,9 @@
             [tech.ml.dataset :as dataset]
             [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]]
             [clojure.math.combinatorics :refer [cartesian-product]]
-            [com.rpl.specter :as specter])
+            [com.rpl.specter :as specter]
+            [clojuress.v1.impl.common
+             :refer [strange-name?]])
   (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
            (java.util Map List Collection Vector)
            (clojure.lang Named)))
@@ -14,6 +16,14 @@
     :ints    (.asIntegers ^REXP java-obj)
     :doubles (.asDoubles ^REXP java-obj)
     :strings (.asStrings ^REXP java-obj)))
+
+
+(defn usually-keyword
+  "Given a name in an R named list, turn it into a keyword unless it contains strange characters, but turn it into a string if it does."
+  [aname]
+  (if (strange-name? (name aname))
+    (name aname)
+    (keyword aname)))
 
 (defn java->naive-clj
   [^REXP java-obj]
@@ -27,7 +37,7 @@
                          (instance? Map v)    (->> v
                                                    (into {})
                                                    (specter/transform [specter/MAP-KEYS]
-                                                                      keyword))
+                                                                      usually-keyword))
                          (instance? Vector v) (vec v)
                          :else                v)))))
 
@@ -187,7 +197,8 @@
   (-java->clj [java-obj]
     (let [names  (some-> java-obj
                          (.getAttribute "names")
-                         ->array-copy)
+                         ->array-copy
+                         (->> (map usually-keyword)))
           values (->> java-obj
                       (.asList)
                       ;; Convert list elements recursively.
