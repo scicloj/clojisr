@@ -31,8 +31,8 @@
                              session)))
          using-sessions/r->java
          (prot/java->clj session)
-         (filter (fn [function-name]
-                   (re-matches #"[A-Za-z][A-Za-z\\.\\_].*" function-name)))
+         (remove (fn [function-name]
+                   (re-matches #"[\Q[](){}#@;:,\/`^'~\"\E].*" function-name)))
          (map symbol))))
 
 (defn all-r-symbols-map [package-symbol]
