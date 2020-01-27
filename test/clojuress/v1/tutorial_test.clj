@@ -11,7 +11,7 @@
 (note-md "Let us start by some basic usage examples of Clojuress.")
 
 (note-void
- (require '[clojuress.v1.r :as r :refer [r eval-r->java r->java java->r java->clj clj->java r->clj clj->r ->code r+ colon function]]
+ (require '[clojuress.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->naive-clj clj->java r->clj clj->r ->code r+ colon function]]
           '[clojuress.v1.require :refer [require-r]]
           '[clojuress.v1.robject :as robject]
           '[clojuress.v1.session :as session]
@@ -468,6 +468,43 @@ In the current implementation, this is based on [REngine](https://github.com/s-u
       r->clj
       (check = [1])))
 
+(note-md "We can further convert data from the java representation to Clojure.")
+
+(note
+ (->> "1:9"
+      r
+      r->java
+      java->clj
+      (check = (range 1 10))))
+
+(note-md "On the opposite direction, we can also convert Clojure data into the Java represenattion.")
+
+(note
+ (->> (range 1 10)
+      clj->java
+      class
+      (check = REXPInteger)))
+
+(note
+ (->> (range 1 10)
+      clj->java
+      java->clj
+      (check = (range 1 10))))
+
+(note-md "There is an alternative way of conversion from Java to Clojure, naively converting the internal Java representation to a Clojure data structure. It can be handy when one wants to have plain access to all the metadata (R attributes), etc. ")
+
+(note
+ (->> "1:9"
+      r
+      r->java
+      java->naive-clj))
+
+(note
+ (->> "data.frame(x=1:3,y=factor('a','a','b'))"
+      r
+      r->java
+      java->naive-clj))
+
 (note-md "We can evaluate R code and immediately return the result as a java object, without ever creating a handle to an R object holding the result:")
 
 (note
@@ -521,5 +558,4 @@ To stress this, we write it explicitly in the following examples.")
       (check = ["list(a = 1:2, b = \"hi!\")"])))
 
 (note/render-this-ns!)
-
 
