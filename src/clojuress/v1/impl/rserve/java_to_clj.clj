@@ -1,6 +1,5 @@
 (ns clojuress.v1.impl.rserve.java-to-clj
   (:require [clojure.walk :as walk]
-            [com.rpl.specter :as specter]
             [tech.ml.dataset :as dataset]
             [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]]
             [clojure.math.combinatorics :refer [cartesian-product]])
@@ -24,12 +23,8 @@
                     (.asNativeJavaObject))}
        (walk/prewalk (fn [v]
                        (if (instance? Map v)
-                         (->> v
-                              (into {})
-                              (specter/transform [specter/MAP-KEYS]
-                                                 keyword))
+                         (into {} v)
                          v)))))
-
 
 (extend-type REXPDouble
   dtype-prot/PToArray
@@ -186,9 +181,8 @@
   Clojable
   (-java->clj [java-obj]
     (let [names  (some-> java-obj
-                          (.getAttribute "names")
-                          ->array-copy
-                          (->> (map keyword)))
+                         (.getAttribute "names")
+                         ->array-copy)
           values (->> java-obj
                       (.asList)
                       ;; Convert list elements recursively.
