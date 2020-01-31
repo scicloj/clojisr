@@ -44,7 +44,7 @@
   (init-memory session)
   ;; TODO: Why is this necessary?
   (try
-    (prot/eval-r->java session "print('dummy')")
+    (prot/eval-r->java session "print('.')")
     (catch Exception e nil))
   session)
 
