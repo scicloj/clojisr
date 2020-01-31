@@ -37,7 +37,7 @@
   (->> r-object
        :object-name
        mem/object-name->memory-place
-       (prot/get-r->java session)))
+       (prot/eval-r->java session)))
 
 (defn java->r [java-object session]
   (if (instance? RObject java-object)

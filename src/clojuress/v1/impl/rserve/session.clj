@@ -47,8 +47,6 @@
      (java/assignment varname java-obj)
      nil
      true))
-  (get-r->java [session varname]
-    (.parseAndEval r-connection varname))
   (java->specified-type [session java-obj typ]
     (java-to-clj/java->specified-type java-obj typ))
   (java->naive-clj [session java-obj]

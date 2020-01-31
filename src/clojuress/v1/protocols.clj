@@ -7,7 +7,6 @@
   (desc [session])
   (eval-r->java [session code])
   (java->r-set [session varname java-object])
-  (get-r->java [session varname])
   (java->specified-type [session java-object type])
   (java->naive-clj [session java-object])
   (java->clj [session java-object])
