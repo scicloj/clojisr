@@ -17,4 +17,5 @@
                  [hiccup "1.0.5"]
                  [cambium/cambium.core         "0.9.3"]
                  [cambium/cambium.codec-simple "0.9.3"]
-                 [cambium/cambium.logback.core "0.4.3"]])
+                 [cambium/cambium.logback.core "0.4.3"]
+                 [org.renjin/renjin-script-engine "3.5-beta43"]])
