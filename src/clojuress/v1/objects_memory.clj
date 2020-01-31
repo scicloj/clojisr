@@ -14,7 +14,7 @@
           (object-name->memory-place obj-name)))
 
 (def init-session-memory-code
-  ".MEM <- list()")
+  ".MEM <- new.env()")
 
 (defn forget [obj-name session]
   (when (not (prot/closed? session))
@@ -24,4 +24,3 @@
       (assert (->> returned
                    (prot/java->clj session)
                    (= ["ok"]))))))
-
