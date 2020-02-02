@@ -10,6 +10,7 @@
   (java->specified-type [session java-object type])
   (java->naive-clj [session java-object])
   (java->clj [session java-object])
-  (clj->java [session clj-object]))
+  (clj->java [session clj-object])
+  (print-to-string [session r-obj]))
 
 
