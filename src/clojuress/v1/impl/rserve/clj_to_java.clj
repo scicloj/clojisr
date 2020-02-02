@@ -134,9 +134,9 @@
       (cond ;; a dataset
         (satisfies? ds-prot/PColumnarDataset obj)
         (->data-frame obj)
-        ;; a named list
+        ;; a map
         (map? obj)
         (->named-list obj)
-        ;; an unnamed list
+        ;; a sequential thing with no inferrable primitive type
         (sequential? obj)
         (->list obj))))
