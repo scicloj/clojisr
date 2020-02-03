@@ -4,7 +4,9 @@
             [clojuress.v1.eval :as evl]
             [clojuress.v1.protocols :as prot]
             [clojuress.v1.util :as util
-             :refer [l clojurize-r-symbol]]))
+             :refer [clojurize-r-symbol]]
+            [clojuress.v1.impl.common
+             :refer [strange-name?]]))
 
 (defn package-r-symbol [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
@@ -17,16 +19,22 @@
     (fn [& args]
       (apply @delayed args))))
 
+(defn package-symbol->nonstrange-r-symbols [package-symbol functions-only?]
+  (let [session (session/fetch-or-make nil)]
+    (->> (prot/package-symbol->r-symbol-names
+          session package-symbol functions-only?)
+         (remove strange-name?)
+         (map symbol))))
+
 (defn all-r-symbols-map [package-symbol]
-  (let [session (session/fetch-or-make nil)
-        function-symbols (set (prot/package-symbol->r-symbols
-                               session package-symbol true))]
+  (let [function-symbols (set (package-symbol->nonstrange-r-symbols
+                               package-symbol true))]
     (into {} (map (fn [r-symbol]
                     [r-symbol (if (function-symbols r-symbol)
                                 (package-function package-symbol r-symbol)
                                 (package-r-symbol package-symbol r-symbol))])
-                  (prot/package-symbol->r-symbols
-                   session package-symbol false)))))
+                  (package-symbol->nonstrange-r-symbols
+                   package-symbol false)))))
 
 (defn find-or-create-ns [ns-symbol]
   (or (find-ns ns-symbol)
@@ -43,8 +51,8 @@
 
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (let [session (session/fetch-or-make nil)]
-    (evl/eval-form (l 'library
-                      package-symbol)
+    (evl/eval-form ['library
+                    package-symbol]
                    session))
   (let [r-ns-symbol (->> package-symbol
                          (str "r.")

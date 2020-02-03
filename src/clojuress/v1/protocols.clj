@@ -12,6 +12,6 @@
   (java->clj [session java-object])
   (clj->java [session clj-object])
   (print-to-string [session r-obj])
-  (package-symbol->r-symbols [session package-symbol functions-only?]))
+  (package-symbol->r-symbol-names [session package-symbol functions-only?]))
 
 
