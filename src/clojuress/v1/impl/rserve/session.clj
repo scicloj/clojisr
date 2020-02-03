@@ -4,8 +4,14 @@
             [clojuress.v1.impl.rserve.java :as java]
             [clojuress.v1.impl.rserve.java-to-clj :as java-to-clj]
             [clojuress.v1.impl.rserve.clj-to-java :as clj-to-java]
+            [clojuress.v1.impl.rserve.packages :as packages]
+            [clojuress.v1.impl.rserve.printing :as printing]
+            [clojuress.v1.objects-memory :as mem]
             [clojure.core.async :as async]
-            [cambium.core :as log])
+            [cambium.core :as log]
+            [clojure.string :as string]
+            [clojuress.v1.impl.common
+             :refer [strange-name?]])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)
            clojuress.v1.protocols.Session
@@ -54,7 +60,12 @@
   (java->clj [session java-obj]
     (java-to-clj/java->clj java-obj))
   (clj->java [session clj-obj]
-    (clj-to-java/clj->java clj-obj)))
+    (clj-to-java/clj->java clj-obj))
+  (print-to-string [session r-obj]
+    (printing/print-to-string session r-obj))
+  (package-symbol->r-symbols [session package-symbol functions-only?]
+    (packages/package-symbol->r-symbols
+     session package-symbol functions-only?)))
 
 (def stop-loops? (atom false))
 

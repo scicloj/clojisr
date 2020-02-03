@@ -2,12 +2,9 @@
   (:require [clojuress.v1.session :as session]
             [clojuress.v1.functions :as functions]
             [clojuress.v1.eval :as evl]
-            [clojuress.v1.using-sessions :as using-sessions]
             [clojuress.v1.protocols :as prot]
             [clojuress.v1.util :as util
-             :refer [l clojurize-r-symbol]]
-            [clojuress.v1.impl.common
-             :refer [strange-name?]]))
+             :refer [l clojurize-r-symbol]]))
 
 (defn package-r-symbol [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
@@ -20,29 +17,16 @@
     (fn [& args]
       (apply @delayed args))))
 
-(defn package-symbol->r-symbols [package-symbol functions-only?]
-  (let [session (session/fetch-or-make nil)
-        r-selector-function (str "function(package_name) as.character(unlist(ls"
-                                 (if functions-only? "f")
-                                 ".str(paste0('package:', package_name))))")]
-    (->> package-symbol
-         name
-         ((fn [package-name] (functions/apply-function
-                             (evl/r r-selector-function session)
-                             [package-name]
-                             session)))
-         using-sessions/r->java
-         (prot/java->clj session)
-         (remove strange-name?)
-         (map symbol))))
-
 (defn all-r-symbols-map [package-symbol]
-  (let [function-symbols (set (package-symbol->r-symbols package-symbol true))]
+  (let [session (session/fetch-or-make nil)
+        function-symbols (set (prot/package-symbol->r-symbols
+                               session package-symbol true))]
     (into {} (map (fn [r-symbol]
                     [r-symbol (if (function-symbols r-symbol)
                                 (package-function package-symbol r-symbol)
                                 (package-r-symbol package-symbol r-symbol))])
-                  (package-symbol->r-symbols package-symbol false)))))
+                  (prot/package-symbol->r-symbols
+                   session package-symbol false)))))
 
 (defn find-or-create-ns [ns-symbol]
   (or (find-ns ns-symbol)
