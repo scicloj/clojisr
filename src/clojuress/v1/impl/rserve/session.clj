@@ -20,7 +20,8 @@
     :host "localhost"
     :spawn-rserve? true}))
 
-(defrecord RserveSession [session-args
+(defrecord RserveSession [id
+                          session-args
                           ^RConnection r-connection
                           rserve
                           closed]
@@ -33,6 +34,8 @@
     (reset! closed true))
   (closed? [session]
     @closed)
+  (id [session]
+    id)
   (session-args [session]
     session-args)
   (desc [session]
@@ -83,7 +86,7 @@
     (if (not @stop-loops?)
       (recur))) )
 
-(defn make [session-args]
+(defn make [id session-args]
   (let [{:keys
          [host
           port
@@ -94,12 +97,11 @@
                             (proc/start-rserve {:port  port
                                                 :sleep 500}))]
     (rserve-print-loop rserve)
-    (->RserveSession session-args
+    (->RserveSession id
+                     session-args
                      (RConnection. host port)
                      rserve
                      (atom false))))
-
-
 
 (comment
 

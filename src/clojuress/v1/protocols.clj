@@ -3,6 +3,7 @@
 (defprotocol Session
   (close [session])
   (closed? [session])
+  (id [session])
   (session-args [session])
   (desc [session])
   (eval-r->java [session code])

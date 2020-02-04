@@ -6,7 +6,8 @@
             [clojuress.v1.protocols :as prot]
             [clojuress.v1.printing]
             [clojuress.v1.codegen :as codegen]
-            [clojure.string :as string])
+            [clojure.string :as string]
+            [clojuress.v1.refresh :as refresh])
   (:import clojuress.v1.robject.RObject))
 
 
@@ -100,37 +101,37 @@
        (format "library(%s)")
        r))
 
-(def r== (function (r "`==`")))
-(def r!= (function (r "`!=`")))
-(def r< (function (r "`<`")))
-(def r> (function (r "`>`")))
-(def r<= (function (r "`<=`")))
-(def r>= (function (r "`>=`")))
-(def r& (function (r "`&`")))
-(def r&& (function (r "`&&`")))
-(def r| (function (r "`||`")))
-(def r|| (function (r "`||`")))
+(def r== (r "`==`"))
+(def r!= (r "`!=`"))
+(def r< (r "`<`"))
+(def r> (r "`>`"))
+(def r<= (r "`<=`"))
+(def r>= (r "`>=`"))
+(def r& (r "`&`"))
+(def r&& (r "`&&`"))
+(def r| (r "`||`"))
+(def r|| (r "`||`"))
 
 
 (def captured-str
   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
-  (function (r "function(x) capture.output(str(x))")))
+  (r "function(x) capture.output(str(x))"))
 
 (def println-captured-str (comp println-r-lines captured-str))
 
 (def str-md (comp r-lines->md captured-str))
 
-
 (defn r+
   "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments."
   [& args]
-  (reduce (function (r "`+`")) args))
+  (reduce (r "`+`") args))
 
 ;; Some special characters will get a name in letters.
-(def bra (function (r "`[`")))
-(def bra<- (function (r "`[<-`")))
-(def brabra (function (r "`[[`")))
-(def brabra<- (function (r "`[[<-`")))
-(def colon (function (r "`:`")))
+(def bra (r "`[`"))
+(def bra<- (r "`[<-`"))
+(def brabra (r "`[[`"))
+(def brabra<- (r "`[[<-`"))
+(def colon (r "`:`"))
+
 
 

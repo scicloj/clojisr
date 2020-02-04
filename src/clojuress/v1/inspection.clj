@@ -2,9 +2,7 @@
   (:require [clojuress.v1.using-sessions :as using-sessions]))
 
 (defn r-class [r-object]
-  (vec
-   (using-sessions/r-function-on-obj
-    r-object "class" :strings)))
+  (:class r-object))
 
 (defn names [r-object]
   (vec

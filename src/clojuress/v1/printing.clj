@@ -1,13 +1,14 @@
 (ns clojuress.v1.printing
   (:import clojuress.v1.robject.RObject)
-  (:require [clojuress.v1.using-sessions :as using-sessions]
-            [clojuress.v1.protocols :as prot]
-            [clojure.pprint :as pp]
-            [clojure.string :as string]))
+  (:require [clojuress.v1.protocols :as prot]
+            [clojuress.v1.refresh :as refresh]
+            [clojure.pprint :as pp]))
 
 (defn r-object->string-to-print [obj]
-  (prot/print-to-string (:session obj)
-                        obj))
+  (if (refresh/fresh-object? obj)
+    (prot/print-to-string (:session obj)
+                          obj)
+    "<an object of lost session>"))
 
 ;; Overriding print
 (defmethod print-method RObject [obj ^java.io.Writer w]

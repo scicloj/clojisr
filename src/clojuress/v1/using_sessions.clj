@@ -7,6 +7,14 @@
             [cambium.core :as log])
   (:import clojuress.v1.robject.RObject))
 
+(defn ->robject [obj-name session code]
+  (let [theclass (->> obj-name
+                      mem/object-name->memory-place
+                      (format "class(%s)")
+                      (prot/eval-r->java session)
+                      (prot/java->clj session))]
+    (->RObject obj-name session code theclass)))
+
 (defn eval-code [code session]
   (let [obj-name (util/rand-name)
         returned (->> code
@@ -15,7 +23,7 @@
     (assert (->> returned
                  (prot/java->clj session)
                  (= ["ok"])))
-    (-> (->RObject obj-name session code)
+    (-> (->robject obj-name session code)
         (resource/track
          #(do (log/info [::releasing obj-name])
               (mem/forget obj-name session))
@@ -47,13 +55,12 @@
                         (mem/object-name->memory-place
                          obj-name)
                         java-object)
-      (->RObject obj-name session nil))))
+      (->robject obj-name session nil))))
 
 (defn function? [r-object]
   (and (instance? RObject r-object)
        (-> r-object
-           (r-function-on-obj "class" :strings)
-           vec
+           :class
            (#{["function"]
               ;; Functions created by the reticulate package:
               ["python.builtin.function" "python.builtin.object"]
