@@ -5,7 +5,8 @@
             [clojuress.v1.util :as util
              :refer [clojurize-r-symbol]]
             [clojuress.v1.impl.common
-             :refer [strange-symbol-name?]]))
+             :refer [strange-symbol-name?]]
+            [cambium.core :as log]))
 
 (defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
@@ -24,7 +25,13 @@
   (->> package-symbol
        package-symbol->nonstrange-r-symbols
        (map (fn [r-symbol]
-              [r-symbol (package-r-object package-symbol r-symbol)]))
+              [r-symbol (try
+                          (package-r-object package-symbol r-symbol)
+                          (catch Exception e
+                            (log/warn [::failed-requiring {:package-symbol package-symbol
+                                                           :r-symbol r-symbol
+                                                           :cause (-> e Throwable->map :cause)}])))]))
+       (filter second)
        (into {})))
 
 (defn find-or-create-ns [ns-symbol]
