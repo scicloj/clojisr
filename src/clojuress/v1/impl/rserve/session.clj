@@ -62,9 +62,9 @@
     (clj-to-java/clj->java clj-obj))
   (print-to-string [session r-obj]
     (printing/print-to-string session r-obj))
-  (package-symbol->r-symbol-names [session package-symbol functions-only?]
+  (package-symbol->r-symbol-names [session package-symbol]
     (packages/package-symbol->r-symbol-names
-     session package-symbol functions-only?)))
+     session package-symbol)))
 
 (def stop-loops? (atom false))
 

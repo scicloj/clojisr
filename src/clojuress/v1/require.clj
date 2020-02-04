@@ -1,40 +1,31 @@
 (ns clojuress.v1.require
   (:require [clojuress.v1.session :as session]
-            [clojuress.v1.functions :as functions]
             [clojuress.v1.eval :as evl]
             [clojuress.v1.protocols :as prot]
             [clojuress.v1.util :as util
              :refer [clojurize-r-symbol]]
             [clojuress.v1.impl.common
-             :refer [strange-name?]]))
+             :refer [strange-symbol-name?]]))
 
-(defn package-r-symbol [package-symbol object-symbol]
+(defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
                  (name package-symbol)
                  (name object-symbol))
          (session/fetch-or-make nil)))
 
-(defn package-function [package-symbol function-symbol]
-  (let [delayed (delay (functions/function (package-r-symbol package-symbol function-symbol)))]
-    (fn [& args]
-      (apply @delayed args))))
-
-(defn package-symbol->nonstrange-r-symbols [package-symbol functions-only?]
+(defn package-symbol->nonstrange-r-symbols [package-symbol]
   (let [session (session/fetch-or-make nil)]
     (->> (prot/package-symbol->r-symbol-names
-          session package-symbol functions-only?)
-         (remove strange-name?)
+          session package-symbol)
+         (remove strange-symbol-name?)
          (map symbol))))
 
 (defn all-r-symbols-map [package-symbol]
-  (let [function-symbols (set (package-symbol->nonstrange-r-symbols
-                               package-symbol true))]
-    (into {} (map (fn [r-symbol]
-                    [r-symbol (if (function-symbols r-symbol)
-                                (package-function package-symbol r-symbol)
-                                (package-r-symbol package-symbol r-symbol))])
-                  (package-symbol->nonstrange-r-symbols
-                   package-symbol false)))))
+  (->> package-symbol
+       package-symbol->nonstrange-r-symbols
+       (map (fn [r-symbol]
+              [r-symbol (package-r-object package-symbol r-symbol)]))
+       (into {})))
 
 (defn find-or-create-ns [ns-symbol]
   (or (find-ns ns-symbol)
