@@ -1,6 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA3] - 2020-01-28
+- handling unhandled cases in java->naive-clj conversion
+- loading data, not only functions, at require-r
+- require-r optimization: all underlying robjects are created once, then bound to namespaces
+- more careful handling of data conversion of list names: names with reader special characters are not converted to keywords
+
 ## [1.0.0-BETA2] - 2020-01-21
 - added '$ as binary operator
 - performance bugfix: using native double array and type hint when conferting integer R vectors with missing values to clj

@@ -2,9 +2,11 @@
   (:require [clojure.walk :as walk]
             [tech.ml.dataset :as dataset]
             [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]]
-            [clojure.math.combinatorics :refer [cartesian-product]])
+            [clojure.math.combinatorics :refer [cartesian-product]]
+            [com.rpl.specter :as specter]
+            [clojuress.v1.impl.common :refer [usually-keyword]])
   (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
-           (java.util Map List Collection)
+           (java.util Map List Collection Vector)
            (clojure.lang Named)))
 
 (defn java->specified-type
@@ -16,15 +18,19 @@
 
 (defn java->naive-clj
   [^REXP java-obj]
-  (->> {:attr  (->> java-obj
-                    (._attr)
-                    (.asNativeJavaObject))
+  (->> {:attr  (some->> java-obj
+                        (._attr)
+                        (.asNativeJavaObject))
         :value (->> java-obj
                     (.asNativeJavaObject))}
        (walk/prewalk (fn [v]
-                       (if (instance? Map v)
-                         (into {} v)
-                         v)))))
+                       (cond
+                         (instance? Map v)    (->> v
+                                                   (into {})
+                                                   (specter/transform [specter/MAP-KEYS]
+                                                                      usually-keyword))
+                         (instance? Vector v) (vec v)
+                         :else                v)))))
 
 (extend-type REXPDouble
   dtype-prot/PToArray
@@ -182,7 +188,8 @@
   (-java->clj [java-obj]
     (let [names  (some-> java-obj
                          (.getAttribute "names")
-                         ->array-copy)
+                         ->array-copy
+                         (->> (map usually-keyword)))
           values (->> java-obj
                       (.asList)
                       ;; Convert list elements recursively.

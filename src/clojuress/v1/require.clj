@@ -1,47 +1,31 @@
 (ns clojuress.v1.require
   (:require [clojuress.v1.session :as session]
-            [clojuress.v1.functions :as functions]
             [clojuress.v1.eval :as evl]
-            [clojuress.v1.using-sessions :as using-sessions]
             [clojuress.v1.protocols :as prot]
             [clojuress.v1.util :as util
-             :refer [l clojurize-r-symbol]]))
+             :refer [clojurize-r-symbol]]
+            [clojuress.v1.impl.common
+             :refer [strange-symbol-name?]]))
 
-(defn package-r-symbol [package-symbol object-symbol]
+(defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
                  (name package-symbol)
                  (name object-symbol))
          (session/fetch-or-make nil)))
 
-(defn package-function [package-symbol function-symbol]
-  (let [delayed (delay (functions/function (package-r-symbol package-symbol function-symbol)))]
-    (fn [& args]
-      (apply @delayed args))))
-
-(defn package-symbol->r-symbols [package-symbol functions-only?]
-  (let [session (session/fetch-or-make nil)
-        r-selector-function (str "function(package_name) as.character(unlist(ls"
-                                 (if functions-only? "f")
-                                 ".str(paste0('package:', package_name))))")]
-    (->> package-symbol
-         name
-         ((fn [package-name] (functions/apply-function
-                             (evl/r r-selector-function session)
-                             [package-name]
-                             session)))
-         using-sessions/r->java
-         (prot/java->clj session)
-         (remove (fn [function-name]
-                   (re-matches #"[\Q[](){}#@;:,\/`^'~\"\E].*" function-name)))
+(defn package-symbol->nonstrange-r-symbols [package-symbol]
+  (let [session (session/fetch-or-make nil)]
+    (->> (prot/package-symbol->r-symbol-names
+          session package-symbol)
+         (remove strange-symbol-name?)
          (map symbol))))
 
 (defn all-r-symbols-map [package-symbol]
-  (let [function-symbols (set (package-symbol->r-symbols package-symbol true))]
-    (into {} (map (fn [r-symbol]
-                    [r-symbol (if (function-symbols r-symbol)
-                                (package-function package-symbol r-symbol)
-                                (package-r-symbol package-symbol r-symbol))])
-                  (package-symbol->r-symbols package-symbol false)))))
+  (->> package-symbol
+       package-symbol->nonstrange-r-symbols
+       (map (fn [r-symbol]
+              [r-symbol (package-r-object package-symbol r-symbol)]))
+       (into {})))
 
 (defn find-or-create-ns [ns-symbol]
   (or (find-ns ns-symbol)
@@ -58,8 +42,8 @@
 
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (let [session (session/fetch-or-make nil)]
-    (evl/eval-form (l 'library
-                      package-symbol)
+    (evl/eval-form ['library
+                    package-symbol]
                    session))
   (let [r-ns-symbol (->> package-symbol
                          (str "r.")

@@ -8,16 +8,19 @@
 (def sessions (atom {}))
 
 (def defaults
-  (atom
-   {:session-type :rserve}))
+  (atom {:session-type :rserve}))
+
+(defn apply-defaults [session-args]
+  (merge @defaults session-args))
 
 (defn make [session-args]
-  (let [{:keys [session-type] :as merged-session-args}
-        (merge @defaults session-args)]
+  (let [id session-args
+        {:keys [session-type] :as merged-session-args}
+        (apply-defaults session-args)]
     (case session-type
       :rserve (clojuress.v1.impl.rserve.session/make
+               id
                merged-session-args))))
-
 
 (defn fetch [session-args]
   (@sessions session-args))
@@ -44,7 +47,7 @@
   (init-memory session)
   ;; TODO: Why is this necessary?
   (try
-    (prot/eval-r->java session "print('dummy')")
+    (prot/eval-r->java session "print('.')")
     (catch Exception e nil))
   session)
 
@@ -59,7 +62,7 @@
 
 (defn fresh? [session]
   (-> session
-      prot/session-args
+      prot/id
       fetch
       (= session)))
 

@@ -2,7 +2,9 @@
   (:require [notespace.v1.note :as note
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
             [tech.ml.dataset :as dataset]
-            [clojuress.v1.r :as r]))
+            [clojuress.v1.r :as r]
+            [clojuress.v1.session :as session]))
+
 
 (note-md "# Clojuress tutorial")
 
@@ -11,7 +13,7 @@
 (note-md "Let us start by some basic usage examples of Clojuress.")
 
 (note-void
- (require '[clojuress.v1.r :as r :refer [r eval-r->java r->java java->r java->clj clj->java r->clj clj->r ->code r+ colon function]]
+ (require '[clojuress.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->naive-clj clj->java r->clj clj->r ->code r+ colon]]
           '[clojuress.v1.require :refer [require-r]]
           '[clojuress.v1.robject :as robject]
           '[clojuress.v1.session :as session]
@@ -28,12 +30,19 @@
 (note-void
  (def x (r "1+2")))
 
-(note-md "Convert the R to Clojure:")
+(note-md "Convert the R to Clojure:
+This part requires more thorough documentation.")
 
 (note
  (->> x
       r->clj
       (check = [3.0])))
+
+(note
+ (->> "list(A=1,B=2,'#123strange<text> ()'=3)"
+      r
+      r->clj
+      (check = {:A [1.0], :B [2.0], "#123strange<text> ()" [3.0]})))
 
 (note-md "Run some code on a separate session (specified Rserve port, rather than the default one).")
 
@@ -51,10 +60,10 @@
 
 (note-md "## Functions")
 
-(note-md "We can define a Clojure function wrapping an R function.")
+(note-md "An R function is also a Clojure function.")
 
 (note-void
- (def f (function (r "function(x) x*10"))))
+ (def f (r "function(x) x*10")))
 
 (note-md "Let us apply it to Clojure data (implicitly converting that data to R).")
 
@@ -79,27 +88,25 @@ that tells R whether to remove missing values
 whenn computing the mean.")
 
 (note
- (->> ((function (r "mean"))
-            [1 nil 3]
-            :na.rm true)
-           r->clj
-           (check = [2.0])))
+ (->> ((r "mean")
+       [1 nil 3]
+       :na.rm true)
+      r->clj
+      (check = [2.0])))
 
 (note-md "An alternative call syntax:")
 
 (note
- (->> ((function (r "mean"))
-            [1 nil 3]
-            [:= :na.rm true])
-           r->clj
-           (check = [2.0])))
+ (->> ((r "mean")
+       [1 nil 3]
+       [:= :na.rm true])
+      r->clj
+      (check = [2.0])))
 
 (note-md "Anoter example:")
 
 (note
- (let [f (->> "function(w,x,y=10,z=20) w+x+y+z"
-              r
-              function)]
+ (let [f (r "function(w,x,y=10,z=20) w+x+y+z")]
    (->> [(f 1 2)
          (f 1 2 :y 100)
          (f 1 2 :z 100)]
@@ -118,7 +125,6 @@ whenn computing the mean.")
       r->clj
       (check = (range 10))))
 
-
 (note-md "## R dataframes and [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) datasets")
 
 (note-md "Create a tech.ml.dataset dataset object,
@@ -126,9 +132,7 @@ pass it to an R function to compute the row means,
 and convert the return value to Clojure.")
 
 (note
- (let [row-means (-> "function(data) rowMeans(data)"
-                     r
-                     function)]
+ (let [row-means (r "function(data) rowMeans(data)")]
    (->> {:x [1 2 3]
          :y [4 5 6]}
         dataset/name-values-seq->dataset
@@ -144,12 +148,8 @@ and convert the return value to Clojure.")
 (note-md "Use dplyr to process some Clojure dataset, and convert back to the resulting dataset.")
 
 (note
- (let [filter-by-x  (-> "function(data) filter(data, x>=2)"
-                        r
-                        function)
-       add-z-column (-> "function(data) mutate(data, z=x+y)"
-                        r
-                        function)]
+ (let [filter-by-x  (r "function(data) filter(data, x>=2)")
+       add-z-column (r "function(data) mutate(data, z=x+y)")]
    (->> {:x [1 2 3]
          :y [4 5 6]}
         dataset/name-values-seq->dataset
@@ -168,13 +168,13 @@ and convert the return value to Clojure.")
  (r "library(tibble)"))
 
 (note
- (let [tibble (function (r "tibble"))]
+ (let [tibble (r "tibble")]
    (tibble
     :x [1 2 3]
     :y [4 5 6])))
 
 (note
- (let [tibble (function (r "tibble"))]
+ (let [tibble (r "tibble")]
    (->> (tibble
          :x [1 2 3]
          :y [4 5 6])
@@ -220,8 +220,8 @@ and convert the return value to Clojure.")
 (note-md "For the following examples, we will use some dummy handles to R objects:")
 
 (note-void
- (def x (robject/->RObject "x" session nil))
- (def y (robject/->RObject "y" session nil)))
+ (def x (robject/->RObject "x" session nil nil))
+ (def y (robject/->RObject "y" session nil nil)))
 
 (note-md ".. and some real handles to R objects:")
 
@@ -329,7 +329,7 @@ this time generating code rather than writing it as Strings.")
       (check = [3])))
 
 (note-void
- (def f (function (r '(function [x] (* x 10))))))
+ (def f (r '(function [x] (* x 10)))))
 
 (note
  "checking again... "
@@ -347,9 +347,7 @@ this time generating code rather than writing it as Strings.")
       (check = [250.0])))
 
 (note
- (let [row-means (-> '(function [data] (rowMeans data))
-                     r
-                     function)]
+ (let [row-means (r '(function [data] (rowMeans data)))]
    (->> {:x [1 2 3]
          :y [4 5 6]}
         dataset/name-values-seq->dataset
@@ -361,12 +359,8 @@ this time generating code rather than writing it as Strings.")
  (r '(library dplyr)))
 
 (note
- (let [filter-by-x  (-> '(function [data] (filter data (>= x 2)))
-                        r
-                        function)
-       add-z-column (-> '(function [data] (mutate data (= z (+ x y))))
-                        r
-                        function)]
+ (let [filter-by-x  (r '(function [data] (filter data (>= x 2))))
+       add-z-column (r '(function [data] (mutate data (= z (+ x y)))))]
    (->> {:x [1 2 3]
          :y [4 5 6]}
         dataset/name-values-seq->dataset
@@ -378,8 +372,7 @@ this time generating code rather than writing it as Strings.")
 
 (note-md "## Requiring R packages")
 
-(note-md "We have seen earlier, that R functions can be wrapped by Clojure functions.
-Sometimes, we want to bring to the Clojure world functions from R packages.
+(note-md "Sometimes, we want to bring to the Clojure world functions and data from R packages.
 Here, we try to follow the [require-python](https://github.com/cnuernber/libpython-clj/blob/master/test/libpython_clj/require_python_test.clj) syntax
 of [libpython-clj](https://github.com/cnuernber/libpython-clj)
 (though currently in a less sophisticated way.)")
@@ -404,6 +397,23 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
       median
       r->clj
       (check = [2])))
+
+(note-void
+ (require-r '[datasets :as datasetz :refer [euro]]))
+
+(note (->> [r.datasets/euro
+            datasetz/euro
+            euro]
+           (check apply =)))
+
+(note-void
+ (require-r '[base :refer [$]]))
+
+(note
+ (-> {:a 1 :b 2}
+     ($ 'a)
+     r->clj
+     (->> (check = [1]))))
 
 (note-md "## Data visualization")
 
@@ -468,6 +478,43 @@ In the current implementation, this is based on [REngine](https://github.com/s-u
       r->clj
       (check = [1])))
 
+(note-md "We can further convert data from the java representation to Clojure.")
+
+(note
+ (->> "1:9"
+      r
+      r->java
+      java->clj
+      (check = (range 1 10))))
+
+(note-md "On the opposite direction, we can also convert Clojure data into the Java represenattion.")
+
+(note
+ (->> (range 1 10)
+      clj->java
+      class
+      (check = REXPInteger)))
+
+(note
+ (->> (range 1 10)
+      clj->java
+      java->clj
+      (check = (range 1 10))))
+
+(note-md "There is an alternative way of conversion from Java to Clojure, naively converting the internal Java representation to a Clojure data structure. It can be handy when one wants to have plain access to all the metadata (R attributes), etc. ")
+
+(note
+ (->> "1:9"
+      r
+      r->java
+      java->naive-clj))
+
+(note
+ (->> "data.frame(x=1:3,y=factor('a','a','b'))"
+      r
+      r->java
+      java->naive-clj))
+
 (note-md "We can evaluate R code and immediately return the result as a java object, without ever creating a handle to an R object holding the result:")
 
 (note
@@ -515,7 +562,7 @@ To stress this, we write it explicitly in the following examples.")
  (->> {:a [1 2] :b "hi!"}
       clj->java
       java->r
-      ((r/function (r "deparse")))
+      ((r "deparse"))
       r->java
       java->clj
       (check = ["list(a = 1:2, b = \"hi!\")"])))

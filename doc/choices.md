@@ -23,7 +23,7 @@ Also, we wish to be able to use R through a separate-process service such as Rse
 
 To achieve all that, we choose to use the backend (Rserve through REngine, at the moment) in a somewhat atypical fashion.
 
-In typical use of Rserve through REngine, one evaluates an R expresion and automatically gets the return value communicated and converted to a Java object (inheriting from `org.rosuda.REngine.REXP` (probbaly meaning "R s-EXPression), which is REngine's representation of any R object). We do not know that.
+In typical use of Rserve through REngine, one evaluates an R expresion and automatically gets the return value communicated and converted to a Java object (inheriting from `org.rosuda.REngine.REXP` (probbaly meaning "R s-EXPression"), which is REngine's representation of any R object). We do not want that.
 
 Instead, we make sure that our calls to R actually do not return a value (except from 'ok'), unless we want them to. Instead, the return value of the evaluated R expression is saved on the R side, and on the Clojure side we just keep a handle of it.
 
@@ -33,21 +33,21 @@ R functions are just a special case of R objects. However, for any handle of an 
 
 Sometimes, Clojure handles of R objects are released by the garbage collector (typically, this happen some time after they have been involved in the evaluation of some Clojure expression, whose returning value (or any mutable state) does not hold to them). Of course, releasing them would be pointless if we do not release the corresponding R objects they refer to.
 
-This is one of situations that the [tech.resource](LINK) library takes care of, in a simple and transparent way. This, taking care of this problem was nothing but joy. For more details, see this [blog post](http://techascent.com/blog/generalized-resource-management.html).
+This is one of the situations that the [tech.resource](LINK) library takes care of, in a simple and transparent way. Thus, taking care of this problem was nothing but joy. For more details, see this [blog post](http://techascent.com/blog/generalized-resource-management.html).
 
 ### The Java layer in between
 
 At the moment, all the backends we consider, and in particular Rserve+REngine and Renjin, have a Java layer that represents R types, and our use of the backend passes through that layer. That is, when one evaluates R code, the data and the possible return values are communicated as Java datatypes of that layer.
 
-All that could be considered as an implementation detail. If we wish our API to support different backends in a transparent way, then probably this kinds of details would rather be abstracted away. On the other hand, exposing this implementation detail as part of the API has some benefits of performance. Moreover, an object at the Java layer could poetentially be converted to different Clojure interpretations of that object (e.g., a named list could be converted to a list, as well as to an array-map), and could implement some protocols/interfaces, and thus be used from Clojure in a neat way.
+All that could be considered as an implementation detail. If we wish our API to support different backends in a transparent way, then probably this kinds of detail would rather be abstracted away. On the other hand, exposing this implementation detail as part of the API has some benefits of performance. Moreover, an object at the Java layer could poetentially be converted to different Clojure interpretations of that object (e.g., a named list could be converted to a list, as well as to an array-map), and could implement some protocols/interfaces, and thus be used from Clojure in a neat way.
 
-This seems to justify exposing the Java layer at this experimental stage.
+This seems to justify exposing the Java layer, at least at this stage.
 
 Thus, for example, conversion functions `clj->java`, `java->R`, `R->java`, `java->clj`, are part of the API, for now.
 
 ### Data abstrations
 
-We plan to use mainly the data abstractions of the tech.datatype and `tech.ml.dataset` mentioned above, in addition to basic Java/Clojure notions such as Map, Sequence, etc.
+We plan to use mainly the data abstractions of the `tech.datatype` and `tech.ml.dataset` libraries mentioned above, in addition to basic Java/Clojure notions such as Map, Sequence, etc.
 
 We experiment with two main ways of using an abstraction layer in interop:
 * Conversion. Converting between R objects to corresponding Clojure objects implementing the abstraction (e.g., converting an R data frame to a Clojure object implementing the dataset protocol of `tech.ml.dataset`).

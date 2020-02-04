@@ -4,6 +4,8 @@
             [clojuress.v1.impl.rserve.java :as java]
             [clojuress.v1.impl.rserve.java-to-clj :as java-to-clj]
             [clojuress.v1.impl.rserve.clj-to-java :as clj-to-java]
+            [clojuress.v1.impl.rserve.packages :as packages]
+            [clojuress.v1.impl.rserve.printing :as printing]
             [clojure.core.async :as async]
             [cambium.core :as log])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
@@ -18,7 +20,8 @@
     :host "localhost"
     :spawn-rserve? true}))
 
-(defrecord RserveSession [session-args
+(defrecord RserveSession [id
+                          session-args
                           ^RConnection r-connection
                           rserve
                           closed]
@@ -31,6 +34,8 @@
     (reset! closed true))
   (closed? [session]
     @closed)
+  (id [session]
+    id)
   (session-args [session]
     session-args)
   (desc [session]
@@ -47,8 +52,6 @@
      (java/assignment varname java-obj)
      nil
      true))
-  (get-r->java [session varname]
-    (.parseAndEval r-connection varname))
   (java->specified-type [session java-obj typ]
     (java-to-clj/java->specified-type java-obj typ))
   (java->naive-clj [session java-obj]
@@ -56,7 +59,12 @@
   (java->clj [session java-obj]
     (java-to-clj/java->clj java-obj))
   (clj->java [session clj-obj]
-    (clj-to-java/clj->java clj-obj)))
+    (clj-to-java/clj->java clj-obj))
+  (print-to-string [session r-obj]
+    (printing/print-to-string session r-obj))
+  (package-symbol->r-symbol-names [session package-symbol]
+    (packages/package-symbol->r-symbol-names
+     session package-symbol)))
 
 (def stop-loops? (atom false))
 
@@ -78,7 +86,7 @@
     (if (not @stop-loops?)
       (recur))) )
 
-(defn make [session-args]
+(defn make [id session-args]
   (let [{:keys
          [host
           port
@@ -89,12 +97,11 @@
                             (proc/start-rserve {:port  port
                                                 :sleep 500}))]
     (rserve-print-loop rserve)
-    (->RserveSession session-args
+    (->RserveSession id
+                     session-args
                      (RConnection. host port)
                      rserve
                      (atom false))))
-
-
 
 (comment
 
