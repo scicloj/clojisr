@@ -52,9 +52,7 @@
       (->> v
            (map-indexed (fn [i x]
                           (when (not (.isElementNA ^Vector v ^int i))
-                            (-> x
-                                java->clj
-                                transf))))
+                            (transf x))))
            ((if (seq names)
               ;; A named list or vector will be translated to a map.
               (partial zipmap names)
@@ -71,17 +69,18 @@
 (extend-type Vector
   Clojable
   (-java->clj [this]
-    (renjin-vector->clj identity
+    (renjin-vector->clj java->clj
                         this)))
 
 (extend-type IntVector
   Clojable
   (-java->clj [this]
     (if (.isNumeric this)
-      (renjin-vector->clj identity
+      (renjin-vector->clj java->clj
                           this)
       ;; else - a factor
-      (renjin-vector->clj  (comp (lang/->attr this :levels)
+      (renjin-vector->clj  (comp java->clj
+                                 (lang/->attr this :levels)
                                  dec)
                            this))))
 
