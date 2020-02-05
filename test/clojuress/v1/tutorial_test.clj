@@ -8,7 +8,9 @@
 
 (note-md "# Clojuress tutorial")
 
-(note-md "## Basic examples")
+(note-void :basic-examples)
+
+(note-md  "## Basic examples")
 
 (note-md "Let us start by some basic usage examples of Clojuress.")
 
@@ -20,9 +22,10 @@
           '[tech.ml.dataset :as dataset]
           '[notespace.v1.util :refer [check]]))
 
-(note-md "First, let us make sure there are no R sessions currently running.")
+(note-md "First, let us make sure that we use the Rserve backend (in case we were using Renjin instead earlier), and that there are no R sessions currently running.")
 
 (note-void
+ (session/set-default-session-type! :rserve)
  (r/discard-all-sessions))
 
 (note-md "Now let us run some R code, and keep a Clojure handle to the return value.")
@@ -57,6 +60,8 @@ This part requires more thorough documentation.")
 (note
  (-> [1 nil 3]
      clj->r))
+
+(note-void :functions)
 
 (note-md "## Functions")
 
@@ -125,6 +130,8 @@ whenn computing the mean.")
       r->clj
       (check = (range 10))))
 
+(note-void :R-dataframes-and-tech.ml.dataset)
+
 (note-md "## R dataframes and [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) datasets")
 
 (note-md "Create a tech.ml.dataset dataset object,
@@ -184,6 +191,7 @@ and convert the return value to Clojure.")
                   {:x 2.0 :y 5.0}
                   {:x 3.0 :y 6.0}]))))
 
+(note-void :R-objects)
 
 (note-md "## R objects")
 
@@ -206,6 +214,8 @@ and convert the return value to Clojure.")
  (-> one+two
      :object-name
      clojuress.v1.objects-memory/object-name->memory-place))
+
+(note-void :generating-code)
 
 (note-md "## Generating code")
 
@@ -307,6 +317,8 @@ and convert the return value to Clojure.")
 
 (note (->code [abs -11]))
 
+(note-void :running-generated-code)
+
 (note-md "## Running generated code")
 
 (note-md "Clojure forms can be run as R code. For example:")
@@ -370,6 +382,8 @@ this time generating code rather than writing it as Strings.")
 
 (note-md "The strange column name is due to dplyr's mutate behaviour when extra parens are added to the expression.")
 
+(note-void :requiring-R-packages)
+
 (note-md "## Requiring R packages")
 
 (note-md "Sometimes, we want to bring to the Clojure world functions and data from R packages.
@@ -415,6 +429,8 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
      r->clj
      (->> (check = [1]))))
 
+(note-void :data-visualization)
+
 (note-md "## Data visualization")
 
 (note-md "Functions creating R plots can be wrapped in a way that returns an SVG.")
@@ -455,7 +471,9 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
             (ylab "y"))))))
 
 
-(note-md "## Intermediaty representation as Java objects.")
+(note-void :intermediary-representation-as-Java-objects)
+
+(note-md "## Intermediary representation as Java objects.")
 
 (note-md "Clojuress relies on the fact of an intemediary representation of java, as Java objects. This is usually hidden from the user, but may be useful sometimes.
 In the current implementation, this is based on [REngine](https://github.com/s-u/REngine).")
@@ -529,6 +547,8 @@ In the current implementation, this is based on [REngine](https://github.com/s-u
       (.asDoubles)
       vec
       (check = [3.0])))
+
+(note-void :more-data-conversion-examples)
 
 (note-md "## More data conversion examples")
 
