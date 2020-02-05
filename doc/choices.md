@@ -7,9 +7,9 @@ This project is still at an experiment stage. We hope to try different design an
 
 In this project, we wish to create an abstration that can use more than one possible backend. Most of the code is backend-agnostic.
 
-The first implementation will use Rserve, inspired by the successful experience of Rincanter forks and Rojure. 
+The first implementation uses Rserve, inspired by the successful experience of Rincanter forks and Rojure. 
 
-In the near future, we plan to add Renjin support. There are several reasons for this to be potentially useful, eventhough Renjin's coverage of R packages is lacking. One is being pure-JVM. Another is that seems to allow a shorter route to embrace a larger part of the R language on the Clojure side, compared to Rserve. Rserve's API, for example, does not support concepts such as R environments, which are supported on Renjin, since it is a full implementation of R base language in the JVM. Another is potential performance improvements, at least in some cases.
+Basic support for a Renjin (pure-JVM R) backend has been added too. There are several reasons for this to be potentially useful, eventhough Renjin's coverage of R packages is lacking. One is being pure-JVM. Another is that seems to allow a shorter route to embrace a larger part of the R language on the Clojure side, compared to Rserve. Rserve's API, for example, does not support concepts such as R environments, which are supported on Renjin, since it is a full implementation of R base language in the JVM. Another is potential performance improvements, at least in some cases.
 
 Later, we may possibly try FastR. After some [basic exerperiments](https://github.com/scicloj/fastr-examples), this seems to be a more difficult story. As Clojure is not one of the [Truffle](https://github.com/oracle/graal/tree/master/truffle)-based languages of GraalVM, it is kind of a second-class citizen in terms of interop possibilities -- some data-conversion steps are required to communicate with other languages, and to support decent interaction with R's type system, some work will be required.
 
