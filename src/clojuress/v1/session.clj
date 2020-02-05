@@ -1,7 +1,8 @@
 (ns clojuress.v1.session
   (:refer-clojure :exclude [time])
   (:require [clojuress.v1.protocols :as prot]
-            [clojuress.v1.impl.rserve.session]
+            [clojuress.v1.impl.rserve.session :as rserve]
+            [clojuress.v1.impl.renjin.session :as renjin]
             [clojuress.v1.objects-memory :as mem]
             [cambium.core  :as log]))
 
@@ -10,17 +11,26 @@
 (def defaults
   (atom {:session-type :rserve}))
 
+(defn set-default-session-type! [session-type]
+  (swap! defaults assoc :session-type session-type))
+
 (defn apply-defaults [session-args]
   (merge @defaults session-args))
 
 (defn make [session-args]
   (let [id session-args
-        {:keys [session-type] :as merged-session-args}
+        {:keys [session-type] :as actual-session-args}
         (apply-defaults session-args)]
+    (log/info [::making-a-new-session
+               {:id                  id
+               :actual-session-args actual-session-args}])
     (case session-type
-      :rserve (clojuress.v1.impl.rserve.session/make
+      :rserve (rserve/make
                id
-               merged-session-args))))
+               actual-session-args)
+      :renjin (renjin/make
+               id
+               actual-session-args))))
 
 (defn fetch [session-args]
   (@sessions session-args))
