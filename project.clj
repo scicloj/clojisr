@@ -18,4 +18,5 @@
                  [cambium/cambium.core         "0.9.3"]
                  [cambium/cambium.codec-simple "0.9.3"]
                  [cambium/cambium.logback.core "0.4.3"]
-                 [org.renjin/renjin-script-engine "3.5-beta43"]])
+                 [org.renjin/renjin-script-engine "3.5-beta65"]
+                 [alembic "0.3.2"]])
