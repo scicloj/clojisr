@@ -70,7 +70,9 @@
     (when refer
       (let [this-ns-symbol (-> *ns* str symbol)]
         (symbols->add-to-ns this-ns-symbol
-                            (select-keys r-symbols refer))))))
+                            (if (= refer :all)
+                              r-symbols
+                              (select-keys r-symbols refer)))))))
 
 (defn require-r [& packages]
   (run! require-r-package packages))
