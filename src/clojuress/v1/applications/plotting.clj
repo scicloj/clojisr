@@ -1,9 +1,18 @@
 (ns clojuress.v1.applications.plotting
-  (:require [clojuress.v1.require :refer [require-r]])
+  (:require [clojuress.v1.r :refer [r]]
+            [clojuress.v1.require :refer [require-r]]
+            [cambium.core :as log])
   (:import [java.io File]))
 
-(require-r '[grDevices :refer [svg png dev.off]]
-           '[ggplot2 :refer [ggsave]])
+(try
+  (require-r '[grDevices :refer [svg png dev.off]])
+  (catch Exception e
+    (log/warn "Failed to load grDevices package.")))
+
+(try
+  (require-r '[ggplot2 :refer [ggsave]])
+  (catch Exception e
+    (log/warn "Failed to load ggplot2 package.")))
 
 (defn plotting-function->svg [plotting-function]
   (let [tempfile (File/createTempFile "ggplot" ".svg")
@@ -17,8 +26,9 @@
 
 (defn ggplot->svg [ggplot-r-object]
   (let [tempfile (File/createTempFile "ggplot" ".svg")
-        _        (-> ggplot-r-object
-                     (ggsave :filename (.getPath tempfile)))
+        _        (r ['ggsave
+                     ggplot-r-object
+                     :filename (.getPath tempfile)])
         svg      (slurp tempfile)]
     (.delete tempfile)
     svg))

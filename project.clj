@@ -1,4 +1,4 @@
-(defproject scicloj/clojuress "1.0.0-BETA4-SNAPSHOT"
+(defproject scicloj/clojuress "1.0.0-BETA4"
   :description "Clojure<->R interop"
   :url "https://github.com/scicloj/clojuress"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -18,4 +18,5 @@
                  [cambium/cambium.core         "0.9.3"]
                  [cambium/cambium.codec-simple "0.9.3"]
                  [cambium/cambium.logback.core "0.4.3"]
-                 [org.renjin/renjin-script-engine "3.5-beta43"]])
+                 [org.renjin/renjin-script-engine "3.5-beta65"]
+                 [alembic "0.3.2"]])

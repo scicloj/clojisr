@@ -25,7 +25,7 @@
                  (= ["ok"])))
     (-> (->robject obj-name session code)
         (resource/track
-         #(do (log/info [::releasing obj-name])
+         #(do (log/debug [::releasing obj-name])
               (mem/forget obj-name session))
          :gc))))
 

@@ -43,7 +43,7 @@
         (swap! functions-mem assoc r-object f)
         (resource/track
          r-object
-         #(do (log/info [::releasing (:object-name r-object)])
+         #(do (log/debug [::releasing-function-cache (:object-name r-object)])
               (swap! functions-mem dissoc r-object))
          :gc)
         f)))

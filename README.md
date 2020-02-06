@@ -48,7 +48,7 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
   * Convenient wrappers for common use cases, such as visualization (Status: wrote a basic wrapper to Rmarkdown)
  
-  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: only GNU R is supported at the moment)
+  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: GNU R is supported through backend; Renjin has some basic support)
 
   * Convenient multi-session support (Status: a draft exists, needs some polish)
 
@@ -68,6 +68,8 @@ Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackover
 ## Tutorials
 
 * [Intro](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/tutorial-test/index.html)
+
+* [Renjin backend](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/renjin-test/index.html)
 
 * [Titanic tutorial #0](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/titanic0-test/index.html)
 
