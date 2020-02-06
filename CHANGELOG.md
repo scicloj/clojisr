@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## next release
+- `require-r` can `:refer :all` now
+- REXPList support is added
 
 ## [1.0.0-BETA4] - 2020-02-05
 The main changes on the user side are the fact that R functions are Clojure functions, and the initial suppoort for a Renjin backend. Details below:

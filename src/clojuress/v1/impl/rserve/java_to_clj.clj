@@ -5,7 +5,7 @@
             [clojure.math.combinatorics :refer [cartesian-product]]
             [com.rpl.specter :as specter]
             [clojuress.v1.impl.common :refer [usually-keyword]])
-  (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage RList REXPNull)
+  (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage REXPList RList REXPNull)
            (java.util Map List Collection Vector)
            (clojure.lang Named)))
 
@@ -182,33 +182,35 @@
                      (aget levels))))
             indices))))
 
-
-(extend-type REXPGenericVector
-  Clojable
-  (-java->clj [java-obj]
-    (let [names  (some-> java-obj
-                         (.getAttribute "names")
-                         ->array-copy
-                         (->> (map usually-keyword)))
-          values (->> java-obj
-                      (.asList)
-                      ;; Convert list elements recursively.
-                      (map java->clj))]
-      (if (nil? names)
-        ;; unnamed list
-        (vec values)
-        ;; else -- assume all names are available
+(defn rexp-vector->list-or-map
+  [^REXP java-obj]
+  (let [^RList rlist (.asList java-obj)]
+    (if-not (.isNamed rlist) ;; where list doesn't contain keys, return vector of elements
+      (mapv java->clj (.values rlist))
+      (let [names (.keys rlist)
+            values (-> (comp java->clj (fn [^String k] (.at rlist k)))
+                       (map names))]
         (do (if (some (partial = "") names)
               (throw (ex-info "Partially named lists are not supported yet. " {:names names})))
-            (let [list-as-map
-                  (->> values
-                       (interleave names)
-                       (apply array-map))]
+            (let [fixed-names (map usually-keyword names)
+                  list-as-map (->> values
+                                   (interleave fixed-names)
+                                   (apply array-map))]
               (if (java-data-frame? java-obj)
                 ;; a data  frame
                 (dataset/name-values-seq->dataset list-as-map)
                 ;; else -- assume a regular list
                 list-as-map)))))))
+
+(extend-type REXPGenericVector
+  Clojable
+  (-java->clj [java-obj]
+    (rexp-vector->list-or-map java-obj)))
+
+(extend-type REXPList
+  Clojable
+  (-java->clj [java-obj]
+    (rexp-vector->list-or-map java-obj)))
 
 (extend-type REXPSymbol
   Clojable
