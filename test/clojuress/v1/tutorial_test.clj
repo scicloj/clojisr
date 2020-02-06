@@ -584,8 +584,7 @@ To stress this, we write it explicitly in the following examples.")
       java->r
       ((r "deparse"))
       r->java
-      java->clj
-      (check = ["list(a = 1:2, b = \"hi!\")"])))
+      java->clj))
 
 (note/render-this-ns!)
 
