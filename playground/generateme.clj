@@ -207,3 +207,10 @@
 
 (dev/dev-off)
 
+(require-r '[datasets])
+(def euro r.datasets/euro)
+
+euro
+
+(System/gc)
+
