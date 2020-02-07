@@ -38,9 +38,11 @@ Here are most of the functions that we need, brought by the standard `require-r`
                                                ggplot->svg]]
   '[clojuress.v1.require :refer [require-r]]
   '[clojure.java.shell :refer [sh]]
-  '[clojure.string :as string]))
+  '[clojure.string :as string]
+  '[clojuress.v1.rserve :as rserve]))
 
 (note-void
+ (rserve/set-as-default!)
  (r/discard-all-sessions))
 
 (note-void

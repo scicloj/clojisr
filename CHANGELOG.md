@@ -1,9 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## next release
+## [1.0.0-BETA5] - 2020-02-07
 - `require-r` can `:refer :all` now
-- REXPList support is added
+- REXPList, REXPNull are supported in data conversion
 - changed the API for setting up and switching backends ("session-types")
 - also fixed #27 by loading the renjin Jar on-the-fly with the proper repository into
 
