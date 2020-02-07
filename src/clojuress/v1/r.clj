@@ -7,9 +7,10 @@
             [clojuress.v1.printing]
             [clojuress.v1.codegen :as codegen]
             [clojure.string :as string]
-            [clojuress.v1.refresh :as refresh])
+            [clojuress.v1.rserve :as rserve])
   (:import clojuress.v1.robject.RObject))
 
+(rserve/set-as-default-if-missing!)
 
 (defn init [& {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]

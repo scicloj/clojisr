@@ -1,36 +1,42 @@
 (ns clojuress.v1.session
   (:refer-clojure :exclude [time])
   (:require [clojuress.v1.protocols :as prot]
-            [clojuress.v1.impl.rserve.session :as rserve]
-            [clojuress.v1.impl.renjin.session :as renjin]
             [clojuress.v1.objects-memory :as mem]
             [cambium.core  :as log]))
 
 (def sessions (atom {}))
 
-(def defaults
-  (atom {:session-type :rserve}))
+(def defaults (atom {}))
 
 (defn set-default-session-type! [session-type]
   (swap! defaults assoc :session-type session-type))
 
+(defn set-default-session-type-if-missing! [session-type]
+  (swap! defaults update :session-type
+         (fn [current-session-type]
+           (or current-session-type session-type))))
+
 (defn apply-defaults [session-args]
   (merge @defaults session-args))
 
+(def session-type->make-fn (atom {}))
+
+(defn add-session-type!
+  [session-type make-fn]
+  (swap! session-type->make-fn
+         assoc session-type make-fn))
+
 (defn make [session-args]
   (let [id session-args
-        {:keys [session-type] :as actual-session-args}
-        (apply-defaults session-args)]
+        {:keys [session-type] :as actual-session-args} (apply-defaults
+                                                        session-args)
+        make-fn (@session-type->make-fn session-type)]
     (log/info [::making-a-new-session
                {:id                  id
-               :actual-session-args actual-session-args}])
-    (case session-type
-      :rserve (rserve/make
-               id
-               actual-session-args)
-      :renjin (renjin/make
-               id
-               actual-session-args))))
+                :actual-session-args actual-session-args}])
+    (make-fn
+     id
+     actual-session-args)))
 
 (defn fetch [session-args]
   (@sessions session-args))

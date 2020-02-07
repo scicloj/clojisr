@@ -16,14 +16,14 @@
 (note-void
  (require '[clojuress.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->naive-clj clj->java r->clj clj->r ->code r+ colon]]
           '[clojuress.v1.require :refer [require-r]]
-          '[clojuress.v1.session :as session]
+          '[clojuress.v1.renjin :as renjin]
           '[tech.ml.dataset :as dataset]
           '[notespace.v1.util :refer [check]]
           '[alembic.still :refer [distill]]
           '[clojuress.v1.applications.plotting :refer [plotting-function->svg]]))
 
 (note-void
- (session/set-default-session-type! :renjin)
+ (renjin/set-as-default!)
  (r/discard-all-sessions))
 
 (note-void :basic-examples)

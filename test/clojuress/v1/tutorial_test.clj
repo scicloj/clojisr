@@ -3,7 +3,8 @@
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
             [tech.ml.dataset :as dataset]
             [clojuress.v1.r :as r]
-            [clojuress.v1.session :as session]))
+            [clojuress.v1.session :as session]
+            [clojuress.v1.rserve :as rserve]))
 
 
 (note-md "# Clojuress tutorial")
@@ -19,13 +20,14 @@
           '[clojuress.v1.require :refer [require-r]]
           '[clojuress.v1.robject :as robject]
           '[clojuress.v1.session :as session]
+          '[clojuress.v1.rserve :as rserve]
           '[tech.ml.dataset :as dataset]
           '[notespace.v1.util :refer [check]]))
 
 (note-md "First, let us make sure that we use the Rserve backend (in case we were using Renjin instead earlier), and that there are no R sessions currently running.")
 
 (note-void
- (session/set-default-session-type! :rserve)
+ (rserve/set-as-default!)
  (r/discard-all-sessions))
 
 (note-md "Now let us run some R code, and keep a Clojure handle to the return value.")

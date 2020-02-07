@@ -3,7 +3,6 @@
   :url "https://github.com/scicloj/clojuress"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
-  :repositories [["bedatadriven" {:url "https://nexus.bedatadriven.com/content/groups/public/"}]]
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [scicloj/notespace "1.0.3"]
                  [gg4clj "0.1.0"]
@@ -18,5 +17,4 @@
                  [cambium/cambium.core         "0.9.3"]
                  [cambium/cambium.codec-simple "0.9.3"]
                  [cambium/cambium.logback.core "0.4.3"]
-                 [org.renjin/renjin-script-engine "3.5-beta65"]
                  [alembic "0.3.2"]])
