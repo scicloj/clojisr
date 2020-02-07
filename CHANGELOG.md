@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. This change
 ## next release
 - `require-r` can `:refer :all` now
 - REXPList support is added
+- changed the API for setting up and switching backends ("session-types")
+- also fixed #27 by loading the renjin Jar on-the-fly with the proper repository into
 
 ## [1.0.0-BETA4] - 2020-02-05
 The main changes on the user side are the fact that R functions are Clojure functions, and the initial suppoort for a Renjin backend. Details below:
