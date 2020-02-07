@@ -226,4 +226,6 @@
          (.asList)
          (mapv java->clj))))
 
-
+(extend-type REXPNull
+  Clojable
+  (-java->clj [_] nil))
