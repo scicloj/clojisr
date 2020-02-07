@@ -4,13 +4,17 @@
             [clojuress.v1.require :refer [require-r]]
             [tech.ml.dataset :as d]))
 
+#_(r/discard-all-sessions)
+
 (require-r '[lattice :as lat]
+           '[latticeExtra :as late]
            '[stats :as stats]
            '[mlmRev]
            '[MEMSS]
            '[grDevices :as dev]
            '[graphics :as g]
-           '[base :refer [$ nrow ncol head data summary] :as base])
+           '[base :refer [$ nrow ncol head data summary] :as base]
+           '[utils])
 
 (require-r '[datasets :refer :all])
 
@@ -68,7 +72,9 @@
 ;; Chapter 1
 
 (def chem97 r.mlmRev/Chem97)
+
 (def gcse-formula (formula "~" gcsescore | factor (score)))
+;; => #'generateme/gcse-formula
 
 (r->clj (stats/xtabs (r "~ score") :data chem97))
 ;; => [3688 3627 4619 5739 6668 6681]
@@ -205,12 +211,144 @@
 
 (stats/update bc-titanic :panel (r "function(..., border) {panel.barchart(..., border='transparent');}"))
 
+;; Chapter 3
+
+;; Figure 1
+
+(-> (formula "~ eruptions")
+    (lat/densityplot :data faithful))
+
+;; Figure 2
+
+(-> (formula "~ eruptions")
+    (lat/densityplot :data faithful :kernel "rect" :bw 0.2 :plot.points "rug" :n 200))
+
+;; Figure 3
+
+(-> (formula "~" log (FSC.H) | Days)
+    (lat/densityplot :data late/gvhd10 :plot.points false :ref true :layout [2 4]))
+
+;; Figure 4
+
+(-> (formula "~" log2 (FSC.H) | Days)
+    (lat/histogram :data late/gvhd10 :xlab "log Forward Scatter"
+                   :type "density" :nint 50 :layout [2 4]))
+
+
+;; Figure 5
+
+(-> (formula "~" gcsescore | factor (score))
+    (lat/qqmath :data chem97 :f.value (stats/ppoints 100)))
+
+;; Figure 6
+
+(-> (formula "~" gcsescore | gender)
+    (lat/qqmath chem97 :groups 'score :aspect "xy" :f.value (stats/ppoints 100)
+                :auto.key {:space "right"}
+                :xlab "Standard Normal Quantiles", 
+                :ylab "Average GCSE Score"))
+
+;; Figure 7
+
+(defmacro rsymbol [s] `(symbol ~(format "`%s`" (name s))))
+
+(def chem97-mod (base/transform chem97 :gcsescore.trans [(rsymbol "^") 'gcsescore 2.34]))
+
+(-> (formula "~" gcsescore.trans | gender)
+    (lat/qqmath chem97-mod :groups 'score :aspect "xy" :f.value (stats/ppoints 100)
+                :auto.key {:space "right" :title "score"}
+                :xlab "Standard Normal Quantiles", 
+                :ylab "Transformed GCSE Score"))
+
+;; Figure 8
+
+(-> (formula "~" gcsescore | factor (score))
+    (late/ecdfplot :data chem97 :groups 'gender :auto.key {:columns 2}
+                   :subset '(> gcsescore 0)
+                   :xlab "Average GCSE Score"))
+
+;; Figure 9
+
+(-> (formula "~" gcsescore | factor (score))
+    (lat/qqmath :data chem97 :groups 'gender :auto.key {:columns 2 :points false :lines true}
+                :type "l" :distribution 'qunif
+                :prepanel 'prepanel.qqmathline :aspect "xy"
+                :subset '(> gcsescore 0)
+                :xlab "Standard Normal Quantiles", 
+                :ylab "Average GCSE Score"))
+
+;; Figure 10
+
+(-> (formula gender "~" gcsescore | factor (score))
+    (lat/qq :data chem97 :f.value (stats/ppoints 100) :aspect 1))
+
+;; Figure 11
+
+(-> (formula factor (score) "~" gcsescore | gender)
+    (lat/bwplot :data chem97 :xlab "Average GCSE Score"))
+
+;; Figure 12
+
+(-> (formula gcsescore "^" 2.34 "~" gender | factor(score))
+    (lat/bwplot :data chem97 :varwidth true :layout [6 1]
+                :xlab "Average GCSE Score"))
+
+;; Figure 13
+
+(-> (formula Days "~" log (FSC.H))
+    (lat/bwplot :data late/gvhd10
+                :xlab "log(Forward Scatter)"
+                :ylab "Days Past Transplant"))
+
+
+;; Figure 14
+
+(-> (formula Days "~" log (FSC.H))
+    (lat/bwplot :data late/gvhd10 :panel 'panel.violin :box.ratio 3
+                :xlab "log(Forward Scatter)"
+                :ylab "Days Past Transplant"))
+
+;; Figure 15
+
+(-> (formula factor (mag) "~" depth)
+    (lat/stripplot quakes))
+
+;; Figure 16
+
+(-> (formula depth "~" factor (mag))
+    (lat/stripplot quakes :jitter.data true :alpha 0.6
+                   :xlab "Magnitude (Richter)" :ylab "Depth (km)"))
+
+;; Figure 17
+
+(-> (r "sqrt(abs(residuals(lm(yield~variety+year+site)))) ~ site")
+    (lat/stripplot :data lat/barley :groups 'year :jitter.data true
+                   :auto.key {:points true :lines true :columns 2}
+                   :type ["p" "a"] :fun 'median
+                   :ylab (r "expression(abs('Residual Barley Yield')^{1 / 2})")))
+
 (dev/dev-off)
 
-(require-r '[datasets])
-(def euro r.datasets/euro)
+#_(loop []
+    
+    (g/plot tp1 :split [1 1 1 2])
+    (g/plot tp2 :split [1 2 1 2] :newpage false)
+    (Thread/sleep 500)
+    (require-r '[datasets])
+    (def euro r.datasets/euro)
+    (r->clj r.mlmRev/Chem97)
+    (r->clj euro)
+    (g/plot (-> (formula Class "~" Freq | Sex + Age)
+                (lat/barchart :data (base/as-data-frame Titanic)
+                              :groups 'Survived :stack true :layout [4 1]
+                              :auto.key {:title "Survived" :columns 2})))
+    (Thread/sleep 500)
 
-euro
 
-(System/gc)
+    
+    (recur))
 
+
+;; (System/gc)
+
+#_(count (set (repeatedly 10000000 u/rand-name)))
