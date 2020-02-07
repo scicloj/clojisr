@@ -586,6 +586,35 @@ To stress this, we write it explicitly in the following examples.")
       r->java
       java->clj))
 
-(note/render-this-ns!)
+(note-void :inspecting-R-functions)
 
+(note-md "## Inspecting R functions")
+
+(note-md "The `mean` function is defined to expect arguments `x` and `...`.  with no default values.
+These arguments have no default values (thus, its formals have empty symbols as values):")
+
+(note
+ (->> 'mean
+      r.base/formals
+      r->clj
+      (check = {:x (symbol "")
+                :... (symbol "")})))
+
+(note-md "It is an [S3](http://adv-r.had.co.nz/S3.html) function, which we can realize by printing it:")
+
+(note
+ (r 'mean))
+
+(note-md "So, we can expect possibly more details when inspecting its default implementation:")
+
+(note
+ (->> 'mean.default
+      r.base/formals
+      r->clj
+      (check = {:x     (symbol "")
+                :trim  [0.0]
+                :na.rm [false]
+                :...   (symbol "")})))
+
+(note/render-this-ns!)
 
