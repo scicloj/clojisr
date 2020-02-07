@@ -600,7 +600,7 @@ These arguments have no default values (thus, its formals have empty symbols as 
       (check = {:x (symbol "")
                 :... (symbol "")})))
 
-(note-md "It is an [S3](http://adv-r.had.co.nz/S3.html) function, which we can realize by printing it:")
+(note-md "It is an [S3 generic function](http://adv-r.had.co.nz/S3.html) function, which we can realize by printing it:")
 
 (note
  (r 'mean))
