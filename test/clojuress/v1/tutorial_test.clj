@@ -586,6 +586,51 @@ To stress this, we write it explicitly in the following examples.")
       r->java
       java->clj))
 
+(note-md "### Basic types convertion clj->r->clj")
+
+(note (def clj->r->clj (comp r->clj r)))
+
+(note (check = (clj->r->clj nil) nil))
+(note (check = (clj->r->clj [10 11]) [10 11]))
+(note (check = (clj->r->clj [10.0 11.0]) [10.0 11.0]))
+(note (check = (clj->r->clj (list 10.0 11.0)) [10.0 11.0]))
+(note (check = (clj->r->clj {:a 1 :b 2}) {:a [1] :b [2]}))
+
+(note-md "### Various R objects")
+
+(note-md "Named list")
+(note (->> (r "list(a=1,b=c(10,20),c='hi!')") ;; named list
+           r->clj
+           (check = {:a [1.0] :b [10.0 20.0] :c ["hi!"]})))
+
+(note-md "Array of doubles")
+(note (->> (r "c(10,20,30)") ;; array of doubles
+           r->clj
+           (check = [10.0 20.0 30.0])))
+
+(note-md "Timeseries")
+(note (->> (r r.datasets/euro) ;; timeseries
+           r->clj
+           first
+           (check = 13.7603)))
+
+(note-md "Pairlist")
+(note (->> (r.base/formals r.stats/dnorm) ;; pairlist
+           r->clj
+           keys
+           sort
+           (check = '(:log :mean :sd :x))))
+
+(note-md "NULL")
+(note (->> (r "NULL") ;; null
+           r->clj
+           (check = nil)))
+
+(note-md "TRUE/FALSE")
+(note (->> (r "TRUE") ;; true/false
+           r->clj
+           (check = [true]))) ;; why?
+
 (note-void :inspecting-R-functions)
 
 (note-md "## Inspecting R functions")
