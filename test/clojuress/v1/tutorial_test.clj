@@ -590,7 +590,7 @@ To stress this, we write it explicitly in the following examples.")
 
 (note-md "## Inspecting R functions")
 
-(note-md "The `mean` function is defined to expect arguments `x` and `...`.  with no default values.
+(note-md "The `mean` function is defined to expect arguments `x` and `...`.
 These arguments have no default values (thus, its formals have empty symbols as values):")
 
 (note
@@ -605,7 +605,8 @@ These arguments have no default values (thus, its formals have empty symbols as 
 (note
  (r 'mean))
 
-(note-md "So, we can expect possibly more details when inspecting its default implementation:")
+(note-md "So, we can expect possibly more details when inspecting its default implementation.
+Now, we see some arguments that do have default values.")
 
 (note
  (->> 'mean.default
