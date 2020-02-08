@@ -1,7 +1,6 @@
 (ns clojuress.v1.renjin-test
   (:require [notespace.v1.note :as note
-             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
-            [tech.ml.dataset :as dataset]))
+             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
 (note-md "# Renjin interop")
 
@@ -14,13 +13,15 @@
 (note-md "## Setup")
 
 (note-void
- (require '[clojuress.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->naive-clj clj->java r->clj clj->r ->code r+ colon]]
+ (require '[clojuress.v1.renjin :as renjin]
+          '[clojuress.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->naive-clj clj->java r->clj clj->r ->code r+ colon]]
           '[clojuress.v1.require :refer [require-r]]
-          '[clojuress.v1.renjin :as renjin]
           '[tech.ml.dataset :as dataset]
           '[notespace.v1.util :refer [check]]
           '[alembic.still :refer [distill]]
           '[clojuress.v1.applications.plotting :refer [plotting-function->svg]]))
+
+(note-md "If we `require`d `clojuress.v1.renjin` first, then the default session-type would be `:renjin`. But since we might be loading this namespace after doing some other things, let us make sure that we are using `:renjin`:")
 
 (note-void
  (renjin/set-as-default!)

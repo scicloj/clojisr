@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA6] - 2020-02-08
+- bugfix of a problem with using Alembic (making sure https is used)
+- change in the setup API of backends: requiring the main namesapce of a backend (renjin/rserve) sets default session-type, if no other default has been set yet; 
+
 ## [1.0.0-BETA5] - 2020-02-07
 - `require-r` can `:refer :all` now
 - REXPList, REXPNull are supported in data conversion

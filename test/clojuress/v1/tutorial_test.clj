@@ -1,10 +1,6 @@
 (ns clojuress.v1.tutorial-test
   (:require [notespace.v1.note :as note
-             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
-            [tech.ml.dataset :as dataset]
-            [clojuress.v1.r :as r]
-            [clojuress.v1.session :as session]
-            [clojuress.v1.rserve :as rserve]))
+             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
 
 (note-md "# Clojuress tutorial")
@@ -665,4 +661,5 @@ Now, we see some arguments that do have default values.")
                 :...   (symbol "")})))
 
 (note/render-this-ns!)
+
 

@@ -10,3 +10,5 @@
 
 (defn set-as-default-if-missing! []
   (session/set-default-session-type-if-missing! :rserve))
+
+(set-as-default-if-missing!)

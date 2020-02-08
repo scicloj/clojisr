@@ -10,8 +10,6 @@
             [clojuress.v1.rserve :as rserve])
   (:import clojuress.v1.robject.RObject))
 
-(rserve/set-as-default-if-missing!)
-
 (defn init [& {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
     (session/init session)))
