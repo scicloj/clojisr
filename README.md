@@ -56,6 +56,10 @@ Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r
 
 * Linux or MacOS
 
+* JDK 1.8
+
+* Clojure 1.9.0 or later
+
 * [R](https://www.r-project.org)
 
 * The [Rserve](https://cran.r-project.org/web/packages/Rserve/index.html) R package (`install.packages("Rserve")`)
