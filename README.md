@@ -1,8 +1,8 @@
-# clojuress
+# clojisr
 
-Clojure speaks statistics - a library for connecting Clojure to R
+Clojure speaks statistics: a [jisr](https://en.wiktionary.org/wiki/جسر) between Clojure and R
 
-[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojuress.svg)](https://clojars.org/scicloj/clojuress)
+[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
 
 ## Status
 
@@ -25,10 +25,6 @@ The main ideas were discussed at [Scicloj Web meeting #7](https://www.youtube.co
 Note however that:
 - The API has changed since then (mainly data visualization support, clear code generation rules, different printing - see the Intro below).
 - On the meeting, there is some careless use of the term 'zero copy'. Actually, what is usually meant by this term is not supported at the moment.
-
-## Why this name?
-
-Clojure Speaks Statistics is a homage to [Emacs Speaks Statistics](https://ess.r-project.org).
 
 ## Meta Goals
 
@@ -67,19 +63,19 @@ Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackover
 
 * This project
 
-[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojuress.svg)](https://clojars.org/scicloj/clojuress)
+[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
 
 ## Tutorials
 
-* [Intro](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/tutorial-test/index.html)
+* [Intro](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/tutorial-test/index.html)
 
-* [Renjin backend](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/renjin-test/index.html)
+* [Renjin backend](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/renjin-test/index.html)
 
-* [Titanic tutorial #0](https://scicloj.github.io/clojuress/resources/public/clojuress/v1/titanic0-test/index.html)
+* [Titanic tutorial #0](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/titanic0-test/index.html)
 
-* [Literate programming using rmarkdown](test/clojuress/v1/rmarkdown_test.clj)
+* [Literate programming using rmarkdown](test/clojisr/v1/rmarkdown_test.clj)
 
-* [Interactive data visualization using shiny](test/clojuress/v1/shiny_test.clj)
+* [Interactive data visualization using shiny](test/clojisr/v1/shiny_test.clj)
 
 ## Background
 
@@ -105,7 +101,7 @@ Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackover
 
 ## Discussion
 
-Please share your comments, thoughts, ideas and questions at the [Issues Page](https://github.com/scicloj/clojuress/issues) of this project and at the [r-interop stream](https://clojurians.zulipchat.com/#narrow/stream/204621-r-interop) of the Clojurians Zulip.
+Please share your comments, thoughts, ideas and questions at the [Issues Page](https://github.com/scicloj/clojisr/issues) of this project and at the [r-interop stream](https://clojurians.zulipchat.com/#narrow/stream/204621-r-interop) of the Clojurians Zulip.
 
 ## Tools used
 
