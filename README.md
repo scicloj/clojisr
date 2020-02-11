@@ -1,4 +1,4 @@
-# clojisr
+# ClojisR
 
 Clojure speaks statistics - a [jisr](https://en.wiktionary.org/wiki/جسر) between Clojure and R
 
