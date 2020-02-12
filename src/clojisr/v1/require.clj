@@ -81,31 +81,34 @@
     (add-to-ns ns-symbol r-symbol r-object)))
 
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
-  (let [session (session/fetch-or-make nil)]
-    (evl/eval-form ['library
-                    package-symbol]
-                   session))
-  (let [r-ns-symbol (->> package-symbol
-                         (str "r.")
-                         symbol)
-        r-symbols (all-r-symbols-map package-symbol)]
+  (try
+    (let [session (session/fetch-or-make nil)]
+      (evl/eval-form ['library
+                      package-symbol]
+                     session))
+    (let [r-ns-symbol (->> package-symbol
+                           (str "r.")
+                           symbol)
+          r-symbols (all-r-symbols-map package-symbol)]
 
-    ;; r.package namespace
-    (find-or-create-ns r-ns-symbol)
-    (symbols->add-to-ns r-ns-symbol r-symbols)
+      ;; r.package namespace
+      (find-or-create-ns r-ns-symbol)
+      (symbols->add-to-ns r-ns-symbol r-symbols)
 
-    ;; alias namespace
-    (when as
-      (find-or-create-ns as)
-      (symbols->add-to-ns as r-symbols))
+      ;; alias namespace
+      (when as
+        (find-or-create-ns as)
+        (symbols->add-to-ns as r-symbols))
 
-    ;; inject symbol into current namespace
-    (when refer
-      (let [this-ns-symbol (-> *ns* str symbol)]
-        (symbols->add-to-ns this-ns-symbol
-                            (if (= refer :all)
-                              r-symbols
-                              (select-keys r-symbols refer)))))))
+      ;; inject symbol into current namespace
+      (when refer
+        (let [this-ns-symbol (-> *ns* str symbol)]
+          (symbols->add-to-ns this-ns-symbol
+                              (if (= refer :all)
+                                r-symbols
+                                (select-keys r-symbols refer))))))
+    (catch Exception e
+      (log/warn (format "Failed to load %s package. Please ensure it's installed." package-symbol)))))
 
 (defn require-r [& packages]
   (run! require-r-package packages))
