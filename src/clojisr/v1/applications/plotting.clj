@@ -4,15 +4,7 @@
             [cambium.core :as log])
   (:import [java.io File]))
 
-(try
-  (require-r '[grDevices :refer [svg png dev.off]])
-  (catch Exception e
-    (log/warn "Failed to load grDevices package.")))
-
-(try
-  (require-r '[ggplot2 :refer [ggsave]])
-  (catch Exception e
-    (log/warn "Failed to load ggplot2 package.")))
+(require-r '[grDevices :as dev])
 
 (defn plotting-function->svg [plotting-function]
   (let [tempfile (File/createTempFile "ggplot" ".svg")
@@ -32,3 +24,6 @@
         svg      (slurp tempfile)]
     (.delete tempfile)
     svg))
+
+(require-r '[base] '[lattice])
+
