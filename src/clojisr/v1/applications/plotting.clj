@@ -32,3 +32,6 @@
         svg      (slurp tempfile)]
     (.delete tempfile)
     svg))
+
+(require-r '[base] '[lattice])
+
