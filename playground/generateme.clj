@@ -53,7 +53,7 @@
 
 (formals base/mean)
 ;; => ([x & {:keys [...]}])
-(formals stats/arima0) 
+(formals stats/arima0)
 ;; => ([x & {:keys [order seasonal xreg include.mean delta transform.pars fixed init method n.cond optim.control]}])
 (formals dev/dev-off)
 ;; => ([& {:keys [which]}])
