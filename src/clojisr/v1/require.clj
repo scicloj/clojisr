@@ -1,5 +1,6 @@
 (ns clojisr.v1.require
   (:require [clojisr.v1.session :as session]
+            [clojisr.v1.using-sessions :as using-sessions]
             [clojisr.v1.eval :as evl]
             [clojisr.v1.protocols :as prot]
             [clojisr.v1.util :as util
@@ -38,9 +39,41 @@
   (or (find-ns ns-symbol)
       (create-ns ns-symbol)))
 
+(def ^:private empty-symbol (symbol ""))
+
+(defn- r-object->arglists-raw
+  "Fetch function aruments using `formals` and produce `:arglists` meta tag value and conforming clojisr R function call style."
+  [{:keys [code class]}]
+  (when (= class ["function"])
+    (let [sess (session/fetch-or-make nil)
+          args (->> sess
+                    (evl/r (format "formals(%s)" code))
+                    (using-sessions/r->java)
+                    (prot/java->clj sess))
+          {:keys [obl opt]} (reduce-kv (fn [m k v]
+                                         (let [selector (if (and (= empty-symbol v)
+                                                                 (not (seq (:obl m)))) :obl :opt)]
+                                           (update m selector conj (symbol k))))
+                                       {:obl [] :opt []}
+                                       args)]
+      (cond
+        (and (seq obl)
+             (seq opt)) (list (conj obl '& {:keys opt}))
+        (seq obl) (list obl)
+        (seq opt) (list ['& {:keys opt}])
+        :else '([])))))
+
+(def r-object->arglists (memoize r-object->arglists-raw))
+
+(defn r-symbol->clj-symbol [r-symbol r-object]
+  (let [clj-symbol (clojurize-r-symbol r-symbol)]
+    (if-let [arglists (r-object->arglists r-object)]
+      (vary-meta clj-symbol assoc :arglists arglists)
+      clj-symbol)))
+
 (defn add-to-ns [ns-symbol r-symbol r-object]
   (intern ns-symbol
-          (clojurize-r-symbol r-symbol)
+          (r-symbol->clj-symbol r-symbol r-object)
           r-object))
 
 (defn symbols->add-to-ns [ns-symbol r-symbols]
