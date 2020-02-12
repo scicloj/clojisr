@@ -1,10 +1,10 @@
 (ns generateme
-  (:require [clojuress.v1.r :as r :refer [r r->clj clj->r clj->java java->clj java->r r->java]]
-            [clojuress.v1.util :as u]
-            [clojuress.v1.require :refer [require-r]]
+  (:require [clojisr.v1.r :as r :refer [r r->clj clj->r clj->java java->clj java->r r->java]]
+            [clojisr.v1.util :as u]
+            [clojisr.v1.require :refer [require-r]]
             [tech.ml.dataset :as d]))
 
-#_(r/discard-all-sessions)
+(r/discard-all-sessions)
 
 (require-r '[lattice :as lat]
            '[latticeExtra :as late]
@@ -17,6 +17,8 @@
            '[utils])
 
 (require-r '[datasets :refer :all])
+
+(r->clj r.base/version)
 
 ;; Some common enhacements
 
