@@ -26,12 +26,13 @@
   (->> package-symbol
        package-symbol->nonstrange-r-symbols
        (map (fn [r-symbol]
-              [r-symbol (try
-                          (package-r-object package-symbol r-symbol)
-                          (catch Exception e
-                            (log/warn [::failed-requiring {:package-symbol package-symbol
-                                                           :r-symbol r-symbol
-                                                           :cause (-> e Throwable->map :cause)}])))]))
+              [(clojurize-r-symbol r-symbol)
+               (try
+                 (package-r-object package-symbol r-symbol)
+                 (catch Exception e
+                   (log/warn [::failed-requiring {:package-symbol package-symbol
+                                                  :r-symbol r-symbol
+                                                  :cause (-> e Throwable->map :cause)}])))]))
        (filter second)
        (into {})))
 
@@ -51,8 +52,11 @@
                     (using-sessions/r->java)
                     (prot/java->clj sess))
           {:keys [obl opt]} (reduce-kv (fn [m k v]
-                                         (let [selector (if (and (= empty-symbol v)
-                                                                 (not (seq (:obl m)))) :obl :opt)]
+                                         (let [selector (if (and (= empty-symbol v) ;; dirty logic
+                                                                 (not (seq (:opt m)))
+                                                                 (not= :... k))
+                                                          :obl
+                                                          :opt)]
                                            (update m selector conj (symbol k))))
                                        {:obl [] :opt []}
                                        args)]
@@ -66,10 +70,9 @@
 (def r-object->arglists (memoize r-object->arglists-raw))
 
 (defn r-symbol->clj-symbol [r-symbol r-object]
-  (let [clj-symbol (clojurize-r-symbol r-symbol)]
-    (if-let [arglists (r-object->arglists r-object)]
-      (vary-meta clj-symbol assoc :arglists arglists)
-      clj-symbol)))
+  (if-let [arglists (r-object->arglists r-object)]
+    (vary-meta r-symbol assoc :arglists arglists)
+    r-symbol))
 
 (defn add-to-ns [ns-symbol r-symbol r-object]
   (intern ns-symbol
@@ -110,5 +113,3 @@
     (catch Exception e
       (log/warn (format "Failed to load %s package. Please ensure it's installed." package-symbol)))))
 
-(defn require-r [& packages]
-  (run! require-r-package packages))
