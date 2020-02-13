@@ -34,8 +34,7 @@ Here are most of the functions that we need, brought by the standard `require-r`
             str-md
             r+
             bra bra<- brabra brabra<- colon]]
-  '[clojisr.v1.applications.plotting :refer [plotting-function->svg
-                                               ggplot->svg]]
+  '[clojisr.v1.applications.plotting :refer [plot->svg]]
   '[clojisr.v1.require :refer [require-r]]
   '[clojure.java.shell :refer [sh]]
   '[clojure.string :as string]
@@ -335,7 +334,7 @@ titanic$family <- paste(titanic$surname, titanic$famsize, sep='_')
          (scale_x_continuous :breaks (colon 1 11))
          (labs :x "Family Size")
          (theme_few))
-     ggplot->svg))
+     plot->svg))
 
 (note-md "Tripathi:
 Explanation: We can see that there's a survival penalty to single/alone, and
@@ -580,7 +579,7 @@ theme_few()
                      :linetype "dashed"
                      :lwd 2)
          (scale_y_continuous :labels (dollar_format)))
-     ggplot->svg))
+     plot->svg))
 
 (note-md
  "Tripathi:
@@ -684,18 +683,18 @@ ggplot(titanic[titanic$Pclass == '3' & titanic$Embarked == 'S', ],
 (note-as-hiccup
  (-> titanic
      (bra (r& (r== ($ titanic 'Pclass) 3)
-                 (r== ($ titanic 'Embarked) "S"))
+              (r== ($ titanic 'Embarked) "S"))
           (empty-symbol))
      (ggplot (aes :x 'Fare))
      (r+ (geom_density :fill "#99d6ff"
                        :alpha 0.4)
          (geom_vline (aes :xintercept
-                           '(median Fare :na.rm true))
+                          '(median Fare :na.rm true))
                      :colour "red"
                      :linetype "dashed"
                      :lwd 1)
          (scale_x_continuous :labels (dollar_format)))
-     ggplot->svg))
+     plot->svg))
 
 (note-md "Tripathi:
 From this visualization, it seems quite reasonable to replace the NA Fare 
@@ -817,7 +816,7 @@ hist(mice_output$Age, freq=F, main='Age: MICE Output',
 
 
 (note-as-hiccup
- (plotting-function->svg
+ (plot->svg
   (fn []
     (par :mfrow [1 2])
     (-> titanic
@@ -883,13 +882,13 @@ ggplot(titanic[1:891,], aes(Age, fill = factor(Survived))) +
 ```")
 
 (note-as-hiccup
-   (-> titanic
-       (bra (colon 1 891) (empty-symbol))
-       (ggplot (aes 'Age :fill '(factor Survived)))
-       (r+ (geom_histogram)
-           (facet_grid '(tilde . Sex))
-           (theme_few))
-       ggplot->svg))
+ (-> titanic
+     (bra (colon 1 891) (empty-symbol))
+     (ggplot (aes 'Age :fill '(factor Survived)))
+     (r+ (geom_histogram)
+         (facet_grid '(tilde . Sex))
+         (theme_few))
+     plot->svg))
 
 
 (note-md "Tripathi: Create the column Child, and indicate whether child or adult:
@@ -1030,7 +1029,7 @@ legend('topright', colnames(titanic_model$err.rate), col=1:3, fill=1:3)
 ```")
 
 (note-as-hiccup
- (plotting-function->svg
+ (plot->svg
   (fn []
     (plot titanic-model :ylim [0 0.36]
           :main "Model Error")
@@ -1117,7 +1116,7 @@ ggplot(rankImportance, aes(x = reorder(Variables, Importance),
          (labs :x "Variables")
          (coord_flip)
          (theme_few))
-     ggplot->svg))
+     plot->svg))
 
 (note-md "Tripathi:
 From the plot we can see that the 'title' variable has the highest
