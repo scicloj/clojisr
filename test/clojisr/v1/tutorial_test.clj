@@ -685,7 +685,9 @@ Now, we see some arguments that do have default values.")
 
 (note
  (->> [#'r.base/mean, #'r.base/mean-default, #'r.stats/arima0,
-       #'r.grDevices/dev-off, #'r.base/Sys-info, #'r.base/summary-default]
+       #'r.grDevices/dev-off, #'r.base/Sys-info, #'r.base/summary-default
+       ;; Primitive functions:
+       #'r.base/sin, #'r.base/sum]
       (map (fn [f]
              (-> f
                  meta
@@ -711,7 +713,9 @@ Now, we see some arguments that do have default values.")
           :ns r.base}
          {:arglists ([object & {:keys [... digits quantile.type]}]),
           :name summary-default,
-          :ns r.base}))))
+          :ns r.base}
+         {:arglists ([x]), :name sin, :ns r.base}
+         {:arglists ([& {:keys [... na.rm]}]), :name sum, :ns r.base}))))
 
 
 (note/render-this-ns!)

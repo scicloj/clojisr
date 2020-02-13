@@ -48,7 +48,10 @@
   (when (= class ["function"])
     (let [sess (session/fetch-or-make nil)
           args (->> sess
-                    (evl/r (format "formals(%s)" code))
+                    (evl/r (format
+                            ;; https://stackoverflow.com/questions/25978301/how-to-retrieve-formals-of-a-primitive-function/25978487#25978487
+                            "with(list(x=%s), if(is.primitive(x)) formals(args(x)) else formals(x))"
+                            code))
                     (using-sessions/r->java)
                     (prot/java->clj sess))
           {:keys [obl opt]} (reduce-kv (fn [m k v]
