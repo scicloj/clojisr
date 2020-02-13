@@ -10,18 +10,15 @@
 
 (require-r '[grDevices :as dev] '[graphics :refer [plot]])
 
-(def ^:private files->fns {:pdf dev/pdf
-                           :png dev/png
-                           :svg dev/svg
-                           :jpg dev/jpeg
-                           :jpeg dev/jpeg
-                           :tiff dev/tiff
-                           :bmp dev/bmp})
+(def ^:private files->fns (let [devices (select-keys (ns-publics 'dev) '[pdf png svg jpeg tiff bmp])]
+                            (if-let [jpg (get devices 'jpeg)]
+                              (assoc devices 'jpg jpg)
+                              devices)))
 
 (defn plot->file
   [filename plotting-function-or-object & device-params]
   (let [apath (.getAbsolutePath (File. filename))
-        extension (keyword (second (re-find #"\.(\w+)$" apath)))
+        extension (symbol (second (re-find #"\.(\w+)$" apath)))
         device (files->fns extension)]
     (assert (contains? files->fns extension) (format "%s filetype is not supported!" (name extension)))
     (try
