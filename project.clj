@@ -1,4 +1,4 @@
-(defproject scicloj/clojisr "1.0.0-BETA6"
+(defproject scicloj/clojisr "1.0.0-BETA7-SNAPSHOT"
   :description "Clojure<->R interop"
   :url "https://github.com/scicloj/clojisr"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
@@ -17,4 +17,4 @@
                  [cambium/cambium.core         "0.9.3"]
                  [cambium/cambium.codec-simple "0.9.3"]
                  [cambium/cambium.logback.core "0.4.3"]
-                 [alembic "0.3.2"]])
+                 [clj-commons/pomegranate "1.2.0"]])

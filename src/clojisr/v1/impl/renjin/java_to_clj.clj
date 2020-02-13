@@ -6,7 +6,7 @@
             [tech.v2.datatype :as dtype]
             [tech.v2.datatype.protocols :as dtype-prot :refer [->array-copy]]
             [clojisr.v1.impl.renjin.lang :as lang])
-  (:import (org.renjin.sexp SEXP Vector ListVector IntVector Logical Symbol Null StringArrayVector)
+  (:import (org.renjin.sexp SEXP Vector ListVector IntVector Logical Symbol Null StringArrayVector PairList)
            (java.util Map List Collection)
            (clojure.lang Named)))
 
@@ -71,6 +71,12 @@
   (-java->clj [this]
     (renjin-vector->clj java->clj
                         this)))
+
+(extend-type PairList
+  Clojable
+  (-java->clj [this]
+    (renjin-vector->clj java->clj
+                        (.toVector this))))
 
 (extend-type IntVector
   Clojable
