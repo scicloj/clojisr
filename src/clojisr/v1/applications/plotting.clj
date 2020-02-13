@@ -5,7 +5,7 @@
   (:import [java.io File]))
 
 (try
-  (require-r '[grDevices :refer [svg png dev.off]])
+  (require-r '[grDevices :refer [svg png dev-off]])
   (catch Exception e
     (log/warn "Failed to load grDevices package.")))
 

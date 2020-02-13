@@ -47,14 +47,14 @@ Here are most of the functions that we need, brought by the standard `require-r`
 
 (note-void
  (require-r
-  '[base :refer [round names ! set.seed sum which rnorm lapply sapply %in% table list.files c paste colnames row.names cbind gsub <- $ $<- as.data.frame data.frame nlevels factor expression is.na strsplit as.character summary table]]
+  '[base :refer [round names ! set-seed sum which rnorm lapply sapply %in% table list-files c paste colnames row-names cbind gsub <- $ $<- as-data-frame data-frame nlevels factor expression is-na strsplit as-character summary table]]
   '[stats :refer [median predict]]
   '[ggplot2 :refer [ggsave qplot ggplot aes facet_grid geom_density geom_text geom_histogram geom_bar scale_x_continuous scale_y_continuous labs coord_flip geom_vline geom_hline geom_boxplot]]
   '[ggthemes :refer [theme_few]]
   '[scales :refer [dollar_format]]
-  '[graphics :refer [par plot hist dev.off legend]]
+  '[graphics :refer [par plot hist dev-off legend]]
   '[dplyr :refer [mutate bind_rows summarise group_by]]
-  '[utils :refer [read.csv write.csv head]]
+  '[utils :refer [read-csv write-csv head]]
   '[mice :refer [mice complete]]
   '[randomForest :refer [randomForest importance]]))
 

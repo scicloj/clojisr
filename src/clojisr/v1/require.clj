@@ -113,3 +113,5 @@
     (catch Exception e
       (log/warn (format "Failed to load %s package. Please ensure it's installed." package-symbol)))))
 
+(defn require-r [& packages]
+  (run! require-r-package packages))
