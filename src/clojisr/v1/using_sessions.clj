@@ -4,6 +4,7 @@
             [clojisr.v1.objects-memory :as mem]
             [clojisr.v1.util :as util]
             [clojisr.v1.robject :refer [->RObject]]
+            [clojisr.v1.known-classes :as known-classes]
             [cambium.core :as log])
   (:import clojisr.v1.robject.RObject))
 
@@ -61,7 +62,4 @@
   (and (instance? RObject r-object)
        (-> r-object
            :class
-           (#{["function"]
-              ;; Functions created by the reticulate package:
-              ["python.builtin.function" "python.builtin.object"]
-              ["python.builtin.builtin_function_or_method" "python.builtin.object"]}))))
+           known-classes/function-classes)))

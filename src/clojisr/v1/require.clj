@@ -3,6 +3,7 @@
             [clojisr.v1.using-sessions :as using-sessions]
             [clojisr.v1.eval :as evl]
             [clojisr.v1.protocols :as prot]
+            [clojisr.v1.known-classes :as known-classes]
             [clojisr.v1.util :as util
              :refer [clojurize-r-symbol]]
             [clojisr.v1.impl.common
@@ -45,7 +46,7 @@
 (defn- r-object->arglists-raw
   "Fetch function aruments using `formals` and produce `:arglists` meta tag value and conforming clojisr R function call style."
   [{:keys [code class]}]
-  (when (= class ["function"])
+  (when (known-classes/function-classes class)
     (let [sess (session/fetch-or-make nil)
           args (->> sess
                     (evl/r (format
