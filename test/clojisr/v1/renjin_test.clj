@@ -18,7 +18,6 @@
           '[clojisr.v1.require :refer [require-r]]
           '[tech.ml.dataset :as dataset]
           '[notespace.v1.util :refer [check]]
-          '[alembic.still :refer [distill]]
           '[clojisr.v1.applications.plotting :refer [plot->svg]]))
 
 (note-md "If we `require`d `clojisr.v1.renjin` first, then the default session-type would be `:renjin`. But since we might be loading this namespace after doing some other things, let us make sure that we are using `:renjin`:")
