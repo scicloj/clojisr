@@ -672,6 +672,48 @@ Now, we see some arguments that do have default values.")
                 :na.rm [false]
                 :...   (symbol "")})))
 
+(note-void :R-function-arglists)
+
+(note-md "## R-function-arglists")
+
+(note-md "As we saw earlier, R functions are Clojure functions. The arglists of functions brought up by `require-r` match the expected arguments. Here are some examples:")
+
+(note-void (require-r
+            '[base]
+            '[stats]
+            '[grDevices]))
+
+(note
+ (->> [#'r.base/mean, #'r.base/mean-default, #'r.stats/arima0,
+       #'r.grDevices/dev-off, #'r.base/Sys-info, #'r.base/summary-default]
+      (map (fn [f]
+             (-> f
+                 meta
+                 (update :ns (comp symbol str)))))
+      (check
+       =
+       '({:arglists ([x & {:keys [...]}]), :name mean, :ns r.base}
+         {:arglists ([x & {:keys [trim na.rm ...]}]),
+          :name     mean-default,
+          :ns       r.base}
+         {:arglists
+          ([x & {:keys
+                 [order seasonal xreg include.mean delta
+                  transform.pars fixed init method n.cond
+                  optim.control]}]),
+          :name arima0,
+          :ns   r.stats}
+         {:arglists ([& {:keys [which]}]),
+          :name dev-off,
+          :ns r.grDevices}
+         {:arglists ([]),
+          :name Sys-info,
+          :ns r.base}
+         {:arglists ([object & {:keys [... digits quantile.type]}]),
+          :name summary-default,
+          :ns r.base}))))
+
+
 (note/render-this-ns!)
 
 
