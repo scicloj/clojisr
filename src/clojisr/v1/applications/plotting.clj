@@ -33,5 +33,6 @@
     (.delete tempfile)
     svg))
 
-(require-r '[base] '[lattice])
+(dev/x11 )
 
+(dev/dev-off)
