@@ -17,4 +17,4 @@
                  [cambium/cambium.core         "0.9.3"]
                  [cambium/cambium.codec-simple "0.9.3"]
                  [cambium/cambium.logback.core "0.4.3"]
-                 [alembic "0.3.2"]])
+                 [clj-commons/pomegranate "1.2.0"]])
