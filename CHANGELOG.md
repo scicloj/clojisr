@@ -1,6 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA7] - 2020-02-16
+- require-r:
+  - :arglists tag added for required R functions
+  - warning when package is not found
+- bugfix for problems when dynamically loading renjin jar:
+  - using pomegranate directly, rather than alembic (to suppoert Java newer than Java 8)
+  - handling classloaders carefully
+- a new API for data visualization, with more rendering options
+
 ## [1.0.0-BETA6] - 2020-02-08
 - bugfix of a problem with using Alembic (making sure https is used)
 - change in the setup API of backends: requiring the main namesapce of a backend (renjin/rserve) sets default session-type, if no other default has been set yet; 
