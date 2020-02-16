@@ -3,6 +3,7 @@ All notable changes to this project will be documented in this file. This change
 
 ## [master]
 - bugfix for plotting (to draw a chart `print` should be called instead of `plot`)
+- tech.ml libraries bumped
 
 ## [1.0.0-BETA7] - 2020-02-16
 - require-r:
