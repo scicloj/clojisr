@@ -8,12 +8,14 @@
            [java.awt.image BufferedImage]
            [javax.swing ImageIcon]))
 
-(require-r '[grDevices :as dev] '[graphics :refer [plot]])
+(require-r '[grDevices :as dev])
 
 (def ^:private files->fns (let [devices (select-keys (ns-publics 'dev) '[pdf png svg jpeg tiff bmp])]
                             (if-let [jpg (get devices 'jpeg)]
                               (assoc devices 'jpg jpg)
                               devices)))
+
+(def ^:private r-print (r "print")) ;; avoid importing `base` here
 
 (defn plot->file
   [filename plotting-function-or-object & device-params]
@@ -25,7 +27,7 @@
       (apply device apath device-params)
       (try
         (if (instance? RObject plotting-function-or-object)
-          (plot plotting-function-or-object)
+          (r-print plotting-function-or-object)
           (plotting-function-or-object))
         (catch Exception e (log/warn "Evaluation of plotting function failed."))
         (finally (dev/dev-off)))

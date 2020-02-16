@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [master]
+- bugfix for plotting (to draw a chart `print` should be called instead of `plot`)
+
 ## [1.0.0-BETA7] - 2020-02-16
 - require-r:
   - :arglists tag added for required R functions
