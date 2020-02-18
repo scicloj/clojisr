@@ -77,9 +77,7 @@ Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackover
 
 * [Titanic tutorial #0](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/titanic0-test/index.html)
 
-* [Literate programming using rmarkdown](test/clojisr/v1/rmarkdown_test.clj)
-
-* [Interactive data visualization using shiny](test/clojisr/v1/shiny_test.clj)
+* More examples -- see the [clojisr-examples repo](https://github.com/scicloj/clojisr-examples#list-of-examples)
 
 ## Background
 
