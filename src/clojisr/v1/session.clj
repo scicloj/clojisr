@@ -2,7 +2,8 @@
   (:refer-clojure :exclude [time])
   (:require [clojisr.v1.protocols :as prot]
             [clojisr.v1.objects-memory :as mem]
-            [cambium.core  :as log]))
+            [cambium.core  :as log])
+  (:import [java.io File]))
 
 (def sessions (atom {}))
 
@@ -64,6 +65,7 @@
   ;; TODO: Why is this necessary?
   (try
     (prot/eval-r->java session "print('.')")
+    (prot/eval-r->java session (format "setwd(\"%s\")" (.getAbsolutePath (File. "."))))
     (catch Exception e nil))
   session)
 
