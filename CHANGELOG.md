@@ -1,9 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [master]
+## [1.0.0-BETA8-SNAPSHOT]
 - bugfix for plotting (to draw a chart `print` should be called instead of `plot`)
 - tech.ml libraries bumped
+- Clojure working directory is now set on R side
 
 ## [1.0.0-BETA7] - 2020-02-16
 - require-r:
