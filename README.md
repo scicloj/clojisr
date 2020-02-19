@@ -56,7 +56,7 @@ Note however that:
 
 * Linux or MacOS
 
-* JDK 1.8
+* JDK 1.8 or later
 
 * Clojure 1.9.0 or later
 
