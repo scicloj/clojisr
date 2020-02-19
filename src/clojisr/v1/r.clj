@@ -52,7 +52,11 @@
 (def clj->java->r (comp java->r clj->java))
 (def clj->r clj->java->r)
 
-(def r->java->clj (comp java->clj r->java))
+(defn r->java->clj [r-object & {:keys [session-args]}]
+  (-> r-object
+      r->java
+      (java->clj :session-args session-args)))
+
 (def r->clj r->java->clj)
 
 (defn discard-session [session-args]
