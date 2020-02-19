@@ -4,6 +4,9 @@ All notable changes to this project will be documented in this file. This change
 ## [1.0.0-BETA8-SNAPSHOT]
 - bugfix for plotting (to draw a chart `print` should be called instead of `plot`)
 - tech.ml libraries bumped
+- deps updated
+- bugfix: recognizing S4 functions ("standardGeneric")
+- bugfix: handling session-args carefully on r->clj data conversion
 - Clojure working directory is now set on R side
 
 ## [1.0.0-BETA7] - 2020-02-16
