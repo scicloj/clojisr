@@ -65,9 +65,22 @@ Note however that:
 * The [Rserve](https://cran.r-project.org/web/packages/Rserve/index.html) R package (`install.packages("Rserve")`)
 Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackoverflow.com/questions/50410289/running-r-script-from-java-rconnection-eval-exception/50622263#50622263) to have a bug. Rserve 1.8.6 is currently not on CRAN, but can be installed with `install.packages("Rserve",,"http://rforge.net")`
 
-* This project
+* This library
 
 [![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
+
+## Checking if it works
+
+This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
+
+```clj
+$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA7"}}}}'
+Clojure 1.10.1
+user=> (require '[clojisr.v1.r :refer [r]])
+
+user=> (r '[+ 1 2])
+[1] 3
+```
 
 ## Tutorials
 
