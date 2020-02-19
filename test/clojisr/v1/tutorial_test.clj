@@ -1,6 +1,7 @@
 (ns clojisr.v1.tutorial-test
   (:require [notespace.v1.note :as note
-             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
+             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
+            [clojisr.v1.session :as session]))
 
 
 (note-md "# Clojisr tutorial")
@@ -717,7 +718,21 @@ Now, we see some arguments that do have default values.")
          {:arglists ([x]), :name sin, :ns r.base}
          {:arglists ([& {:keys [... na.rm]}]), :name sum, :ns r.base}))))
 
+(note-void :using-Renjin)
+
+(note-md "## Using Renjin")
+
+(note-md "In the followint example, we use a differnt R backend (the pure JVM Renjin) for reading a csv, without changing the default backend (which is the usual R using Rserve).")
+
+(note
+ (require 'clojisr.v1.renjin)
+ (let [path "/tmp/data.csv"]
+   (spit path "a,b,c\n1,2,3\n4,5,6\n")
+   (-> ['read.csv path]
+       (r :session-args {:session-type :renjin})
+       (r/r->clj :session-args {:session-type :renjin})
+       (->> (check = [{:a 1, :b 2, :c 3}
+                      {:a 4, :b 5, :c 6}])))))
 
 (note/render-this-ns!)
-
 
