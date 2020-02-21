@@ -10,8 +10,8 @@
           code))
 
 (defn code-to-forget [obj-name]
-  (let [mem (object-name->memory-place obj-name)]
-    (format "%s <- NULL; rm(%s); 'ok'" mem mem)))
+  (format "%s <- NULL; 'ok'"
+          (object-name->memory-place obj-name)))
 
 (def init-session-memory-code
   ".MEM <- new.env()")
