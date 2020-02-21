@@ -1,5 +1,5 @@
 (ns clojisr.v1.renjin-test
-  (:require [notespace.v1.note :as note
+  (:require [notespace.v2.note :as note
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
 (note-md "# Renjin interop")
@@ -17,7 +17,6 @@
           '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->naive-clj clj->java r->clj clj->r ->code r+ colon]]
           '[clojisr.v1.require :refer [require-r]]
           '[tech.ml.dataset :as dataset]
-          '[notespace.v1.util :refer [check]]
           '[clojisr.v1.applications.plotting :refer [plot->svg]]))
 
 (note-md "If we `require`d `clojisr.v1.renjin` first, then the default session-type would be `:renjin`. But since we might be loading this namespace after doing some other things, let us make sure that we are using `:renjin`:")
@@ -104,4 +103,3 @@
           :xlab "x"
           :bins 100)))))
 
-(note/render-this-ns!)

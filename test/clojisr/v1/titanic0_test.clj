@@ -1,5 +1,5 @@
 (ns clojisr.v1.titanic0-test
-  (:require [notespace.v1.note :as note
+  (:require [notespace.v2.note :as note
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
 (note-md "
@@ -1164,4 +1164,3 @@ write.csv(Output, file = 'pradeep_titanic_output.csv', row.names = F)
 Tripathi: Thank you for taking the time to read through my first
 exploration of a Titanic Kaggle dataset. Again, this newbie welcomes comments and suggestions!")
 
-(note/render-this-ns!)
