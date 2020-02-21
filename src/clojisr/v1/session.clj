@@ -2,6 +2,7 @@
   (:refer-clojure :exclude [time])
   (:require [clojisr.v1.protocols :as prot]
             [clojisr.v1.objects-memory :as mem]
+            [clojisr.v1.gc :as gc]
             [cambium.core  :as log])
   (:import [java.io File]))
 
@@ -39,11 +40,26 @@
      id
      actual-session-args)))
 
+(def last-clean-time (atom (System/currentTimeMillis)))
+
+;; TODO: GC should be done on the `session` level. Not globally. Currently GC can be called long after session is closed
+;; and memory disposal is missed. Also, refreshing should be done for every object not only function.
+
+(defn clean-r-orphans []
+  "Clean garbage collected RObjects on the R side."
+  (when (> (- (System/currentTimeMillis) 120000) ;; every 2 minutes
+           @last-clean-time)
+    (gc/clear-reference-queue)
+    (reset! last-clean-time (System/currentTimeMillis))))
+
 (defn fetch [session-args]
+  (clean-r-orphans)
   (@sessions session-args))
 
 (defn discard [session-args]
+  (gc/clear-reference-queue)
   (when-let [session (fetch session-args)]
+    (log/info [::discarding session-args])
     (prot/close session)
     (swap! sessions dissoc session-args)))
 
@@ -51,6 +67,7 @@
   (discard nil))
 
 (defn discard-all []
+  (gc/clear-reference-queue)
   (doseq [[session-args session] @sessions]
     (log/info [::discarding session-args])
     (prot/close session))

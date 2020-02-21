@@ -43,7 +43,7 @@
 
 (def ^:private empty-symbol (symbol ""))
 
-(defn- r-object->arglists-raw
+(defn- r-object->arglists
   "Fetch function aruments using `formals` and produce `:arglists` meta tag value and conforming clojisr R function call style."
   [{:keys [code class]}]
   (when (known-classes/function-classes class)
@@ -70,8 +70,6 @@
         (seq obl) (list obl)
         (seq opt) (list ['& {:keys opt}])
         :else '([])))))
-
-(def r-object->arglists (memoize r-object->arglists-raw))
 
 (defn r-symbol->clj-symbol [r-symbol r-object]
   (if-let [arglists (r-object->arglists r-object)]

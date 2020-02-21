@@ -20,20 +20,32 @@
     :host "localhost"
     :spawn-rserve? true}))
 
+(defn close! [{:keys [^RConnection r-connection rserve]}]
+  (when r-connection
+    (.close r-connection))
+  (when rserve
+    (proc/close rserve))
+  nil)
+
+;; Session is valid when process is alive and when there is connection
+;; if something is not true, ensure cleaning the rest and close the session
+(defn active?-or-close! [{:keys [^RConnection r-connection rserve]
+                          :as sess}]
+  (let [state (and r-connection
+                   rserve
+                   (.isConnected r-connection)
+                   (proc/alive? rserve))]
+    (or state (close! sess))))
+
 (defrecord RserveSession [id
                           session-args
                           ^RConnection r-connection
-                          rserve
-                          closed]
+                          rserve]
   Session
   (close [session]
-    (when r-connection
-      (.close r-connection))
-    (when rserve
-      (proc/close rserve))
-    (reset! closed true))
+    (close! session))
   (closed? [session]
-    @closed)
+    (not (active?-or-close! session)))
   (id [session]
     id)
   (session-args [session]
@@ -100,8 +112,7 @@
     (->RserveSession id
                      session-args
                      (RConnection. host port)
-                     rserve
-                     (atom false))))
+                     rserve)))
 
 (comment
 
