@@ -8,6 +8,10 @@ All notable changes to this project will be documented in this file. This change
 - bugfix: recognizing S4 functions ("standardGeneric")
 - bugfix: handling session-args carefully on r->clj data conversion
 - Clojure working directory is now set on R side
+- print-loop bound to session (#42)
+- RConnection locking revisited (#40)
+- GC rewritten (#25)
+- More careful session management (all atoms are now `defonce`, `closed?` depends on processes state)
 
 ## [1.0.0-BETA7] - 2020-02-16
 - require-r:
