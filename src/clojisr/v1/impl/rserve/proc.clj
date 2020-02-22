@@ -63,7 +63,9 @@
       (Thread/sleep sleep)
       rserve)))
 
+(defn alive? [rserve]
+  (.isAlive ^Process (:process rserve)))
+
 (defn close [rserve]
-  (.destroy ^Process (:process rserve)))
-
-
+  (let [p ^Process (:process rserve)]
+    (when (.isAlive p) (.destroy p))))

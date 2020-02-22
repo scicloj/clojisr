@@ -1,5 +1,5 @@
 (ns clojisr.v1.using-sessions
-  (:require [tech.resource :as resource]
+  (:require [clojisr.v1.gc :as gc]
             [clojisr.v1.protocols :as prot]
             [clojisr.v1.objects-memory :as mem]
             [clojisr.v1.util :as util]
@@ -25,10 +25,9 @@
                  (prot/java->clj session)
                  (= ["ok"])))
     (-> (->robject obj-name session code)
-        (resource/track
+        (gc/track
          #(do (log/debug [::releasing obj-name])
-              (mem/forget obj-name session))
-         :gc))))
+              (mem/forget obj-name session))))))
 
 (defn java->r-specified-type [java-object type session]
   (prot/java->specified-type session java-object type))

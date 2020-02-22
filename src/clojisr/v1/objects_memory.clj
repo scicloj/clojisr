@@ -16,11 +16,11 @@
 (def init-session-memory-code
   ".MEM <- new.env()")
 
+;; Try to clean memory, there can be no session or session can be ruined in certain ways (like killed processes).
 (defn forget [obj-name session]
   (when (not (prot/closed? session))
-    (let [returned (->> obj-name
-                        code-to-forget
-                        (prot/eval-r->java session))]
-      (assert (->> returned
-                   (prot/java->clj session)
-                   (= ["ok"]))))))
+    (try
+      (->> obj-name
+           code-to-forget
+           (prot/eval-r->java session))
+      (catch Exception e))))

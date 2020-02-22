@@ -3,7 +3,7 @@
             [clojisr.v1.session :as session]
             [clojisr.v1.refresh :as refresh]
             [clojisr.v1.codegen :as codegen]
-            [tech.resource :as resource]
+            [clojisr.v1.gc :as gc]
             [cambium.core :as log])
   (:import clojisr.v1.robject.RObject))
 
@@ -41,9 +41,9 @@
   (or (@functions-mem r-object)
       (let [f (function-impl r-object)]
         (swap! functions-mem assoc r-object f)
-        (resource/track
+        (gc/track
          r-object
-         #(do (log/debug [::releasing-function-cache (:object-name r-object)])
-              (swap! functions-mem dissoc r-object))
-         :gc)
+         ;; TODO: revisit cleaning strategy, below code will never be called (r-object is kept in `functions-mem` atom forever) [ts]
+         #(do (log/warn [::releasing-function-cache (:object-name r-object)])
+              (swap! functions-mem dissoc r-object)))
         f)))
