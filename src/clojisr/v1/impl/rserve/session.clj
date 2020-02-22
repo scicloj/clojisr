@@ -59,11 +59,12 @@
   (java->r-set [session varname java-obj]
     ;; Unlike (.assign r-connection ...), the following approach
     ;; allows for a varname like "abc$xyz".
-    (.eval
-     r-connection
-     (java/assignment varname java-obj)
-     nil
-     true))
+    (locking r-connection
+      (.eval
+       r-connection
+       (java/assignment varname java-obj)
+       nil
+       true)))
   (java->specified-type [session java-obj typ]
     (java-to-clj/java->specified-type java-obj typ))
   (java->naive-clj [session java-obj]
@@ -78,9 +79,8 @@
     (packages/package-symbol->r-symbol-names
      session package-symbol)))
 
-(def stop-loops? (atom false))
-
-(defn rserve-print-loop [rserve]
+(defn rserve-print-loop [{:keys [rserve]
+                          :as session}]
   (async/go-loop []
     (doseq [^BufferedReader reader
             (-> rserve
@@ -95,8 +95,9 @@
               (println line)))
           (recur))))
     (Thread/sleep 100)
-    (if (not @stop-loops?)
-      (recur))) )
+    (if (not (prot/closed? session))
+      (recur)
+      (log/info [::print-loop-closed {:session-args (:session-args session)}]))))
 
 (defn make [id session-args]
   (let [{:keys
@@ -107,17 +108,11 @@
         rserve            (when spawn-rserve?
                             (assert (= host "localhost"))
                             (proc/start-rserve {:port  port
-                                                :sleep 500}))]
-    (rserve-print-loop rserve)
-    (->RserveSession id
-                     session-args
-                     (RConnection. host port)
-                     rserve)))
+                                                :sleep 500}))
+        session (->RserveSession id
+                                 session-args
+                                 (RConnection. host port)
+                                 rserve)]
+    (rserve-print-loop session)
+    session))
 
-(comment
-
-  (reset! stop-loops? true)
-
-  (reset! stop-loops? false)
-
-  )

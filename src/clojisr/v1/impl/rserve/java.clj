@@ -40,18 +40,18 @@
 
 (defn try-eval-catching-errors [expression ^RConnection r-connection]
   ;; Using the technique of https://stackoverflow.com/a/40447542/1723677, the way it is used in Rojure.
-  (locking r-connection
-    (try
-      (let [rexp (-> expression
-                     (string/replace "\"" "\\\"")
-                     (->> (format "try(eval(parse(text=\"%s\")),silent=TRUE)")
-                          (.parseAndEval r-connection)))]
-        (if (.inherits rexp "try-error")
-          (throw (Exception.
-                  (format "Error in R evaluating expression:\n %s.\nR exception: %s"
-                          expression (.asString rexp))))
-          rexp))
-      (catch REngineException ex
-        (log/error (format "Caught exception evaluating expression: %s\n: %s" expression ex)))
-      (catch REXPMismatchException ex
-        (log/error (format "Caught exception evaluating expression: %s\n: %s" expression ex))))))
+  (try
+    (let [expression-str (-> expression
+                             (string/replace "\"" "\\\"")
+                             (->> (format "try(eval(parse(text=\"%s\")),silent=TRUE)")))
+          rexp (locking r-connection
+                 (.parseAndEval r-connection expression-str))]
+      (if (.inherits rexp "try-error")
+        (throw (Exception.
+                (format "Error in R evaluating expression:\n %s.\nR exception: %s"
+                        expression (.asString rexp))))
+        rexp))
+    (catch REngineException ex
+      (log/error (format "Caught exception evaluating expression: %s\n: %s" expression ex)))
+    (catch REXPMismatchException ex
+      (log/error (format "Caught exception evaluating expression: %s\n: %s" expression ex)))))

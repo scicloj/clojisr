@@ -7,9 +7,9 @@
   (:import [java.io File]))
 
 
-(def sessions (atom {}))
+(defonce sessions (atom {}))
 
-(def defaults (atom {}))
+(defonce defaults (atom {}))
 
 (defn set-default-session-type! [session-type]
   (swap! defaults assoc :session-type session-type))
@@ -22,7 +22,7 @@
 (defn apply-defaults [session-args]
   (merge @defaults session-args))
 
-(def session-type->make-fn (atom {}))
+(defonce session-type->make-fn (atom {}))
 
 (defn add-session-type!
   [session-type make-fn]
@@ -41,7 +41,7 @@
      id
      actual-session-args)))
 
-(def last-clean-time (atom (System/currentTimeMillis)))
+(defonce last-clean-time (atom (System/currentTimeMillis)))
 
 ;; TODO: GC should be done on the `session` level. Not globally. Currently GC can be called long after session is closed
 ;; and memory disposal is missed. Also, refreshing should be done for every object not only function.
@@ -50,7 +50,10 @@
   "Clean garbage collected RObjects on the R side."
   (when (> (- (System/currentTimeMillis) 120000) ;; every 2 minutes
            @last-clean-time)
-    (gc/clear-reference-queue)
+    (let [curr (count (gc/ptr-set))]
+      (gc/clear-reference-queue)
+      (log/info [::gc-called {:objects-before curr
+                              :objects-after (count (gc/ptr-set))}]))
     (reset! last-clean-time (System/currentTimeMillis))))
 
 (defn fetch [session-args]
