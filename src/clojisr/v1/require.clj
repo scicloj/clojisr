@@ -113,7 +113,8 @@
                                 r-symbols
                                 (select-keys r-symbols refer))))))
     (catch Exception e
-      (log/warn (format "Failed to load %s package. Please ensure it's installed." package-symbol)))))
+      (log/warn [::failed-requiring-package {:package-symbol package-symbol
+                                             :cause (-> e Throwable->map :cause)}]))))
 
 (defn require-r [& packages]
   (run! require-r-package packages))

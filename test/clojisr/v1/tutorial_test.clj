@@ -35,7 +35,7 @@ This part requires more thorough documentation.")
 (note
  (->> x
       r->clj
-      (check = [3])))
+      (check = [3.0])))
 
 (note
  (->> "list(A=1,B=2,'#123strange<text> ()'=3)"
@@ -718,5 +718,4 @@ Now, we see some arguments that do have default values.")
        (->> (check = [{:a 1, :b 2, :c 3}
                       {:a 4, :b 5, :c 6}])))))
 
-
-
+(notespace.v2.note/compute-this-notespace!)

@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file. This change
 - RConnection locking revisited (#40)
 - GC rewritten (#25)
 - More careful session management (all atoms are now `defonce`, `closed?` depends on processes state)
+- fixed rmarkdown bug (wrong usage of gc)
 
 ## [1.0.0-BETA7] - 2020-02-16
 - require-r:

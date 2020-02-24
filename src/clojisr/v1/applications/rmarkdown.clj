@@ -2,7 +2,6 @@
   (:require [clojisr.v1.r :as r :refer [r]]
             [clojisr.v1.util :refer [starts-with?]]
             [hiccup.core :as hiccup]
-            [clojisr.v1.gc :as gc]
             [clojure.string :as string]
             [clojure.walk :as walk]
             [cambium.core :as log])
@@ -44,14 +43,15 @@
                                   #"\.Rmd"
                                   ".html")
         html-file (File. html-path)]
-    (gc/with-stack-context
-      (gc/track #(.delete rmd-file))
+    (try
       (->> rmd
            (spit rmd-path))
       (r/apply-function
        (r "function(rmd, data) with(data, rmarkdown::render(rmd))")
        [rmd-path
         data])
-      html-path)))
+      html-path
+      (catch Exception e (log/error [::render-rmd {:exception (.getMessage e)}]))
+      (finally (.delete rmd-file)))))
 
 
