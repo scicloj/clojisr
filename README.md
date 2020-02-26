@@ -82,6 +82,10 @@ user=> (r '[+ 1 2])
 [1] 3
 ```
 
+## Known issues
+
+* clojisr can behave strange when abandoned R (with Rserve) processes are running. Please kill such processes before running rserve session
+
 ## Tutorials
 
 * [Intro](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/tutorial-test/index.html)
