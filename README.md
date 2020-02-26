@@ -84,7 +84,7 @@ user=> (r '[+ 1 2])
 
 ## Known issues
 
-* clojisr can behave strange when abandoned R (with Rserve) processes are running. Please kill such processes before running rserve session
+* clojisr can behave strange when abandoned R (with Rserve) processes are running. Please kill such processes before creating rserve session
 
 ## Tutorials
 
