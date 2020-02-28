@@ -1,15 +1,13 @@
 {:deps
  {org.clojure/clojure {:mvn/version "1.10.1"},
-  scicloj/notespace {:mvn/version "1.0.3"},
-  cambium/cambium.logback.core {:mvn/version "0.4.3"},
+  org.clojure/tools.logging {:mvn/version "1.0.0"},
+  scicloj/notespace {:mvn/version "2.0.0-alpha3"},
   techascent/tech.resource {:mvn/version "4.6"},
   techascent/tech.ml.dataset {:mvn/version "1.70"},
-  techascent/tech.datatype {:mvn/version "4.74"},
-  org.rosuda.REngine/Rserve {:mvn/version "1.8.1"},
-  cambium/cambium.codec-simple {:mvn/version "0.9.3"},
+  techascent/tech.datatype {:mvn/version "4.74"}, 
+  org.rosuda.REngine/Rserve {:mvn/version "1.8.1"}, 
   hiccup {:mvn/version "1.0.5"}, 
   org.rosuda.REngine/REngine {:mvn/version "2.1.0"}, 
-  nrepl {:mvn/version "0.6.0"}, 
   com.rpl/specter {:mvn/version "1.1.3"}, 
-  clj-commons/pomegranate {:mvn/version "1.2.0"}, 
-  cambium/cambium.core {:mvn/version "0.9.3"}}}
+  clj-commons/pomegranate {:mvn/version "1.2.0"}}}
+

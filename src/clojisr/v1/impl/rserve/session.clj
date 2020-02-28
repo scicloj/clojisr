@@ -7,7 +7,7 @@
             [clojisr.v1.impl.rserve.packages :as packages]
             [clojisr.v1.impl.rserve.printing :as printing]
             [clojure.core.async :as async]
-            [cambium.core :as log])
+            [clojure.tools.logging.readable :as log])
   (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)
            clojisr.v1.protocols.Session
@@ -53,8 +53,8 @@
   (desc [session]
     session-args)
   (eval-r->java [session code]
-    (log/debug [::eval {:code         code
-                        :session-args (:session-args session)}])
+    (log/debug [::eval-r->java {:code         code
+                                :session-args (:session-args session)}])
     (java/try-eval-catching-errors code r-connection))
   (java->r-set [session varname java-obj]
     ;; Unlike (.assign r-connection ...), the following approach
@@ -81,6 +81,8 @@
 
 (defn rserve-print-loop [{:keys [rserve]
                           :as session}]
+  (log/info [::rserve-print-loop {:action :started
+                                  :session-args (:session-args session)}])
   (async/go-loop []
     (doseq [^BufferedReader reader
             (-> rserve
@@ -97,7 +99,8 @@
     (Thread/sleep 100)
     (if (not (prot/closed? session))
       (recur)
-      (log/info [::print-loop-closed {:session-args (:session-args session)}]))))
+      (log/info [::rserve-print-loop {:action :stopped
+                                      :session-args (:session-args session)}]))))
 
 (defn make [id session-args]
   (let [{:keys
@@ -106,7 +109,7 @@
           spawn-rserve?]} (merge @defaults
                                  session-args)
         rserve            (when spawn-rserve?
-                            (assert (= host "localhost"))
+                            ;; (assert (= host "localhost")) ;; why???
                             (proc/start-rserve {:port  port
                                                 :sleep 500}))
         session (->RserveSession id

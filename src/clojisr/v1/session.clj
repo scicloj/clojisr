@@ -3,7 +3,8 @@
   (:require [clojisr.v1.protocols :as prot]
             [clojisr.v1.objects-memory :as mem]
             [clojisr.v1.gc :as gc]
-            [cambium.core  :as log])
+            [clojisr.v1.util :refer [exception-cause]]
+            [clojure.tools.logging.readable :as log])
   (:import [java.io File]))
 
 
@@ -34,8 +35,9 @@
         {:keys [session-type] :as actual-session-args} (apply-defaults
                                                         session-args)
         make-fn (@session-type->make-fn session-type)]
-    (log/info [::making-a-new-session
-               {:id                  id
+    (log/info [::make-session
+               {:action :new-session
+                :id id
                 :actual-session-args actual-session-args}])
     (make-fn
      id
@@ -43,17 +45,14 @@
 
 (defonce last-clean-time (atom (System/currentTimeMillis)))
 
-;; TODO: GC should be done on the `session` level. Not globally. Currently GC can be called long after session is closed
-;; and memory disposal is missed. Also, refreshing should be done for every object not only function.
-
 (defn clean-r-orphans []
   "Clean garbage collected RObjects on the R side."
   (when (> (- (System/currentTimeMillis) 120000) ;; every 2 minutes
            @last-clean-time)
     (let [curr (count (gc/ptr-set))]
       (gc/clear-reference-queue)
-      (log/info [::gc-called {:objects-before curr
-                              :objects-after (count (gc/ptr-set))}]))
+      (log/info [::gc-clean-r-objects {:objects-before curr
+                                       :objects-after (count (gc/ptr-set))}]))
     (reset! last-clean-time (System/currentTimeMillis))))
 
 (defn fetch [session-args]
@@ -63,7 +62,7 @@
 (defn discard [session-args]
   (gc/clear-reference-queue)
   (when-let [session (fetch session-args)]
-    (log/info [::discarding session-args])
+    (log/info [::discard-session {:session-args session-args}])
     (prot/close session)
     (swap! sessions dissoc session-args)))
 
@@ -73,7 +72,7 @@
 (defn discard-all []
   (gc/clear-reference-queue)
   (doseq [[session-args session] @sessions]
-    (log/info [::discarding session-args])
+    (log/info [::discard-all-sessions {:session-args session-args}])
     (prot/close session))
   (reset! sessions {}))
 
@@ -85,9 +84,10 @@
   (init-memory session)
   ;; TODO: Why is this necessary?
   (try
-    (prot/eval-r->java session "print('.')")
     (prot/eval-r->java session (format "setwd(\"%s\")" (.getAbsolutePath (File. "."))))
-    (catch Exception e nil))
+    (prot/eval-r->java session "print('.')")
+    (catch Exception e (log/error [::init {:message "Session initialization failed."
+                                           :exception (exception-cause e)}])))
   session)
 
 (defn make-and-init [session-args]

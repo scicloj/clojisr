@@ -1,7 +1,8 @@
 (ns clojisr.v1.applications.plotting
   (:require [clojisr.v1.r :refer [r]]
+            [clojisr.v1.util :refer [exception-cause]]
             [clojisr.v1.require :refer [require-r]]
-            [cambium.core :as log])
+            [clojure.tools.logging.readable :as log])
   (:import [java.io File]
            [clojisr.v1.robject RObject]
            [java.awt Graphics2D Image]
@@ -20,18 +21,22 @@
 (defn plot->file
   [filename plotting-function-or-object & device-params]
   (let [apath (.getAbsolutePath (File. filename))
-        extension (symbol (second (re-find #"\.(\w+)$" apath)))
+        extension (symbol (or (second (re-find #"\.(\w+)$" apath)) :no))
         device (files->fns extension)]
-    (assert (contains? files->fns extension) (format "%s filetype is not supported!" (name extension)))
-    (try
-      (apply device apath device-params)
+    (if-not (contains? files->fns extension)
+      (log/warn [::plot->file {:message (format "%s filetype is not supported!" (name extension))}])
       (try
-        (if (instance? RObject plotting-function-or-object)
-          (r-print plotting-function-or-object)
-          (plotting-function-or-object))
-        (catch Exception e (log/warn "Evaluation of plotting function failed."))
-        (finally (dev/dev-off)))
-      (catch Exception e (log/warn (format "File creation (%s) failed" apath))))))
+        (apply device apath device-params)
+        (try
+          (if (instance? RObject plotting-function-or-object)
+            (r-print plotting-function-or-object)
+            (plotting-function-or-object))
+          (log/debug [[::plot->file {:message (format "File %s saved." apath)}]])
+          (catch Exception e (log/warn [::plot->file {:message "Evaluation plotting function failed."
+                                                      :exception (exception-cause e)}]))
+          (finally (dev/dev-off)))
+        (catch Exception e (log/warn [::plot->file {:message (format "File creation (%s) failed" apath)
+                                                    :exception (exception-cause e)}]))))))
 
 (defn plot->svg [plotting-function-or-object & svg-params]
   (let [tempfile (File/createTempFile "clojisr_plot" ".svg")

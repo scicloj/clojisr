@@ -5,8 +5,7 @@
             [clojisr.v1.impl.renjin.engine :as engine]
             [clojisr.v1.impl.renjin.lang :as lang]
             [clojisr.v1.impl.renjin.packages :as packages]
-            [clojisr.v1.impl.renjin.printing :as printing]
-            [cambium.core :as log])
+            [clojisr.v1.impl.renjin.printing :as printing])
   (:import (org.renjin.sexp SEXP)
            (org.renjin.script RenjinScriptEngine RenjinScriptEngineFactory)
            clojisr.v1.protocols.Session))
