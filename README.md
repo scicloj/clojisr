@@ -123,6 +123,8 @@ user=> (r '[+ 1 2])
 
 Please share your comments, thoughts, ideas and questions at the [Issues Page](https://github.com/scicloj/clojisr/issues) of this project and at the [r-interop stream](https://clojurians.zulipchat.com/#narrow/stream/204621-r-interop) of the Clojurians Zulip.
 
+Also we run [a stream](https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev) for developers or people interested in contributing.
+
 ## Tools used
 
 Working on this project, we enjoyed the following tools (partial list):
