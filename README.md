@@ -69,6 +69,14 @@ Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackover
 
 [![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
 
+### Setting up the logging
+
+* `clojisr` library uses [clojure/tools.logging](https://github.com/clojure/tools.logging) for logging. `tools.logging` doesn't force any logging backend and users has to configure it on their side. To force specific backend you can set it using JVM options, for example in lein `profile.clj` or `project.clj`:
+
+```clj
+:jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
+```
+
 ## Checking if it works
 
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):

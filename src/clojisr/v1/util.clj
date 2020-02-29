@@ -145,3 +145,6 @@
       name
       (string/replace #"\." "-")
       symbol))
+
+(defn exception-cause [e]
+  (-> e Throwable->map (select-keys [:via :cause])))

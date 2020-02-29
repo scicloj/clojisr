@@ -4,7 +4,7 @@
             [clojisr.v1.refresh :as refresh]
             [clojisr.v1.codegen :as codegen]
             [clojisr.v1.gc :as gc]
-            [cambium.core :as log])
+            [clojure.tools.logging.readable :as log])
   (:import clojisr.v1.robject.RObject))
 
 
@@ -44,6 +44,7 @@
         (gc/track
          r-object
          ;; TODO: revisit cleaning strategy, below code will never be called (r-object is kept in `functions-mem` atom forever) [ts]
-         #(do (log/warn [::releasing-function-cache (:object-name r-object)])
+         #(do (log/debug [::function {:message "Releasing function cache."
+                                      :object-name r-object}])
               (swap! functions-mem dissoc r-object)))
         f)))

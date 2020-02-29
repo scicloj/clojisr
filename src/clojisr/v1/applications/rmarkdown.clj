@@ -1,10 +1,10 @@
 (ns clojisr.v1.applications.rmarkdown
   (:require [clojisr.v1.r :as r :refer [r]]
-            [clojisr.v1.util :refer [starts-with?]]
+            [clojisr.v1.util :refer [starts-with? exception-cause]]
             [hiccup.core :as hiccup]
             [clojure.string :as string]
             [clojure.walk :as walk]
-            [cambium.core :as log])
+            [clojure.tools.logging.readable :as log])
   (:import (java.io File)
            (java.lang Math)))
 
@@ -51,7 +51,8 @@
        [rmd-path
         data])
       html-path
-      (catch Exception e (log/error [::render-rmd {:exception (.getMessage e)}]))
+      (catch Exception e (log/warn [::render-rmd {:message "Can't create html from rmarkdown."
+                                                  :exception (exception-cause e)}]))
       (finally (.delete rmd-file)))))
 
 

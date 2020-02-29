@@ -4,11 +4,9 @@
             [clojisr.v1.eval :as evl]
             [clojisr.v1.protocols :as prot]
             [clojisr.v1.known-classes :as known-classes]
-            [clojisr.v1.util :as util
-             :refer [clojurize-r-symbol]]
-            [clojisr.v1.impl.common
-             :refer [strange-symbol-name?]]
-            [cambium.core :as log]))
+            [clojisr.v1.util :as util :refer [clojurize-r-symbol exception-cause]]
+            [clojisr.v1.impl.common :refer [strange-symbol-name?]]
+            [clojure.tools.logging.readable :as log]))
 
 (defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
@@ -31,9 +29,9 @@
                (try
                  (package-r-object package-symbol r-symbol)
                  (catch Exception e
-                   (log/warn [::failed-requiring {:package-symbol package-symbol
-                                                  :r-symbol r-symbol
-                                                  :cause (-> e Throwable->map :cause)}])))]))
+                   (log/warn [::require-symbol {:package-symbol package-symbol
+                                                :r-symbol r-symbol
+                                                :exception (exception-cause e)}])))]))
        (filter second)
        (into {})))
 
@@ -113,8 +111,8 @@
                                 r-symbols
                                 (select-keys r-symbols refer))))))
     (catch Exception e
-      (log/warn [::failed-requiring-package {:package-symbol package-symbol
-                                             :cause (-> e Throwable->map :cause)}]))))
+      (log/warn [::require-r-package {:package-symbol package-symbol
+                                      :cause (exception-cause e)}]))))
 
 (defn require-r [& packages]
   (run! require-r-package packages))

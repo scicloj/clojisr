@@ -5,7 +5,7 @@
             [clojisr.v1.util :as util]
             [clojisr.v1.robject :refer [->RObject]]
             [clojisr.v1.known-classes :as known-classes]
-            [cambium.core :as log])
+            [clojure.tools.logging.readable :as log])
   (:import clojisr.v1.robject.RObject))
 
 (defn ->robject [obj-name session code]
@@ -26,7 +26,7 @@
                  (= ["ok"])))
     (-> (->robject obj-name session code)
         (gc/track
-         #(do (log/debug [::releasing obj-name])
+         #(do (log/debug [::gc {:releasing obj-name}])
               (mem/forget obj-name session))))))
 
 (defn java->r-specified-type [java-object type session]

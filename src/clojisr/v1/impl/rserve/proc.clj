@@ -6,26 +6,26 @@
             [clojure.java.shell :refer [sh]]
             [clojure.string :as string]
             [clojisr.v1.util :refer [file-exists?]]
-            [cambium.core :as log])
+            [clojure.tools.logging.readable :as log])
   (:import [java.lang ProcessBuilder]
            [java.io File]))
 
+
 (defn spawn [& args]
-  (log/info [::spawning (string/join " " args)])
- (let [process (-> (ProcessBuilder. ^java.util.List args)
-                   (.start))]
-  {:out (-> process
-            (.getInputStream)
-            (reader))
-   :err (-> process
-            (.getErrorStream)
-            (reader))
-   :in (-> process
-           (.getOutputStream)
-           (writer))
-   :process process}))
-
-
+  (log/info [::spawn {:process args}])
+  (let [process (-> (ProcessBuilder. ^java.util.List args)
+                    (.start))]
+    {:out (-> process
+              (.getInputStream)
+              (reader))
+     :err (-> process
+              (.getErrorStream)
+              (reader))
+     :in (-> process
+             (.getOutputStream)
+             (writer))
+     :process process
+     :args args}))
 
 ;; Running Rserve -- copied from Rojure:
 ;; https://github.com/behrica/rojure
@@ -44,7 +44,7 @@
    Returns a map with a java.lang.Process that can be 'destroy'ed"
   [{:keys [port init-r sleep]
     :or {init-r ""
-         sleep 0}}]
+         sleep 500}}]
   (let [rstr-temp (format
                    (if (file-exists? "/etc/Rserv.conf")
                      "library(Rserve); run.Rserve(port=%s, config.file='/etc/Rserv.conf');"
@@ -59,7 +59,6 @@
                         "--slave"
                         "-e" ; evaluate (boot server)
                         rstr)]
-      (log/info [::sleeping sleep])
       (Thread/sleep sleep)
       rserve)))
 
@@ -68,4 +67,5 @@
 
 (defn close [rserve]
   (let [p ^Process (:process rserve)]
-    (when (.isAlive p) (.destroy p))))
+    (when (.isAlive p)
+      (.destroy p))))

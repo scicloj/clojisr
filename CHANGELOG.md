@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA9-SNAPSHOT]
+- changed logging to `clojure/tools.logging`
+
 ## [1.0.0-BETA8]
 - bugfix for plotting (to draw a chart `print` should be called instead of `plot`)
 - tech.ml libraries bumped

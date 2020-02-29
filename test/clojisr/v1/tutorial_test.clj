@@ -3,7 +3,6 @@
              :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup check]]
             [notespace.v2.live-reload]))
 
-
 (note-md "# Clojisr tutorial")
 
 (note-md :basic-examples "## Basic examples")
@@ -387,7 +386,7 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
  (->> [1 2 3]
       r.stats/median
       r->clj
-     (check = [2])))
+      (check = [2])))
 
 (note
  (->> [1 2 3]
