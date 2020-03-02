@@ -84,6 +84,9 @@
 (defn form->code [form session]
   (cond (sequential? form) (seq-form->code form session)
         (symbol? form)     (name form)
+        (integer? form)    (str form) ;; integer is rational :/
+        (rational? form)   (format "(%s)" form)
+        (number? form)     (str form)
         :else              (value->code form session)))
 
 (defn arg->arg-name-and-value [arg]
