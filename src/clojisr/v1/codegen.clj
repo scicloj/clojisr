@@ -87,6 +87,7 @@
         (integer? form)    (str form) ;; integer is rational :/
         (rational? form)   (format "(%s)" form)
         (number? form)     (str form)
+        (boolean? form)    (if form "TRUE" "FALSE")
         :else              (value->code form session)))
 
 (defn arg->arg-name-and-value [arg]
