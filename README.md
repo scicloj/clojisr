@@ -54,7 +54,7 @@ Note however that:
 
 ## Usage requirements
 
-* Linux or MacOS
+* Linux, MacOS or WSL (Windows Subsystem for Linux)
 
 * JDK 1.8 or later
 
