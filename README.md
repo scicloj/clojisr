@@ -54,7 +54,7 @@ Note however that:
 
 ## Usage requirements
 
-* Linux or MacOS
+* Linux, MacOS or WSL (Windows Subsystem for Linux)
 
 * JDK 1.8 or later
 
@@ -71,7 +71,7 @@ Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackover
 
 ### Setting up the logging
 
-* `clojisr` library uses [clojure/tools.logging](https://github.com/clojure/tools.logging) for logging. `tools.logging` doesn't force any logging backend and users has to configure it on their side. To force specific backend you can set it using JVM options, for example in lein `profile.clj` or `project.clj`:
+* `clojisr` library uses [clojure/tools.logging](https://github.com/clojure/tools.logging) for logging. `tools.logging` doesn't force any logging backend and users have to configure it on their side. To force specific backend you can set it using JVM options, for example in lein `profile.clj` or `project.clj`:
 
 ```clj
 :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
