@@ -116,7 +116,7 @@ whenn computing the mean.")
 (note
  (->> (r+ 1 2 3)
       r->clj
-      (check = [6])))
+      (check = [6.0])))
 
 (note
  (->> (colon 0 9)
@@ -327,7 +327,7 @@ this time generating code rather than writing it as Strings.")
  "checking again... "
  (->> x
       r->clj
-      (check = [3])))
+      (check = [3.0])))
 
 (note-void
  (def f (r '(function [x] (* x 10)))))
@@ -337,7 +337,7 @@ this time generating code rather than writing it as Strings.")
  (->> 5
       f
       r->clj
-      (check = [50])))
+      (check = [50.0])))
 
 (note
  "checking again... "
@@ -461,10 +461,12 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
 
 (note-md "Any plot (function or object) can be saved to file or converted to BufferedImage object.")
 
-(def target-path (second (re-find #"(.*)/[^/]*" (notespace.v2.note/ns->out-filename *ns*))))
+(def target-path (notespace.v2.note/ns->out-dir *ns*))
 
-(note (r->clj (plot->file (str target-path "/histogram.jpg") (fn [] (hist [1 1 1 1 2 3 4 5]))
-                          :width 800 :height 400 :quality 50)))
+(note-void (r->clj (plot->file (str target-path "histogram.jpg") #(hist [1 1 1 1 2 3 4 5]
+                                                                        :main "Histogram"
+                                                                        :xlab "data: [1 1 1 1 2 3 4 5]")
+                               :width 800 :height 400 :quality 50)))
 
 (note-hiccup [:image {:src "histogram.jpg"}])
 

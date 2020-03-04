@@ -3,7 +3,9 @@
             [clojisr.v1.using-sessions :as using-sessions]
             [clojure.string :as string]
             [clojisr.v1.protocols :as prot]
-            [clojisr.v1.util :as util :refer [l]]))
+            [clojisr.v1.util :as util :refer [l]]
+            [clojisr.v1.robject])
+  (:import [clojisr.v1.robject RObject]))
 
 (defn r-object->code [r-object]
   (-> r-object
@@ -83,12 +85,13 @@
 
 (defn form->code [form session]
   (cond (sequential? form) (seq-form->code form session)
-        (symbol? form)     (name form)
-        (integer? form)    (str form) ;; integer is rational :/
-        (rational? form)   (format "(%s)" form)
-        (number? form)     (str form)
-        (boolean? form)    (if form "TRUE" "FALSE")
-        :else              (value->code form session)))
+        (symbol? form)           (name form)
+        (integer? form)          (str form) ;; integer is rational :/
+        (rational? form)         (format "(%s)" form)
+        (number? form)           (str form)
+        (boolean? form)          (if form "TRUE" "FALSE")
+        (instance? RObject form) (r-object->code form)
+        :else                    (value->code form session)))
 
 (defn arg->arg-name-and-value [arg]
   (if (util/starts-with? arg :=)
