@@ -28,10 +28,11 @@
       (try
         (apply device apath device-params)
         (try
-          (if (instance? RObject plotting-function-or-object)
-            (r-print plotting-function-or-object)
-            (plotting-function-or-object))
+          (let [res (if (instance? RObject plotting-function-or-object)
+                      (r-print plotting-function-or-object)
+                      (plotting-function-or-object))])
           (log/debug [[::plot->file {:message (format "File %s saved." apath)}]])
+          res
           (catch Exception e (log/warn [::plot->file {:message "Evaluation plotting function failed."
                                                       :exception (exception-cause e)}]))
           (finally (dev/dev-off)))
