@@ -94,6 +94,7 @@ user=> (r '[+ 1 2])
 
 * clojisr can behave strange when abandoned R (with Rserve) processes are running. Please kill such processes before creating rserve session
 * Nextjournal can hang due to problems with logging, please add ` org.slf4j/slf4j-nop {:mvn/version "1.7.30"}` to the deps to disable logger
+* When R dataset contains logical columns, these are not transferable to Clojure. We wait for fix in `tech.ml.dataset` code.
 
 ## Tutorials
 
