@@ -82,7 +82,7 @@ Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackover
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
 
 ```clj
-$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA7"}}}}'
+$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA8"}}}}'
 Clojure 1.10.1
 user=> (require '[clojisr.v1.r :refer [r]])
 
