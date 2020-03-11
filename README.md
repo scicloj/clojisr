@@ -134,6 +134,10 @@ Please share your comments, thoughts, ideas and questions at the [Issues Page](h
 
 Also we run [a stream](https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev) for developers or people interested in contributing.
 
+## Testing
+
+The code tests are embedded in the [tutorials](#tutorials) and are run when they are rendered (using [notespace](https://github.com/scicloj/notespace)). This way we make sure that tests and documentation are in sync.
+
 ## Tools used
 
 Working on this project, we enjoyed the following tools (partial list):
