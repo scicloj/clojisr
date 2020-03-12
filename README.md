@@ -10,7 +10,9 @@ The beginning of the pronunciation is the same as Clojure, but then it rhymes wi
 
 ## Status
 
-Not tested in production, still evolving.
+- still evolving
+- not recommended for production yet
+- already used by several people in their data science explorations
 
 ## Scope of the project
 
