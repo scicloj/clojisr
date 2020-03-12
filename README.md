@@ -29,7 +29,7 @@ The related problem, of calling Clojure from R, may be addressed too in the futu
 The main ideas were discussed at [Scicloj Web meeting #7](https://www.youtube.com/watch?v=XoVX2Ezi_YM) and [ClojuTRE 2019](https://www.youtube.com/watch?v=A55jO02ZKcg).
 
 Note however that:
-- The API has changed since then (mainly data visualization support, clear code generation rules, different printing - see the Intro below).
+- The API has changed since then (code generation mechanism, data visualization support, printing - see the [Tutorials](#Tutorials) below).
 - On the meeting, there is some careless use of the term 'zero copy'. Actually, what is usually meant by this term is not supported at the moment.
 
 ## Meta Goals
