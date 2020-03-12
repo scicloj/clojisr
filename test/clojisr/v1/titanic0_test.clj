@@ -1,6 +1,8 @@
 (ns clojisr.v1.titanic0-test
   (:require [notespace.v2.note :as note
-             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
+             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
+            [clojisr.v1.r :as r]
+            [clojure.java.io :as io]))
 
 (note-md "
 #Clouress example: Titanic #0
@@ -36,7 +38,6 @@ Here are most of the functions that we need, brought by the standard `require-r`
             bra bra<- brabra brabra<- colon]]
   '[clojisr.v1.applications.plotting :refer [plot->svg]]
   '[clojisr.v1.require :refer [require-r]]
-  '[clojure.java.shell :refer [sh]]
   '[clojure.string :as string]
   '[clojisr.v1.rserve :as rserve]))
 
@@ -57,7 +58,6 @@ Here are most of the functions that we need, brought by the standard `require-r`
   '[mice :refer [mice complete]]
   '[randomForest :refer [randomForest importance]]))
 
-
 (note-md
  "
 ## Introduction -- Prediction of Titanic Survival using Random Forest
@@ -74,11 +74,10 @@ This step assumes that the [Titanic data](https://www.kaggle.com/c/titanic/data)
 
 (note-void
  (def data-path
-   (-> "pwd"
-       sh
-       :out
-       string/trim
-       (str "/resources/data/titanic/"))))
+   (-> (io/resource "data/titanic")
+       (io/file)
+       (.getAbsolutePath)
+       (str "/"))))
 
 (note-md
  "
@@ -175,10 +174,9 @@ titanic$title<-gsub('(.*, )|(\\..*)', '', titanic$Name)
 (note-void
  (def titanic
    ($<- titanic 'title
-     (gsub "(.*, )|(\\..*)"
-           ""
-           ($ titanic 'Name)))))
-
+        (gsub "(.*, )|(\\\\..*)"
+              ""
+              ($ titanic 'Name)))))
 
 (note-md
  "Show title counts by sex
@@ -271,7 +269,13 @@ nlevels(factor(titanic$surname)) ## 875 unique surnames
  (def titanic
    ($<- titanic 'surname
         (sapply ($ titanic 'Name)
-                (r "function(x) strsplit(x,split='[,.]')[[1]][1]")))))
+                (r "function(x) strsplit(x,split='[,.]')[[1]][1]")
+                ;; (r '(function [x] (~bra (~brabra (strsplit x :split "[,.]") 1) 1)))
+                ))))
+
+
+
+(r (:object-name bra))
 
 (note
  (-> titanic

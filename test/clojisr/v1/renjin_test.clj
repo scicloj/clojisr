@@ -34,7 +34,7 @@
             '[stats]))
 
 (note
- (r ['+ 1 2]))
+ (r '(+ 1 2)))
 
 (note
  (r.stats/median [1 2 4]))
@@ -82,7 +82,7 @@
        df     (r.base/data-frame
                :x xs
                :y ys)
-       fit    (r.stats/lm '[tilde y x]
+       fit    (r.stats/lm '(formula y x)
                           :data df)]
    (r.base/summary fit)))
 

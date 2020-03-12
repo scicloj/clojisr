@@ -86,8 +86,7 @@
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (try
     (let [session (session/fetch-or-make nil)]
-      (evl/eval-form ['library
-                      package-symbol]
+      (evl/eval-form `(library ~package-symbol)
                      session))
     (let [r-ns-symbol (->> package-symbol
                            (str "r.")

@@ -8,26 +8,30 @@
             [clojure.tools.logging.readable :as log])
   (:import clojisr.v1.robject.RObject))
 
+(defn random-object-name []
+  (str mem/session-env "$" (util/rand-name)))
+
 (defn ->robject [obj-name session code]
-  (let [theclass (->> obj-name
-                      mem/object-name->memory-place
+  (let [theclass (->> obj-name   
                       (format "class(%s)")
                       (prot/eval-r->java session)
                       (prot/java->clj session))]
     (->RObject obj-name session code theclass)))
 
-(defn eval-code [code session]
-  (let [obj-name (util/rand-name)
-        returned (->> code
-                      (mem/code-that-remembers obj-name)
-                      (prot/eval-r->java session))]
-    (assert (->> returned
-                 (prot/java->clj session)
-                 (= ["ok"])))
-    (-> (->robject obj-name session code)
-        (gc/track
-         #(do (log/debug [::gc {:releasing obj-name}])
-              (mem/forget obj-name session))))))
+(defn eval-code
+  ([code session] (eval-code (random-object-name) code session))
+  ([obj-name code session]
+   (let [obj-name (or obj-name (random-object-name))
+         returned (->> code
+                       (mem/code-that-remembers obj-name)
+                       (prot/eval-r->java session))]
+     (assert (->> returned
+                  (prot/java->clj session)
+                  (= ["ok"])))
+     (-> (->robject obj-name session code)
+         (gc/track
+          #(do (log/debug [::gc {:releasing obj-name}])
+               (mem/forget obj-name session)))))))
 
 (defn java->r-specified-type [java-object type session]
   (prot/java->specified-type session java-object type))
@@ -36,24 +40,19 @@
                          function-code return-type]
   (->> r-object
        :object-name
-       mem/object-name->memory-place
        (format "%s(%s)" function-code)
        (prot/eval-r->java session)
        (#(prot/java->specified-type session % return-type))))
 
-(defn r->java [{:keys [session] :as r-object}]
-  (->> r-object
-       :object-name
-       mem/object-name->memory-place
-       (prot/eval-r->java session)))
+(defn r->java [{:keys [session object-name] :as r-object}]
+  (prot/eval-r->java session object-name))
 
 (defn java->r [java-object session]
   (if (instance? RObject java-object)
     java-object
-    (let [obj-name (util/rand-name)]
+    (let [obj-name (random-object-name)]
       (prot/java->r-set session
-                        (mem/object-name->memory-place
-                         obj-name)
+                        obj-name
                         java-object)
       (->robject obj-name session nil))))
 
