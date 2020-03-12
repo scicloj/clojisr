@@ -16,21 +16,13 @@ The beginning of the pronunciation is the same as Clojure, but then it rhymes wi
 
 ## Scope of the project
 
-There are already stable libraries for Clojure-R interop - see [this list](doc/existing_libraries.md).
+Libraries for Clojure-R interop are note new - see [this list](doc/existing_libraries.md).
 
 This project suggests yet another way to use R from Clojure.
 
 Currently we target only JVM Clojure, but we are interested in generalizing the work to Clojurescript.
 
 The related problem, of calling Clojure from R, may be addressed too in the future. We are experimenting with that.
-
-## Video presentations
-
-The main ideas were discussed at [Scicloj Web meeting #7](https://www.youtube.com/watch?v=XoVX2Ezi_YM) and [ClojuTRE 2019](https://www.youtube.com/watch?v=A55jO02ZKcg).
-
-Note however that:
-- The API has changed since then (code generation mechanism, data visualization support, printing - see the [Tutorials](#Tutorials) below).
-- On the meeting, there is some careless use of the term 'zero copy'. Actually, what is usually meant by this term is not supported at the moment.
 
 ## Meta Goals
 
@@ -42,17 +34,17 @@ Note however that:
 
   * A Function-centric API, where the default mode of usage is calling R functions on R objects, from Clojure (Status: supported)
 
-  * "R code as Clojure data", inspired by but extending the EDN-based syntax inroducted in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and [used](https://github.com/sbelak/huri/blob/master/src/huri/plot.clj#L299) in [huri](https://github.com/sbelak/huri) (Status: supported)
+  * "R code as Clojure data", inspired by the EDN-based syntax inroducted in [gg4clj](https://github.com/JonyEpsilon/gg4clj) and [used](https://github.com/sbelak/huri/blob/master/src/huri/plot.clj#L299) in [huri](https://github.com/sbelak/huri) (Status: supported)
 
   * Interop with minimal copying of data (Status: supported)
 
-  * Compatibility with common data abstractions such as [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) datasets (Status: partial support) 
+  * Compatibility with common data abstractions such as [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) datasets (Status: partially supported) 
 
-  * Convenient wrappers for common use cases, such as visualization (Status: wrote a basic wrapper to Rmarkdown)
+  * Convenient wrappers for common use cases, such as visualization (Status: basic support for plots and Rmarkdown)
  
-  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: GNU R is supported through backend; Renjin has some basic support)
+  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: GNU R is supported through Rserve; Renjin has some basic support)
 
-  * Convenient multi-session support (Status: a draft exists, needs some polish)
+  * Convenient multi-session support (Status: basic support with some known issues)
 
 ## Usage requirements
 
@@ -97,6 +89,15 @@ user=> (r '[+ 1 2])
 * clojisr can behave in a strange way when abandoned R (with Rserve) processes are running. Please kill such processes before creating an Rserve session.
 * Nextjournal can hang due to problems with logging, please add ` org.slf4j/slf4j-nop {:mvn/version "1.7.30"}` to the deps to disable logger.
 * When an R dataframe contains columns of type "logical" (that is, boolean), these are not transferable to Clojure. We wait for an upcoming fix in `tech.ml.dataset` code.
+
+
+## Video presentations
+
+The main ideas were discussed at [Scicloj Web meeting #7](https://www.youtube.com/watch?v=XoVX2Ezi_YM) and [ClojuTRE 2019](https://www.youtube.com/watch?v=A55jO02ZKcg).
+
+Note however that:
+- The API has changed since then (code generation mechanism, data visualization support, printing - see the [Tutorials](#Tutorials) below).
+- On the meeting, there is some careless use of the term 'zero copy'. Actually, what is usually meant by this term is not supported at the moment.
 
 ## Tutorials
 
