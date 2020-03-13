@@ -55,7 +55,7 @@
   [args session ctx]
   (->> (loop [res []
               [fa & ra :as all] args]
-         (if all
+         (if (seq all)
            (if (keyword? fa)
              (recur (conj res (format "%s=%s" (name fa) (form->code (first ra) session ctx))) (rest ra))
              (recur (conj res (form->code fa session ctx)) ra))
