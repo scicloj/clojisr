@@ -20,7 +20,7 @@
 ;; Leave nil untouched when coercing seq
 (defn ^:private map-with-nil
   [f xs]
-  (map #(if (nil? %) nil (f %)) xs))
+  (map #(some-> % f) xs))
 
 ;; all binary operators as set of strings
 (def binary-operators #{"$" "=" "<<-" "<-" "+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">"})
@@ -55,7 +55,7 @@
   [args session ctx]
   (->> (loop [res []
               [fa & ra :as all] args]
-         (if (seq all)
+         (if all
            (if (keyword? fa)
              (recur (conj res (format "%s=%s" (name fa) (form->code (first ra) session ctx))) (rest ra))
              (recur (conj res (form->code fa session ctx)) ra))
@@ -75,11 +75,12 @@
   (let [fmt (partial format (if (ctx :flat) "%s%s%s" "(%s%s%s)"))
         res (if-not f1
               (throw (Exception. "Positive number of arguments is required."))
-              (if-not (seq fr)
-                (if (unary-operators f)
-                  (str f (form->code f1 session ctx))
-                  (str fr))
-                (reduce (fn [a1 a2] (fmt a1 f (form->code a2 session ctx))) (form->code f1 session ctx) fr)))]
+              (let [f1-code (form->code f1 session ctx)]
+                (if-not fr
+                  (if (unary-operators f)
+                    (str f f1-code)
+                    f1-code)
+                  (reduce (fn [a1 a2] (fmt a1 f (form->code a2 session ctx))) f1-code fr))))]
     (if (and (wrapped-operators f)
              (not (ctx :unwrap))
              (ctx :flat))
@@ -117,16 +118,14 @@
           (join ";" (map #(form->code % session ctx) body))))
 
 (defn unquote-form->code
-  "Eval quoted form.
+  "Eval unquoted form.
 
   Used when unquote symbol is part of regular quoted form.
 
-  Warning: You can't unquote local bindings! Use syntax quote instead."
+  Warning: You can't unquote local bindings! For this case use inside syntax quote."
   [u-form session ctx]
-  (let [ef (apply eval u-form)]
-    (if (instance? RObject ef)
-      (:object-name ef)
-      (form->code ef session ctx))))
+  (-> (apply eval u-form)
+      (form->code session ctx)))
 
 (defn vector->code
   "Construct R vector using `c` function.
@@ -137,17 +136,16 @@
   `nil` is converted to `NA`"
   [[f & r :as v-form] session ctx]
   (with-ctx [:na]
-    (cond
-      (= :!string f) (vector->code (map-with-nil named-or-anything->string r) session ctx)
-      (= :!boolean f) (vector->code (map-with-nil #(if % true false) r) session ctx)
-      (= :!int f) (vector->code (map-with-nil unchecked-int r) session ctx)
-      (= :!double f) (vector->code (map-with-nil unchecked-double r) session ctx)
-      (= :!named f) (format "c(%s)" (args->code r session ctx))
-      (= :!list f) (format "list(%s)" (args->code r session ctx))
-      (= :!factor f) (format "factor(%s)" (vector->code r session ctx))
-      (= :!ct f) (format "as.POSIXct(%s)" (vector->code r session ctx))
-      (= :!lt f) (format "as.POSIXlt(%s)" (vector->code r session ctx))
-      :else
+    (case f
+      :!string (vector->code (map-with-nil named-or-anything->string r) session ctx)
+      :!boolean (vector->code (map-with-nil #(if % true false) r) session ctx)
+      :!int (vector->code (map-with-nil unchecked-int r) session ctx)
+      :!double (vector->code (map-with-nil unchecked-double r) session ctx)
+      :!named (format "c(%s)" (args->code r session ctx))
+      :!list (format "list(%s)" (args->code r session ctx))
+      :!factor (format "factor(%s)" (vector->code r session ctx))
+      :!ct (format "as.POSIXct(%s)" (vector->code r session ctx))
+      :!lt (format "as.POSIXlt(%s)" (vector->code r session ctx))
       (if (< (count v-form) 80)
         (format "c(%s)" (join "," (map #(form->code % session ctx) v-form)))
         (form->java->code v-form session)))))
@@ -186,7 +184,7 @@
 
   `nil` is treated as `NA`"
   [form session ctx]
-  (if (< (count form) 2)
+  (if (< (count form) 50)
     (with-ctx [:na]
       (->> (map (fn [[k v]]
                   (format "%s=%s" (form->code k session ctx) (form->code v session ctx))) form)
