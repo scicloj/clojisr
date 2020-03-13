@@ -269,13 +269,8 @@ nlevels(factor(titanic$surname)) ## 875 unique surnames
  (def titanic
    ($<- titanic 'surname
         (sapply ($ titanic 'Name)
-                (r "function(x) strsplit(x,split='[,.]')[[1]][1]")
-                ;; (r '(function [x] (~bra (~brabra (strsplit x :split "[,.]") 1) 1)))
-                ))))
-
-
-
-(r (:object-name bra))
+                (r '(function [x]
+                              (bra (brabra (strsplit x :split "[,.]") 1) 1)))))))
 
 (note
  (-> titanic
@@ -420,7 +415,8 @@ titanic$deck<-factor(sapply(titanic$Cabin, function(x) strsplit(x, NULL)[[1]][1]
  (def titanic
    ($<- titanic 'deck
         (factor (sapply ($ titanic 'Cabin)
-                        (r "function(x) strsplit(x, NULL)[[1]][1]"))))))
+                        (r '(function [x]
+                                      (bra (brabra (strsplit x nil) 1) 1))))))))
 
 (note-md "Let us check:")
 
@@ -970,8 +966,7 @@ titanic$fsizeD <- factor(titanic$fsizeD)
              ($<- data symbol
                   (factor ($ data symbol))))
            titanic
-           ['Child 'Mother 'Pclass 'Sex
-            'Embarked 'Survived 'title 'fsizeD])))
+           '[Child Mother Pclass Sex Embarked Survived title fsizeD])))
 
 (note-md "Check classes of all columns:")
 

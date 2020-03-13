@@ -7,7 +7,8 @@
             [clojisr.v1.printing]
             [clojisr.v1.codegen :as codegen]
             [clojure.string :as string]
-            [clojisr.v1.rserve :as rserve])
+            [clojisr.v1.rserve :as rserve]
+            [clojisr.v1.util :refer [special-functions]])
   (:import clojisr.v1.robject.RObject))
 
 (defn init [& {:keys [session-args]}]
@@ -130,8 +131,11 @@
   (reduce (r "`+`") args))
 
 ;; Some special characters will get a name in letters.
-(def bra (r "`[`"))
-(def bra<- (r "`[<-`"))
-(def brabra (r "`[[`"))
-(def brabra<- (r "`[[<-`"))
-(def colon (r "`:`"))
+
+(defmacro ^:private def-special-functions
+  []
+  `(do ~@(for [[n f] special-functions
+               :let [ns (symbol n)]]
+           `(def ~ns (r ~f)))))
+
+(def-special-functions)

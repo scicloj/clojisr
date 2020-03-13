@@ -123,10 +123,9 @@
 
 (defn tilde [s]
   (->> s
-      name
-      (str "~")
-      keyword))
-
+       name
+       (str "~")
+       keyword))
 
 (defn file-exists? [path]
   (.exists (File. path)))
@@ -148,3 +147,9 @@
 
 (defn exception-cause [e]
   (-> e Throwable->map (select-keys [:via :cause])))
+
+(def special-functions {"bra" "`[`"
+                        "brabra" "`[[`"
+                        "bra<-" "`[<-`"
+                        "brabra<-" "`[[<-`"
+                        "colon" "`:`"})
