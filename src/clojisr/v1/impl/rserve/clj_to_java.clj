@@ -117,9 +117,7 @@
   (or (cond
         ;; an r object
         (instance? RObject obj)
-        (do
-          (println (:object-name obj))
-          (REXPSymbol. (:object-name obj)))
+        (REXPSymbol. (:object-name obj))
         ;; a java REXP object
         (instance? REXP obj)
         obj

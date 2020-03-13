@@ -2,7 +2,8 @@
   (:require [clojisr.v1.using-sessions :as using-sessions]
             [clojure.string :refer [join]]
             [clojisr.v1.protocols :as prot]
-            [clojisr.v1.robject])
+            [clojisr.v1.robject]
+            [clojisr.v1.util :refer [special-functions]])
   (:import [clojure.lang Named]
            [clojisr.v1.robject RObject]))
 
@@ -53,8 +54,8 @@
   Used to format function arguments or when coercing vector to a list."
   [args session ctx]
   (->> (loop [res []
-              [fa & ra] args]
-         (if fa
+              [fa & ra :as all] args]
+         (if (seq all)
            (if (keyword? fa)
              (recur (conj res (format "%s=%s" (name fa) (form->code (first ra) session ctx))) (rest ra))
              (recur (conj res (form->code fa session ctx)) ra))
@@ -161,13 +162,16 @@
   * RObject which is a function - create function call
   * sequence - create function call with processed first element.
   * any symbol - function call
+  * one of the functions with special names: [,[[,[<-,[[<-,:
   * any other value - construct vector"
   [[f & r :as seq-form] session ctx]
   (if (symbol? f)
     (let [fs (name f)]
       (cond
         (= "function" fs) (function-def->code (first r) (rest r) session ctx)
-        (= "formula" fs) (formula->code r session ctx)
+        (or (= "tilde" fs)
+            (= "formula" fs)) (formula->code r session ctx)
+        (contains? special-functions fs) (function-call->code (special-functions fs) r session ctx)
         (= 'clojure.core/unquote f) (unquote-form->code r session ctx)
         :else (symbol-form->code fs r session ctx)))
     (cond
@@ -216,4 +220,3 @@
      (inst? form) (format "'%s'" (.format dt-format form)) ;; date/time just as string, to be converted to time by the user
      (instance? Named form) (name form)
      :else (form->java->code form session))))
-
