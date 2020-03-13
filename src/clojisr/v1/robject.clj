@@ -6,8 +6,8 @@
 ;; See https://stackoverflow.com/a/3084773/1723677
 ;; After some long thought, couldn't find a more decent option,
 ;; except for uniting many, many namespaces into one huge namespace.
-(defn- function [& args]
-  (apply (resolve 'clojisr.v1.functions/function) args))
+(defn- function [args]
+  ((resolve 'clojisr.v1.functions/function) args))
 
 ;; See this related discussion on reifying IFn.
 ;; https://clojurians.zulipchat.com/#narrow/stream/215609-libpython-clj-dev/topic/pandas.20query.20methods.20bug/near/186410253

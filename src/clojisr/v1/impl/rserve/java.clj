@@ -44,7 +44,7 @@
   ;; Using the technique of https://stackoverflow.com/a/40447542/1723677, the way it is used in Rojure.
   (try
     (let [expression-str (-> expression
-                             (string/replace "\"" "\\\"")
+                             (string/escape char-escape-string)
                              (->> (format "try(eval(parse(text=\"%s\")),silent=TRUE)")))
           rexp (locking r-connection
                  (.parseAndEval r-connection expression-str))]

@@ -86,10 +86,10 @@
 
 (defn ->list [values]
   (->> values
-      ;; recursively
-      (map clj->java)
-      (RList.)
-      (REXPGenericVector.)))
+       ;; recursively
+       (map clj->java)
+       (RList.)
+       (REXPGenericVector.)))
 
 (defn ->named-list [amap]
   (-> (RList. (->> amap
@@ -117,7 +117,9 @@
   (or (cond
         ;; an r object
         (instance? RObject obj)
-        obj
+        (do
+          (println (:object-name obj))
+          (REXPSymbol. (:object-name obj)))
         ;; a java REXP object
         (instance? REXP obj)
         obj

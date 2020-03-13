@@ -15,11 +15,10 @@
     ;; Try to return a refreshed object.
     (if-let [code (:code r-object)]
       ;; The object has code information -- rerun the code with the same session-args.
-      (->> r-object
-           :session
+      (->> (:session r-object)
            prot/id
            session/fetch-or-make
-           (evl/r code))
+           (evl/r (:object-name r-object) code)) ;; reuse the name!
       ;; No code information.
       (ex-info "Cannot refresh an object with no code info."
                {:r-object r-object}))))
@@ -31,4 +30,3 @@
         (when (-> @mem fresh-object? not)
           (reset! mem (refreshed-object r-object)))
         @mem))))
-

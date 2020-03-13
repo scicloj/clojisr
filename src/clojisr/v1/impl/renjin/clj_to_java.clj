@@ -17,6 +17,7 @@
            (org.renjin.sexp SEXP Symbol
                             Vector Null
                             FunctionCall
+                            Symbol
                             DoubleVector DoubleArrayVector
                             IntVector IntArrayVector
                             LogicalVector LogicalArrayVector
@@ -127,7 +128,7 @@
   (or (cond
         ;; an r object
         (instance? RObject obj)
-        obj
+        (Symbol/get (:object-name obj))
         ;; a renjin object
         (instance? SEXP obj)
         obj
