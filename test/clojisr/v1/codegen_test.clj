@@ -280,11 +280,10 @@ First require necessary namespaces.")
 
 (note-md "#### Unquoting")
 
-(note-md "Sometimes we want to use objects created outside our form (defined earlier or in `let`). For this case you can use the `unqote` (`~`) symbol. There are two options:")
+(note-md "Sometimes we want to use objects created outside our form (defined earlier or in `let`). For this case you can use the `unqote` (`~`) symbol. There are two options:
 
-(note-md "* when using quoting `'`, unqote evaluates the uquoted form using `eval`. `eval` has some constrains, the most important is that local bindings (`let` bindings) can't be use.")
-
-(note-md "* when using syntax quoting (backquote `), unqote acts as in clojure macros -- all unquoted forms are evaluated instantly.")
+* when using quoting `'`, unqote evaluates the uquoted form using `eval`. `eval` has some constrains, the most important is that local bindings (`let` bindings) can't be use.
+* when using syntax quoting (backquote `), unqote acts as in clojure macros -- all unquoted forms are evaluated instantly.")
 
 (note
  (def v (r '(+ 1 2 3 4)))
