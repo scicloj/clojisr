@@ -17,7 +17,7 @@
           '[clojisr.v1.rserve :as rserve]
           '[tech.ml.dataset :as dataset]))
 
-(note-md "First, let us make sure that we use the Rserve backend (in case we were using Renjin instead earlier), and that there are no R sessions currently running.")
+(note-md "First, let us make sure that we use the Rserve backend (in case we were using Renjin instead earlier), and that there are no R sessions currently running. This is typically not needed if you just started working. Here, we do it just in case.")
 
 (note-void
  (rserve/set-as-default!)
@@ -28,13 +28,19 @@
 (note-void
  (def x (r "1+2")))
 
-(note-md "Convert the R to Clojure:
-This part requires more thorough documentation.")
+(note-md "The thing we created is something called an ROBject.")
+
+(note
+ (class x))
+
+(note-md "If we wish, we can convert an ROBject to Clojure: ")
 
 (note
  (->> x
       r->clj
       (check = [3.0])))
+
+(note-md "Let us see more examples of creating ROBjects and converting them to Clojure: ")
 
 (note
  (->> "list(A=1,B=2,'#123strange<text> ()'=3)"
@@ -42,19 +48,19 @@ This part requires more thorough documentation.")
       r->clj
       (check = {:A [1.0], :B [2.0], "#123strange<text> ()" [3.0]})))
 
-(note-md "Run some code on a separate session (specified Rserve port, rather than the default one).")
-
-(note
- (-> "1+2"
-     (r :session-args {:port 4444})
-     r->clj
-     (->> (check = [3.0]))))
-
-(note-md "Convert Clojure data to R data. Note that `nil` is turned to `NA`.")
+(note-md "In the other direction, we can convert Clojure data to R data. Note that `nil` is turned to `NA`.")
 
 (note
  (-> [1 nil 3]
      clj->r))
+
+(note-md "We can run code on a separate R session (specify session-args which are different than the default ones).")
+
+(note
+ (-> "1+2"
+     (r :session-args {:session-name "mysession"})
+     r->clj
+     (->> (check = [3.0]))))
 
 (note-md  :functions "## Functions")
 
@@ -92,16 +98,7 @@ whenn computing the mean.")
       r->clj
       (check = [2.0])))
 
-(note-md "An alternative call syntax:")
-
-(note
- (->> ((r "mean")
-       [1 nil 3]
-       [:= :na.rm true])
-      r->clj
-      (check = [2.0])))
-
-(note-md "Anoter example:")
+(note-md "Another example:")
 
 (note
  (let [f (r "function(w,x,y=10,z=20) w+x+y+z")]
@@ -111,12 +108,16 @@ whenn computing the mean.")
         (map r->clj)
         (check = [[33.0] [123.0] [113.0]]))))
 
-(note-md "Some functions are already created in Clojisr and given special names for convenience. For example:")
+(note-md "Some functions are already created in Clojisr and given special names for convenience. Here are some examples:")
+
+(note-md "R addition:")
 
 (note
  (->> (r+ 1 2 3)
       r->clj
-      (check = [6])))
+      (check = [6.0])))
+
+(note-md "R colon (`:`), for creating a range of integers, like `0:9`:")
 
 (note
  (->> (colon 0 9)
@@ -124,11 +125,11 @@ whenn computing the mean.")
       (check = (range 10))))
 
 (note-md  :R-dataframes-and-tech.ml.dataset
-          "## R dataframes and [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) datasets")
+          "## R dataframes and tech.ml.dataset datasets")
 
-(note-md "Create a tech.ml.dataset dataset object,
-pass it to an R function to compute the row means,
-and convert the return value to Clojure.")
+(note-md "At Clojure, we have a structure that is equivalent to R dataframes: a [tech.ml.dataset](https://github.com/techascent/tech.ml.dataset) dataset.
+
+Let us create such a dataset, pass it to an R function to compute the row means, and then convert the return value back to Clojure.")
 
 (note
  (let [row-means (r "function(data) rowMeans(data)")]
@@ -139,12 +140,14 @@ and convert the return value to Clojure.")
         r->clj
         (check = [2.5 3.5 4.5]))))
 
-(note-md "Load the R package 'dplyr' (assuming it is installed).")
+(note-md "Let us see some more dataset proccessing through R.")
+
+(note-md "Loading the R package [dplyr](https://dplyr.tidyverse.org/) (assuming it is installed).")
 
 (note-void
  (r "library(dplyr)"))
 
-(note-md "Use dplyr to process some Clojure dataset, and convert back to the resulting dataset.")
+(note-md "Using dplyr to process some Clojure dataset, and convert back to the resulting dataset.")
 
 (note
  (let [filter-by-x  (r "function(data) filter(data, x>=2)")
@@ -161,7 +164,7 @@ and convert the return value to Clojure.")
                      (= [{:x 2.0 :y 5.0 :z 7.0}
                          {:x 3.0 :y 6.0 :z 9.0}])))))))
 
-(note-md "Tibbles are also supported, as a special case of data frames.")
+(note-md "[Tibbles](https://tibble.tidyverse.org), which are a more recent R dataframe notion, are also supported, as a special case of data frames.")
 
 (note-void
  (r "library(tibble)"))
@@ -183,7 +186,7 @@ and convert the return value to Clojure.")
                   {:x 2.0 :y 5.0}
                   {:x 3.0 :y 6.0}]))))
 
-(note-md :R-objects
+(note-md :ROBjects
          "## R objects")
 
 (note-md "Clojisr holds handles to R objects, that are stored in memory at the R session, where they are assigned random names.")
@@ -196,52 +199,53 @@ and convert the return value to Clojure.")
       class
       (check = clojisr.v1.robject.RObject)))
 
-(note
- (:object-name one+two))
+(note-md "The name of an object is the place where it is held at R (inside an R [evnironment](http://adv-r.had.co.nz/Environments.html) called `.MEM`).")
 
-(note-md "We can figure out the place in R memory corresponding to an object's name.")
-
-(note
- (-> one+two
-     :object-name
-     clojisr.v1.objects-memory/object-name->memory-place))
+(note (:object-name one+two))
 
 (note-md :generating-code
          "## Generating code")
 
-(note-md "Let us see the code-generation mechanism of Clojisr, and the rules defining it.")
+(note-md "Let us see the mechanism by which clojisr generates R code, and the rules defining it.")
 
-(note-md "We will need a reference to the R session:")
+(note-md "Since we are playing a bit with the internals here, we will need a reference to the R session:")
 
 (note-void
  (def session
    (session/fetch-or-make nil)))
 
-(note-md "For the following examples, we will use some dummy handles to R objects:")
+(note-md "For the following examples, we will use some **dummy** handles to R objects with given names:")
 
 (note-void
- (def x (robject/->RObject "x" session nil nil))
- (def y (robject/->RObject "y" session nil nil)))
+ (def x (robject/->RObject "robject_x" session nil nil))
+ (def y (robject/->RObject "robject_y" session nil nil)))
 
-(note-md ".. and some real handles to R objects:")
+(note-md ".. and some **real** handles to R objects:")
 
 (note-void
  (def minus-eleven (r "-11"))
  (def abs (r "abs")))
 
-(note-md "For an r-object, we generate the code with that object's location in the R session memory.")
+(note-md "The function `->code` generates R code according to a certain set of rules. Here we describe some of these rules briefly. We also wrote a dedicated tutorial about the rule set more thoroughly.")
+
+(note-md "For an ROBject, the generated code is just the ROBject name.")
 
 (note
  (->> x
       ->code
-      (check = ".MEM$x")))
+      (check = "robject_x")))
 
-(note-md "For a clojure value, we implicitly convert to an R object, generating the corresponding code.")
+(note-md "For a clojure value, we use some form analysis and generate proper R string or values.")
 
 (note
  (->> "hello"
       ->code
-      (check re-matches #"\.MEM\$.*")))
+      (check re-matches #"\"hello\"$")))
+
+(note
+ (->> [1 2 3]
+      ->code
+      (check = "c(1,2,3)")))
 
 (note-md "For a symbol, we generate the code with the corresponding R symbol.")
 
@@ -253,25 +257,25 @@ and convert the return value to Clojure.")
 
 (note (->> '(function [x y] x)
            ->code
-           (check = "function(x, y) {x}")))
+           (check = "function(x,y) {x}")))
 
-(note-md "For a vector instead of list, we heve the same behaviour.")
+(note-md "For a vector instead of list, we create R vector.")
 
 (note (->> '[function [x y] x]
            ->code
-           (check = "function(x, y) {x}")))
+           (check = "c(function,c(x,y),x)")))
 
-(note-md "For a list beginning with the symbol `'tilde`, we generate an R `~`-furmula.")
+(note-md "For a list beginning with the symbol `'formula`, we generate an R `~`-formula.")
 
-(note (->> '(tilde x y)
+(note (->> '(formula x y)
            ->code
-           (check = "(x ~ y)")))
+           (check = "(x~y)")))
 
-(note-md "For a list beginning with a symbol known to be a binary operator, we generate the code with that operator between all arguments.")
+(note-md "For a list beginning with a symbol known to be a binary operator, we generate nested calls.")
 
 (note (->> '(+ x y z)
            ->code
-           (check = "(x + y + z)")))
+           (check = "((x+y)+z)")))
 
 (note-md "For a list beginning with another symbol, we generate a function call with that symbol as the function name.")
 
@@ -279,43 +283,56 @@ and convert the return value to Clojure.")
            ->code
            (check = "f(x)")))
 
-(note-md "For a list beginning with an R object that is a function, we generate a function call with that object as the function.")
+(note-md "For a list beginning with an R object that is a function, we generate a function call with that object as the function. If you create the list using the quote sign (`'`), don't forget to unquote symbols refering to things you defined on the Clojure side.")
 
-(note (->> [abs 'x]
+(note (->> '(~abs x)
            ->code
            (check re-matches #"\.MEM\$.*\(x\)")))
 
-(note-md "All other sequential things (that is, those not beginning with a symbol or R function) are intepreted as data, converted implicitly to R data.")
+(note-md "All other sequential things (that is, those not beginning with a symbol or R function) are intepreted as data, converted implicitly R data representation.")
 
-(note (->> [abs '(1 2 3)]
+(note (->> `(~abs (1 2 3))
            ->code
-           (check re-matches #"\.MEM\$.*\(\.MEM\$.*\)")))
+           (check re-matches #"\.MEM\$.*\(c\(1,2,3\)\)")))
 
 (note-md "Some more examples, showing how these rules compose:")
 
 (note (->code '(function [x y] (f y))))
+(note (->code '(function [x y] (f ~y))))
 
 (note (->code '(function [x y] (+ x y))))
-
-(note (->code ['function '[x y] ['+ 'x y]]))
+(note (->code (list 'function '[x y] (list '+ 'x 'y))))
 
 (note (->code '(function [x y] (print x) (f x))))
 
-(note (->code ['function '[x y] [abs 'x]]))
+(note (->code '(function [x y] (~abs x))))
 
-(note (->code [abs minus-eleven]))
+(note (->code '(~abs ~minus-eleven)))
 
-(note (->code [abs -11]))
+(note (->code '(~abs -11)))
+
+(note-md "Use syntax quote ` in case you want to use local bindings.")
+
+(note (let [minus-ten -10]
+        (->code `(~abs ~minus-ten))))
 
 (note-md :running-generated-code
          "## Running generated code")
 
-(note-md "Clojure forms can be run as R code. For example:")
+(note-md "Clojure forms can be run as R code. Behind the scences, they are turned to R code using the `->code` function described above. For example:")
 
-(note (->> [abs (range -3 0)]
+(note (->> '(~abs ~(range -3 0))
            r
            r->clj
-           (check = [3 2 1])))
+           (check = [3.0 2.0 1.0])))
+
+(note-md "Or, equivalently:")
+
+(note (->> '(~abs ~(range -3 0))
+           ->code
+           r
+           r->clj
+           (check = [3.0 2.0 1.0])))
 
 (note-md "Let us repeat the basic examples from the beginning of this tutorial,
 this time generating code rather than writing it as Strings.")
@@ -324,23 +341,20 @@ this time generating code rather than writing it as Strings.")
  (def x (r '(+ 1 2))))
 
 (note
- "checking again... "
  (->> x
       r->clj
-      (check = [3])))
+      (check = [3.0])))
 
 (note-void
  (def f (r '(function [x] (* x 10)))))
 
 (note
- "checking again... "
  (->> 5
       f
       r->clj
-      (check = [50])))
+      (check = [50.0])))
 
 (note
- "checking again... "
  (->> "5*5"
       r
       f
@@ -369,8 +383,6 @@ this time generating code rather than writing it as Strings.")
         add-z-column
         r->clj)))
 
-(note-md "The strange column name is due to dplyr's mutate behaviour when extra parens are added to the expression.")
-
 (note-md :requiring-R-packages
          "## Requiring R packages")
 
@@ -386,19 +398,19 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
  (->> [1 2 3]
       r.stats/median
       r->clj
-      (check = [2])))
+      (check = [2.0])))
 
 (note
  (->> [1 2 3]
       statz/median
       r->clj
-     (check = [2])))
+      (check = [2.0])))
 
 (note
  (->> [1 2 3]
       median
       r->clj
-      (check = [2])))
+      (check = [2.0])))
 
 (note-void
  (require-r '[datasets :as datasetz :refer [euro]]))
@@ -415,7 +427,7 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
  (-> {:a 1 :b 2}
      ($ 'a)
      r->clj
-     (->> (check = [1]))))
+     (->> (check = [1.0]))))
 
 (note-md :data-visualization
          "## Data visualization")
@@ -461,9 +473,11 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
 
 (note-md "Any plot (function or object) can be saved to file or converted to BufferedImage object.")
 
-(def target-path (second (re-find #"(.*)/[^/]*" (notespace.v2.note/ns->out-filename *ns*))))
+(def target-path (notespace.v2.note/ns->out-dir *ns*))
 
-(note (r->clj (plot->file (str target-path "/histogram.jpg") (fn [] (hist [1 1 1 1 2 3 4 5]))
+(note (r->clj (plot->file (str target-path "histogram.jpg") (fn [] (hist [1 1 1 1 2 3 4 5]
+                                                                        :main "Histogram"
+                                                                        :xlab "data: [1 1 1 1 2 3 4 5]"))
                           :width 800 :height 400 :quality 50)))
 
 (note-hiccup [:image {:src "histogram.jpg"}])
@@ -587,11 +601,16 @@ To stress this, we write it explicitly in the following examples.")
 
 (note (def clj->r->clj (comp r->clj r)))
 
-(note (check = (clj->r->clj nil) nil))
-(note (check = (clj->r->clj [10 11]) [10 11]))
-(note (check = (clj->r->clj [10.0 11.0]) [10.0 11.0]))
-(note (check = (clj->r->clj (list 10.0 11.0)) [10.0 11.0]))
-(note (check = (clj->r->clj {:a 1 :b 2}) {:a [1] :b [2]}))
+(note (->> (clj->r->clj nil)
+           (check = nil)))
+(note (->> (clj->r->clj [10 11])
+           (check = [10.0 11.0])))
+(note (->> (clj->r->clj [10.0 11.0])
+           (check = [10.0 11.0])))
+(note (->> (clj->r->clj (list 10.0 11.0))
+           (check = [10.0 11.0])))
+(note (->> (clj->r->clj {:a 1 :b 2})
+           (check = {:a [1.0] :b [2.0]})))
 
 (note-md "### Various R objects")
 
@@ -711,10 +730,10 @@ Now, we see some arguments that do have default values.")
  (require 'clojisr.v1.renjin)
  (let [path "/tmp/data.csv"]
    (spit path "a,b,c\n1,2,3\n4,5,6\n")
-   (-> ['read.csv path]
+   (-> `(read.csv ~path)
        (r :session-args {:session-type :renjin})
        (r/r->clj :session-args {:session-type :renjin})
        (->> (check = [{:a 1, :b 2, :c 3}
                       {:a 4, :b 5, :c 6}])))))
 
-(notespace.v2.note/compute-this-notespace!)
+#_(notespace.v2.note/compute-this-notespace!)
