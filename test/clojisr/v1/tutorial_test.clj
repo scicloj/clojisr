@@ -475,7 +475,9 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
 
 (def target-path (notespace.v2.note/ns->out-dir *ns*))
 
-(note (r->clj (plot->file (str target-path "histogram.jpg") (fn [] (hist [1 1 1 1 2 3 4 5]))
+(note (r->clj (plot->file (str target-path "histogram.jpg") (fn [] (hist [1 1 1 1 2 3 4 5]
+                                                                        :main "Histogram"
+                                                                        :xlab "data: [1 1 1 1 2 3 4 5]"))
                           :width 800 :height 400 :quality 50)))
 
 (note-hiccup [:image {:src "histogram.jpg"}])
