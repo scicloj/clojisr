@@ -80,7 +80,7 @@ $ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA8"}}}}'
 Clojure 1.10.1
 user=> (require '[clojisr.v1.r :refer [r]])
 
-user=> (r '[+ 1 2])
+user=> (r '(+ 1 2))
 [1] 3
 ```
 
