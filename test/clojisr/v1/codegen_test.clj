@@ -17,9 +17,18 @@ RObject is `clojisr` data structure which keeps reference to R objects. Also can
 
 Let's see what is possible in detail. 
 
-First require necessary namespaces.")
+First, require the necessary namespaces.")
 
-(note-void (require '[clojisr.v1.r :as r :refer [r ->code r->clj]]))
+
+
+(note-void (require '[clojisr.v1.rserve :as rserve]
+                    '[clojisr.v1.r :as r :refer [r ->code r->clj]]))
+
+(note-md "Also, let us make sure we are using a clean session.")
+
+(note-void
+ (rserve/set-as-default!)
+ (r/discard-all-sessions))
 
 (note-md :r-code-as-a-string "## R code as a string")
 
@@ -236,7 +245,7 @@ First require necessary namespaces.")
            r->clj
            (check = [2.0])))
 
-(note-md "There are some special symbols which get a special meaning on:
+(note-md "There are some special symbols which get a special meaning on,:
 
 | symbol | meaning |
 | - | - |
@@ -301,4 +310,3 @@ First require necessary namespaces.")
 (note (def square (r '(function [x] (* x x)))))
 (note (->> (square 123) r->clj first (check = 15129.0)))
 
-#_(notespace.v2.note/compute-this-notespace!)
