@@ -103,6 +103,8 @@ Note however that:
 
 * [Intro](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/tutorial-test/index.html)
 
+* [A tutorial about generating R code from Clojure](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/codegen-test/index.html)
+
 * [Renjin backend](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/renjin-test/index.html)
 
 * [Titanic tutorial #0](https://scicloj.github.io/clojisr/resources/public/clojisr/v1/titanic0-test/index.html)
