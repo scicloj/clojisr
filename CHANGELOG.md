@@ -2,7 +2,6 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [1.0.0-BETA10-SNAPSHOT]
-
 - new forms added: `if`, `do`, `for` and `while`
 - more binary operators: `%%`, `%/%`, `**` and `%in%`
 - sequences beginning with command as backticked string are now callable (eg. '("`^`" 2 4))
