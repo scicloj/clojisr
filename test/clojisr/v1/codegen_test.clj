@@ -259,6 +259,8 @@ First, require the necessary namespaces.")
 | - | - |
 | `function` | R function definition |
 | `do` | join all forms using \";\" |
+| `for` | for loop with multiple bindings |
+| `while` | while loop |
 | `if` | if or if-else |
 | `tilde` or `formula` | R formula |
 | `colon` | colon (`:`) |
@@ -266,6 +268,37 @@ First, require the necessary namespaces.")
 | `brabra` | `[[` |
 | `bra<-` | `[<-` |
 | `brabra<-` | `[[<-` |")
+
+(note-md "You can use `if` with optional `else` form. Use `do` to create block of operations")
+
+(note (->> (r '(if true 11 22)) r->clj (check = [11.0])))
+(note (->> (r '(if false 11 22)) r->clj (check = [22.0])))
+(note (->> (r '(if true 11)) r->clj (check = [11.0])))
+(note (->> (r '(if false 11)) r->clj (check = nil)))
+(note (->> (r '(if true (do (<- x [1 2 3 4])
+                            (mean x)))) r->clj (check = [2.5])))
+
+(note-md "Loops")
+
+(note (->> (r '(do
+                 (<- v 3)
+                 (<- coll [v])
+                 (while (> v 0)
+                   (<- v (- v 1))
+                   (<- coll [coll v]))
+                 coll))
+           r->clj
+           (check = [3.0 2.0 1.0 0.0])))
+
+(note-void
+ (def for-form '(do
+                  (<- coll [])
+                  (for [a [1 2]
+                        b [3 4]]
+                    (<- coll [coll (* a b)]))
+                  coll)))
+(note (->code for-form))
+(note (->> (r for-form) r->clj (check = [3.0 4.0 6.0 8.0])))
 
 (note-md "#### Function definitions")
 
@@ -280,15 +313,6 @@ First, require the necessary namespaces.")
 (note (->> (r '(stat [100 33 22 44 55] :median true)) r->clj (check = [44.0])))
 (note (->> (r '(stat [100 33 22 44 55 nil])) r->clj first (check #(Double/isNaN %))))
 (note (->> (r '(stat [100 33 22 44 55 nil] :na.rm true)) r->clj (check = [50.8])))
-
-(note-md "You can use `if` with optional `else` form. Use `do` to create block of operations")
-
-(note (->> (r '(if true 11 22)) r->clj (check = [11.0])))
-(note (->> (r '(if false 11 22)) r->clj (check = [22.0])))
-(note (->> (r '(if true 11)) r->clj (check = [11.0])))
-(note (->> (r '(if false 11)) r->clj (check = nil)))
-(note (->> (r '(if true (do (<- x [1 2 3 4])
-                            (mean x)))) r->clj (check = [2.5])))
 
 (note-md "#### Formulas")
 

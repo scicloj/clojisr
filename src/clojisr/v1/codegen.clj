@@ -125,6 +125,23 @@
       (format "if(%s) {%s} else {%s}"  pred f1 f2)
       (format "if(%s) {%s}" pred f1))))
 
+(defn for-loop->code
+  "Create for loop"
+  [bindings body session ctx]  
+  (if (seq bindings)
+    (let [[v s & r] bindings]
+      (format "for(%s in %s){%s\n}"
+              (name v) (form->code s session ctx)
+              (for-loop->code r body session ctx)))
+    (join ";" (map #(form->code % session ctx) body))))
+
+(defn while-loop->code
+  "Create while loop"
+  [pred body session ctx]
+  (format "while(%s) {%s}"
+          (form->code pred session ctx)
+          (join ";" (map #(form->code % session ctx) body))))
+
 (defn unquote-form->code
   "Eval unquoted form.
 
@@ -179,6 +196,8 @@
       (cond
         (= "do" fs) (join ";" (map #(form->code % session ctx) r))
         (= "if" fs) (ifelse->code r session ctx)
+        (= "for" fs) (for-loop->code (first r) (rest r) session ctx)
+        (= "while" fs) (while-loop->code (first r) (rest r) session ctx)
         (= "function" fs) (function-def->code (first r) (rest r) session ctx)
         (or (= "tilde" fs)
             (= "formula" fs)) (formula->code r session ctx)
