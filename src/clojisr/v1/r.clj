@@ -115,7 +115,7 @@
 (def r&& (r "`&&`"))
 (def r| (r "`||`"))
 (def r|| (r "`||`"))
-
+(def r! (r "`!`"))
 
 (def captured-str
   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
@@ -125,6 +125,10 @@
 
 (def str-md (comp r-lines->md captured-str))
 
+(def r** (r "`^`"))
+(def rdiv (r "`/`"))
+(def r- (r "`-`"))
+(defn r* [& args] (reduce (r "`*`") args))
 (defn r+
   "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments."
   [& args]
