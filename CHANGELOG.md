@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. This change
 ## [1.0.0-BETA10-SNAPSHOT]
 
 - new forms added: `if` and `do`
+- more binary operators: `%%`, `%/%`, `**` and `%in%`
 - sequences beginning with command as backticked string are now callable (eg. '("`^`" 2 4))
 - vector starting with `:!code` is callable
 - JVM shutdown hook is registered to clean all R processes which are run when closing java process
