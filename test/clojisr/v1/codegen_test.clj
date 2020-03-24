@@ -1,6 +1,6 @@
 (ns clojisr.v1.codegen-test
   (:require [notespace.v2.note :as note
-             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup check]]
+             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
             [notespace.v2.live-reload]
             [clojisr.v1.r :as r]))
 
@@ -19,10 +19,9 @@ Let's see what is possible in detail.
 
 First, require the necessary namespaces.")
 
-
-
 (note-void (require '[clojisr.v1.rserve :as rserve]
-                    '[clojisr.v1.r :as r :refer [r ->code r->clj]]))
+                    '[clojisr.v1.r :as r :refer [r ->code r->clj]]
+                    '[notespace.v2.note :refer [check]]))
 
 (note-md "Also, let us make sure we are using a clean session.")
 
@@ -183,6 +182,7 @@ First, require the necessary namespaces.")
 | `:!double` | vector of doubles |
 | `:!named` | named vector |
 | `:!list` | partially named list |
+| `:!call` | treat the rest of the vector as callable sequence |
 | `:!ct` | vector of POSIXct classes |
 | `:!lt` | vector of POSIXlt classes |
 
@@ -198,6 +198,10 @@ First, require the necessary namespaces.")
 
 (note (->code (range 10000)))
 (note (->> (r (conj (range 10000) :!string)) r->clj first (check = "0")))
+
+(note-md "Treat vector as callable.")
+
+(note (->> (r [:!call 'mean [1 2 3 4]]) r->clj (check = [2.5])))
 
 (note-md "### Maps")
 
@@ -245,11 +249,17 @@ First, require the necessary namespaces.")
            r->clj
            (check = [2.0])))
 
+(note-md "You can call using special names (surrounded by backquote) as strings")
+
+(note (->> (r '("`^`" 10 2)) r->clj (check = [100.0])))
+
 (note-md "There are some special symbols which get a special meaning on,:
 
 | symbol | meaning |
 | - | - |
 | `function` | R function definition |
+| `do` | join all forms using \";\" |
+| `if` | if or if-else |
 | `tilde` or `formula` | R formula |
 | `colon` | colon (`:`) |
 | `bra` | `[` |
@@ -270,6 +280,15 @@ First, require the necessary namespaces.")
 (note (->> (r '(stat [100 33 22 44 55] :median true)) r->clj (check = [44.0])))
 (note (->> (r '(stat [100 33 22 44 55 nil])) r->clj first (check #(Double/isNaN %))))
 (note (->> (r '(stat [100 33 22 44 55 nil] :na.rm true)) r->clj (check = [50.8])))
+
+(note-md "You can use `if` with optional `else` form. Use `do` to create block of operations")
+
+(note (->> (r '(if true 11 22)) r->clj (check = [11.0])))
+(note (->> (r '(if false 11 22)) r->clj (check = [22.0])))
+(note (->> (r '(if true 11)) r->clj (check = [11.0])))
+(note (->> (r '(if false 11)) r->clj (check = nil)))
+(note (->> (r '(if true (do (<- x [1 2 3 4])
+                            (mean x)))) r->clj (check = [2.5])))
 
 (note-md "#### Formulas")
 
@@ -310,3 +329,4 @@ First, require the necessary namespaces.")
 (note (def square (r '(function [x] (* x x)))))
 (note (->> (square 123) r->clj first (check = 15129.0)))
 
+(comment (notespace.v2.note/compute-this-notespace!))

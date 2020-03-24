@@ -736,4 +736,4 @@ Now, we see some arguments that do have default values.")
        (->> (check = [{:a 1, :b 2, :c 3}
                       {:a 4, :b 5, :c 6}])))))
 
-#_(notespace.v2.note/compute-this-notespace!)
+(comment (notespace.v2.note/compute-this-notespace!))

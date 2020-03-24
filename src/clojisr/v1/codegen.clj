@@ -117,6 +117,14 @@
           (args->code args session ctx)
           (join ";" (map #(form->code % session ctx) body))))
 
+(defn ifelse->code
+  "Create if or if-else form"
+  [vs session ctx]
+  (let [[pred f1 f2] (map #(form->code % session ctx) (take 3 vs))]
+    (if f2
+      (format "if(%s) {%s} else {%s}"  pred f1 f2)
+      (format "if(%s) {%s}" pred f1))))
+
 (defn unquote-form->code
   "Eval unquoted form.
 
@@ -126,6 +134,8 @@
   [u-form session ctx]
   (-> (apply eval u-form)
       (form->code session ctx)))
+
+(declare seq-form->code)
 
 (defn vector->code
   "Construct R vector using `c` function.
@@ -146,6 +156,7 @@
       :!factor (format "factor(%s)" (vector->code r session ctx))
       :!ct (format "as.POSIXct(%s)" (vector->code r session ctx))
       :!lt (format "as.POSIXlt(%s)" (vector->code r session ctx))
+      :!call (seq-form->code r session ctx)
       (if (< (count v-form) 80)
         (format "c(%s)" (join "," (map #(form->code % session ctx) v-form)))
         (form->java->code v-form session)))))
@@ -166,6 +177,8 @@
   (if (symbol? f)
     (let [fs (name f)]
       (cond
+        (= "do" fs) (join ";" (map #(form->code % session ctx) r))
+        (= "if" fs) (ifelse->code r session ctx)
         (= "function" fs) (function-def->code (first r) (rest r) session ctx)
         (or (= "tilde" fs)
             (= "formula" fs)) (formula->code r session ctx)
@@ -174,6 +187,10 @@
         :else (symbol-form->code fs r session ctx)))
     (cond
       (using-sessions/function? f) (function-call->code (:object-name f) r session ctx)
+      (string? f) (if (and (= (first f) \`)
+                           (= (last f) \`))
+                    (function-call->code f r session ctx)
+                    (vector->code seq-form session ctx))
       (sequential? f) (function-call->code (seq-form->code f session ctx) r session ctx)
       :else (vector->code seq-form session ctx))))
 

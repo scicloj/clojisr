@@ -139,3 +139,9 @@
            `(def ~ns (r ~f)))))
 
 (def-special-functions)
+
+;; register shutdown hook
+;; should be called once
+(defonce ^:private shutdown-hook-registered
+  (do (.addShutdownHook (Runtime/getRuntime) (Thread. #(locking session/sessions (discard-all-sessions))))
+      true))

@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA10-SNAPSHOT]
+
+- new forms added: `if` and `do`
+- sequences beginning with command as backticked string are now callable (eg. '("`^`" 2 4))
+- vector starting with `:!code` is callable
+- JVM shutdown hook is registered to clean all R processes which are run when closing java process
+
 ## [1.0.0-BETA9]
 - changed logging to `clojure/tools.logging`
 - major breaking change: a new set of code-generation rules
