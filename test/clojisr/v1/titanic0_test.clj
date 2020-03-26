@@ -31,7 +31,6 @@ Here are most of the functions that we need, brought by the standard `require-r`
  (require
   '[clojisr.v1.r :as r
     :refer [r r->clj
-            na empty-symbol
             r== r!= r< r> r<= r>= r& r&& r| r||
             str-md
             r+
@@ -325,7 +324,7 @@ titanic$family <- paste(titanic$surname, titanic$famsize, sep='_')
 (note-as-hiccup
  (-> titanic
      (bra (colon 1 891)
-          (empty-symbol))
+          nil)
      (ggplot (aes :x 'famsize
                   :fill '(factor Survived)))
      (r+ (geom_bar :stat "count"
@@ -415,8 +414,8 @@ titanic$deck<-factor(sapply(titanic$Cabin, function(x) strsplit(x, NULL)[[1]][1]
  (def titanic
    ($<- titanic 'deck
         (factor (sapply ($ titanic 'Cabin)
-                        (r '(function [x]
-                                      (bra (brabra (strsplit x nil) 1) 1))))))))
+                        '(function [x]
+                                   (bra (brabra (strsplit x nil) 1) 1)))))))
 
 (note-md "Let us check:")
 
@@ -642,7 +641,7 @@ titanic[1044, ]
 
 (note
  (-> titanic
-     (bra 1044 (empty-symbol))))
+     (bra 1044 nil)))
 
 (note-md "Thripathi's explanation:
 Looks like he left from 'S' (Southampton) as a 3rd class passenger.
@@ -684,7 +683,7 @@ ggplot(titanic[titanic$Pclass == '3' & titanic$Embarked == 'S', ],
  (-> titanic
      (bra (r& (r== ($ titanic 'Pclass) 3)
               (r== ($ titanic 'Embarked) "S"))
-          (empty-symbol))
+          nil)
      (ggplot (aes :x 'Fare))
      (r+ (geom_density :fill "#99d6ff"
                        :alpha 0.4)
@@ -780,7 +779,7 @@ mice_mod <- mice(titanic[, !names(titanic) %in% c('PassengerId','Name','Ticket',
 (note-void
  (def mice-mod
    (-> titanic
-       (bra (empty-symbol)
+       (bra nil
             (-> titanic
                 names
                 (%in% ["PassengerId","Name","Ticket","Cabin","Family","Surname","Survived"])
@@ -883,7 +882,7 @@ ggplot(titanic[1:891,], aes(Age, fill = factor(Survived))) +
 
 (note-as-hiccup
  (-> titanic
-     (bra (colon 1 891) (empty-symbol))
+     (bra (colon 1 891) nil)
      (ggplot (aes 'Age :fill '(factor Survived)))
      (r+ (geom_histogram)
          (facet_grid '(tilde . Sex))
@@ -984,9 +983,9 @@ test <- titanic[892:1309,]
 
 (note-void
  (def train
-   (bra titanic (colon 1 891) (empty-symbol)))
+   (bra titanic (colon 1 891) nil))
  (def test
-   (bra titanic (colon 892 1309) (empty-symbol))))
+   (bra titanic (colon 892 1309) nil)))
 
 (note-md "Building the model:
 
@@ -1062,7 +1061,7 @@ varImportance <- data.frame(Variables = row.names(importance),
  (def var-importance
    (data-frame :Variables (row-names importance-info)
                :Importance (-> importance-info
-                               (bra (empty-symbol) "MeanDecreaseGini")
+                               (bra nil "MeanDecreaseGini")
                                round))))
 
 (note importance-info)
@@ -1162,4 +1161,6 @@ write.csv(Output, file = 'pradeep_titanic_output.csv', row.names = F)
 (note-md "## Conclusion
 Tripathi: Thank you for taking the time to read through my first
 exploration of a Titanic Kaggle dataset. Again, this newbie welcomes comments and suggestions!")
+
+(comment (notespace.v2.note/compute-this-notespace!))
 

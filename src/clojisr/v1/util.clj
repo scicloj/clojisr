@@ -148,8 +148,8 @@
 (defn exception-cause [e]
   (-> e Throwable->map (select-keys [:via :cause])))
 
-(def special-functions {"bra" "`[`"
-                        "brabra" "`[[`"
-                        "bra<-" "`[<-`"
-                        "brabra<-" "`[[<-`"
-                        "colon" "`:`"})
+;; symbol, string, how to process parameters (all or butlast)
+(def bracket-data {"bra" ["`[`" true]
+                   "brabra" ["`[[`" true]
+                   "bra<-" ["`[<-`" false]
+                   "brabra<-" ["`[[<-`" false]})

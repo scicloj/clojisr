@@ -3,7 +3,7 @@
             [clojure.string :refer [join]]
             [clojisr.v1.protocols :as prot]
             [clojisr.v1.robject]
-            [clojisr.v1.util :refer [special-functions]])
+            [clojisr.v1.util :refer [bracket-data]])
   (:import [clojure.lang Named]
            [clojisr.v1.robject RObject]))
 
@@ -23,7 +23,7 @@
   (map #(some-> % f) xs))
 
 ;; all binary operators as set of strings
-(def binary-operators #{"$" "=" "<<-" "<-" "+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">" "%in%" "%%" "%/%" "**"})
+(def binary-operators #{"$" "=" "<<-" "<-" "+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">" "%in%" "%%" "**"})
 (def binary-operators-flat #{"=" "<<-" "<-" "$"})
 (def unary-operators #{"+" "-"})
 (def wrapped-operators #{"+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">"})
@@ -52,15 +52,16 @@
   "Convert arguments to a partially named list.
 
   Used to format function arguments or when coercing vector to a list."
-  [args session ctx]
-  (->> (loop [res []
-              [fa & ra :as all] args]
-         (if (seq all)
-           (if (keyword? fa)
-             (recur (conj res (format "%s=%s" (name fa) (form->code (first ra) session ctx))) (rest ra))
-             (recur (conj res (form->code fa session ctx)) ra))
-           res))
-       (join ",")))
+  ([args session ctx] (args->code args session ctx nil))
+  ([args session ctx bra?]
+   (->> (loop [res []
+               [fa & ra :as all] args]
+          (if (seq all)
+            (if (keyword? fa)
+              (recur (conj res (format "%s=%s" (name fa) (form->code (first ra) session ctx))) (rest ra))
+              (recur (conj res (if (and bra? (nil? fa)) "" (form->code fa session ctx))) ra))
+            res))
+        (join ","))))
 
 (defn function-call->code
   "Create R function call."
@@ -142,6 +143,19 @@
           (form->code pred session ctx)
           (join ";" (map #(form->code % session ctx) body))))
 
+(defn colon->code
+  "Create colon"
+  [[a b] session ctx]
+  (format "%s:%s" (form->code a session ctx) (form->code b session ctx)))
+
+(defn bracket-call->code
+  [[bra all?] args session ctx]
+  (let [args (if (and (not all?)
+                      (nil? (last args)))
+               (conj (vec (butlast args)) 'NULL)
+               args)]
+    (format "%s(%s)" bra (args->code args session ctx true))))
+
 (defn unquote-form->code
   "Eval unquoted form.
 
@@ -194,14 +208,15 @@
   (if (symbol? f)
     (let [fs (name f)]
       (cond
-        (= "do" fs) (join ";" (map #(form->code % session ctx) r))
-        (= "if" fs) (ifelse->code r session ctx)
-        (= "for" fs) (for-loop->code (first r) (rest r) session ctx)
-        (= "while" fs) (while-loop->code (first r) (rest r) session ctx)
+        (= "colon" fs) (colon->code r session ctx)
         (= "function" fs) (function-def->code (first r) (rest r) session ctx)
         (or (= "tilde" fs)
             (= "formula" fs)) (formula->code r session ctx)
-        (contains? special-functions fs) (function-call->code (special-functions fs) r session ctx)
+        (= "if" fs) (ifelse->code r session ctx)
+        (= "do" fs) (join ";" (map #(form->code % session ctx) r))
+        (= "for" fs) (for-loop->code (first r) (rest r) session ctx)
+        (= "while" fs) (while-loop->code (first r) (rest r) session ctx)
+        (contains? bracket-data fs) (bracket-call->code (bracket-data fs) r session ctx)
         (= 'clojure.core/unquote f) (unquote-form->code r session ctx)
         :else (symbol-form->code fs r session ctx)))
     (cond

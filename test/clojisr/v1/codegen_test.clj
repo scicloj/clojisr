@@ -19,11 +19,11 @@ Let's see what is possible in detail.
 
 First, require the necessary namespaces.")
 
+(note-md "Also, let us make sure we are using a clean session.")
+
 (note-void (require '[clojisr.v1.rserve :as rserve]
                     '[clojisr.v1.r :as r :refer [r ->code r->clj]]
                     '[notespace.v2.note :refer [check]]))
-
-(note-md "Also, let us make sure we are using a clean session.")
 
 (note-void
  (rserve/set-as-default!)
@@ -268,6 +268,37 @@ First, require the necessary namespaces.")
 | `brabra` | `[[` |
 | `bra<-` | `[<-` |
 | `brabra<-` | `[[<-` |")
+
+(note-md "All `bra...` functions accept `nil` or `empty-symbol` to mark empty selector.")
+
+(note-void (def m (r '(matrix (colon 1 6)
+                              :nrow 2
+                              :dimnames [:!list ["a" "b"] (bra LETTERS (colon 1 3))]))))
+(note m)
+
+(note (->> (r '(bra ~m nil 1)) r->clj (check = [1 2])))
+(note (->> (r '(bra ~m 1 nil)) r->clj (check = [1 3 5])))
+(note (->> (r '(bra ~m 1 nil :drop false)) r->clj (check = [1 3 5])))
+(note (->> (r '(bra<- ~m 1 nil [11 22 33])) r->clj (check = [11.0 2.0 22.0 4.0 33.0 6.0])))
+(note (->> (r '(bra<- ~m nil 1 [22 33])) r->clj (check = [22.0 33.0 3.0 4.0 5.0 6.0])))
+
+(note (->> (r/bra m nil 1) r->clj (check = [1 2])))
+(note (->> (r/bra m 1 nil) r->clj (check = [1 3 5])))
+(note (->> (r/bra m 1 nil :drop false) r->clj (check = [1 3 5])))
+(note (->> (r/bra<- m 1 nil [11 22 33]) r->clj (check = [11.0 2.0 22.0 4.0 33.0 6.0])))
+(note (->> (r/bra<- m nil 1 [22 33]) r->clj (check = [22.0 33.0 3.0 4.0 5.0 6.0])))
+
+(note-void (def l (r [:!list "a" "b" "c"])))
+(note l)
+
+(note (->> (r '(brabra ~l 2)) r->clj (check = ["b"])))
+(note (->> (r '(brabra<- ~l 2 nil)) r->clj (check = [["a"] ["c"]])))
+(note (->> (r '(brabra<- ~l 5 "fifth")) r->clj (check = [["a"] ["b"] ["c"] nil ["fifth"]])))
+
+(note (->> (r/brabra l 2) r->clj (check = ["b"])))
+(note (->> (r/brabra<- l 2 nil) r->clj (check = [["a"] ["c"]])))
+(note (->> (r/brabra<- l 5 "fifth") r->clj (check = [["a"] ["b"] ["c"] nil ["fifth"]])))
+
 
 (note-md "You can use `if` with optional `else` form. Use `do` to create block of operations")
 

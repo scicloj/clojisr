@@ -8,7 +8,7 @@
             [clojisr.v1.codegen :as codegen]
             [clojure.string :as string]
             [clojisr.v1.rserve :as rserve]
-            [clojisr.v1.util :refer [special-functions]])
+            [clojisr.v1.util :refer [bracket-data]])
   (:import clojisr.v1.robject.RObject))
 
 (defn init [& {:keys [session-args]}]
@@ -92,18 +92,28 @@
   (instance? RObject obj))
 
 
-(defn na [& {:keys [session-args]}]
-  (r "NA" :session-args session-args))
+(comment (defn na [& {:keys [session-args]}]
+           (r "NA" :session-args session-args)))
 
-(defn empty-symbol [& {:keys [session-args]}]
-  "The empty symbol.
-  See https://stackoverflow.com/a/20906150/1723677."
-  (r "(quote(f(,)))[[2]]" :session-args session-args))
+(comment (def ^{:doc "The empty symbol.
+  See https://stackoverflow.com/a/20906150/1723677."}
+           empty-symbol
+           (r "(quote(f(,)))[[2]]")))
 
 (defn library [libname]
   (->> libname
        (format "library(%s)")
        r))
+
+(defn data
+  "Load R dataset and def global var"
+  ([dataset-name] (data dataset-name nil))
+  ([dataset-name package]
+   (let [n (name dataset-name)
+         ns (symbol n)
+         fmt (if package "data(%s,package=\"%s\")" "data(%s)")]
+     (r (format fmt n (name package)))
+     (intern *ns* ns (r ns)))))
 
 (def r== (r "`==`"))
 (def r!= (r "`!=`"))
@@ -135,14 +145,29 @@
   (reduce (r "`+`") args))
 
 ;; Some special characters will get a name in letters.
+(def colon (r "`:`"))
 
-(defmacro ^:private def-special-functions
+;; brackets!
+
+;; FIXME! Waiting for session management.
+(defn- prepare-args-for-bra
+  ([pars]
+   (mapv #(if (nil? %) (r "(quote(f(,)))[[2]]") %) pars))
+  ([pars all?]
+   (if all?
+     (prepare-args-for-bra pars)
+     (conj (prepare-args-for-bra (butlast pars)) (last pars)))))
+
+(defmacro ^:private make-bras
   []
-  `(do ~@(for [[n f] special-functions
-               :let [ns (symbol n)]]
-           `(def ~ns (r ~f)))))
+  `(do ~@(for [[bra-sym-name [bra-str all?]] bracket-data
+               :let [bra-sym (symbol bra-sym-name)]]
+           `(let [bra# (r ~bra-str)]
+              (defn ~bra-sym [& pars#]
+                (let [fixed# (prepare-args-for-bra pars# ~all?)]
+                  (apply bra# fixed#)))))))
 
-(def-special-functions)
+(make-bras)
 
 ;; register shutdown hook
 ;; should be called once
