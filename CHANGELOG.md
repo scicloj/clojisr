@@ -7,6 +7,9 @@ All notable changes to this project will be documented in this file. This change
 - sequences beginning with command as backticked string are now callable (eg. '("`^`" 2 4))
 - vector starting with `:!code` is callable
 - JVM shutdown hook is registered to clean all R processes which are run when closing java process
+- picking a random free port as the default Rserve port 
+- updating notespace dep version
+- updating tech.ml.dataset dep version
 
 ## [1.0.0-BETA9]
 - changed logging to `clojure/tools.logging`
