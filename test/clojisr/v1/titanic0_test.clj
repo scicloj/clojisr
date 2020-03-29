@@ -458,7 +458,7 @@ titanic[(which(is.na(titanic$Embarked))), 1]
    (bra<- titanic
           (r== ($ titanic 'Embarked) "")
           "Embarked"
-          (r/na))))
+          'NA)))
 
 (note-md "Checking which has missing port:")
 
