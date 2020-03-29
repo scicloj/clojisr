@@ -161,3 +161,8 @@
     (.close socket)
     (.getLocalPort socket)))
 
+;; symbol, string, how to process parameters (all or butlast)
+(def bracket-data {"bra" ["`[`" true]
+                   "brabra" ["`[[`" true]
+                   "bra<-" ["`[<-`" false]
+                   "brabra<-" ["`[[<-`" false]})

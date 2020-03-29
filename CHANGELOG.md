@@ -7,9 +7,15 @@ All notable changes to this project will be documented in this file. This change
 - sequences beginning with command as backticked string are now callable (eg. '("`^`" 2 4))
 - vector starting with `:!code` is callable
 - JVM shutdown hook is registered to clean all R processes which are run when closing java process
+<<<<<<< HEAD
 - picking a random free port as the default Rserve port 
 - updating notespace dep version
 - updating tech.ml.dataset dep version
+=======
+- `bra`, `brabra`, `bra<-`, `brabra<-` can accept `nil` as `empty-symbol` now.
+- `data` function introduced (to load data from package)
+- removed `empty-symbol` (use `nil` in brackets) and `na` (use just 'NA)
+>>>>>>> 11c0f63e59d1a35f031b8f21d9c03f10abacd595
 
 ## [1.0.0-BETA9]
 - changed logging to `clojure/tools.logging`
