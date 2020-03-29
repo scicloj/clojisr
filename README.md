@@ -49,19 +49,22 @@ The related problem, of calling Clojure from R, may be addressed too in the futu
 ## Usage requirements
 
 * Linux, MacOS or WSL (Windows Subsystem for Linux)
-
 * JDK 1.8 or later
-
 * Clojure 1.9.0 or later
-
 * [R](https://www.r-project.org)
-
 * The [Rserve](https://cran.r-project.org/web/packages/Rserve/index.html) R package (`install.packages("Rserve",,"http://rforge.net")`)
 Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackoverflow.com/questions/50410289/running-r-script-from-java-rconnection-eval-exception/50622263#50622263) to have a bug.
+* This library: [![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
 
-* This library
+### MacOS installation
 
-[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
+Installing R with Rserve on MacOS can be problematic due to issues related to openssl installation. Please apply following steps (thanks to @ezmiller):
+
+1. Download the lastest R for mac from here: https://cloud.r-project.org/
+2. Install openssl: `brew install openssl`.
+3. Make sure that the `openssl` library is linked. Try in order:
+   * `brew link --force openssl`
+   * If that doesn't work, follow directions in `brew info openssl` for setting environment variables. Set the `LIBRARY_PATH` environment variable to the location of the library, e.g. `export LIBRARY_PATH=/usr/local/opt/openssl@1.1/lib`.
 
 ### Setting up the logging
 
