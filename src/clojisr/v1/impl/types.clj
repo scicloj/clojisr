@@ -1,4 +1,5 @@
-(ns clojisr.v1.impl.types)
+(ns clojisr.v1.impl.types
+  (:require [tech.v2.datatype :as dtype]))
 
 (defn primitive-r-type [clj-val]
   (cond (nil? clj-val)              :na
@@ -25,7 +26,7 @@
        frequencies))
 
 (defn finest-primitive-r-type [clj-sequential]
-  (let [n-elements (count clj-sequential)]
+  (let [n-elements (dtype/ecount clj-sequential)]
     (->> clj-sequential
          (mapcat (fn [elem]
                    (-> elem primitive-r-type valid-coercions)))
