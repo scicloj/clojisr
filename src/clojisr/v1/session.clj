@@ -3,7 +3,7 @@
   (:require [clojisr.v1.protocols :as prot]
             [clojisr.v1.objects-memory :as mem]
             [clojisr.v1.gc :as gc]
-            [clojisr.v1.util :refer [exception-cause]]
+            [clojisr.v1.util :refer [exception-cause get-free-port]]
             [clojure.tools.logging.readable :as log])
   (:import [java.io File]))
 
@@ -11,6 +11,10 @@
 (defonce sessions (atom {}))
 
 (defonce defaults (atom {}))
+(let [port (get-free-port)]
+  (log/info [::setting-default-port
+             {:port port}])
+  (swap! defaults assoc :port port))
 
 (defn set-default-session-type! [session-type]
   (swap! defaults assoc :session-type session-type))

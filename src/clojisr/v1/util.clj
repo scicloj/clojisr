@@ -153,3 +153,11 @@
                         "bra<-" "`[<-`"
                         "brabra<-" "`[[<-`"
                         "colon" "`:`"})
+
+
+;; https://gist.github.com/apeckham/78da0a59076a4b91b1f5acf40a96de69
+(defn get-free-port []
+  (let [socket (java.net.ServerSocket. 0)]
+    (.close socket)
+    (.getLocalPort socket)))
+
