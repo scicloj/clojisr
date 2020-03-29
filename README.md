@@ -56,8 +56,8 @@ The related problem, of calling Clojure from R, may be addressed too in the futu
 
 * [R](https://www.r-project.org)
 
-* The [Rserve](https://cran.r-project.org/web/packages/Rserve/index.html) R package (`install.packages("Rserve")`)
-Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackoverflow.com/questions/50410289/running-r-script-from-java-rconnection-eval-exception/50622263#50622263) to have a bug. Rserve 1.8.6 is currently not on CRAN, but can be installed with `install.packages("Rserve",,"http://rforge.net")`
+* The [Rserve](https://cran.r-project.org/web/packages/Rserve/index.html) R package (`install.packages("Rserve",,"http://rforge.net")`)
+Tested with Rserve version 1.8.6. Earlier versions are [known](https://stackoverflow.com/questions/50410289/running-r-script-from-java-rconnection-eval-exception/50622263#50622263) to have a bug.
 
 * This library
 
