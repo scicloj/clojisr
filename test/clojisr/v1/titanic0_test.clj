@@ -549,10 +549,9 @@ embark_fare
 
 (note
  (def embark_fare
-   (-> titanic
+   -> titanic
        (r.dplyr/filter '(& (!= PassengerId 62)
-                     (!= PassengerId 830)))
-       r->clj)))
+                     (!= PassengerId 830)))))
 
 
 (note-md "Use ggplot2 to visualize embarkment, passenger class, & median fare:
