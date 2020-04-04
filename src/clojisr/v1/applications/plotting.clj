@@ -9,9 +9,9 @@
            [java.awt.image BufferedImage]
            [javax.swing ImageIcon]))
 
-(require-r '[grDevices :as dev])
+(require-r '[grDevices])
 
-(def ^:private files->fns (let [devices (select-keys (ns-publics 'dev) '[pdf png svg jpeg tiff bmp])]
+(def ^:private files->fns (let [devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp])]
                             (if-let [jpg (get devices 'jpeg)]
                               (assoc devices 'jpg jpg)
                               devices)))
@@ -26,16 +26,15 @@
     (if-not (contains? files->fns extension)
       (log/warn [::plot->file {:message (format "%s filetype is not supported!" (name extension))}])
       (try
-        (apply device apath device-params)
+        (apply device :filename apath device-params)
         (try
-          (let [res (if (instance? RObject plotting-function-or-object)
-                      (r-print plotting-function-or-object)
-                      (plotting-function-or-object))]
-            (log/debug [[::plot->file {:message (format "File %s saved." apath)}]])
-            res)
+          (if (instance? RObject plotting-function-or-object)
+            (r-print plotting-function-or-object)
+            (plotting-function-or-object))
           (catch Exception e (log/warn [::plot->file {:message "Evaluation plotting function failed."
                                                       :exception (exception-cause e)}]))
-          (finally (dev/dev-off)))
+          (finally (r.grDevices/dev-off)
+                   (log/debug [[::plot->file {:message (format "File %s saved." apath)}]])))
         (catch Exception e (log/warn [::plot->file {:message (format "File creation (%s) failed" apath)
                                                     :exception (exception-cause e)}]))))))
 

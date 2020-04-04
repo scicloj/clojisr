@@ -111,7 +111,9 @@
                                 (select-keys r-symbols refer))))))
     (catch Exception e
       (log/warn [::require-r-package {:package-symbol package-symbol
-                                      :cause (exception-cause e)}]))))
+                                      :cause (exception-cause e)}])
+      (throw (ex-info (format "R package '%s' is not available. Please install it first." (name package-symbol))
+                      {:package-name package-symbol})))))
 
 (defn require-r [& packages]
   (run! require-r-package packages))
