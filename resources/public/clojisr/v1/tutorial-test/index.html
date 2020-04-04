@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html><html><head><script language="JavaScript">
+                   socket= new WebSocket('ws://localhost:5678/watch-reload');
+                   socket.onopen= function() {
+                       socket.send ('watch') ;
+                   };
+                   socket.onmessage= function(s) {
+                       if                                                          ( s.data == 'started') {
+                           console.log ("Watching started") ;
+                       }                                 else                   if ( s.data == 'reload') {
+                           console.log            ("reloading") ;
+                           window.location.reload ()            ;
+                       } else                   {
+                           alert('Don\'t know what to do with [' + s.data + ']');
+                       }
+                   };
+</script>
+<style type="text/css">body {
+    background-image: linear-gradient(0deg, #fff4e8 25%, #fef8e9 25%, #fef8e9 50%, #fff4e8 50%, #fff4e8 75%, #fef8e9 75%, #fef8e9 100%);
+    background-size: 32.00px 32.00px;
+    color: #3e3c3f;
+    font-family: "Source Sans Pro", sans-serif;
+    font-size: 14px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0;
+ }
+
+ .nspin {
+     border-radius: 10px;
+     background: #d7d2c3;
+     padding: 10px;
+     margin-bottom: 5px;
+ }
+
+ .nspout {
+     border-radius: 10px;
+     background: #e4ded0;
+     padding: 10px;
+     margin-left: 10px;
+ }
+
+ .nspbox {
+     padding-bottom: 5px;
+     margin: 0;
+ }
+
+ .FAILED { color: #bb0000; }
+ .PASSED { color: #009500; }
+
+ p {
+     margin-top: 0;
+     margin-bottom: 5px; }
+
+ h1, h2, h3, h4, h5, h6 {
+     margin-top: 10px;
+     margin-bottom: 5px;
+     color: #720000;
+ }
+
+ a:visited { color: #5E5E59; }
+ a:link { color: #720000; }
+ tr:nth-child(even) { background-color: #e4ded0; }
+ th { background-color: #d7d2c3; }
+
+</style><script src="https://cdn.jsdelivr.net/gh/google/code-prettify@master/loader/run_prettify.js" type="text/javascript"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/lang-clj.js" type="text/javascript"></script><link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"><script src="https://code.jquery.com/jquery-3.4.1.min.js" type="text/javascript"></script><script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" type="text/javascript"></script><link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro" rel="stylesheet" type="text/css"></head><body>
+    
+    <div>
+        
+        <h1>clojisr.v1.tutorial-test</h1>
+        <div>
+            <i><small><a href="https://github.com/scicloj/clojisr/tree/master/test/clojisr/v1/tutorial_test.clj">clojisr.v1.tutorial-test</a> - created by <a href="https://github.com/scicloj/notespace">notespace</a>, Sun Mar 29 13:08:40 CEST 2020.</small></i><hr>
+        </div>
+
+        <div>
+            Checks: <b class="PASSED">59 PASSED </b><hr>
+        </div>
+
+        <div>
+            Table of contents<ul><li><a href="#basic-examples">basic-examples</a></li><li><a href="#functions">functions</a></li><li><a href="#R-dataframes-and-tech.ml.dataset">R-dataframes-and-tech.ml.dataset</a></li><li><a href="#ROBjects">ROBjects</a></li><li><a href="#generating-code">generating-code</a></li><li><a href="#running-generated-code">running-generated-code</a></li><li><a href="#requiring-R-packages">requiring-R-packages</a></li><li><a href="#data-visualization">data-visualization</a></li><li><a href="#intermediary-representation-as-Java-objects">intermediary-representation-as-Java-objects</a></li><li><a href="#more-data-conversion-examples">more-data-conversion-examples</a></li><li><a href="#inspecting-R-functions">inspecting-R-functions</a></li><li><a href="#R-function-arglists">R-function-arglists</a></li><li><a href="#using-Renjin">using-Renjin</a></li></ul><hr>
+        </div>
+        <div class="nspbox">
+            <div>
+                <h1>Clojisr tutorial</h1>
+            </div>
+
+        </div><div class="nspbox">
+            <a id="basic-examples"> </a>
+            <a id="functions"> </a>
+            <a id="R-dataframes-and-tech.ml.dataset"> </a>
+            <a id="ROBjects"> </a>
+            <a id="generating-code"> </a>
+            <a id="running-generated-code"> </a>
+            <a id="requiring-R-packages"> </a>
+            <a id="data-visualization"> </a>
+            <a id="intermediary-representation-as-Java-objects"> </a>
+            <a id="more-data-conversion-examples"> </a>
+            <a id="inspecting-R-functions"> </a>
+            <a id="R-function-arglists"> </a>
+            <a id="using-Renjin"> </a>
+        </div>
+    </div>
+</body></html></html>
