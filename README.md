@@ -16,7 +16,7 @@ The beginning of the pronunciation is the same as Clojure, but then it rhymes wi
 
 ## Scope of the project
 
-Libraries for Clojure-R interop are note new - see [this list](doc/existing_libraries.md).
+Libraries for Clojure-R interop are not new - see [this list](doc/existing_libraries.md).
 
 This project suggests yet another way to use R from Clojure.
 
