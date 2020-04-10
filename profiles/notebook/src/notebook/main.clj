@@ -1,0 +1,27 @@
+(ns notebook.main
+  (:require
+   [clojure.core.async :refer [thread]]
+   [pinkgorilla.notebook-app.cli :refer [parse-opts]]
+   [pinkgorilla.notebook-app.core :refer [run-gorilla-server]])
+  (:gen-class))
+
+(defn run-notebook []
+  (let [args2 ["-c" "./profiles/notebook/config.edn"]
+        {:keys [options]} (parse-opts args2)]
+    (println "Options Are: " options)
+    (run-gorilla-server options)
+    nil))
+
+(defn start []
+  (thread
+   (run-notebook)))
+
+(defn -main []
+  (println "Running PinkGorilla Notebook")
+  (run-notebook))
+
+(comment
+  (run-notebook)
+
+  ;comment end
+  )

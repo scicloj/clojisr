@@ -1,0 +1,8 @@
+{:settings 
+ {:explore-repositories 
+  [{:name "files" :url "/explore"}
+   #_{:name "public" :url "https://raw.githubusercontent.com/pink-gorilla/gorilla-explore/master/resources/list.json"}]
+  :explore-file-directories
+  {:clojisr "./resources/notebooks"}}}
+
+
