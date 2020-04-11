@@ -27,15 +27,16 @@
       (log/warn [::plot->file {:message (format "%s filetype is not supported!" (name extension))}])
       (try
         (apply device :filename apath device-params)
-        (try
-          (if (instance? RObject plotting-function-or-object)
-            (r-print plotting-function-or-object)
-            (plotting-function-or-object))
-          (catch Exception e
-            (log/warn [::plot->file {:message "Evaluation plotting function failed."
-                                     :exception (exception-cause e)}]))
-          (finally (r.grDevices/dev-off)))
-        (log/debug [[::plot->file {:message (format "File %s saved." apath)}]])
+        (let [the-plot-robject (try
+                             (if (instance? RObject plotting-function-or-object)
+                               (r-print plotting-function-or-object)
+                               (plotting-function-or-object))
+                             (catch Exception e
+                               (log/warn [::plot->file {:message   "Evaluation plotting function failed."
+                                                        :exception (exception-cause e)}]))
+                             (finally (r.grDevices/dev-off)))]
+          (log/debug [[::plot->file {:message (format "File %s saved." apath)}]])
+          the-plot-robject)
         (catch clojure.lang.ExceptionInfo e (throw e))
         (catch Exception e (log/warn [::plot->file {:message (format "File creation (%s) failed" apath)
                                                     :exception (exception-cause e)}]))))))
