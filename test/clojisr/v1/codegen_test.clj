@@ -147,10 +147,6 @@ First, require the necessary namespaces.")
 
 (note-md "Date/time is converted to a string.")
 
-(->> #inst "2031-02-03T11:22:33"
-     ->code
-     )
-
 (note (->> #inst "2031-02-03T11:22:33"
            ->code
            (check re-matches #"'2031-02-03 1.:22:33'")))
