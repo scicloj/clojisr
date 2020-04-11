@@ -3,7 +3,7 @@
   :url "https://github.com/scicloj/clojisr"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
-
+  :min-lein-version "2.9.1"
 ;; managed deendencies only define the version of a dependency,
 ;; if no dependeny needs them, then they are not included
   :managed-dependencies [; to avoid a :exclusion mess, we define certain versions numbers centrally
@@ -31,9 +31,14 @@
                          [org.pinkgorilla/kernel-cljs-shadow "0.0.25"]
                          ; shadow-cljs
                          [thheller/shadow-cljs "2.8.94"]]
-  
+
   :dependencies [[org.clojure/clojure "1.10.1"]
-                 [scicloj/notespace "2.0.0-alpha4"]
+
+                ; [org.pinkgorilla/gorilla-notebook "0.4.12-SNAPSHOT"]
+                ; [javax.websocket/javax.websocket-api "1.1"]
+                ; [javax.servlet/javax.servlet-api "4.0.1"]
+                 
+               ;  [scicloj/notespace "2.0.0-alpha4"]
                  [techascent/tech.datatype "4.88"]
                  [techascent/tech.resource "4.6"]
                  [techascent/tech.ml.dataset "2.0-beta-4"]
@@ -43,9 +48,17 @@
                  [org.clojure/tools.logging "1.0.0"]
                  [clj-commons/pomegranate "1.2.0"]
                  [org.pinkgorilla/gorilla-renderable "3.0.5"] ; to implement pink-gorilla renderer
-                 ]
-  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
-
+                 [com.rpl/specter "1.1.3"] ; clojisr.util, svg width/height injection
+                 
+                 [org.clojure/data.xml "0.0.8"] ; make sure old version from tagsoup is not used
+                 [clj-tagsoup/clj-tagsoup "0.3.0" ; to parse xml from the svg
+                  :exclusions [org.clojure/clojure ; very, very old clojure version. 
+                               org.clojure/core.specs.alpha ; damn old
+                               org.clojure/data.xml ; damn old - "0.0.3"
+                               ]]]
+  
+  ;:jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
+  :source-paths ["src"]
   :profiles {:notebook
              ; run the pink-gorilla notebook (standalone, or in repl)
              ; important to keep this dependency in here only, as we do not want to
@@ -57,8 +70,6 @@
                              :init-ns notebook.main  ;; Specify the ns to start the REPL in (overrides :main in this case only)
                              :init (start) ;; This expression will run when first opening a REPL, in the namespace from :init-ns or :main if specified.
                              }}}
+  :plugins [[lein-ancient "0.6.15"]]
   :aliases {"notebook" ^{:doc "Runs pink-gorilla notebook"}
-            ["with-profile" "+notebook" "run" "-m" "notebook.main"] }
-  
-  
-  )
+            ["with-profile" "+notebook" "run" "-m" "notebook.main"]})

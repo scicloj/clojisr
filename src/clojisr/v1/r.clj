@@ -75,8 +75,9 @@
 
 (def function functions/function)
 
-(defn println-r-lines [r-lines]
+(defn println-r-lines
   "Get a sequence of strings, typically corresponding to lines captured from the standard output of R functions, println them sequentially."
+  [r-lines]
   (doseq [line r-lines]
     (println line)))
 

@@ -9,34 +9,29 @@
    in project.clj is very lightweight and only defines the renderable
    protocol.   
   "
-  (:import clojisr.v1.robject.RObject)
   (:require
    [clojisr.v1.refresh :refer [fresh-object?]]
-   [clojisr.v1.protocols :refer [print-to-string]]
-   [pinkgorilla.ui.gorilla-renderable :refer [Renderable render]]))
+   [clojisr.v1.protocols :refer [print-to-string]]))
 
+(defn- ->hiccup [hiccup]
+  {:type :reagent
+   :content {:hiccup hiccup
+             :map-keywords false
+             :widget false}})
 
 (defn- render-session-lost []
-  ^:r [:span.r-session-lost "R session lost - cannot display R object!"])
+  (->hiccup
+   [:span.r-session-lost "R session lost - cannot display R object!"]))
 
 (defn- render-text [r-obj]
-  ^:r [:p/text (print-to-string (:session r-obj) r-obj)])
+  (->hiccup
+   [:p/text (print-to-string (:session r-obj) r-obj)]))
 
 
 (defn render-r-object [r-obj]
   (if (fresh-object? r-obj)
     (render-text r-obj)
     (render-session-lost)))
-
-
-; After extending the type RObject, Pinkie Renderer will use 
-; render-r-object to render RObjects.
-(extend-type clojisr.v1.robject.RObject
-  Renderable
-  (render [self]
-    (render-r-object self)))
-
-
 
 
 
