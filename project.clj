@@ -5,7 +5,7 @@
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [scicloj/notespace "2.0.0-alpha4"]
-                 [techascent/tech.datatype "4.88"]
+                 [techascent/tech.datatype "5.0-beta-2"]
                  [techascent/tech.resource "4.6"]
                  [techascent/tech.ml.dataset "2.0-beta-11"]
                  [org.rosuda.REngine/REngine "2.1.0"]
