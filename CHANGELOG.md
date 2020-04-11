@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. This change
 ## [1.0.0-BETA11-SNAPSHOT]
 - updates in exception handling
 - updated tech.ml.dataset dependency version
+- notespace is no longer a dependency
 
 ## [1.0.0-BETA10]
 - new forms added: `if`, `do`, `for` and `while`

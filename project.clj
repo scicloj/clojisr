@@ -4,7 +4,6 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :dependencies [[org.clojure/clojure "1.10.1"]
-                 [scicloj/notespace "2.0.0-alpha4"]
                  [techascent/tech.datatype "5.0-beta-2"]
                  [techascent/tech.resource "4.6"]
                  [techascent/tech.ml.dataset "2.0-beta-11"]
@@ -13,4 +12,5 @@
                  [hiccup "1.0.5"]
                  [org.clojure/tools.logging "1.0.0"]
                  [clj-commons/pomegranate "1.2.0"]]
-  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"])
+  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
+  :profiles {:dev {:dependencies [[scicloj/notespace "2.0.0-alpha4"]]}})
