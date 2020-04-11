@@ -147,16 +147,23 @@ First, require the necessary namespaces.")
 
 (note-md "Date/time is converted to a string.")
 
+(->> #inst "2031-02-03T11:22:33"
+     ->code
+     )
+
 (note (->> #inst "2031-02-03T11:22:33"
            ->code
-           (check = "'2031-02-03 12:22:33'")))
+           (check re-matches #"'2031-02-03 1.:22:33'")))
 
 (note (r #inst "2031-02-03T11:22:33"))
 
 (note (->> #inst "2031-02-03T11:22:33"
            r
            r->clj
-           (check = ["2031-02-03 12:22:33"])))
+           (check (fn [v]
+                    (and (vector? v)
+                         (-> v count (= 1))
+                         (->> v first (re-matches #"2031-02-03 1.:22:33")))))))
 
 (note-md "### Vectors")
 
