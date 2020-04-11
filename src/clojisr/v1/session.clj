@@ -49,8 +49,9 @@
 
 (defonce last-clean-time (atom (System/currentTimeMillis)))
 
-(defn clean-r-orphans []
+(defn clean-r-orphans 
   "Clean garbage collected RObjects on the R side."
+  []
   (when (> (- (System/currentTimeMillis) 120000) ;; every 2 minutes
            @last-clean-time)
     (let [curr (count (gc/ptr-set))]

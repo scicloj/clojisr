@@ -1,11 +1,11 @@
 (ns clojisr.v1.codegen
-  (:require [clojisr.v1.using-sessions :as using-sessions]
-            [clojure.string :refer [join]]
-            [clojisr.v1.protocols :as prot]
-            [clojisr.v1.robject]
-            [clojisr.v1.util :refer [bracket-data]])
-  (:import [clojure.lang Named]
-           [clojisr.v1.robject RObject]))
+  (:require
+   [clojisr.v1.robject :refer [instance-robject?]]
+   [clojisr.v1.using-sessions :as using-sessions]
+   [clojure.string :refer [join]]
+   [clojisr.v1.protocols :as prot]
+   [clojisr.v1.util :refer [bracket-data]])
+  (:import [clojure.lang Named]))
 
 ;; helpers
 
@@ -28,12 +28,13 @@
 (def unary-operators #{"+" "-"})
 (def wrapped-operators #{"+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">"})
 
-(defn form->java->code [value session]
+(defn form->java->code
   "Convert form using Java backend.
    
    Used when seq or map is too big for string.
 
    Returns R handler name"
+  [value session]
   (-> value
       (->> (prot/clj->java session))
       (using-sessions/java->r session)
@@ -128,7 +129,7 @@
 
 (defn for-loop->code
   "Create for loop"
-  [bindings body session ctx]  
+  [bindings body session ctx]
   (if (seq bindings)
     (let [[v s & r] bindings]
       (format "for(%s in %s){%s\n}"
@@ -258,7 +259,7 @@
    (cond
      (vector? form) (vector->code form session ctx) ;; vector always is converted to datatype
      (sequential? form) (seq-form->code form session ctx) ;; sequence is usually call
-     (instance? RObject form) (:object-name form) ;; RObject is a R symbol
+     (instance-robject? form) (:object-name form) ;; RObject is a R symbol
      (map? form) (map->code form session ctx) ;; map goes to a list
      (string? form) (format "\"%s\"" form) ;; string is string wrapped in double quotes
      (integer? form) (str form) ;; int is treated literally
