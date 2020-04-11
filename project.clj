@@ -7,7 +7,7 @@
                  [scicloj/notespace "2.0.0-alpha4"]
                  [techascent/tech.datatype "4.88"]
                  [techascent/tech.resource "4.6"]
-                 [techascent/tech.ml.dataset "2.0-beta-4"]
+                 [techascent/tech.ml.dataset "2.0-beta-11"]
                  [org.rosuda.REngine/REngine "2.1.0"]
                  [org.rosuda.REngine/Rserve "1.8.1"]
                  [hiccup "1.0.5"]

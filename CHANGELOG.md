@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA11-SNAPSHOT]
+- updates in exception handling
+- updated tech.ml.dataset dependency version
+
 ## [1.0.0-BETA10]
 - new forms added: `if`, `do`, `for` and `while`
 - more binary operators: `%%`, `%/%`, `**` and `%in%`
