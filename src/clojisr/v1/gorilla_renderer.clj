@@ -9,7 +9,10 @@
    in project.clj is very lightweight and only defines the renderable
    protocol.   
   "
+  (:import [clojisr.v1.robject RObject])
   (:require
+   [pinkgorilla.ui.gorilla-renderable :refer [Renderable render]]
+   [clojisr.v1.robject]
    [clojisr.v1.refresh :refer [fresh-object?]]
    [clojisr.v1.protocols :refer [print-to-string]]))
 
@@ -34,4 +37,7 @@
     (render-session-lost)))
 
 
-
+(extend-type RObject
+  Renderable
+  (render [self]
+    (render-r-object self)))

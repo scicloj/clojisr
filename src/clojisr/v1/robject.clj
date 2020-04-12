@@ -1,10 +1,10 @@
 (ns clojisr.v1.robject
- (:require
-     [pinkgorilla.ui.gorilla-renderable :refer [Renderable render]] )
+ ;(:require
+ ;    [pinkgorilla.ui.gorilla-renderable :refer [Renderable render]] )
   )
 
-(defn- render-r-object [args]
-  ((resolve 'clojisr.v1.gorilla-renderer/render-r-object) args))
+;(defn- render-r-object [args]
+;  ((resolve 'clojisr.v1.gorilla-renderer/render-r-object) args))
 
 
 ;; Since IFn is an interface, not a protocol, we need to implement it here.
@@ -19,11 +19,9 @@
 ;; See this related discussion on reifying IFn.
 ;; https://clojurians.zulipchat.com/#narrow/stream/215609-libpython-clj-dev/topic/pandas.20query.20methods.20bug/near/186410253
 (defrecord RObject [object-name session code class]
-  
-  Renderable
-  (render [self]
-    (render-r-object self))
-
+ ; Renderable
+ ; (render [self]
+ ;   (render-r-object self))
   clojure.lang.IFn
   (applyTo [this args]
     (apply (function this) args))
@@ -370,5 +368,7 @@
        (list 'invoke
              (into ['this] args)
              (concat '(apply (function this)) args)))])
-   40))
+   40)
+;comment
+  )
 
