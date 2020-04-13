@@ -6,7 +6,6 @@
   :min-lein-version "2.9.1"
   :min-java-version "1.11"
   :dependencies [[org.clojure/clojure "1.10.1"]
-
                  [techascent/tech.datatype "5.0-beta-2"]
                  [techascent/tech.resource "4.6"]
                  [techascent/tech.ml.dataset "2.0-beta-11"]
