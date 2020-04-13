@@ -4,6 +4,7 @@
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"
             :url "https://www.eclipse.org/legal/epl-2.0/"}
   :min-lein-version "2.9.1"
+  :min-java-version "1.11"
   :dependencies [[org.clojure/clojure "1.10.1"]
 
                  [techascent/tech.datatype "5.0-beta-2"]
@@ -40,12 +41,13 @@
                        ; important to keep this dependency in here only, as we do not want to
                        ; bundle the notebook (big bundle) into clojisr library 
                        :source-paths ["profiles/notebook/src"]
-                       :main ^:skip-aot notebook.main
+                       :main notebook.main ; ^:skip-aot 
                        :dependencies [[org.pinkgorilla/gorilla-notebook "0.4.12-SNAPSHOT"]]
                        :repl-options {:welcome (println "Profile: gorilla")
                                       :init-ns notebook.main  ;; Specify the ns to start the REPL in (overrides :main in this case only)
                                       :init (start) ;; This expression will run when first opening a REPL, in the namespace from :init-ns or :main if specified.
                                       }}}
-  :plugins [[lein-ancient "0.6.15"]]
+  :plugins [[lein-ancient "0.6.15"]
+            [min-java-version "0.1.0"]]
   :aliases {"gorilla" ^{:doc "Runs pink-gorilla notebook"}
             ["with-profile" "+gorilla" "run" "-m" "notebook.main"]})
