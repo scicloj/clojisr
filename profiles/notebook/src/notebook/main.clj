@@ -1,4 +1,5 @@
 (ns notebook.main
+  ;(:import  [clojisr.v1.robject RObject])
   (:require
    [clojure.core.async :refer [thread]]
    [pinkgorilla.notebook-app.cli :refer [parse-opts]]
