@@ -6,6 +6,7 @@
   :min-lein-version "2.9.1"
   :min-java-version "1.11"
   :dependencies [[org.clojure/clojure "1.10.1"]
+                 [org.clojure/tools.logging "1.0.0"]
                  [techascent/tech.datatype "5.0-beta-2"]
                  [techascent/tech.resource "4.6"]
                  [techascent/tech.ml.dataset "2.0-beta-11"]
@@ -24,7 +25,7 @@
                                org.clojure/data.xml ; damn old - "0.0.3"
                                ]]]
 
-  ;:jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
+  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
   :source-paths ["src"]
   :profiles {:notespace {; runs notespace demos
                          ; important to keep this dependency in here only, as we do not want to
