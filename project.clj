@@ -11,6 +11,7 @@
                  [org.rosuda.REngine/Rserve "1.8.1"]
                  [hiccup "1.0.5"]
                  [org.clojure/tools.logging "1.0.0"]
-                 [clj-commons/pomegranate "1.2.0"]]
+                 [clj-commons/pomegranate "1.2.0"]
+                 [com.rpl/specter "1.1.3"]]
   :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
   :profiles {:dev {:dependencies [[scicloj/notespace "2.0.0-alpha4"]]}})
