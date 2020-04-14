@@ -265,10 +265,10 @@ USArrests
 ;; <=
 
 ;; @@ [clj]
-(->code (stats/cor 'UrbanPop 'Murder))
+(->code '(stats/cor UrbanPop Murder))
 ;; @@
 ;; =>
-;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-string"],"\".MEM$x16f1ccab49164cab\""],"~:value","\".MEM$x16f1ccab49164cab\""]
+;;; ["^ ","~:type","~:html","~:content",["~:span",["^ ","~:class","clj-string"],"\"cor(UrbanPop,Murder)\""],"~:value","\"cor(UrbanPop,Murder)\""]
 ;; <=
 
 ;; @@ [clj]
