@@ -1,11 +1,12 @@
 (ns notebook.main
-  ;(:import  [clojisr.v1.robject RObject])
+ ; (:import  [clojisr.v1.robject RObject])
   (:require
    [clojure.core.async :refer [thread]]
    [pinkgorilla.notebook-app.cli :refer [parse-opts]]
    [pinkgorilla.notebook-app.core :refer [run-gorilla-server]]
    [clojisr.v1.robject]
-   [clojisr.v1.gorilla-renderer] ; bring renderer to scope
+   [clojisr.v1.gorilla.renderer] ; bring renderer to scope
+   
    )
   (:gen-class))
 

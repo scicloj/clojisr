@@ -2,8 +2,7 @@
   (:require [clojisr.v1.r :refer [r]]
             [clojisr.v1.util :refer [exception-cause]]
             [clojisr.v1.require :refer [require-r]]
-            [clojure.tools.logging.readable :as log]
-            [clojisr.v1.gorilla-util :refer [fix-svg]])
+            [clojure.tools.logging.readable :as log])
   (:import [java.io File]
            [clojisr.v1.robject RObject]
            [java.awt Graphics2D Image]
@@ -50,18 +49,7 @@
       (.delete tempfile)
       result)))
 
-(defn ->svg [wrapper-params plotting-function-or-object & svg-params]
-  (let [tempfile (File/createTempFile "clojisr_notebook_plot" ".svg")
-        path     (.getAbsolutePath tempfile)
-        {:keys [width height]} wrapper-params
-        ]
-    (apply plot->file path plotting-function-or-object svg-params)
-    (let [result (slurp path)]
-      (.delete tempfile)
-      ;^:R [:p/html (fix-svg result 300 200)]
-      ^:R [:div.clojsrplot (fix-svg result width height)]
-      
-      )))
+
 
 (defn- force-argb-image
   "Create ARGB buffered image from given image."

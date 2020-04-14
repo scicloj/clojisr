@@ -1,4 +1,4 @@
-(ns clojisr.v1.gorilla-renderer
+(ns clojisr.v1.gorilla.renderer
   "Implement pink-gorilla renderer
 
    If this namespace is required, then pink-gorilla notebook
