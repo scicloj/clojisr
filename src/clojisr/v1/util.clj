@@ -167,7 +167,7 @@
                    "bra<-" ["`[<-`" false]
                    "brabra<-" ["`[[<-`" false]})
 
-(defn- maybe-wrap-backtick
+(defn maybe-wrap-backtick
   [string-or-symbol]
   (if (symbol? string-or-symbol)
     (name string-or-symbol)
