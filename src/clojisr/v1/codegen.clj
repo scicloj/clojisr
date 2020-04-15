@@ -3,7 +3,7 @@
             [clojure.string :refer [join]]
             [clojisr.v1.protocols :as prot]
             [clojisr.v1.robject]
-            [clojisr.v1.util :refer [bracket-data]])
+            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
   (:import [clojure.lang Named]
            [clojisr.v1.robject RObject]))
 
@@ -148,6 +148,19 @@
   [[a b] session ctx]
   (format "%s:%s" (form->code a session ctx) (form->code b session ctx)))
 
+(defn- rsymbol-wrapper
+  [a session ctx]
+  (if (or (symbol? a) (string? a))
+    (maybe-wrap-backtick a)
+    (maybe-wrap-backtick (form->code a session ctx))))
+
+(defn rsymbol->code
+  "Create qualified or regular symbol wrapped to ticks if necessary."
+  ([[a b] session ctx]
+   (if-not b
+     (rsymbol-wrapper a session ctx)
+     (str (rsymbol-wrapper a session ctx) "::" (rsymbol-wrapper b session ctx)))))
+
 (defn bracket-call->code
   [[bra all?] args session ctx]
   (let [args (if (and (not all?)
@@ -212,6 +225,7 @@
         (= "function" fs) (function-def->code (first r) (rest r) session ctx)
         (or (= "tilde" fs)
             (= "formula" fs)) (formula->code r session ctx)
+        (= "rsymbol" fs) (rsymbol->code r session ctx)
         (= "if" fs) (ifelse->code r session ctx)
         (= "do" fs) (join ";" (map #(form->code % session ctx) r))
         (= "for" fs) (for-loop->code (first r) (rest r) session ctx)

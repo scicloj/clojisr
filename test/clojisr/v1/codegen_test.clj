@@ -267,10 +267,22 @@ First, require the necessary namespaces.")
 | `if` | if or if-else |
 | `tilde` or `formula` | R formula |
 | `colon` | colon (`:`) |
+| `rsymbol` | qualified and/or backticked symbol wrapper |
 | `bra` | `[` |
 | `brabra` | `[[` |
 | `bra<-` | `[<-` |
 | `brabra<-` | `[[<-` |")
+
+(note-md "Sometimes symbols are represented as string with spaces inside, also can be prepend with package name. Tick `'` in clojure is not enough for that, for that purpose you can use `rsymbol`.")
+
+(note (->> (r/->code '(rsymbol name)) (check = "name")))
+(note (->> (r/->code '(rsymbol "name with spaces")) (check = "`name with spaces`")))
+(note (->> (r/->code '(rsymbol package name)) (check = "package::name")))
+(note (->> (r/->code '(rsymbol "package with spaces" name)) (check = "`package with spaces`::name")))
+
+(note (->> ((r/rsymbol 'base 'mean) [1 2 3 4]) r->clj (check = [2.5])))
+(note (->> ((r/rsymbol "[") 'iris 1) r->clj ffirst (check = 5.1)))
+(note (->> ((r/rsymbol 'base "[") 'iris 1) r->clj ffirst (check = 5.1)))
 
 (note-md "All `bra...` functions accept `nil` or `empty-symbol` to mark empty selector.")
 

@@ -8,7 +8,7 @@
             [clojisr.v1.codegen :as codegen]
             [clojure.string :as string]
             [clojisr.v1.rserve :as rserve]
-            [clojisr.v1.util :refer [bracket-data]])
+            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
   (:import clojisr.v1.robject.RObject))
 
 (defn init [& {:keys [session-args]}]
@@ -146,6 +146,15 @@
 
 ;; Some special characters will get a name in letters.
 (def colon (r "`:`"))
+
+;;
+
+(defn rsymbol
+  "Create RObject representing symbol"
+  ([string-or-symbol]
+   (r (maybe-wrap-backtick string-or-symbol)))
+  ([package string-or-symbol]
+   (r (str (maybe-wrap-backtick package) "::" (maybe-wrap-backtick string-or-symbol)))))
 
 ;; brackets!
 
