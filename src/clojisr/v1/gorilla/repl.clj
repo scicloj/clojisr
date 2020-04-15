@@ -1,9 +1,14 @@
 (ns clojisr.v1.gorilla.repl
+  "require this namespace in order to work with clojisr from 
+   a pinkgorilla notebook."
   (:require
    [clojisr.v1.require :refer [require-r]]
    [clojisr.v1.r :as r :refer [r]]
    [clojisr.v1.applications.plotting :refer [plot->file]]
-   [clojisr.v1.gorilla.util :refer [fix-svg]])
+   [clojisr.v1.gorilla.util :refer [fix-svg]]
+   
+   ; bring renderer to scope, so notebook user does not need two requires
+   [clojisr.v1.gorilla.renderer])
   (:import [java.io File]))
 
 (defn pdf-off
