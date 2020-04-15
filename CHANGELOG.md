@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file. This change
 - updates in exception handling
 - updated tech.ml.dataset dependency version
 - notespace is no longer a dependency
+- `rsymbol` introduced
 
 ## [1.0.0-BETA10]
 - new forms added: `if`, `do`, `for` and `while`
