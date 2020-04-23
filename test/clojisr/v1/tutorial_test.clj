@@ -161,8 +161,8 @@ Let us create such a dataset, pass it to an R function to compute the row means,
         (check (fn [d]
                  (-> d
                      dataset/->flyweight
-                     (= [{:x 2.0 :y 5.0 :z 7.0}
-                         {:x 3.0 :y 6.0 :z 9.0}])))))))
+                     (= [{:x 2 :y 5 :z 7}
+                         {:x 3 :y 6 :z 9}])))))))
 
 (note-md "[Tibbles](https://tibble.tidyverse.org), which are a more recent R dataframe notion, are also supported, as a special case of data frames.")
 
