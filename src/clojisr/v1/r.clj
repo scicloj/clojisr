@@ -7,7 +7,7 @@
             [clojisr.v1.printing]
             [clojisr.v1.codegen :as codegen]
             [clojure.string :as string]
-            [clojisr.v1.rserve :as rserve]
+            [clojisr.v1.rserve :as rserve] ; imprtant to load this
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
   (:import clojisr.v1.robject.RObject))
 
