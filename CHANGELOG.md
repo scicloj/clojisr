@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. This change
 - notespace is no longer a dependency
 - `rsymbol` introduced
 
-## [1.0.0-BETA10]
+## [1.0.0-BETA10] - 2020-03-29
 - new forms added: `if`, `do`, `for` and `while`
 - more binary operators: `%%`, `%/%`, `**` and `%in%`
 - sequences beginning with command as backticked string are now callable (eg. '("`^`" 2 4))
@@ -20,11 +20,11 @@ All notable changes to this project will be documented in this file. This change
 - updating notespace dep version
 - updating tech.ml.dataset dep version
 -
-## [1.0.0-BETA9]
+## [1.0.0-BETA9] - 2020-03-21
 - changed logging to `clojure/tools.logging`
 - major breaking change: a new set of code-generation rules
 
-## [1.0.0-BETA8]
+## [1.0.0-BETA8] - 2020-02-24
 - bugfix for plotting (to draw a chart `print` should be called instead of `plot`)
 - tech.ml libraries bumped
 - deps updated
