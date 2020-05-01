@@ -56,6 +56,7 @@
     (prn rstr)
     (let [rserve (spawn (r-path)
                         "--no-save" ; don't save workspace when quitting
+                        "--no-restore-data"
                         "--slave"
                         "-e" ; evaluate (boot server)
                         rstr)]
