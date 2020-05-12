@@ -117,7 +117,7 @@
    ["data.frame(columns, stringsAsFactors=FALSE)"]
    (lang/->env engine
                {:columns (->> dataset
-                              dataset/column-map
+                              dataset/column-name->column-map
                               (fmap (partial ->primitive-vector engine))
                               (->named-list-vector engine))})))
 

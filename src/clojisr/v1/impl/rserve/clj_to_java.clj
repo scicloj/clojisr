@@ -103,7 +103,7 @@
 
 (defn ->data-frame [dataset]
   (->> dataset
-       dataset/column-map
+       dataset/column-name->column-map
        (fmap (comp clj->java ; recursively
                    seq ; TODO: avoid this wasteful conversion
                    dtype-prot/->array-copy))
