@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This change
 - updated tech.datatype, tech.ml.dataset dependency versions with some small code adaptation ([#64](https://github.com/scicloj/clojisr/issues/64))
 - notespace is no longer a dependency
 - `rsymbol` introduced
+- moved to `lein-tools-deps` and all deps are defined in `deps.edn` now
 
 ## [1.0.0-BETA10] - 2020-03-29
 - new forms added: `if`, `do`, `for` and `while`

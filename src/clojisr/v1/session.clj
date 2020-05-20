@@ -7,7 +7,6 @@
             [clojure.tools.logging.readable :as log])
   (:import [java.io File]))
 
-
 (defonce sessions (atom {}))
 
 (defonce defaults (atom {}))
