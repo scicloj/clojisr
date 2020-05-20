@@ -1,4 +1,4 @@
-(defproject scicloj/clojisr "1.0.0-BETA11-SNAPSHOT"
+(defproject scicloj/clojisr "1.0.0-BETA11"
   :description "Clojure<->R interop"
   :url "https://github.com/scicloj/clojisr"
   :license {:name "EPL-2.0 OR GPL-2.0-or-later WITH Classpath-exception-2.0"

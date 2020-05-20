@@ -79,7 +79,7 @@ Installing R with Rserve on MacOS can be problematic due to issues related to op
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
 
 ```clj
-$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA10"}}}'
+$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA11"}}}'
 Clojure 1.10.1
 user=> (require '[clojisr.v1.r :refer [r]])
 

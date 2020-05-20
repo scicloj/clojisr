@@ -103,3 +103,4 @@
           :xlab "x"
           :bins 100)))))
 
+(comment (notespace.v2.note/compute-this-notespace!))

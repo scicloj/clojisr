@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [1.0.0-BETA11-SNAPSHOT]
+## [1.0.0-BETA11]
 - updates in exception handling
 - updated tech.datatype, tech.ml.dataset dependency versions with some small code adaptation ([#64](https://github.com/scicloj/clojisr/issues/64))
 - notespace is no longer a dependency
