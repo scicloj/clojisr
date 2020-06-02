@@ -1,5 +1,5 @@
 (ns clojisr.v1.applications.plotting
-  (:require [clojisr.v1.r :refer [r]]
+  (:require [clojisr.v1.r :refer [r r->clj rsymbol]]
             [clojisr.v1.util :refer [exception-cause]]
             [clojisr.v1.require :refer [require-r]]
             [clojure.tools.logging.readable :as log])
@@ -13,10 +13,15 @@
 
 (def ^:private files->fns (let [devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp])]
                             (if-let [jpg (get devices 'jpeg)]
-                              (assoc devices 'jpg jpg)
+                              (let [devices (assoc devices 'jpg jpg)]
+                                (if (-> '(%in% "svglite" (rownames (installed.packages))) ;; check if svglite is available
+                                        (r)
+                                        (r->clj)
+                                        (first))
+                                  (assoc devices 'svg (rsymbol "svglite" "svglite"))
+                                  (do (log/warn [::plotting {:messaage "We highly recommend installing of `svglite` package."}])
+                                      devices)))
                               devices)))
-
-(def ^:private r-print (r "print")) ;; avoid importing `base` here
 
 (defn plot->file
   [filename plotting-function-or-object & device-params]
@@ -26,15 +31,15 @@
     (if-not (contains? files->fns extension)
       (log/warn [::plot->file {:message (format "%s filetype is not supported!" (name extension))}])
       (try
-        (apply device :filename apath device-params)
+        (apply device apath device-params)
         (let [the-plot-robject (try
-                             (if (instance? RObject plotting-function-or-object)
-                               (r-print plotting-function-or-object)
-                               (plotting-function-or-object))
-                             (catch Exception e
-                               (log/warn [::plot->file {:message   "Evaluation plotting function failed."
-                                                        :exception (exception-cause e)}]))
-                             (finally (r.grDevices/dev-off)))]
+                                 (if (instance? RObject plotting-function-or-object)
+                                   (r `(print ~plotting-function-or-object))
+                                   (plotting-function-or-object))
+                                 (catch Exception e
+                                   (log/warn [::plot->file {:message   "Evaluation plotting function failed."
+                                                            :exception (exception-cause e)}]))
+                                 (finally (r.grDevices/dev-off)))]
           (log/debug [[::plot->file {:message (format "File %s saved." apath)}]])
           the-plot-robject)
         (catch clojure.lang.ExceptionInfo e (throw e))
