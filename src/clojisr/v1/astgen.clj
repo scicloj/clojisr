@@ -352,14 +352,3 @@
      :else (form->r->ast form session))))
 
 
-(comment
-  (-> (conj (range 10000) :!string)
-      clojisr.v1.r/->ast
-      #_clojisr.v1.r/ast->code)
-
-
-  (let [x (clojisr.v1.r/r '(+ 1 2))]
-    (-> `(+ 1 ~x)
-        clojisr.v1.r/->ast
-        clojisr.v1.r/ast->code)))
-
