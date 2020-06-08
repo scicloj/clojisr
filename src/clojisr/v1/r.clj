@@ -16,10 +16,6 @@
   (let [session (session/fetch-or-make session-args)]
     (session/init session)))
 
-#_(defn ->code [form & {:keys [session-args]}]
-  (let [session (session/fetch-or-make session-args)]
-    (codegen/form->code form session)))
-
 (defn ->ast [form & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
     (astgen/form->ast form session)))
