@@ -6,6 +6,7 @@
             [clojisr.v1.protocols :as prot]
             [clojisr.v1.printing]
             [clojisr.v1.codegen :as codegen]
+            [clojisr.v1.astgen :as astgen]
             [clojure.string :as string]
             [clojisr.v1.rserve :as rserve] ; imprtant to load this
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
@@ -15,9 +16,23 @@
   (let [session (session/fetch-or-make session-args)]
     (session/init session)))
 
-(defn ->code [form & {:keys [session-args]}]
+#_(defn ->code [form & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
     (codegen/form->code form session)))
+
+(defn ->ast [form & {:keys [session-args]}]
+  (let [session (session/fetch-or-make session-args)]
+    (astgen/form->ast form session)))
+
+(defn ast->code [ast & {:keys [session-args]}]
+  (let [session (session/fetch-or-make session-args)]
+    (codegen/ast->code ast session)))
+
+(defn ->code [form & {:keys [session-args]}]
+  (let [session (session/fetch-or-make session-args)]
+    (-> form
+        (astgen/form->ast session)
+        (codegen/ast->code session))))
 
 (defn r [form-or-code & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
