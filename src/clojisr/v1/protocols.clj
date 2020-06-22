@@ -14,5 +14,3 @@
   (clj->java [session clj-object])
   (print-to-string [session r-obj])
   (package-symbol->r-symbol-names [session package-symbol]))
-
-

@@ -27,10 +27,6 @@
   (let [session (session/fetch-or-make session-args)]
     (prot/eval-r->java session r-code)))
 
-(defn eval-r->java [r-code & {:keys [session-args]}]
-  (let [session (session/fetch-or-make session-args)]
-    (prot/eval-r->java session r-code)))
-
 (defn r->java [r-object]
   (using-sessions/r->java r-object))
 
@@ -75,8 +71,9 @@
 
 (def function functions/function)
 
-(defn println-r-lines [r-lines]
+(defn println-r-lines
   "Get a sequence of strings, typically corresponding to lines captured from the standard output of R functions, println them sequentially."
+  [r-lines]
   (doseq [line r-lines]
     (println line)))
 
@@ -126,6 +123,7 @@
 (def r| (r "`||`"))
 (def r|| (r "`||`"))
 (def r! (r "`!`"))
+(def r$ (r "`$`"))
 
 (def captured-str
   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."

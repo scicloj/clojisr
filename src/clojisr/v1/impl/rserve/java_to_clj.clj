@@ -6,15 +6,16 @@
             [com.rpl.specter :as specter]
             [clojisr.v1.impl.common :refer [usually-keyword]])
   (:import (org.rosuda.REngine REXP REXPGenericVector REXPString REXPLogical REXPFactor REXPSymbol REXPDouble REXPInteger REXPLanguage REXPList RList REXPNull)
-           (java.util Map List Collection Vector)
-           (clojure.lang Named)))
+           (java.util Map Vector)))
+
+(set! *warn-on-reflection* true)
 
 (defn java->specified-type
   [^REXP java-obj typ]
   (case typ
-    :ints    (.asIntegers ^REXP java-obj)
-    :doubles (.asDoubles ^REXP java-obj)
-    :strings (.asStrings ^REXP java-obj)))
+    :ints    (.asIntegers java-obj)
+    :doubles (.asDoubles  java-obj)
+    :strings (.asStrings  java-obj)))
 
 (defn java->naive-clj
   [^REXP java-obj]
@@ -25,18 +26,21 @@
                     (.asNativeJavaObject))}
        (walk/prewalk (fn [v]
                        (cond
-                         (instance? Map v)    (->> v
-                                                   (into {})
-                                                   (specter/transform [specter/MAP-KEYS]
-                                                                      usually-keyword))
+                         (instance? Map v) (->> v
+                                                (into {})
+                                                (specter/transform [specter/MAP-KEYS]
+                                                                   usually-keyword))
                          (instance? Vector v) (vec v)
-                         :else                v)))))
+                         :else v)))))
 
 (extend-type REXPDouble
   dtype-prot/PToArray
   (->array-copy [item]
     ;; NA maps to REXPDouble/NA.
-    (.asDoubles item)))
+    (.asDoubles item))
+  dtype-prot/PToReader
+  (convertible-to-reader? [_] true)
+  (->reader [item options] (dtype-prot/->reader (.asDoubles item) options)))
 
 (extend-type REXPInteger
   dtype-prot/PToArray
@@ -54,13 +58,19 @@
                   ^double (if (aget na? i)
                             REXPDouble/NA
                             (double (aget values i)))))
-          target)))))
+          target))))
+  dtype-prot/PToReader
+  (convertible-to-reader? [_] true)
+  (->reader [item options] (dtype-prot/->reader (->array-copy item) options))) 
 
 (extend-type REXPString
   dtype-prot/PToArray
   (->array-copy [item]
     ;; NA maps to nil.
-    (.asStrings item)))
+    (.asStrings item))
+  dtype-prot/PToReader
+  (convertible-to-reader? [_] true)
+  (->reader [item options] (dtype-prot/->reader (.asStrings item) options)))
 
 (extend-type REXPLogical
   dtype-prot/PToArray
@@ -69,7 +79,7 @@
     (let [n      (.length item)
           na? (.isNA item)
           true? (.isTRUE item)
-          target (make-array Boolean (.length item))]
+          ^"[Ljava.lang.Boolean;" target (make-array Boolean (.length item))]
       (dotimes [i n]
         (aset target i
               (or (aget true? i)
@@ -77,7 +87,6 @@
                     nil
                     false))))
       target)))
-
 
 (defn java-factor? [^REXP java-obj]
   (-> java-obj
@@ -171,7 +180,7 @@
 (extend-type REXPFactor
   Clojable
   (-java->clj [java-factor]
-    (let [{:keys [levels indices]}
+    (let [{:keys [^"[Ljava.lang.String;" levels indices]}
           (java-factor->clj-info
            java-factor)]
       (mapv (fn [i]
@@ -180,7 +189,10 @@
                 (->> i
                      dec
                      (aget levels))))
-            indices))))
+            indices)))
+  dtype-prot/PToReader
+  (convertible-to-reader? [_] true)
+  (->reader [item options] (dtype-prot/->reader (-java->clj item) options))  )
 
 (defn rexp-vector->list-or-map
   [^REXP java-obj]
@@ -190,17 +202,17 @@
       (let [names (.keys rlist)
             values (-> (comp java->clj (fn [^String k] (.at rlist k)))
                        (map names))]
-        (do (if (some (partial = "") names)
-              (throw (ex-info "Partially named lists are not supported yet. " {:names names})))
-            (let [fixed-names (map usually-keyword names)
-                  list-as-map (->> values
-                                   (interleave fixed-names)
-                                   (apply array-map))]
-              (if (java-data-frame? java-obj)
-                ;; a data  frame
-                (dataset/name-values-seq->dataset list-as-map)
-                ;; else -- assume a regular list
-                list-as-map)))))))
+        (when (some (partial = "") names)
+          (throw (ex-info "Partially named lists are not supported yet. " {:names names})))
+        (let [fixed-names (map usually-keyword names)
+              list-as-map (->> values
+                               (interleave fixed-names)
+                               (apply array-map))]
+          (if (java-data-frame? java-obj)
+            ;; a data  frame
+            (dataset/name-values-seq->dataset list-as-map)
+            ;; else -- assume a regular list
+            list-as-map))))))
 
 (extend-type REXPGenericVector
   Clojable

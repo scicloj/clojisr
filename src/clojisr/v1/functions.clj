@@ -4,9 +4,7 @@
             [clojisr.v1.refresh :as refresh]
             [clojisr.v1.codegen :as codegen]
             [clojisr.v1.gc :as gc]
-            [clojure.tools.logging.readable :as log])
-  (:import clojisr.v1.robject.RObject))
-
+            [clojure.tools.logging.readable :as log]))
 
 (defn apply-function [r-function
                       args

@@ -8,11 +8,9 @@
             [clojisr.v1.impl.rserve.printing :as printing]
             [clojure.core.async :as async]
             [clojure.tools.logging.readable :as log])
-  (:import (org.rosuda.REngine REXP REngineException REXPMismatchException)
-           (org.rosuda.REngine.Rserve RConnection)
-           clojisr.v1.protocols.Session
-           java.lang.Process
-           java.io.BufferedReader))
+  (:import [org.rosuda.REngine.Rserve RConnection]
+           [clojisr.v1.protocols Session]
+           [java.io BufferedReader]))
 
 (def defaults
   (atom

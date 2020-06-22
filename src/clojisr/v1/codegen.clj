@@ -28,12 +28,13 @@
 (def unary-operators #{"+" "-"})
 (def wrapped-operators #{"+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">"})
 
-(defn form->java->code [value session]
+(defn form->java->code
   "Convert form using Java backend.
    
    Used when seq or map is too big for string.
 
    Returns R handler name"
+  [value session]
   (-> value
       (->> (prot/clj->java session))
       (using-sessions/java->r session)
