@@ -1,21 +1,13 @@
-(ns clojisr.v1.impl.rserve.dataset
+(ns clojisr.v1.impl.java-to-clj
   (:require [tech.ml.dataset :as ds]
             [tech.ml.dataset.column :as col]
 
             [clojure.math.combinatorics :refer [cartesian-product]]
             [clojisr.v1.impl.protocols :as prot]
-            [clojisr.v1.impl.common :refer [tsp->reader first-step->java java->column]]
-
-            [clojisr.v1.r :as r]
-            [clojisr.v1.require :refer [require-r]]))
+            [clojisr.v1.impl.common :refer [tsp->reader first-step->java java->column]]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
-
-;; datetime wrappers
-
-
-;;
 
 ;; regular timeseries
 
@@ -153,6 +145,9 @@
       (multidim? exp) (multidim->dataset exp)
       :else (prot/->clj exp))))
 
+(defn java->native
+  [exp]
+  (prot/->native exp))
 
 ;;;;;;
 
@@ -165,7 +160,7 @@
    dts2 <- as.POSIXct(dts1, format = \"%Y%m%d %H:%M:%S\")
    dts3 <- as.POSIXlt(dts1, format = \"%Y%m%d %H:%M:%S\")
    dts <- data.frame(posixct=dts2, posixlt=dts3)") 
-
+  
   ;; data.frame without row.names
   (java->clj (r/r->java d/BOD))
 

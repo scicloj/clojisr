@@ -1,7 +1,8 @@
 (ns clojisr.v1.tutorial-test
   (:require [notespace.v2.note :as note
-             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup check]]
-            [notespace.v2.live-reload]))
+             :refer [note note-void note-md note-hiccup note-as-hiccup check]]
+            [notespace.v2.live-reload]
+            [tech.ml.dataset :as dataset]))
 
 (note-md "# Clojisr tutorial")
 
@@ -10,7 +11,7 @@
 (note-md "Let us start by some basic usage examples of Clojisr.")
 
 (note-void
- (require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->naive-clj clj->java r->clj clj->r ->code r+ colon]]
+ (require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon]]
           '[clojisr.v1.require :refer [require-r]]
           '[clojisr.v1.robject :as robject]
           '[clojisr.v1.session :as session]
@@ -537,13 +538,13 @@ In the current implementation, this is based on [REngine](https://github.com/s-u
  (->> "1:9"
       r
       r->java
-      java->naive-clj))
+      java->native-clj))
 
 (note
  (->> "data.frame(x=1:3,y=factor('a','a','b'))"
       r
       r->java
-      java->naive-clj))
+      java->native-clj))
 
 (note-md "We can evaluate R code and immediately return the result as a java object, without ever creating a handle to an R object holding the result:")
 
@@ -573,13 +574,27 @@ To stress this, we write it explicitly in the following examples.")
       java->clj
       (check = {:a [1 2] :b ["hi!"]})))
 
+(note-md "Partially named lists are also supported")
+
+(note
+ (->> "list(a=1:2,'hi!')"
+      r
+      r->java
+      java->clj
+      (check = {:a [1 2] 1 ["hi!"]})))
+
 (note
  (->> "table(c('a','b','a','b','a','b','a','b'), c(1,1,2,2,3,3,1,1))"
-     r
-     r->java
-     java->clj
-     (check = {["1" "a"] 2 ["1" "b"] 2 ["2" "a"] 1 ["2" "b"] 1 ["3" "a"] 1 ["3" "b"] 1})))
-
+      r
+      r->java
+      java->clj
+      dataset/->flyweight
+      (check = [{1 "1", :$value 2, 0 "a"}
+                {1 "1", :$value 2, 0 "b"}
+                {1 "2", :$value 1, 0 "a"}
+                {1 "2", :$value 1, 0 "b"}
+                {1 "3", :$value 1, 0 "a"}
+                {1 "3", :$value 1, 0 "b"}])))
 
 (note
  (->> {:a [1 2] :b "hi!"}
@@ -726,14 +741,14 @@ Now, we see some arguments that do have default values.")
 
 (note-md "In the followint example, we use a differnt R backend (the pure JVM Renjin) for reading a csv, without changing the default backend (which is the usual R using Rserve).")
 
-(note
- (require 'clojisr.v1.renjin)
- (let [path "/tmp/data.csv"]
-   (spit path "a,b,c\n1,2,3\n4,5,6\n")
-   (-> `(read.csv ~path)
-       (r :session-args {:session-type :renjin})
-       (r/r->clj :session-args {:session-type :renjin})
-       (->> (check = [{:a 1, :b 2, :c 3}
-                      {:a 4, :b 5, :c 6}])))))
+#_(note
+   (require 'clojisr.v1.renjin)
+   (let [path "/tmp/data.csv"]
+     (spit path "a,b,c\n1,2,3\n4,5,6\n")
+     (-> `(read.csv ~path)
+         (r :session-args {:session-type :renjin})
+         (r/r->java :session-args {:session-type :renjin})
+         (->> (check = [{:a 1, :b 2, :c 3}
+                        {:a 4, :b 5, :c 6}])))))
 
 (comment (notespace.v2.note/compute-this-notespace!))

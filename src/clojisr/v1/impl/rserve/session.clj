@@ -1,15 +1,14 @@
 (ns clojisr.v1.impl.rserve.session
   (:require [clojisr.v1.protocols :as prot]
+            [clojisr.v1.impl.protocols :as iprot]
+            [clojisr.v1.impl.rserve.rexp :as rexp] ;; ensure protocols implementation
             [clojisr.v1.impl.rserve.proc :as proc]
-            [clojisr.v1.impl.rserve.java :as java]
-            [clojisr.v1.impl.rserve.java-to-clj :as java-to-clj]
-            [clojisr.v1.impl.rserve.clj-to-java :as clj-to-java]
+            [clojisr.v1.impl.rserve.call :as call]
             [clojisr.v1.impl.rserve.packages :as packages]
             [clojisr.v1.impl.rserve.printing :as printing]
             [clojure.core.async :as async]
             [clojure.tools.logging.readable :as log])
   (:import [org.rosuda.REngine.Rserve RConnection]
-           [clojisr.v1.protocols Session]
            [java.io BufferedReader]))
 
 (def defaults
@@ -39,7 +38,7 @@
                           session-args
                           ^RConnection r-connection
                           rserve]
-  Session
+  prot/Session
   (close [session]
     (close! session))
   (closed? [session]
@@ -53,29 +52,34 @@
   (eval-r->java [session code]
     (log/debug [::eval-r->java {:code         code
                                 :session-args (:session-args session)}])
-    (java/try-eval-catching-errors code r-connection))
+    (call/try-eval-catching-errors code r-connection))
   (java->r-set [session varname java-obj]
     ;; Unlike (.assign r-connection ...), the following approach
     ;; allows for a varname like "abc$xyz".
     (locking r-connection
       (.eval
        r-connection
-       (java/assignment varname java-obj)
+       (call/assignment varname java-obj)
        nil
        true)))
-  (java->specified-type [session java-obj typ]
-    (java-to-clj/java->specified-type java-obj typ))
-  (java->naive-clj [session java-obj]
-    (java-to-clj/java->naive-clj java-obj))
-  (java->clj [session java-obj]
-    (java-to-clj/java->clj java-obj))
-  (clj->java [session clj-obj]
-    (clj-to-java/clj->java clj-obj))
   (print-to-string [session r-obj]
     (printing/print-to-string session r-obj))
   (package-symbol->r-symbol-names [session package-symbol]
     (packages/package-symbol->r-symbol-names
-     session package-symbol)))
+     session package-symbol))
+
+  iprot/Engine
+  (->nil [_] (rexp/->rexp-nil))
+  (->symbol [_ x] (rexp/->rexp-symbol x))
+  (->string-vector [_ xs] (rexp/->rexp-strings xs))
+  (->numeric-vector [_ xs] (rexp/->rexp-doubles xs))
+  (->integer-vector [_ xs] (rexp/->rexp-integers xs))
+  (->logical-vector [_ xs] (rexp/->rexp-logical xs))
+  (->factor [_ xs] (rexp/->rexp-factor xs))
+  (->factor [_ ids levels] (rexp/->rexp-factor ids levels))
+  (->list [_ vs] (rexp/->rexp-list vs))
+  (->named-list [_ ks vs] (rexp/->rexp-named-list ks vs))
+  (native? [_ x] (rexp/rexp? x)))
 
 (defn rserve-print-loop [{:keys [rserve]
                           :as session}]

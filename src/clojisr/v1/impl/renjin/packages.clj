@@ -1,7 +1,7 @@
 (ns clojisr.v1.impl.renjin.packages
   (:require [clojisr.v1.protocols :as prot]
             [clojisr.v1.impl.renjin.engine :as engine])
-  (:import (org.renjin.sexp DynamicEnvironment ListVector$NameValuePair)
+  (:import (org.renjin.sexp ListVector$NameValuePair)
            (org.renjin.eval Context)
            (org.renjin.primitives.packaging NamespaceRegistry ClasspathPackageLoader ClasspathPackage)))
 

@@ -6,6 +6,7 @@
             [clojisr.v1.known-classes :as known-classes]
             [clojisr.v1.util :as util :refer [clojurize-r-symbol exception-cause]]
             [clojisr.v1.impl.common :refer [strange-symbol-name?]]
+            [clojisr.v1.impl.java-to-clj :refer [java->clj]]
             [clojure.tools.logging.readable :as log]))
 
 (defn package-r-object [package-symbol object-symbol]
@@ -16,8 +17,7 @@
 
 (defn package-symbol->nonstrange-r-symbols [package-symbol]
   (let [session (session/fetch-or-make nil)]
-    (->> (prot/package-symbol->r-symbol-names
-          session package-symbol)
+    (->> (prot/package-symbol->r-symbol-names session package-symbol)
          (remove strange-symbol-name?)
          (map symbol))))
 
@@ -52,7 +52,7 @@
                             "with(list(x=%s), if(is.primitive(x)) formals(args(x)) else formals(x))"
                             code))
                     (using-sessions/r->java)
-                    (prot/java->clj sess))
+                    (java->clj))
           {:keys [obl opt]} (reduce-kv (fn [m k v]
                                          (let [selector (if (and (= empty-symbol v) ;; dirty logic
                                                                  (not (seq (:opt m)))

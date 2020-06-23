@@ -1,6 +1,7 @@
 (ns clojisr.v1.codegen-test
   (:require [notespace.v2.note :as note
-             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
+             :refer [note note-void note-md]]
+            [tech.ml.dataset :as dataset]
             [notespace.v2.live-reload]
             [clojisr.v1.r :as r]))
 
@@ -69,9 +70,10 @@ First, require the necessary namespaces.")
 
 (note-md "We use `r->clj` to transfer data from R to Clojure (converting an R object to Clojure data):")
 
-(note (->> (r->clj dataset)
-           first
-           (check = 49.9)))
+(note (-> (r->clj dataset)
+          (dataset/select-rows 0)
+          (dataset/mapseq-reader)
+          (->> (check = [{:$series 49.9 :$time 1912.0}]))))
 
 (note-md "Creating an R object, applying the function to it, and conveting to Clojure data (in this pipeline, both `function` and `r` return an RObject):")
 
@@ -194,7 +196,7 @@ First, require the necessary namespaces.")
 (note (->> (r [:!string 1 nil 3]) r->clj (check = ["1" nil "3"])))
 (note (r [:!named 1 2 :abc 3]))
 (note (r [:!list :a 1 :b [:!list 1 2 :c ["a" "b"]]]))
-(note (->> (r [:!ct #inst "2011-11-01T22:33:11"]) r->clj first long))
+(note (->> (r [:!ct #inst "2011-11-01T22:33:11"]) r->clj))
 (note (->> (r [:!lt #inst "2011-11-01T22:33:11"]) r->clj))
 
 (note-md "When a vector is big enough, it is transfered not directly as code, but as the name of a newly created R variable holding the corresponding vector data, converted via the Java conversion layer.")
@@ -293,15 +295,18 @@ First, require the necessary namespaces.")
 
 (note (->> (r '(bra ~m nil 1)) r->clj (check = [1 2])))
 (note (->> (r '(bra ~m 1 nil)) r->clj (check = [1 3 5])))
-(note (->> (r '(bra ~m 1 nil :drop false)) r->clj (check = [1 3 5])))
-(note (->> (r '(bra<- ~m 1 nil [11 22 33])) r->clj (check = [11.0 2.0 22.0 4.0 33.0 6.0])))
-(note (->> (r '(bra<- ~m nil 1 [22 33])) r->clj (check = [22.0 33.0 3.0 4.0 5.0 6.0])))
-
+(note (->> (r '(bra ~m 1 nil :drop false)) r->clj dataset/value-reader (check = [["a" 1 3 5]])))
+(note (->> (r '(bra<- ~m 1 nil [11 22 33])) r->clj dataset/value-reader (check = [["a" 11.0 22.0 33.0]
+                                                                                  ["b" 2.0 4.0 6.0]])))
+(note (->> (r '(bra<- ~m nil 1 [22 33])) r->clj dataset/value-reader (check = [["a" 22.0 3.0 5.0]
+                                                                               ["b" 33.0 4.0 6.0]])))
 (note (->> (r/bra m nil 1) r->clj (check = [1 2])))
 (note (->> (r/bra m 1 nil) r->clj (check = [1 3 5])))
-(note (->> (r/bra m 1 nil :drop false) r->clj (check = [1 3 5])))
-(note (->> (r/bra<- m 1 nil [11 22 33]) r->clj (check = [11.0 2.0 22.0 4.0 33.0 6.0])))
-(note (->> (r/bra<- m nil 1 [22 33]) r->clj (check = [22.0 33.0 3.0 4.0 5.0 6.0])))
+(note (->> (r/bra m 1 nil :drop false) r->clj dataset/value-reader (check = [["a" 1 3 5]])))
+(note (->> (r/bra<- m 1 nil [11 22 33]) r->clj dataset/value-reader (check = [["a" 11.0 22.0 33.0]
+                                                                              ["b" 2.0 4.0 6.0]])))
+(note (->> (r/bra<- m nil 1 [22 33]) r->clj dataset/value-reader (check = [["a" 22.0 3.0 5.0]
+                                                                           ["b" 33.0 4.0 6.0]])))
 
 (note-void (def l (r [:!list "a" "b" "c"])))
 (note l)
@@ -357,7 +362,7 @@ First, require the necessary namespaces.")
 
 (note (->> (r '(stat [100 33 22 44 55])) r->clj (check = [50.8])))
 (note (->> (r '(stat [100 33 22 44 55] :median true)) r->clj (check = [44.0])))
-(note (->> (r '(stat [100 33 22 44 55 nil])) r->clj first (check #(Double/isNaN %))))
+(note (->> (r '(stat [100 33 22 44 55 nil])) r->clj first (check nil?)))
 (note (->> (r '(stat [100 33 22 44 55 nil] :na.rm true)) r->clj (check = [50.8])))
 
 (note-md "#### Formulas")
@@ -400,3 +405,4 @@ First, require the necessary namespaces.")
 (note (->> (square 123) r->clj first (check = 15129.0)))
 
 (comment (notespace.v2.note/compute-this-notespace!))
+

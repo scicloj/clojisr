@@ -5,6 +5,7 @@
   "Backend protocols"
   (attribute [exp attr])
   (attribute-names [exp])
+  (set-attributes! [exp m])
   (inherits? [exp clss])
   (na? [exp]))
 
@@ -23,3 +24,18 @@
   (indexes [factor])
   (strings [factor])
   (counts [factor]))
+
+(defprotocol Engine
+  "Clojure to native objects converter"
+  (->string-vector [session xs])
+  (->numeric-vector [session xs])
+  (->integer-vector [session xs])
+  (->logical-vector [session xs])
+  (->factor [session xs] [session ids levels])
+  (->data-frame [session xs])
+  (->nil [session])
+  (->symbol [session x])
+  (->list [session vs]) ;; from any vector
+  (->named-list [session ks vs]) ;; from map
+  (native? [session x]) ;; is native object? (REXP or SEXP)
+  )
