@@ -71,6 +71,9 @@
         
         ;; nil
         (nil? obj) (prot/->nil session)
+
+        ;; symbol
+        (symbol? obj) (prot/->symbol session (name obj))
         
         ;; basic types
         (types/primitive-r-type obj) ((primitive-vector-ctors (types/primitive-r-type obj)) session [obj])

@@ -41,8 +41,14 @@
   (map-indexed (fn [^long id k]
                  (if (empty? k) id (usually-keyword k))) names))
 
-
 ;; REXP/SEXP helpers for dataset conversion
+
+(extend-type Object
+  prot/RProto
+  (inherits? [_ _] false)
+  prot/Clojable
+  (->clj [obj] obj)
+  (->native [obj] obj))
 
 (defn ->seq-with-missing
   [xs missing]
@@ -75,6 +81,7 @@
      (attribute [_ attr#] (prot/attribute ~exp attr#))
      (attribute-names [_] (prot/attribute-names ~exp))
      (inherits? [_ clss#] (prot/inherits? ~exp clss#))
+     prot/NAProto
      (na? [_] (prot/na? ~exp))
      prot/Clojable
      (->clj [_] (deref ~data))
@@ -138,10 +145,11 @@
       (attribute [_ attr] (prot/attribute obj attr))
       (attribute-names [_] (prot/attribute-names obj))
       (inherits? [_ clss] (prot/inherits? obj clss))
+      prot/NAProto
       (na? [_] (prot/na? obj))
       prot/Clojable
-      (->clj [_] @data)
-      (->native [_] (prot/->native obj))
+      (->clj [this] this)
+      (->native [_] ids)
       prot/DatasetProto
       (->column [_ name] (->column @data name :keyword (prot/na? obj))))))
 

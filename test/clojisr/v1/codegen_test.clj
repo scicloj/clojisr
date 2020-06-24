@@ -23,10 +23,12 @@ First, require the necessary namespaces.")
 (note-md "Also, let us make sure we are using a clean session.")
 
 (note-void (require '[clojisr.v1.rserve :as rserve]
+                    ;; '[clojisr.v1.renjin :as renjin]
                     '[clojisr.v1.r :as r :refer [r ->code r->clj]]
                     '[notespace.v2.note :refer [check]]))
 
 (note-void
+ ;; (renjin/set-as-default!)
  (rserve/set-as-default!)
  (r/discard-all-sessions))
 
@@ -283,8 +285,8 @@ First, require the necessary namespaces.")
 (note (->> (r/->code '(rsymbol "package with spaces" name)) (check = "`package with spaces`::name")))
 
 (note (->> ((r/rsymbol 'base 'mean) [1 2 3 4]) r->clj (check = [2.5])))
-(note (->> ((r/rsymbol "[") 'iris 1) r->clj ffirst (check = 5.1)))
-(note (->> ((r/rsymbol 'base "[") 'iris 1) r->clj ffirst (check = 5.1)))
+(note (->> ((r/rsymbol "[") 'iris 1) r->clj dataset/->flyweight first :Sepal.Length (check = 5.1)))
+(note (->> ((r/rsymbol 'base "[") 'iris 1) r->clj dataset/->flyweight first :Sepal.Length (check = 5.1)))
 
 (note-md "All `bra...` functions accept `nil` or `empty-symbol` to mark empty selector.")
 

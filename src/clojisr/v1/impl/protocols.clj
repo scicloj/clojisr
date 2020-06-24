@@ -4,9 +4,13 @@
 (defprotocol RProto
   "Backend protocols"
   (attribute [exp attr])
+  (attributes [exp])
   (attribute-names [exp])
   (set-attributes! [exp m])
-  (inherits? [exp clss])
+  (inherits? [exp clss]))
+
+(defprotocol NAProto
+  "List of true/false of NA values"
   (na? [exp]))
 
 (defprotocol Clojable

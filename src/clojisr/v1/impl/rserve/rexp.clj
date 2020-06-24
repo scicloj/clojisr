@@ -1,5 +1,5 @@
 (ns clojisr.v1.impl.rserve.rexp
-  "SEXP enhancements"
+  "REXP enhancements"
   (:require [clojisr.v1.impl.protocols :as prot]
             [clojisr.v1.impl.common :refer [->seq-with-missing ->column java->column
                                             valid-list-names]]
@@ -17,21 +17,16 @@
 
 (defn rexp? [exp] (instance? REXP exp))
 
-(extend-type Object
-  prot/RProto
-  (inherits? [_ _] false)
-  prot/Clojable
-  (->clj [obj] obj)
-  (->native [obj] obj))
-
 (extend-type REXP
   prot/RProto
   (attribute [exp attr] (some-> (.getAttribute ^REXP exp ^String attr) prot/->clj))
+  (attributes [exp] (some-> (._attr ^REXP exp) prot/->clj))
   (set-attributes! [exp m] (do
                              (.putAll (.asList (._attr ^REXP exp)) ^java.util.Map m)
                              exp))
   (attribute-names [exp] (seq (.keys (.asList (._attr ^REXP exp)))))
   (inherits? [exp clss] (.inherits ^REXP exp ^String clss))
+  prot/NAProto
   (na? [exp] (.isNA ^REXP exp)))
 
 (defmacro emit-rexp-extensions

@@ -149,6 +149,24 @@
   [exp]
   (prot/->native exp))
 
+(comment (def engine (.getScriptEngine (org.renjin.script.RenjinScriptEngineFactory.)))
+
+         (.eval engine "factor(c(1,2,1,2))")
+
+         (java->clj (.eval engine "CO2"))
+
+         (prot/->columns (.eval engine "list(1,2,abc=T,NA)"))
+
+         (java->clj (.eval engine "
+   day <- c(\"20081101\", \"20081101\", \"20081101\", \"20081101\", \"18081101\", \"20081102\", \"20081102\", \"20081102\", \"20081102\", \"20081103\")
+   time <- c(\"01:20:00\", \"06:00:00\", \"12:20:00\", \"17:30:00\", \"21:45:00\", \"01:15:00\", \"06:30:00\", \"12:50:00\", \"20:00:00\", \"01:05:00\")
+   dts1 <- paste(day, time)
+   dts2 <- as.POSIXct(dts1, format = \"%Y%m%d %H:%M:%S\")
+   dts3 <- as.POSIXlt(dts1, format = \"%Y%m%d %H:%M:%S\")
+   dts <- data.frame(posixct=dts2, posixlt=dts3)"))
+
+         (java->clj (.eval engine "dts3")))
+
 ;;;;;;
 
 (comment

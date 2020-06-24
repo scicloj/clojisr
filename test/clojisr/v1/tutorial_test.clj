@@ -2,7 +2,8 @@
   (:require [notespace.v2.note :as note
              :refer [note note-void note-md note-hiccup note-as-hiccup check]]
             [notespace.v2.live-reload]
-            [tech.ml.dataset :as dataset]))
+            [tech.ml.dataset :as dataset]
+            [clojisr.v1.r :as r]))
 
 (note-md "# Clojisr tutorial")
 
@@ -640,7 +641,7 @@ To stress this, we write it explicitly in the following examples.")
            (check = [10.0 20.0 30.0])))
 
 (note-md "Timeseries")
-(note (->> (r r.datasets/euro) ;; timeseries
+(note (->> (r 'euro) ;; timeseries
            r->clj
            first
            (check = 13.7603)))
@@ -741,14 +742,16 @@ Now, we see some arguments that do have default values.")
 
 (note-md "In the followint example, we use a differnt R backend (the pure JVM Renjin) for reading a csv, without changing the default backend (which is the usual R using Rserve).")
 
-#_(note
-   (require 'clojisr.v1.renjin)
-   (let [path "/tmp/data.csv"]
-     (spit path "a,b,c\n1,2,3\n4,5,6\n")
-     (-> `(read.csv ~path)
-         (r :session-args {:session-type :renjin})
-         (r/r->java :session-args {:session-type :renjin})
-         (->> (check = [{:a 1, :b 2, :c 3}
-                        {:a 4, :b 5, :c 6}])))))
+(note
+ (require 'clojisr.v1.renjin)
+ (let [path "/tmp/data.csv"]
+   (spit path "a,b,c\n1,2,3\n4,5,6\n")
+   (-> `(read.csv ~path)
+       (r :session-args {:session-type :renjin})
+       (r/r->clj)
+       (dataset/drop-columns [:$row.names])
+       (dataset/->flyweight)
+       (->> (check = [{:a 1, :b 2, :c 3}
+                      {:a 4, :b 5, :c 6}])))))
 
 (comment (notespace.v2.note/compute-this-notespace!))
