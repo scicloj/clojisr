@@ -57,7 +57,7 @@
 (defn ->column
   [xs name datatype missing]
   (if datatype
-    (new-column name (->reader xs {:datatype datatype}) nil (seq (argfilter identity missing)))
+    (new-column name (->reader xs datatype) nil (seq (argfilter identity missing)))
     (new-column name (->reader xs) nil (seq (argfilter identity missing)))))
 
 ;; Timeseries

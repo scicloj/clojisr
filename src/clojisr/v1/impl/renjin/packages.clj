@@ -31,4 +31,3 @@
           (->> (map (fn [^ListVector$NameValuePair nvp]
                       (.getName nvp))))))))
 
-

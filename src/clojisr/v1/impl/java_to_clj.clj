@@ -1,6 +1,7 @@
 (ns clojisr.v1.impl.java-to-clj
   (:require [tech.ml.dataset :as ds]
             [tech.ml.dataset.column :as col]
+            [tech.v2.datatype :refer [->reader]]
 
             [clojure.math.combinatorics :refer [cartesian-product]]
             [clojisr.v1.impl.protocols :as prot]
@@ -131,6 +132,25 @@
                   (map #(apply array-map (interleave %1 %2)) (repeat (keys dimnames))))]
     (ds/->dataset (map #(assoc %1 :$value %2) cols (prot/->clj exp)))))
 
+;; dist
+
+(defn dist? [obj] (prot/inherits? obj "dist"))
+(defn dist->dataset
+  [exp]
+  (let [labels (prot/attribute exp "Labels")
+        cnt (count labels)
+        values (prot/->clj exp)
+        datatype (if (integer? (first values)) :int64 :float64)
+        offsets (vec (reductions (fn [^long i ^long v]
+                                   (+ i v)) 0 (range (dec cnt) 1 -1)))
+        cols (map-indexed (fn [^long col label]
+                            (col/new-column label
+                                            (->reader (vec (for [^long row (range cnt)]
+                                                             (if (= row col) 0
+                                                                 (let [^long off (offsets (if (< col row) col row))]
+                                                                   (values (+ off (dec (Math/abs (- row col))))))))) datatype))) labels)]
+    (ds/new-dataset (conj cols (col/new-column :$row.names labels)))))
+
 ;; two stage conversion to avoid recursive call on several classes
 
 (defn java->clj
@@ -141,6 +161,7 @@
       (data-frame? exp) (data-frame->dataset exp)
       (mts? exp) (mts->dataset exp)
       (timeseries? exp) (timeseries->dataset exp)
+      (dist? exp) (dist->dataset exp)
       (table? exp) (table->dataset exp)
       (multidim? exp) (multidim->dataset exp)
       :else (prot/->clj exp))))
