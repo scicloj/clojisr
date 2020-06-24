@@ -7,8 +7,7 @@
             [clojisr.v1.util :as util :refer [clojurize-r-symbol exception-cause]]
             [clojisr.v1.impl.common :refer [strange-symbol-name?]]
             [clojisr.v1.impl.java-to-clj :refer [java->clj]]
-            [clojure.tools.logging.readable :as log]
-            [clojisr.v1.r :as r]))
+            [clojure.tools.logging.readable :as log]))
 
 (defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"

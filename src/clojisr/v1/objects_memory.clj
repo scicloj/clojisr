@@ -17,4 +17,4 @@
       (->> obj-name
            code-to-forget
            (prot/eval-r->java session))
-      (catch Exception e))))
+      (catch Exception _))))

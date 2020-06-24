@@ -10,10 +10,7 @@
             [clojisr.v1.impl.clj-to-java :as clj2java]
             [clojure.string :as string]
             [clojisr.v1.rserve :as rserve] ; imprtant to load this
-            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
-            [clojisr.v1.impl.protocols :as iprot]
-            [tech.ml.dataset :as ds]
-            [tech.v2.datatype.functional :as dfn])
+            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
   (:import clojisr.v1.robject.RObject))
 
 (defn init [& {:keys [session-args]}]
