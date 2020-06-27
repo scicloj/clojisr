@@ -76,7 +76,7 @@ Installing R with Rserve on MacOS can be problematic due to issues related to op
 
 ### Docker image
 
-Thanks to Carsten Behring we have a Docker image prepared
+Thanks to Carsten Behring we have a Docker template prepared
 
 https://github.com/behrica/clj-py-r-template
 
