@@ -9,32 +9,31 @@
 (defn init []
   (catalog/reset))
 
-(defn ground-to-use [context]
-  (-> context
-      :ground
-      (or (catalog/default-ground))))
+(defn ground-to-use [{:keys [ground]}]
+  (or ground
+      (catalog/default-ground)))
 
-(defn season-to-use [context]
-  (or (:season context)
-      (-> context
+(defn season-to-use [{:keys [season] :as options}]
+  (or season
+      (-> options
           ground-to-use
           (season/current-season))))
 
 (defn plant
   ([seedling]
    (plant seedling nil))
-  ([seedling context]
-   (let [ground (ground-to-use context)]
-     (tree/->tree (:tree-name context)
+  ([seedling options]
+   (let [ground (ground-to-use options)]
+     (tree/->tree (:tree-name options)
                   (ground/seedling->ast ground seedling)))))
 
 (defn pick
   ([tree]
    (pick tree nil))
-  ([tree context]
-   (let [season         (season-to-use context)
+  ([tree options]
+   (let [season         (season-to-use options)
          ground         (season/ground season)
-         refined-context (assoc context :season season)
+         refined-context (assoc options :season season)
          var-name (->> tree
                        :tree-name
                        (ground/tree-name->var-name ground))]
@@ -58,8 +57,8 @@
 (defn data->fruit
   ([data]
    (data->fruit data nil))
-  ([data context]
-   (let [season (season-to-use context)
+  ([data options]
+   (let [season (season-to-use options)
          tree (-> data
                   ast/->data-dep-ast
                   tree/->tree)]
