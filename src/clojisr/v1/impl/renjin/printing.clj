@@ -1,6 +1,5 @@
 (ns clojisr.v1.impl.renjin.printing
-  (:require [clojisr.v1.protocols :as prot]
-            [clojisr.v1.objects-memory :as mem]))
+  (:require [clojisr.v1.protocols :as prot]))
 
 (defn print-to-string [session r-obj]
   (->> r-obj

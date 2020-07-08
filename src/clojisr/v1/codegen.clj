@@ -1,7 +1,7 @@
 (ns clojisr.v1.codegen
   (:require [clojisr.v1.using-sessions :as using-sessions]
             [clojure.string :refer [join]]
-            [clojisr.v1.protocols :as prot]
+            [clojisr.v1.impl.clj-to-java :refer [clj->java]]
             [clojisr.v1.robject]
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
   (:import [clojure.lang Named]
@@ -28,14 +28,15 @@
 (def unary-operators #{"+" "-"})
 (def wrapped-operators #{"+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">"})
 
-(defn form->java->code [value session]
+(defn form->java->code
   "Convert form using Java backend.
    
    Used when seq or map is too big for string.
 
    Returns R handler name"
+  [value session]
   (-> value
-      (->> (prot/clj->java session))
+      (->> (clj->java session))
       (using-sessions/java->r session)
       :object-name))
 

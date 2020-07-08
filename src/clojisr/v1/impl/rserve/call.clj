@@ -1,30 +1,13 @@
-(ns clojisr.v1.impl.rserve.java
-  (:require [clojure.pprint :as pp]
-            [clojure.string :as string]
+(ns clojisr.v1.impl.rserve.call
+  (:require [clojure.string :as string]
             [clojisr.v1.util :refer [exception-cause]]
             [clojure.tools.logging.readable :as log])
-  (:import (org.rosuda.REngine REXP REXPString REXPSymbol REXPDouble REXPInteger REXPLanguage
-                               RList REXPNull REngineException REXPMismatchException)
-           (org.rosuda.REngine.Rserve RConnection)
-           (java.util List Collection)
-           (clojure.lang Named)))
-
-
-(defn r-list [^Collection names
-              ^Collection contents]
-  (RList. contents names))
-
-(defn rexp-language [^List alist]
-  (REXPLanguage. alist))
+  (:import (org.rosuda.REngine REXP REXPSymbol
+                               REngineException REXPMismatchException)
+           (org.rosuda.REngine.Rserve RConnection)))
 
 (defn rexp-symbol [name]
   (REXPSymbol. name))
-
-(defn rexp-double [xs]
-  (REXPDouble. (double-array xs)))
-
-(defn rexp-int [xs]
-  (REXPInteger. (int-array xs)))
 
 (defn call
   [op args]

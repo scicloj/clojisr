@@ -1,7 +1,7 @@
 (ns clojisr.v1.impl.renjin.packages
-  (:require [clojisr.v1.protocols :as prot]
+  (:require [clojisr.v1.impl.java-to-clj :refer [java->clj]]
             [clojisr.v1.impl.renjin.engine :as engine])
-  (:import (org.renjin.sexp DynamicEnvironment ListVector$NameValuePair)
+  (:import (org.renjin.sexp ListVector$NameValuePair)
            (org.renjin.eval Context)
            (org.renjin.primitives.packaging NamespaceRegistry ClasspathPackageLoader ClasspathPackage)))
 
@@ -13,7 +13,7 @@
          engine/runtime-context
          (.getBaseEnvironment)
          (.getNames)
-         (prot/java->clj session))
+         (java->clj))
     ;; else
     (let [ctx (-> session
                   :engine
@@ -30,5 +30,4 @@
           (.loadSymbols ctx)
           (->> (map (fn [^ListVector$NameValuePair nvp]
                       (.getName nvp))))))))
-
 

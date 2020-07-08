@@ -5,6 +5,7 @@
             [clojisr.v1.util :as util]
             [clojisr.v1.robject :refer [->RObject]]
             [clojisr.v1.known-classes :as known-classes]
+            [clojisr.v1.impl.java-to-clj :refer [java->clj]]
             [clojure.tools.logging.readable :as log])
   (:import clojisr.v1.robject.RObject))
 
@@ -15,7 +16,7 @@
   (let [theclass (->> obj-name   
                       (format "class(%s)")
                       (prot/eval-r->java session)
-                      (prot/java->clj session))]
+                      (java->clj))]
     (->RObject obj-name session code theclass)))
 
 (defn eval-code
@@ -26,25 +27,14 @@
                        (mem/code-that-remembers obj-name)
                        (prot/eval-r->java session))]
      (assert (->> returned
-                  (prot/java->clj session)
+                  (java->clj)
                   (= ["ok"])))
      (-> (->robject obj-name session code)
          (gc/track
           #(do (log/debug [::gc {:releasing obj-name}])
                (mem/forget obj-name session)))))))
 
-(defn java->r-specified-type [java-object type session]
-  (prot/java->specified-type session java-object type))
-
-(defn r-function-on-obj [{:keys [session] :as r-object}
-                         function-code return-type]
-  (->> r-object
-       :object-name
-       (format "%s(%s)" function-code)
-       (prot/eval-r->java session)
-       (#(prot/java->specified-type session % return-type))))
-
-(defn r->java [{:keys [session object-name] :as r-object}]
+(defn r->java [{:keys [session object-name]}]
   (prot/eval-r->java session object-name))
 
 (defn java->r [java-object session]

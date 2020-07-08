@@ -2,7 +2,7 @@
   (:require [clojisr.v1.session :as session]
             [cemerick.pomegranate :refer [add-dependencies]]))
 
-(add-dependencies :coordinates '[[org.renjin/renjin-script-engine "3.5-beta65"]]
+(add-dependencies :coordinates '[[org.renjin/renjin-script-engine "RELEASE"]]
                   :repositories {"bedatadriven" {:url "https://nexus.bedatadriven.com/content/groups/public/"}
                                  ;; Making sure https is used with Maven Central.
                                  ;; See https://stackoverflow.com/a/59763928/1723677

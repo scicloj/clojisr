@@ -5,8 +5,7 @@
             [clojure.string :as string]
             [clojure.walk :as walk]
             [clojure.tools.logging.readable :as log])
-  (:import (java.io File)
-           (java.lang Math)))
+  (:import (java.io File)))
 
 (defn r-code-block [r-codes]
   (log/info [::r-codes r-codes])
@@ -42,7 +41,8 @@
         html-path (string/replace rmd-path
                                   #"\.Rmd"
                                   ".html")
-        html-file (File. html-path)]
+        ;; html-file (File. html-path)
+        ]
     (try
       (->> rmd
            (spit rmd-path))

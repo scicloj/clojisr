@@ -6,6 +6,8 @@
             [clojisr.v1.protocols :as prot]
             [clojisr.v1.printing]
             [clojisr.v1.codegen :as codegen]
+            [clojisr.v1.impl.java-to-clj :as java2clj]
+            [clojisr.v1.impl.clj-to-java :as clj2java]
             [clojure.string :as string]
             [clojisr.v1.rserve :as rserve] ; imprtant to load this
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
@@ -27,10 +29,6 @@
   (let [session (session/fetch-or-make session-args)]
     (prot/eval-r->java session r-code)))
 
-(defn eval-r->java [r-code & {:keys [session-args]}]
-  (let [session (session/fetch-or-make session-args)]
-    (prot/eval-r->java session r-code)))
-
 (defn r->java [r-object]
   (using-sessions/r->java r-object))
 
@@ -38,27 +36,23 @@
   (let [session (session/fetch-or-make session-args)]
     (using-sessions/java->r java-object session)))
 
-(defn java->naive-clj [java-object & {:keys [session-args]}]
-  (let [session (session/fetch-or-make session-args)]
-    (prot/java->naive-clj session java-object)))
+(defn java->native-clj [java-object]
+  (java2clj/java->native java-object))
 
-(defn java->clj [java-object & {:keys [session-args]}]
-  (let [session (session/fetch-or-make session-args)]
-    (prot/java->clj session java-object)))
+(defn java->clj [java-object] (java2clj/java->clj java-object))
 
 (defn clj->java [clj-object & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
-    (prot/clj->java session clj-object)))
+    (clj2java/clj->java session clj-object)))
 
 (def clj->java->r (comp java->r clj->java))
 (def clj->r clj->java->r)
 
-(defn r->java->clj [r-object & {:keys [session-args]}]
-  (-> r-object
-      r->java
-      (java->clj :session-args session-args)))
-
+(defn r->java->clj [r-object] (-> r-object r r->java java2clj/java->clj))
 (def r->clj r->java->clj)
+
+(defn r->java->native-clj [r-object] (-> r r-object r->java java2clj/java->native))
+(def r->native-clj r->java->native-clj)
 
 (defn discard-session [session-args]
   (session/discard session-args))
@@ -75,8 +69,9 @@
 
 (def function functions/function)
 
-(defn println-r-lines [r-lines]
+(defn println-r-lines
   "Get a sequence of strings, typically corresponding to lines captured from the standard output of R functions, println them sequentially."
+  [r-lines]
   (doseq [line r-lines]
     (println line)))
 
@@ -126,6 +121,7 @@
 (def r| (r "`||`"))
 (def r|| (r "`||`"))
 (def r! (r "`!`"))
+(def r$ (r "`$`"))
 
 (def captured-str
   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
@@ -183,3 +179,5 @@
 (defonce ^:private shutdown-hook-registered
   (do (.addShutdownHook (Runtime/getRuntime) (Thread. #(locking session/sessions (discard-all-sessions))))
       true))
+
+#_(require '[clojisr.v1.impl.protocols :as iprot])

@@ -4,11 +4,9 @@
 (ns clojisr.v1.impl.rserve.proc
   (:require [clojure.java.io :refer [reader writer]]
             [clojure.java.shell :refer [sh]]
-            [clojure.string :as string]
             [clojisr.v1.util :refer [file-exists?]]
             [clojure.tools.logging.readable :as log])
-  (:import [java.lang ProcessBuilder]
-           [java.io File]))
+  (:import [java.lang ProcessBuilder]))
 
 
 (defn spawn [& args]
