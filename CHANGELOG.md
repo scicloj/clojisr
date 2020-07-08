@@ -1,7 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [1.0.0-BETA12-SNAPSHOT]
+## [1.0.0-BETA12]
+- refactored data and dataset transition between clojure and R backend as described [here](https://github.com/scicloj/clojisr/wiki/R----Dataset)
+- `tech.ml.dataset` bumped to 2.13 version
+- small bug fixes
+- removed `java->naive-clj` and added `java->native-clj`
+- `require-r` is moved to `clojisr.v1.r` (direct call to `clojisr.v1.require/require-r` is possible but deprecated) 
 
 ## [1.0.0-BETA11] - 2020-05-20
 - updates in exception handling

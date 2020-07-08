@@ -12,8 +12,7 @@
 (note-md "Let us start by some basic usage examples of Clojisr.")
 
 (note-void
- (require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon]]
-          '[clojisr.v1.require :refer [require-r]]
+ (require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon require-r]]
           '[clojisr.v1.robject :as robject]
           '[clojisr.v1.session :as session]
           '[clojisr.v1.rserve :as rserve]

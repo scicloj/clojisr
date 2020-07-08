@@ -23,7 +23,6 @@ First, require the necessary namespaces.")
 (note-md "Also, let us make sure we are using a clean session.")
 
 (note-void (require '[clojisr.v1.rserve :as rserve]
-                    ;; '[clojisr.v1.renjin :as renjin]
                     '[clojisr.v1.r :as r :refer [r ->code r->clj]]
                     '[notespace.v2.note :refer [check]]))
 

@@ -116,4 +116,5 @@
                       {:package-name package-symbol})))))
 
 (defn require-r [& packages]
+  {:deprecated "Please use `require-r` function from `clojisr.v1.r` directly."}
   (run! require-r-package packages))

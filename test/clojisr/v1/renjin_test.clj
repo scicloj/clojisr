@@ -14,8 +14,8 @@
 
 (note-void
  (require '[clojisr.v1.renjin :as renjin]
-          '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->naive-clj clj->java r->clj clj->r ->code r+ colon]]
-          '[clojisr.v1.require :refer [require-r]]
+          '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj clj->java r->clj clj->r ->code r+ colon
+                                       require-r]]
           '[tech.ml.dataset :as dataset]
           '[clojisr.v1.applications.plotting :refer [plot->svg]]))
 
