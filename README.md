@@ -98,7 +98,7 @@ So it has in a single place all dependencies and they do work together and no fu
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
 
 ```clj
-$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA11"}}}'
+$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA12"}}}'
 Clojure 1.10.1
 user=> (require '[clojisr.v1.r :refer [r]])
 
@@ -110,8 +110,6 @@ user=> (r '(+ 1 2))
 
 * clojisr can behave in a strange way when abandoned R (with Rserve) processes are running. Please kill such processes before creating an Rserve session.
 * Nextjournal can hang due to problems with logging, please add ` org.slf4j/slf4j-nop {:mvn/version "1.7.30"}` to the deps to disable logger.
-* When an R dataframe contains columns of type "logical" (that is, boolean), these are not transferable to Clojure. We wait for an upcoming fix in `tech.ml.dataset` code.
-
 
 ## Video presentations
 
@@ -177,7 +175,7 @@ Working on this project, we enjoyed the following tools (partial list):
 
 ## License
 
-Copyright © 2019 Scicloj 
+Copyright © 2019-2020 Scicloj 
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at
