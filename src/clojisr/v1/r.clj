@@ -14,6 +14,8 @@
             [clojisr.v1.require :refer [require-r-package]])
   (:import clojisr.v1.robject.RObject))
 
+(set! *warn-on-reflection* true)
+
 (defn init [& {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
     (session/init session)))

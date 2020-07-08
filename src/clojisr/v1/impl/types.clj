@@ -4,6 +4,8 @@
            [java.time ZonedDateTime LocalDateTime LocalDate LocalTime OffsetTime OffsetDateTime ZoneId Instant]
            [java.time.format DateTimeFormatter]))
 
+(set! *warn-on-reflection* true)
+
 (defn primitive-r-type [clj-val]
   (cond (nil? clj-val) :na
         (integer? clj-val) :integer
@@ -44,7 +46,7 @@
 
 ;; to string
 
-(defonce ^:private date-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss.SSS"))
+(defonce ^:private ^java.text.SimpleDateFormat date-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss.SSS"))
 (defonce ^:private java-time-formatters
   {ZonedDateTime DateTimeFormatter/ISO_ZONED_DATE_TIME
    LocalDateTime DateTimeFormatter/ISO_LOCAL_DATE_TIME

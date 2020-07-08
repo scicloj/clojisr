@@ -8,6 +8,8 @@
             [clojisr.v1.impl.renjin.sexp :as sexp])
   (:import [org.renjin.script RenjinScriptEngine]))
 
+(set! *warn-on-reflection* true)
+
 (defrecord RenjinSession [id session-args engine closed]
   prot/Session
   (close [session]

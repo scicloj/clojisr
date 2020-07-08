@@ -1162,4 +1162,3 @@ Tripathi: Thank you for taking the time to read through my first
 exploration of a Titanic Kaggle dataset. Again, this newbie welcomes comments and suggestions!")
 
 (comment (notespace.v2.note/compute-this-notespace!))
-

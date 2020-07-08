@@ -7,6 +7,8 @@
             [tech.v2.datatype :as dtype])
   (:import [clojisr.v1.robject RObject]))
 
+(set! *warn-on-reflection* true)
+
 (declare clj->java)
 
 ;; time

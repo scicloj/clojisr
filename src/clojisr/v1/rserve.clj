@@ -2,6 +2,8 @@
   (:require [clojisr.v1.session :as session]
             [clojisr.v1.impl.rserve.session :refer [make]]))
 
+(set! *warn-on-reflection* true)
+
 (session/add-session-type!
  :rserve make)
 

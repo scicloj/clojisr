@@ -3,6 +3,8 @@
             [clojisr.v1.eval :as evl]
             [clojisr.v1.protocols :as prot]))
 
+(set! *warn-on-reflection* true)
+
 (defn fresh-object? [r-object]
   (-> r-object
       :session

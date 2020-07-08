@@ -6,6 +6,7 @@
            (org.renjin.eval Context)
            (org.renjin.parser RParser)))
 
+(set! *warn-on-reflection* true)
 
 (defn ->env
   [engine bindings-map]

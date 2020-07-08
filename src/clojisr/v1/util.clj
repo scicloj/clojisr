@@ -3,15 +3,17 @@
             [clojure.string :as string])
   (:import [java.io File]))
 
+(set! *warn-on-reflection* true)
+
 (defn first-if-one
   "Given a vector with a single element, first-if-one extracts that element; acts as identity otherwise.
- 
+  
        (first-if-one [:abc])
        => :abc
- 
+  
        (first-if-one [:abc :def])
        => [:abc :def]
- 
+  
        (first-if-one :abc)
        => :abc"
   {:added "0.1"}
@@ -127,7 +129,7 @@
        (str "~")
        keyword))
 
-(defn file-exists? [path]
+(defn file-exists? [^String path]
   (.exists (File. path)))
 
 (defn rand-name []

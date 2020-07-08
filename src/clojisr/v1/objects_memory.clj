@@ -1,6 +1,8 @@
 (ns clojisr.v1.objects-memory
   (:require [clojisr.v1.protocols :as prot]))
 
+(set! *warn-on-reflection* true)
+
 (defn code-that-remembers [obj-name code]
   (format "%s <- {%s}; 'ok'" obj-name code))
 

@@ -5,6 +5,8 @@
            (org.renjin.eval Context)
            (org.renjin.primitives.packaging NamespaceRegistry ClasspathPackageLoader ClasspathPackage)))
 
+(set! *warn-on-reflection* true)
+
 (defn package-symbol->r-symbol-names [session package-symbol]
   (if (= package-symbol 'base)
     (->> session

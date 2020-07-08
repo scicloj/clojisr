@@ -8,6 +8,7 @@
             [clojure.tools.logging.readable :as log])
   (:import [java.lang ProcessBuilder]))
 
+(set! *warn-on-reflection* true)
 
 (defn spawn [& args]
   (log/info [::spawn {:process args}])
