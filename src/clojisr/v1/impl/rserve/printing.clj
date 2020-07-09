@@ -3,9 +3,12 @@
             [clojure.string :as string])
   (:import (org.rosuda.REngine REXP)))
 
+(set! *warn-on-reflection* true)
+
 (defn print-to-string
   [session r-obj]
-  (->> (.asStrings ^REXP (->> (:object-name r-obj)
-                              (format "capture.output(print(%s))")
-                              (prot/eval-r->java session)))       
-       (string/join "\n")))
+  (let [^REXP output (->> (:object-name r-obj)
+                          (format "capture.output(print(%s))")
+                          (prot/eval-r->java session))]
+    (->> (.asStrings output)       
+         (string/join "\n"))))

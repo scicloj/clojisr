@@ -74,12 +74,31 @@ Installing R with Rserve on MacOS can be problematic due to issues related to op
 :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
 ```
 
+### Docker image
+
+Thanks to Carsten Behring we have a Docker template prepared
+
+https://github.com/behrica/clj-py-r-template
+
+The Dockerfile of the template adds as well python + libpython-clj for completeness.
+
+So it has in a single place all dependencies and they do work together and no further setup is required.
+
+* R: 4.0.0
+* RServe: latest from rforge.net
+* python: 3.8.2
+* java:  openjdk 11
+* clojure: 1.10.1
+* clj-python/libpython-clj 1.45
+* scicloj/clojisr 1.0.0-BETA11
+* cider-nrepl 0.25.2
+
 ## Checking if it works
 
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
 
 ```clj
-$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA11"}}}'
+$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA13"}}}'
 Clojure 1.10.1
 user=> (require '[clojisr.v1.r :refer [r]])
 
@@ -91,8 +110,6 @@ user=> (r '(+ 1 2))
 
 * clojisr can behave in a strange way when abandoned R (with Rserve) processes are running. Please kill such processes before creating an Rserve session.
 * Nextjournal can hang due to problems with logging, please add ` org.slf4j/slf4j-nop {:mvn/version "1.7.30"}` to the deps to disable logger.
-* When an R dataframe contains columns of type "logical" (that is, boolean), these are not transferable to Clojure. We wait for an upcoming fix in `tech.ml.dataset` code.
-
 
 ## Video presentations
 
@@ -158,7 +175,7 @@ Working on this project, we enjoyed the following tools (partial list):
 
 ## License
 
-Copyright © 2019 Scicloj 
+Copyright © 2019-2020 Scicloj 
 
 This program and the accompanying materials are made available under the
 terms of the Eclipse Public License 2.0 which is available at

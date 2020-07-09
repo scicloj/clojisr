@@ -2,6 +2,8 @@
   (:require [clojisr.v1.codegen :as codegen]
             [clojisr.v1.using-sessions :as using-sessions]))
 
+(set! *warn-on-reflection* true)
+
 (defn eval-form
   ([form session] (eval-form nil form session))
   ([obj-name form session]

@@ -10,8 +10,11 @@
             [clojisr.v1.impl.clj-to-java :as clj2java]
             [clojure.string :as string]
             [clojisr.v1.rserve :as rserve] ; imprtant to load this
-            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
+            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
+            [clojisr.v1.require :refer [require-r-package]])
   (:import clojisr.v1.robject.RObject))
+
+(set! *warn-on-reflection* true)
 
 (defn init [& {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
@@ -66,6 +69,9 @@
 (defn apply-function [r-function args & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
     (functions/apply-function r-function args session)))
+
+(defn require-r [& packages]
+  (run! require-r-package packages))
 
 (def function functions/function)
 
@@ -180,4 +186,3 @@
   (do (.addShutdownHook (Runtime/getRuntime) (Thread. #(locking session/sessions (discard-all-sessions))))
       true))
 
-#_(require '[clojisr.v1.impl.protocols :as iprot])

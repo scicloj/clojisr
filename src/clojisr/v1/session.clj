@@ -7,9 +7,12 @@
             [clojure.tools.logging.readable :as log])
   (:import [java.io File]))
 
+(set! *warn-on-reflection* true)
+
 (defonce sessions (atom {}))
 
 (defonce defaults (atom {}))
+
 (let [port (get-free-port)]
   (log/info [::setting-default-port
              {:port port}])

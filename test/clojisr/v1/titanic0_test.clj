@@ -34,9 +34,9 @@ Here are most of the functions that we need, brought by the standard `require-r`
             r== r!= r< r> r<= r>= r& r&& r| r||
             str-md
             r+
-            bra bra<- brabra brabra<- colon]]
+            bra bra<- brabra brabra<- colon
+            require-r]]
   '[clojisr.v1.applications.plotting :refer [plot->svg]]
-  '[clojisr.v1.require :refer [require-r]]
   '[clojure.string :as string]
   '[clojisr.v1.rserve :as rserve]))
 
@@ -1162,4 +1162,3 @@ Tripathi: Thank you for taking the time to read through my first
 exploration of a Titanic Kaggle dataset. Again, this newbie welcomes comments and suggestions!")
 
 (comment (notespace.v2.note/compute-this-notespace!))
-

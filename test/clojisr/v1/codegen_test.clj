@@ -23,7 +23,6 @@ First, require the necessary namespaces.")
 (note-md "Also, let us make sure we are using a clean session.")
 
 (note-void (require '[clojisr.v1.rserve :as rserve]
-                    ;; '[clojisr.v1.renjin :as renjin]
                     '[clojisr.v1.r :as r :refer [r ->code r->clj]]
                     '[notespace.v2.note :refer [check]]))
 
@@ -95,8 +94,8 @@ First, require the necessary namespaces.")
 
 (note
  (->> [1 2 4]
-     ->code
-     (check = "c(1,2,4)")))
+      ->code
+      (check = "c(1L,2L,4L)")))
 
 (note-md "When the `r` function gets an argument that is not a string, it uses `->code` behind the scenes to turn that argument into code as a string.")
 
@@ -107,7 +106,7 @@ First, require the necessary namespaces.")
  (->> [1 2 4]
       r
       r->clj
-      (check = [1.0 2.0 4.0])))
+      (check = [1 2 4])))
 
 (note-md "Equivalently:")
 
@@ -116,11 +115,11 @@ First, require the necessary namespaces.")
       ->code
       r
       r->clj
-      (check = [1.0 2.0 4.0])))
+      (check = [1 2 4])))
 
 (note-md "### Primitive data types")
 
-(note (->> (r 1) r->clj (check = [1.0])))
+(note (->> (r 1) r->clj (check = [1])))
 (note (->> (r 2.0) r->clj (check = [2.0])))
 (note (->> (r 3/4) r->clj (check = [0.75])))
 (note (->> (r true) r->clj (check = [true])))
@@ -130,6 +129,13 @@ First, require the necessary namespaces.")
 
 (note (->> (r nil) r->clj (check = nil)))
 (note (->> (->code nil) (check = "NULL")))
+
+;; Below crashes `notespace`
+#_(note-md "Infinities etc.")
+
+#_(note (->> (r ##Inf) r->clj (check = [##Inf])))
+#_(note (->> (r ##-Inf) r->clj (check = [##-Inf])))
+#_(note (->> (r ##NaN) r->clj first (check #(Double/isNaN %))))
 
 (note-md "When you pass a string to `r`, it is treated as code. So we have to escape double quotes if we actually mean to represent an R string (or an R character object, as it is called in R). However, when string is used inside a more complex form, it is escaped automatically.")
 
@@ -169,8 +175,8 @@ First, require the necessary namespaces.")
 
 (note-md "A Clojure vector is converted to an R vector created using the `c` function. That means that nested vectors are flattened. All the values inside are translated to R recursively.")
 
-(note (->> (->code [1 2 3]) (check = "c(1,2,3)")))
-(note (->> (r [[1] [2 [3]]]) r->clj (check = [1.0 2.0 3.0])))
+(note (->> (->code [1 2 3]) (check = "c(1L,2L,3L)")))
+(note (->> (r [[1] [2 [3]]]) r->clj (check = [1 2 3])))
 
 (note-md "Some Clojure sequences are interpreted as function calls, if it makes sense for their first element. However, sequences beginning with numbers or strings are treated as vectors.")
 
@@ -196,8 +202,11 @@ First, require the necessary namespaces.")
 `nil` in a vector is converted to `NA`")
 
 (note (->> (r [:!string 1 nil 3]) r->clj (check = ["1" nil "3"])))
-(note (r [:!named 1 2 :abc 3]))
-(note (r [:!list :a 1 :b [:!list 1 2 :c ["a" "b"]]]))
+(note (->> (r [:!boolean 1 true nil false]) r->clj (check = [true true nil false])))
+(note (->> (r [:!double 1.0 nil 3]) r->clj (check = [1.0 nil 3.0])))
+(note (->> (r [:!int 1.0 nil 3]) r->clj (check = [1 nil 3])))
+(note (->> (r [:!named 1 2 :abc 3]) r->clj (check = [1 2 3]))) ;; I think here we should return map maybe?
+(note (->> (r [:!list :a 1 :b [:!list 1 2 :c ["a" "b"]]]) r->clj (check = {:a [1] :b {0 [1] 1 [2] :c ["a" "b"]}})))
 (note (->> (r [:!ct #inst "2011-11-01T22:33:11"]) r->clj))
 (note (->> (r [:!lt #inst "2011-11-01T22:33:11"]) r->clj))
 
@@ -215,9 +224,9 @@ First, require the necessary namespaces.")
 (note-md "A Clojue Map is transformed to an R named list. As with vectors, all data elements inside are processed recursively.")
 
 (note (r {:a 1 :b nil}))
-(note (->> (r {:a 1 :b nil :c [2 3 4]}) r->clj (check = {:a [1.0]
-                                                         :b [nil]
-                                                         :c [2.0 3.0 4.0]})))
+(note (->> (r {:a 1 :b nil :c [2.0 3 4]}) r->clj (check = {:a [1]
+                                                           :b [nil]
+                                                           :c [2.0 3.0 4.0]})))
 
 (note-md "Bigger maps are transfered to R variables via the Java conversion layer.")
 
@@ -237,7 +246,7 @@ First, require the necessary namespaces.")
 
 (note (r "mean(c(1,2,3))"))
 (note (r '(mean [1 2 3])))
-(note (->> (->code '(mean [1 2 3])) (check = "mean(c(1,2,3))")))
+(note (->> (->code '(mean [1 2 3])) (check = "mean(c(1L,2L,3L))")))
 
 (note-md "Here is another example.")
 
@@ -254,7 +263,7 @@ First, require the necessary namespaces.")
 (note (->> (list (r 'median) [1 2 4])
            r
            r->clj
-           (check = [2.0])))
+           (check = [2])))
 
 (note-md "You can call using special names (surrounded by backquote) as strings")
 
@@ -264,8 +273,9 @@ First, require the necessary namespaces.")
 
 | symbol | meaning |
 | - | - |
+| `'( )` | Wrap first element of the quoted list into parentheses |
 | `function` | R function definition |
-| `do` | join all forms using \";\" |
+| `do` | join all forms using \";\"  and wrap into `{}` |
 | `for` | for loop with multiple bindings |
 | `while` | while loop |
 | `if` | if or if-else |
@@ -298,17 +308,17 @@ First, require the necessary namespaces.")
 (note (->> (r '(bra ~m nil 1)) r->clj (check = [1 2])))
 (note (->> (r '(bra ~m 1 nil)) r->clj (check = [1 3 5])))
 (note (->> (r '(bra ~m 1 nil :drop false)) r->clj dataset/value-reader (check = [["a" 1 3 5]])))
-(note (->> (r '(bra<- ~m 1 nil [11 22 33])) r->clj dataset/value-reader (check = [["a" 11.0 22.0 33.0]
-                                                                                  ["b" 2.0 4.0 6.0]])))
-(note (->> (r '(bra<- ~m nil 1 [22 33])) r->clj dataset/value-reader (check = [["a" 22.0 3.0 5.0]
-                                                                               ["b" 33.0 4.0 6.0]])))
+(note (->> (r '(bra<- ~m 1 nil [11 22 33])) r->clj dataset/value-reader (check = [["a" 11 22 33]
+                                                                                  ["b" 2 4 6]])))
+(note (->> (r '(bra<- ~m nil 1 [22 33])) r->clj dataset/value-reader (check = [["a" 22 3 5]
+                                                                               ["b" 33 4 6]])))
 (note (->> (r/bra m nil 1) r->clj (check = [1 2])))
 (note (->> (r/bra m 1 nil) r->clj (check = [1 3 5])))
 (note (->> (r/bra m 1 nil :drop false) r->clj dataset/value-reader (check = [["a" 1 3 5]])))
-(note (->> (r/bra<- m 1 nil [11 22 33]) r->clj dataset/value-reader (check = [["a" 11.0 22.0 33.0]
-                                                                              ["b" 2.0 4.0 6.0]])))
-(note (->> (r/bra<- m nil 1 [22 33]) r->clj dataset/value-reader (check = [["a" 22.0 3.0 5.0]
-                                                                           ["b" 33.0 4.0 6.0]])))
+(note (->> (r/bra<- m 1 nil [11 22 33]) r->clj dataset/value-reader (check = [["a" 11 22 33]
+                                                                              ["b" 2 4 6]])))
+(note (->> (r/bra<- m nil 1 [22 33]) r->clj dataset/value-reader (check = [["a" 22 3 5]
+                                                                           ["b" 33 4 6]])))
 
 (note-void (def l (r [:!list "a" "b" "c"])))
 (note l)
@@ -321,15 +331,19 @@ First, require the necessary namespaces.")
 (note (->> (r/brabra<- l 2 nil) r->clj (check = [["a"] ["c"]])))
 (note (->> (r/brabra<- l 5 "fifth") r->clj (check = [["a"] ["b"] ["c"] nil ["fifth"]])))
 
-
 (note-md "You can use `if` with optional `else` form. Use `do` to create block of operations")
 
-(note (->> (r '(if true 11 22)) r->clj (check = [11.0])))
-(note (->> (r '(if false 11 22)) r->clj (check = [22.0])))
-(note (->> (r '(if true 11)) r->clj (check = [11.0])))
+(note (->> (r '(if true 11 22)) r->clj (check = [11])))
+(note (->> (r '(if false 11 22)) r->clj (check = [22])))
+(note (->> (r '(if true 11)) r->clj (check = [11])))
 (note (->> (r '(if false 11)) r->clj (check = nil)))
 (note (->> (r '(if true (do (<- x [1 2 3 4])
                             (mean x)))) r->clj (check = [2.5])))
+
+(note-md "`do` wraps everything into curly braces `{}`")
+
+(note (check = (->code '(do (<- x 1)
+                            (<- x (+ x 1)))) "{x<-1L;x<-(x+1L)}"))
 
 (note-md "Loops")
 
@@ -341,7 +355,7 @@ First, require the necessary namespaces.")
                    (<- coll [coll v]))
                  coll))
            r->clj
-           (check = [3.0 2.0 1.0 0.0])))
+           (check = [3 2 1 0])))
 
 (note-void
  (def for-form '(do
@@ -351,7 +365,12 @@ First, require the necessary namespaces.")
                     (<- coll [coll (* a b)]))
                   coll)))
 (note (->code for-form))
-(note (->> (r for-form) r->clj (check = [3.0 4.0 6.0 8.0])))
+(note (->> (r for-form) r->clj (check = [3 4 6 8])))
+
+(note-md "Sometimes wrapping into parentheses is needed.")
+
+(note (check = (->code '(:!wrap z)) "(z)"))
+(note (check = (->code '[:!list 1.0 2.0 3.0 (:!wrap inside)]) "list(1.0,2.0,3.0,(inside))"))
 
 (note-md "#### Function definitions")
 
@@ -363,7 +382,7 @@ First, require the necessary namespaces.")
                                      (mean x ...))))))
 
 (note (->> (r '(stat [100 33 22 44 55])) r->clj (check = [50.8])))
-(note (->> (r '(stat [100 33 22 44 55] :median true)) r->clj (check = [44.0])))
+(note (->> (r '(stat [100 33 22 44 55] :median true)) r->clj (check = [44])))
 (note (->> (r '(stat [100 33 22 44 55 nil])) r->clj first (check nil?)))
 (note (->> (r '(stat [100 33 22 44 55 nil] :na.rm true)) r->clj (check = [50.8])))
 
@@ -404,7 +423,6 @@ First, require the necessary namespaces.")
 (note-md "You are not limited to the use code forms. When an RObject correspinds to an R function, it can be used and called as normal Clojure functions.")
 
 (note (def square (r '(function [x] (* x x)))))
-(note (->> (square 123) r->clj first (check = 15129.0)))
+(note (->> (square 123) r->clj first (check = 15129)))
 
 (comment (notespace.v2.note/compute-this-notespace!))
-

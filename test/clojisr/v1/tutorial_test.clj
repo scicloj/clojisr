@@ -12,8 +12,7 @@
 (note-md "Let us start by some basic usage examples of Clojisr.")
 
 (note-void
- (require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon]]
-          '[clojisr.v1.require :refer [require-r]]
+ (require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon require-r]]
           '[clojisr.v1.robject :as robject]
           '[clojisr.v1.session :as session]
           '[clojisr.v1.rserve :as rserve]
@@ -117,7 +116,7 @@ whenn computing the mean.")
 (note
  (->> (r+ 1 2 3)
       r->clj
-      (check = [6.0])))
+      (check = [6])))
 
 (note-md "R colon (`:`), for creating a range of integers, like `0:9`:")
 
@@ -184,9 +183,9 @@ Let us create such a dataset, pass it to an R function to compute the row means,
          :y [4 5 6])
         r->clj
         dataset/->flyweight
-        (check = [{:x 1.0 :y 4.0}
-                  {:x 2.0 :y 5.0}
-                  {:x 3.0 :y 6.0}]))))
+        (check = [{:x 1 :y 4}
+                  {:x 2 :y 5}
+                  {:x 3 :y 6}]))))
 
 (note-md :ROBjects
          "## R objects")
@@ -247,7 +246,7 @@ Let us create such a dataset, pass it to an R function to compute the row means,
 (note
  (->> [1 2 3]
       ->code
-      (check = "c(1,2,3)")))
+      (check = "c(1L,2L,3L)")))
 
 (note-md "For a symbol, we generate the code with the corresponding R symbol.")
 
@@ -295,7 +294,7 @@ Let us create such a dataset, pass it to an R function to compute the row means,
 
 (note (->> `(~abs (1 2 3))
            ->code
-           (check re-matches #"\.MEM\$.*\(c\(1,2,3\)\)")))
+           (check re-matches #"\.MEM\$.*\(c\(1L,2L,3L\)\)")))
 
 (note-md "Some more examples, showing how these rules compose:")
 
@@ -326,7 +325,7 @@ Let us create such a dataset, pass it to an R function to compute the row means,
 (note (->> '(~abs ~(range -3 0))
            r
            r->clj
-           (check = [3.0 2.0 1.0])))
+           (check = [3 2 1])))
 
 (note-md "Or, equivalently:")
 
@@ -334,7 +333,7 @@ Let us create such a dataset, pass it to an R function to compute the row means,
            ->code
            r
            r->clj
-           (check = [3.0 2.0 1.0])))
+           (check = [3 2 1])))
 
 (note-md "Let us repeat the basic examples from the beginning of this tutorial,
 this time generating code rather than writing it as Strings.")
@@ -345,7 +344,7 @@ this time generating code rather than writing it as Strings.")
 (note
  (->> x
       r->clj
-      (check = [3.0])))
+      (check = [3])))
 
 (note-void
  (def f (r '(function [x] (* x 10)))))
@@ -354,7 +353,7 @@ this time generating code rather than writing it as Strings.")
  (->> 5
       f
       r->clj
-      (check = [50.0])))
+      (check = [50])))
 
 (note
  (->> "5*5"
@@ -400,19 +399,19 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
  (->> [1 2 3]
       r.stats/median
       r->clj
-      (check = [2.0])))
+      (check = [2])))
 
 (note
  (->> [1 2 3]
       statz/median
       r->clj
-      (check = [2.0])))
+      (check = [2])))
 
 (note
  (->> [1 2 3]
       median
       r->clj
-      (check = [2.0])))
+      (check = [2])))
 
 (note-void
  (require-r '[datasets :as datasetz :refer [euro]]))
@@ -429,7 +428,7 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
  (-> {:a 1 :b 2}
      ($ 'a)
      r->clj
-     (->> (check = [1.0]))))
+     (->> (check = [1]))))
 
 (note-md :data-visualization
          "## Data visualization")
@@ -620,25 +619,30 @@ To stress this, we write it explicitly in the following examples.")
 (note (->> (clj->r->clj nil)
            (check = nil)))
 (note (->> (clj->r->clj [10 11])
-           (check = [10.0 11.0])))
+           (check = [10 11])))
 (note (->> (clj->r->clj [10.0 11.0])
            (check = [10.0 11.0])))
 (note (->> (clj->r->clj (list 10.0 11.0))
            (check = [10.0 11.0])))
 (note (->> (clj->r->clj {:a 1 :b 2})
-           (check = {:a [1.0] :b [2.0]})))
+           (check = {:a [1] :b [2]})))
 
 (note-md "### Various R objects")
 
 (note-md "Named list")
-(note (->> (r "list(a=1,b=c(10,20),c='hi!')") ;; named list
+(note (->> (r "list(a=1L,b=c(10,20),c='hi!')") ;; named list
            r->clj
-           (check = {:a [1.0] :b [10.0 20.0] :c ["hi!"]})))
+           (check = {:a [1] :b [10.0 20.0] :c ["hi!"]})))
 
 (note-md "Array of doubles")
 (note (->> (r "c(10,20,30)") ;; array of doubles
            r->clj
            (check = [10.0 20.0 30.0])))
+
+(note-md "Array of longs")
+(note (->> (r "c(10L,20L,30L)") ;; array of longs
+           r->clj
+           (check = [10 20 30])))
 
 (note-md "Timeseries")
 (note (->> (r 'euro) ;; timeseries

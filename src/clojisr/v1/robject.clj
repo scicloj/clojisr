@@ -1,5 +1,7 @@
 (ns clojisr.v1.robject)
 
+(set! *warn-on-reflection* true)
+
 ;; Since IFn is an interface, not a protocol, we need to implement it here.
 ;; To do that, we need to resolve something from another namespace,
 ;; that we cannot depend upon (to avoid circular dependency).

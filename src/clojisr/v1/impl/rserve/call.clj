@@ -2,16 +2,24 @@
   (:require [clojure.string :as string]
             [clojisr.v1.util :refer [exception-cause]]
             [clojure.tools.logging.readable :as log])
-  (:import (org.rosuda.REngine REXP REXPSymbol
+  (:import (org.rosuda.REngine REXP REXPSymbol REXPLanguage RList
                                REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)))
 
-(defn rexp-symbol [name]
+(set! *warn-on-reflection* true)
+
+(defn rexp-symbol
+  ^REXP [name]
   (REXPSymbol. name))
 
+;; reimplemented to make call non-reflective
 (defn call
-  [op args]
-  (REXP/asCall op (into-array REXP args)))
+  [^String op args]
+  (let [^RList l (RList.)]
+    (.add l (rexp-symbol op))
+    (doseq [^REXP v args]
+      (.add l v))
+    (REXPLanguage. l)))
 
 (defn assignment
   [varname java-obj]
@@ -29,8 +37,8 @@
     (let [expression-str (-> expression
                              (string/escape char-escape-string)
                              (->> (format "try(eval(parse(text=\"%s\")),silent=TRUE)")))
-          rexp (locking r-connection
-                 (.parseAndEval r-connection expression-str))]
+          ^REXP rexp (locking r-connection
+                       (.parseAndEval r-connection expression-str))]
       (if (.inherits rexp "try-error")
         (do (log/error [::try-eval-catching-errors {:message (format "Error in R evaluating expression: %s. R exception: %s"
                                                                      expression (.asString rexp))}])

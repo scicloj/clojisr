@@ -11,6 +11,8 @@
   (:import [org.rosuda.REngine.Rserve RConnection]
            [java.io BufferedReader]))
 
+(set! *warn-on-reflection* true)
+
 (def defaults
   (atom
    {:port 6311

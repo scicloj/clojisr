@@ -6,6 +6,8 @@
             [clojisr.v1.gc :as gc]
             [clojure.tools.logging.readable :as log]))
 
+(set! *warn-on-reflection* true)
+
 (defn apply-function [r-function
                       args
                       session]

@@ -2,15 +2,13 @@
   (:require [clojisr.v1.using-sessions :as using-sessions]
             [clojure.string :refer [join]]
             [clojisr.v1.impl.clj-to-java :refer [clj->java]]
+            [clojisr.v1.impl.types :as t]
             [clojisr.v1.robject]
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
   (:import [clojure.lang Named]
            [clojisr.v1.robject RObject]))
 
-;; helpers
-
-;; Convert instant to date/time R string
-(defonce ^:private dt-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss"))
+(set! *warn-on-reflection* true)
 
 ;; Add context to a call, used to change formatting behaviour in certain cases
 (defmacro ^:private with-ctx
@@ -23,8 +21,9 @@
   (map #(some-> % f) xs))
 
 ;; all binary operators as set of strings
-(def binary-operators #{"$" "=" "<<-" "<-" "+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">" "%in%" "%%" "**"})
-(def binary-operators-flat #{"=" "<<-" "<-" "$"})
+(def binary-operators #{"$" "=" "<<-" "<-" "+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">" "**"})
+(def binary-operators-flat #{"=" "<<-" "<-" "$" "%>%"})
+(def binary-exclusions #{})
 (def unary-operators #{"+" "-"})
 (def wrapped-operators #{"+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">"})
 
@@ -80,7 +79,7 @@
               (let [f1-code (form->code f1 session ctx)]
                 (if-not fr
                   (if (unary-operators f)
-                    (str f f1-code)
+                    (str f "(" f1-code ")")
                     f1-code)
                   (reduce (fn [a1 a2] (fmt a1 f (form->code a2 session ctx))) f1-code fr))))]
     (if (and (wrapped-operators f)
@@ -104,7 +103,9 @@
 (defn symbol-form->code
   "Create binary or regular function call, when first argument in a seq was a symbol."
   [f args session ctx]
-  (if (binary-operators f)
+  (if (and (or (binary-operators f)
+               (re-matches #"^%.*%$" f))
+           (not (binary-exclusions f)))
     (if (binary-operators-flat f)
       (with-ctx [:flat] (binary-call->code f args session ctx))
       (binary-call->code f args session ctx))
@@ -185,7 +186,7 @@
 (defn vector->code
   "Construct R vector using `c` function.
 
-  When first element is a coersion symbol starting with `:!`, values are coerced to the required type.
+  When first element is a coersion symbol starting with `:!`, values are coerced to the required type or create special structure no available in clojure (like partially named list or datetime).
   When number of elements is big enough, java backend is used to transfer data first.
 
   `nil` is converted to `NA`"
@@ -202,6 +203,7 @@
       :!ct (format "as.POSIXct(%s)" (vector->code r session ctx))
       :!lt (format "as.POSIXlt(%s)" (vector->code r session ctx))
       :!call (seq-form->code r session ctx)
+      :!wrap (format "(%s)" (form->code (first r) session ctx))
       (if (< (count v-form) 80)
         (format "c(%s)" (join "," (map #(form->code % session ctx) v-form)))
         (form->java->code v-form session)))))
@@ -228,7 +230,7 @@
             (= "formula" fs)) (formula->code r session ctx)
         (= "rsymbol" fs) (rsymbol->code r session ctx)
         (= "if" fs) (ifelse->code r session ctx)
-        (= "do" fs) (join ";" (map #(form->code % session ctx) r))
+        (= "do" fs) (format "{%s}" (join ";" (map #(form->code % session ctx) r)))
         (= "for" fs) (for-loop->code (first r) (rest r) session ctx)
         (= "while" fs) (while-loop->code (first r) (rest r) session ctx)
         (contains? bracket-data fs) (bracket-call->code (bracket-data fs) r session ctx)
@@ -266,6 +268,15 @@
     (ctx :na) "NA"
     :else "NULL"))
 
+(defn double->code
+  "Convert double with Infinity/NaN awerness"
+  [^double in]
+  (cond
+    (Double/isFinite in) (str in)
+    (Double/isNaN in) "NaN"
+    (pos? in) "Inf"
+    :else "-Inf"))
+
 (defn form->code
   "Format every possible form to a R string."
   ([form session] (form->code form session #{}))
@@ -276,11 +287,12 @@
      (instance? RObject form) (:object-name form) ;; RObject is a R symbol
      (map? form) (map->code form session ctx) ;; map goes to a list
      (string? form) (format "\"%s\"" form) ;; string is string wrapped in double quotes
-     (integer? form) (str form) ;; int is treated literally
+     (integer? form) (str form "L") ;; int is treated literally
      (rational? form) (format "(%s)" form) ;; rational is wrapped in in case of used in calculations
-     (number? form) (str form) ;; other numbers are treated literally
+     (number? form) (double->code form) ;; other numbers are treated literally
      (boolean? form) (if form "TRUE" "FALSE") ;; boolean as logical
      (nil? form) (nil->code ctx)
-     (inst? form) (format "'%s'" (.format dt-format form)) ;; date/time just as string, to be converted to time by the user
+     (or (inst? form)
+         (instance? java.time.temporal.Temporal form)) (format "'%s'" (t/->str form)) ;; date/time just as string, to be converted to time by the user
      (instance? Named form) (name form)
      :else (form->java->code form session))))

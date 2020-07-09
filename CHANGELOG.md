@@ -1,7 +1,27 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [1.0.0-BETA12-SNAPSHOT]
+## [1.0.0-BETA13] - 2020-07-09
+- regresion with `quote` (#61), changed to use `:!wrap` hint
+- datetime conversion to string fixes
+- `tech.ml.dataset` bumped to 2.15 version
+- (experimental) turned off `pomegranate` dynamic dep loading for `renjin`
+
+## [1.0.0-BETA12] - 2020-07-08
+
+Note: `quote` function doesn't work properly
+
+- refactored data and dataset transition between clojure and R backend as described [here](https://github.com/scicloj/clojisr/wiki/R----Dataset) (#14)
+- `tech.ml.dataset` bumped to 2.13 version
+- removed `java->naive-clj` and added `java->native-clj`
+- `require-r` is moved to `clojisr.v1.r` (direct call to `clojisr.v1.require/require-r` is possible but deprecated) 
+- reflection warnings mitigation
+- integer transition (#73)
+- ##Inf/##-Inf transition (#72)
+- wrapping into `()` and `{}` (#61)
+- unary operator wraps next form into parentheses (#59)
+- missing path is created when plotting (#56)
+- operators wrapped into % (like `%chin%`) are treated as binary operators (#55)
 
 ## [1.0.0-BETA11] - 2020-05-20
 - updates in exception handling
