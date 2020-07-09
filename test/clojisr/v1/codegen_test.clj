@@ -369,8 +369,8 @@ First, require the necessary namespaces.")
 
 (note-md "Sometimes wrapping into parentheses is needed.")
 
-(note (check = (->code ''(z)) "(z)"))
-(note (check = (->code '[:!list 1.0 2.0 3.0 '(inside)]) "list(1.0,2.0,3.0,(inside))"))
+(note (check = (->code '(:!wrap z)) "(z)"))
+(note (check = (->code '[:!list 1.0 2.0 3.0 (:!wrap inside)]) "list(1.0,2.0,3.0,(inside))"))
 
 (note-md "#### Function definitions")
 

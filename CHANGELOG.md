@@ -1,7 +1,16 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [1.0.0-BETA12]
+## [1.0.0-BETA13]
+- regresion with `quote` (#61), changed to use `:!wrap` hint
+- datetime conversion to string fixes
+- `tech.ml.dataset` bumped to 2.15 version
+- (experimental) turned off `pomegranate` dynamic dep loading for `renjin`
+
+## [1.0.0-BETA12] - 2020-07-08
+
+Note: `quote` function doesn't work properly
+
 - refactored data and dataset transition between clojure and R backend as described [here](https://github.com/scicloj/clojisr/wiki/R----Dataset) (#14)
 - `tech.ml.dataset` bumped to 2.13 version
 - removed `java->naive-clj` and added `java->native-clj`

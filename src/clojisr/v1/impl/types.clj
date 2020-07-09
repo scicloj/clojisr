@@ -46,14 +46,19 @@
 
 ;; to string
 
-(defonce ^:private ^java.text.SimpleDateFormat date-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss.SSS"))
-(defonce ^:private java-time-formatters
-  {ZonedDateTime DateTimeFormatter/ISO_ZONED_DATE_TIME
-   LocalDateTime DateTimeFormatter/ISO_LOCAL_DATE_TIME
+(defonce ^:private ^java.text.SimpleDateFormat date-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss"))
+(defonce ^:private ^DateTimeFormatter java-time-date-format (DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm:ss"))
+(def ^:private java-time-formatters
+  {ZonedDateTime java-time-date-format
+   LocalDateTime java-time-date-format
    LocalDate DateTimeFormatter/ISO_LOCAL_DATE
    LocalTime DateTimeFormatter/ISO_LOCAL_TIME
    OffsetTime DateTimeFormatter/ISO_OFFSET_TIME
-   OffsetDateTime DateTimeFormatter/ISO_OFFSET_DATE_TIME})
+   OffsetDateTime java-time-date-format})
+
+(defn ->to-zone
+  [^ZonedDateTime dt]
+  (str (.getZone dt)))
 
 (defn ->str
   [x]

@@ -2,17 +2,13 @@
   (:require [clojisr.v1.using-sessions :as using-sessions]
             [clojure.string :refer [join]]
             [clojisr.v1.impl.clj-to-java :refer [clj->java]]
+            [clojisr.v1.impl.types :as t]
             [clojisr.v1.robject]
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
   (:import [clojure.lang Named]
            [clojisr.v1.robject RObject]))
 
 (set! *warn-on-reflection* true)
-
-;; helpers
-
-;; Convert instant to date/time R string
-(defonce ^:private ^java.text.SimpleDateFormat dt-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss"))
 
 ;; Add context to a call, used to change formatting behaviour in certain cases
 (defmacro ^:private with-ctx
@@ -190,7 +186,7 @@
 (defn vector->code
   "Construct R vector using `c` function.
 
-  When first element is a coersion symbol starting with `:!`, values are coerced to the required type.
+  When first element is a coersion symbol starting with `:!`, values are coerced to the required type or create special structure no available in clojure (like partially named list or datetime).
   When number of elements is big enough, java backend is used to transfer data first.
 
   `nil` is converted to `NA`"
@@ -207,15 +203,10 @@
       :!ct (format "as.POSIXct(%s)" (vector->code r session ctx))
       :!lt (format "as.POSIXlt(%s)" (vector->code r session ctx))
       :!call (seq-form->code r session ctx)
+      :!wrap (format "(%s)" (form->code (first r) session ctx))
       (if (< (count v-form) 80)
         (format "c(%s)" (join "," (map #(form->code % session ctx) v-form)))
         (form->java->code v-form session)))))
-
-(defn quote->code
-  [form session ctx]
-  (cond
-    (list? form) (format "(%s)" (form->code (first form) session ctx))
-    :else (form->code form session ctx)))
 
 (defn seq-form->code
   "Process sequence.
@@ -233,7 +224,6 @@
   (if (symbol? f)
     (let [fs (name f)]
       (cond
-        (= "quote" fs) (quote->code (first r) session ctx)
         (= "colon" fs) (colon->code r session ctx)
         (= "function" fs) (function-def->code (first r) (rest r) session ctx)
         (or (= "tilde" fs)
@@ -302,7 +292,7 @@
      (number? form) (double->code form) ;; other numbers are treated literally
      (boolean? form) (if form "TRUE" "FALSE") ;; boolean as logical
      (nil? form) (nil->code ctx)
-     (inst? form) (format "'%s'" (.format dt-format form)) ;; date/time just as string, to be converted to time by the user
-     (instance? java.time.temporal.Temporal form) (str form)
+     (or (inst? form)
+         (instance? java.time.temporal.Temporal form)) (format "'%s'" (t/->str form)) ;; date/time just as string, to be converted to time by the user
      (instance? Named form) (name form)
      :else (form->java->code form session))))
