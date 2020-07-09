@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [1.0.0-BETA13]
+## [1.0.0-BETA13] - 2020-07-09
 - regresion with `quote` (#61), changed to use `:!wrap` hint
 - datetime conversion to string fixes
 - `tech.ml.dataset` bumped to 2.15 version
