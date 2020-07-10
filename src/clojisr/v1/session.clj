@@ -3,20 +3,13 @@
   (:require [clojisr.v1.protocols :as prot]
             [clojisr.v1.objects-memory :as mem]
             [clojisr.v1.gc :as gc]
-            [clojisr.v1.util :refer [exception-cause get-free-port]]
+            [clojisr.v1.util :refer [exception-cause]]
+            [clojisr.v1.engines :refer [engines]]
             [clojure.tools.logging.readable :as log])
   (:import [java.io File]))
 
-(set! *warn-on-reflection* true)
-
 (defonce sessions (atom {}))
-
 (defonce defaults (atom {}))
-
-(let [port (get-free-port)]
-  (log/info [::setting-default-port
-             {:port port}])
-  (swap! defaults assoc :port port))
 
 (defn set-default-session-type! [session-type]
   (swap! defaults assoc :session-type session-type))
@@ -26,28 +19,25 @@
          (fn [current-session-type]
            (or current-session-type session-type))))
 
+(doseq [[session-type info] @engines]
+  (when (:default info)
+    (set-default-session-type! session-type)))
+
 (defn apply-defaults [session-args]
   (merge @defaults session-args))
 
-(defonce session-type->make-fn (atom {}))
-
-(defn add-session-type!
-  [session-type make-fn]
-  (swap! session-type->make-fn
-         assoc session-type make-fn))
-
 (defn make [session-args]
   (let [id session-args
-        {:keys [session-type] :as actual-session-args} (apply-defaults
-                                                        session-args)
-        make-fn (@session-type->make-fn session-type)]
+        {:keys [session-type] :as actual-session-args} (apply-defaults session-args)
+        make-fn (:make (@engines session-type))]
     (log/info [::make-session
                {:action :new-session
                 :id id
                 :actual-session-args actual-session-args}])
-    (make-fn
-     id
-     actual-session-args)))
+    
+    (make-fn id actual-session-args)))
+
+;; GC part
 
 (defonce last-clean-time (atom (System/currentTimeMillis)))
 
@@ -70,7 +60,7 @@
   (gc/clear-reference-queue)
   (when-let [session (fetch session-args)]
     (log/info [::discard-session {:session-args session-args}])
-    (prot/close session)
+    (.close session) ;; reflection on purpose
     (swap! sessions dissoc session-args)))
 
 (defn discard-default []
@@ -80,7 +70,7 @@
   (gc/clear-reference-queue)
   (doseq [[session-args session] @sessions]
     (log/info [::discard-all-sessions {:session-args session-args}])
-    (prot/close session))
+    (.close session)) ;; reflection on purpose
   (reset! sessions {}))
 
 (defn init-memory [session]
@@ -116,4 +106,3 @@
   (-> session-args
       fetch-or-make
       init))
-

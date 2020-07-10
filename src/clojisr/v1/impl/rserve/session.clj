@@ -7,7 +7,8 @@
             [clojisr.v1.impl.rserve.packages :as packages]
             [clojisr.v1.impl.rserve.printing :as printing]
             [clojure.core.async :as async]
-            [clojure.tools.logging.readable :as log])
+            [clojure.tools.logging.readable :as log]
+            [clojisr.v1.util :refer [exception-cause get-free-port]])
   (:import [org.rosuda.REngine.Rserve RConnection]
            [java.io BufferedReader]))
 
@@ -15,8 +16,7 @@
 
 (def defaults
   (atom
-   {:port 6311
-    :host "localhost"
+   {:host "localhost"
     :spawn-rserve? true}))
 
 (defn close! [{:keys [^RConnection r-connection rserve]}]
@@ -26,14 +26,15 @@
     (proc/close rserve))
   nil)
 
-;; Session is valid when process is alive and when there is connection
+;; Session is valid when there is connection, also when we have rserve, process should be active
 ;; if something is not true, ensure cleaning the rest and close the session
 (defn active?-or-close! [{:keys [^RConnection r-connection rserve]
                           :as sess}]
   (let [state (and r-connection
-                   rserve
                    (.isConnected r-connection)
-                   (proc/alive? rserve))]
+                   (if-not rserve
+                     true
+                     (proc/alive? rserve)))]
     (or state (close! sess))))
 
 (defrecord RserveSession [id
@@ -52,7 +53,7 @@
   (desc [session]
     session-args)
   (eval-r->java [session code]
-    (log/debug [::eval-r->java {:code         code
+    (log/debug [::eval-r->java {:code code
                                 :session-args (:session-args session)}])
     (call/try-eval-catching-errors code r-connection))
   (java->r-set [session varname java-obj]
@@ -106,20 +107,43 @@
       (log/info [::rserve-print-loop {:action :stopped
                                       :session-args (:session-args session)}]))))
 
-(defn make [id session-args]
-  (let [{:keys
-         [host
-          port
-          spawn-rserve?]} (merge @defaults
-                                 session-args)
-        rserve            (when spawn-rserve?
-                            ;; (assert (= host "localhost")) ;; why???
-                            (proc/start-rserve {:port  port
-                                                :sleep 500}))
-        session (->RserveSession id
-                                 session-args
-                                 (RConnection. host port)
-                                 rserve)]
-    (rserve-print-loop session)
-    session))
 
+(defn make [id session-args]
+  (let [{:keys [host port spawn-rserve? init-r]} (merge @defaults
+                                                        session-args)
+        port (or port (get-free-port))
+        rserve (when spawn-rserve?
+                 (proc/start-rserve port init-r))]
+
+    (when rserve ;; be sure the process is spawned
+      (loop [attempts (int 5)]
+        (Thread/sleep 500)
+        (if (or (zero? attempts)
+                (proc/alive? rserve))
+          (when-not (proc/alive? rserve)
+            (throw (Exception. "Can't create RServe process.")))
+          (do
+            (log/warn [::rserve-spawn {:message "Rserve is not alive yet, waiting 0.5s"}])
+            (recur (dec attempts))))))
+
+    (let [conn (loop [attempts (int 1)] ;; try 5 times to connect
+                 (when (> attempts 5) ;; throw an Exception when can't connect
+                   (throw (Exception. "Can't connect to RServe, please check host/port settings.")))
+                 (Thread/sleep (* attempts 200))
+                 (let [conn (try
+                              (RConnection. host port)
+                              (catch Exception e
+                                (log/warn [::make-rserve {:exception (exception-cause e)
+                                                          :message "Exception during connection to RServe, trying once more."}])))]
+                   (if (and conn (.isConnected ^RConnection conn))
+                     conn
+                     (do
+                       (log/warn [::make-rserve {:message "Waiting for connection to the RServe."}])
+                       (recur (inc attempts))))))
+          
+          session (->RserveSession id
+                                   session-args
+                                   conn
+                                   rserve)]      
+      (when rserve (rserve-print-loop session))
+      session)))

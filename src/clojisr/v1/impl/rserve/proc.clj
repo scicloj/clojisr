@@ -38,34 +38,32 @@
              (get :out)
              (butlast)))) ; avoid trailing newline
 
+(defn alive? [rserve]
+  (when rserve
+    (.isAlive ^Process (:process rserve))))
+
+(defn close [rserve]
+  (when rserve
+    (let [p ^Process (:process rserve)]
+      (when (.isAlive p)
+        (.destroy p)))))
+
 (defn start-rserve
   "Boot up RServe in another process.
    Returns a map with a java.lang.Process that can be 'destroy'ed"
-  [{:keys [port init-r sleep]
-    :or {init-r ""
-         sleep 500}}]
+  [port init-r]
   (let [rstr-temp (format
                    (if (file-exists? "/etc/Rserv.conf")
                      "library(Rserve); run.Rserve(port=%s, config.file='/etc/Rserv.conf');"
                      "library(Rserve); run.Rserve(port=%s);")
                    port)
-        rstr      (if (empty? init-r )
-                    rstr-temp
-                    (str init-r ";" rstr-temp ))]
-    (prn rstr)
-    (let [rserve (spawn (r-path)
-                        "--no-save" ; don't save workspace when quitting
-                        "--no-restore-data"
-                        "--slave"
-                        "-e" ; evaluate (boot server)
-                        rstr)]
-      (Thread/sleep sleep)
-      rserve)))
-
-(defn alive? [rserve]
-  (.isAlive ^Process (:process rserve)))
-
-(defn close [rserve]
-  (let [p ^Process (:process rserve)]
-    (when (.isAlive p)
-      (.destroy p))))
+        rstr (if (and init-r (string? init-r) (seq init-r))
+               (str init-r ";" rstr-temp )
+               rstr-temp)]
+    
+    (spawn (r-path)
+           "--no-save" ; don't save workspace when quitting
+           "--no-restore-data"
+           "--slave"
+           "-e" ; evaluate (boot server)
+           rstr)))

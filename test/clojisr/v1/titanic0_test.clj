@@ -1,8 +1,6 @@
 (ns clojisr.v1.titanic0-test
   (:require [notespace.v2.note :as note
-             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]
-            [clojisr.v1.r :as r]
-            [clojure.java.io :as io]))
+             :refer [note note-void note-md note-as-md note-hiccup note-as-hiccup]]))
 
 (note-md "
 #ClojisR example: Titanic #0
@@ -38,10 +36,10 @@ Here are most of the functions that we need, brought by the standard `require-r`
             require-r]]
   '[clojisr.v1.applications.plotting :refer [plot->svg]]
   '[clojure.string :as string]
-  '[clojisr.v1.rserve :as rserve]))
+  '[clojure.java.io :as io]))
 
 (note-void
- (rserve/set-as-default!)
+ (r/set-default-session-type! :rserve)
  (r/discard-all-sessions))
 
 (note-void
