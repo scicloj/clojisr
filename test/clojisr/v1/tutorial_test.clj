@@ -15,13 +15,12 @@
  (require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon require-r]]
           '[clojisr.v1.robject :as robject]
           '[clojisr.v1.session :as session]
-          '[clojisr.v1.rserve :as rserve]
           '[tech.ml.dataset :as dataset]))
 
 (note-md "First, let us make sure that we use the Rserve backend (in case we were using Renjin instead earlier), and that there are no R sessions currently running. This is typically not needed if you just started working. Here, we do it just in case.")
 
 (note-void
- (rserve/set-as-default!)
+ (r/set-default-session-type! :rserve)
  (r/discard-all-sessions))
 
 (note-md "Now let us run some R code, and keep a Clojure handle to the return value.")
@@ -747,7 +746,6 @@ Now, we see some arguments that do have default values.")
 (note-md "In the followint example, we use a differnt R backend (the pure JVM Renjin) for reading a csv, without changing the default backend (which is the usual R using Rserve).")
 
 (note
- (require 'clojisr.v1.renjin)
  (let [path "/tmp/data.csv"]
    (spit path "a,b,c\n1,2,3\n4,5,6\n")
    (-> `(read.csv ~path)

@@ -1,17 +1,17 @@
 (ns clojisr.v1.r
-  (:require [clojisr.v1.session :as session]
+  (:require [clojisr.v1.protocols :as prot]
+            [clojisr.v1.session :as session]
             [clojisr.v1.eval :as evl]
             [clojisr.v1.functions :as functions]
             [clojisr.v1.using-sessions :as using-sessions]
-            [clojisr.v1.protocols :as prot]
             [clojisr.v1.printing]
             [clojisr.v1.codegen :as codegen]
             [clojisr.v1.impl.java-to-clj :as java2clj]
             [clojisr.v1.impl.clj-to-java :as clj2java]
             [clojure.string :as string]
-            [clojisr.v1.rserve :as rserve] ; imprtant to load this
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
-            [clojisr.v1.require :refer [require-r-package]])
+            [clojisr.v1.require :refer [require-r-package]]
+            [clojisr.v1.engines :refer [engines]])
   (:import clojisr.v1.robject.RObject))
 
 (set! *warn-on-reflection* true)
@@ -56,6 +56,16 @@
 
 (defn r->java->native-clj [r-object] (-> r r-object r->java java2clj/java->native))
 (def r->native-clj r->java->native-clj)
+
+(defn session-types
+  "Return registered session types"
+  []
+  (keys @engines))
+
+(defn set-default-session-type!
+  "Set default session type."
+  [session-type]
+  (session/set-default-session-type! session-type))
 
 (defn discard-session [session-args]
   (session/discard session-args))
@@ -185,4 +195,3 @@
 (defonce ^:private shutdown-hook-registered
   (do (.addShutdownHook (Runtime/getRuntime) (Thread. #(locking session/sessions (discard-all-sessions))))
       true))
-

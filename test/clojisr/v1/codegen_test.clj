@@ -22,13 +22,11 @@ First, require the necessary namespaces.")
 
 (note-md "Also, let us make sure we are using a clean session.")
 
-(note-void (require '[clojisr.v1.rserve :as rserve]
-                    '[clojisr.v1.r :as r :refer [r ->code r->clj]]
+(note-void (require '[clojisr.v1.r :as r :refer [r ->code r->clj]]
                     '[notespace.v2.note :refer [check]]))
 
 (note-void
- ;; (renjin/set-as-default!)
- (rserve/set-as-default!)
+ (r/set-default-session-type! :rserve)
  (r/discard-all-sessions))
 
 (note-md :r-code-as-a-string "## R code as a string")
