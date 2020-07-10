@@ -1,6 +1,5 @@
-(ns vrksasana.impl.rserve.astgen
+(ns vrksasana.impl.r.astgen
   (:require [vrksasana.util]
-            [vrksasana.tree :as tree]
             [vrksasana.ast :as ast])
   (:import [clojure.lang Named]))
 

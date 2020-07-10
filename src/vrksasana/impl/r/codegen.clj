@@ -1,4 +1,4 @@
-(ns vrksasana.impl.rserve.codegen
+(ns vrksasana.impl.r.codegen
   (:require [clojure.walk :as walk]
             [clojure.string :as string]
             [vrksasana.catalog :as catalog]
@@ -22,7 +22,7 @@
 (defn astnode->code [[nodekind
                       & [body-first & body-rest :as body]]]
 
-  (let [ground (catalog/ground-name->ground :rserve)]
+  (let [ground (catalog/ground-name->ground :r)]
     (case (name nodekind)
       "funcall"          (->> body-rest
                               first

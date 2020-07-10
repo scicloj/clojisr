@@ -1,18 +1,18 @@
-(ns vrksasana.impl.rserve.ground
+(ns vrksasana.impl.r.ground
   (:require [vrksasana.ground]
-            [vrksasana.impl.rserve.season :as rserve-season]
-            [vrksasana.impl.rserve.astgen :as rserve-astgen]
-            [vrksasana.impl.rserve.codegen :as rserve-codegen]
+            [vrksasana.impl.r.season :as r-season]
+            [vrksasana.impl.r.astgen :as r-astgen]
+            [vrksasana.impl.r.codegen :as r-codegen]
             [vrksasana.catalog :as catalog]))
 
 (deftype Ground []
   vrksasana.ground/PGround
 
   (seedling->ast [this seedling]
-    (rserve-astgen/form->ast seedling))
+    (r-astgen/form->ast seedling))
 
   (ast->code [this ast]
-    (rserve-codegen/ast->code ast))
+    (r-codegen/ast->code ast))
 
   (assignment-code [this var-name code]
     (format "%s <- %s;" var-name code))
@@ -24,18 +24,18 @@
     (str ".MEM$" tree-name))
  
   (default-season-name [this]
-    :rserve)
+    :r)
  
   (default-season-attributes [this]
     {})
 
   (new-season [this season-name attributes]
-    (rserve-season/new-season this season-name attributes)))
+    (r-season/new-season this season-name attributes)))
 
 (def ground (->Ground))
 
 (defn setup [{:keys [make-default]
               :or {make-default true}}]
-  (catalog/add-ground :rserve ground)
+  (catalog/add-ground :r ground)
   (when make-default
-    (catalog/set-default-ground-name :rserve)))
+    (catalog/set-default-ground-name :r)))

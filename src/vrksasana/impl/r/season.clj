@@ -1,8 +1,7 @@
-(ns vrksasana.impl.rserve.season
+(ns vrksasana.impl.r.season
   (:require [vrksasana.season]
             [clojisr.v1.protocols]
             [clojisr.v1.session :as session]
-            [clojisr.v1.impl.rserve.session :as impl-session]
             [clojisr.v1.using-sessions :as using-sessions]
             [clojisr.v1.impl.java-to-clj :as java2clj]
             [clojisr.v1.impl.clj-to-java :as clj2java]))
@@ -19,7 +18,7 @@
   (season-name [this] season-name)
   (attributes [this] attributes)
   (close [this]
-    (impl-session/close! session))
+    (clojisr.v1.protocols/close session))
   (fruit-value->data [this fruit-value]
     (-> fruit-value
         using-sessions/r->java
@@ -33,4 +32,3 @@
                    (session/make attributes))]
     (clojisr.v1.session/init @*session)
     (->Season ground season-name attributes @*session)))
-

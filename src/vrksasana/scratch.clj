@@ -1,10 +1,10 @@
 (ns vrksasana.scratch
   (:require [vrksasana.core :as vrksa]
-            [vrksasana.impl.rserve.core :as rserve]))
+            [vrksasana.impl.r.core :as r]))
 
 (vrksa/restart)
 
-(rserve/setup {:make-default true})
+(r/setup {:make-default true})
 
 (let [x (vrksa/plant '(+ 1 ~(range 9)))]
   (vrksa/pick x))
