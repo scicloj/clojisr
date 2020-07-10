@@ -14,9 +14,10 @@
   (data->fruit-value [this data]))
 
 (defn start [ground season-name]
-  (let [season (->> season-name
-                    (catalog/season-attributres-by-name)
-                    (ground/new-season ground season-name))]
+  (let [season (ground/new-season ground
+                                  season-name
+                                  (catalog/season-name->season-attributres
+                                   season-name))]
     (catalog/add-season season-name season)
     season))
 
@@ -31,4 +32,3 @@
   (->> ground
        catalog/current-season-name
        (get-or-make ground)))
-

@@ -34,7 +34,8 @@
 
 (def ground (->Ground))
 
-(defn init [& {:keys [make-default]}]
+(defn setup [{:keys [make-default]
+              :or {make-default true}}]
   (catalog/add-ground :rserve ground)
   (when make-default
     (catalog/set-default-ground-name :rserve)))

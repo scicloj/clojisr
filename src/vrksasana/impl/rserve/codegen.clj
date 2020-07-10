@@ -22,7 +22,7 @@
 (defn astnode->code [[nodekind
                       & [body-first & body-rest :as body]]]
 
-  (let [ground (catalog/ground-by-name :rserve)]
+  (let [ground (catalog/ground-name->ground :rserve)]
     (case (name nodekind)
       "funcall"          (->> body-rest
                               first

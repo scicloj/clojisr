@@ -1,15 +1,10 @@
 (ns vrksasana.scratch
   (:require [vrksasana.core :as vrksa]
-            [vrksasana.impl.rserve.core :as rserve]
-            [clojure.tools.namespace.repl :as ctnr]))
+            [vrksasana.impl.rserve.core :as rserve]))
 
-(comment
-  (ctnr/refresh-all)
-  )
+(vrksa/restart)
 
-(vrksa/init)
-
-(rserve/init :make-default true)
+(rserve/setup {:make-default true})
 
 (let [x (vrksa/plant '(+ 1 ~(range 9)))]
   (vrksa/pick x))
@@ -21,8 +16,7 @@
 (let [x (vrksa/plant '(+ 1 ~(range 9)))
       y (vrksa/plant `(* ~x 10))]
   (->> y
-      vrksa/pick
-      vrksa/fruit->data
-      (map inc)
-      vrksa/data->fruit))
-
+       vrksa/pick
+       vrksa/fruit->data
+       (map inc)
+       vrksa/data->fruit))

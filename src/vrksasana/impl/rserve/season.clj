@@ -1,7 +1,6 @@
 (ns vrksasana.impl.rserve.season
   (:require [vrksasana.season]
             [clojisr.v1.protocols]
-            [clojisr.v1.rserve]
             [clojisr.v1.session :as session]
             [clojisr.v1.impl.rserve.session :as impl-session]
             [clojisr.v1.using-sessions :as using-sessions]

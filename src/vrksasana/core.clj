@@ -6,25 +6,39 @@
             [vrksasana.fruit :as fruit]
             [vrksasana.ast :as ast]))
 
-(defn init []
+(defn start []
   (catalog/reset))
 
-(defn ground-to-use [{:keys [ground]}]
-  (or ground
-      (catalog/default-ground)))
+(defn end []
+  (doseq [season (catalog/seasons)]
+    (season/end season)))
 
-(defn season-to-use [{:keys [season] :as options}]
+(defn restart []
+  (end)
+  (start))
+
+(defn ground-to-use
+  ([]
+   (ground-to-use {}))
+  ([{:keys [ground]}]
+   (or ground
+       (catalog/default-ground))))
+
+(defn season-to-use
+  ([]
+   (season-to-use {}))
+  ([{:keys [season] :as options}]
   (or season
       (-> options
           ground-to-use
-          (season/current-season))))
+          (season/current-season)))))
 
 (defn plant
   ([seedling]
    (plant seedling nil))
-  ([seedling options]
+  ([seedling {:keys [tree-name] :as options}]
    (let [ground (ground-to-use options)]
-     (tree/->tree (:tree-name options)
+     (tree/->tree tree-name
                   (ground/seedling->ast ground seedling)))))
 
 (defn pick
@@ -33,12 +47,12 @@
   ([tree options]
    (let [season         (season-to-use options)
          ground         (season/ground season)
-         refined-context (assoc options :season season)
+         refined-options (assoc options :season season)
          var-name (->> tree
                        :tree-name
                        (ground/tree-name->var-name ground))]
      (doseq [dep (ast/tree->deps tree)]
-       (pick dep refined-context))
+       (pick dep refined-options))
      (catalog/add-tree-to-season tree season)
      (->> tree
           :ast
@@ -46,7 +60,6 @@
           (ground/assignment-code ground var-name)
           (season/eval-code season)
           (fruit/->Fruit season tree)))))
-
 
 (defn fruit->data [fruit]
   (let [fresh-fruit (fruit/get-fresh fruit)]
