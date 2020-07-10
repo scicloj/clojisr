@@ -5,7 +5,7 @@
             [vrksasana.impl.r.codegen :as r-codegen]
             [vrksasana.catalog :as catalog]))
 
-(deftype Ground []
+(defrecord Ground []
   vrksasana.ground/PGround
 
   (seedling->ast [this seedling]
@@ -22,20 +22,12 @@
 
   (tree-name->var-name [this tree-name]
     (str ".MEM$" tree-name))
+
+  (ground-name [this] :r)
  
-  (default-season-name [this]
-    :r)
+  (default-season-name [this] :r)
  
-  (default-season-attributes [this]
-    {})
+  (default-season-attributes [this] {})
 
   (new-season [this season-name attributes]
     (r-season/new-season this season-name attributes)))
-
-(def ground (->Ground))
-
-(defn setup [{:keys [make-default]
-              :or {make-default true}}]
-  (catalog/add-ground :r ground)
-  (when make-default
-    (catalog/set-default-ground-name :r)))

@@ -7,7 +7,8 @@
 
 (defn fresh? [fruit]
   (-> fruit
-      :season-name
+      :season
+      (season/season-name)
       catalog/active-season?))
 
 (defn refresh [fruit]

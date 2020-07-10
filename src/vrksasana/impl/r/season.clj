@@ -6,7 +6,7 @@
             [clojisr.v1.impl.java-to-clj :as java2clj]
             [clojisr.v1.impl.clj-to-java :as clj2java]))
 
-(deftype Season [ground season-name attributes session]
+(defrecord Season [ground season-name attributes session]
   vrksasana.season/PSeason
   (eval-code [this code]
     (using-sessions/eval-code code session))

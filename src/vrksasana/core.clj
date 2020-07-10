@@ -17,6 +17,17 @@
   (end)
   (start))
 
+(defn setup-ground
+  ([ground]
+   (setup-ground ground {}))
+  ([ground
+    {:keys [make-default]
+     :or   {make-default true}}]
+   (let [nam (ground/ground-name ground)]
+     (catalog/add-ground nam ground)
+     (when make-default
+       (catalog/set-default-ground-name nam)))))
+
 (defn ground-to-use
   ([]
    (ground-to-use {}))

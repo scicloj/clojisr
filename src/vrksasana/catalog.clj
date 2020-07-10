@@ -5,7 +5,8 @@
 
 (defn reset []
   (reset! *state
-          {:ground-name->ground             {}
+          {:counter 0
+           :ground-name->ground             {}
            :season-name->season             {}
            :season-name->season-attributres {}
            :tree-name->tree                 {}
@@ -14,6 +15,10 @@
            :tree->seasons                   {}
            :tree->current-season            {}
            :season->trees                   {}}))
+
+(defn next-counter []
+  (swap! *state update :counter inc)
+  (:counter @*state))
 
 (defn ground-name->ground [ground-name]
   (get-in @*state [:ground-name->ground ground-name]))
@@ -68,6 +73,14 @@
          assoc-in
          [:ground->current-season-name ground]
          season-name))
+
+(defn current-season-name [ground]
+  (or (get-in @*state [:ground->current-season-name ground])
+      (let [season-name (->> (next-counter)
+                             (format "s%d")
+                             keyword)]
+        (set-current-season-name ground season-name)
+        season-name)))
 
 (defn active-season-names []
   (-> @*state :season-name->season keys))
