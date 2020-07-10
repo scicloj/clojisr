@@ -129,6 +129,8 @@ Note however that:
 
 * [Titanic tutorial #0](https://scicloj.github.io/clojisr/doc/clojisr/v1/titanic0-test/)
 
+* [Dataset transfer](https://scicloj.github.io/clojisr/doc/clojisr/v1/dataset-test/)
+
 * More examples -- see the [clojisr-examples repo](https://github.com/scicloj/clojisr-examples#list-of-examples)
 
 ## Background
