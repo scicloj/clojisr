@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This change
 - setting default session type moved to `clojisr.v1.r/set-default-session-type!` function
 - refactoring of RServe process spawn and connection to mitigate (#62)
 - abandoned sessions/R processes cleaning fixes
+- `tech.ml/dataset` bumped to 3.01 version
 
 ## [1.0.0-BETA13] - 2020-07-09
 - regresion with `quote` (#61), changed to use `:!wrap` hint

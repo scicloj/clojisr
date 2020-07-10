@@ -2,8 +2,7 @@
   (:require [notespace.v2.note :as note
              :refer [note note-void note-md]]
             [tech.ml.dataset :as dataset]
-            [notespace.v2.live-reload]
-            [clojisr.v1.r :as r]))
+            [notespace.v2.live-reload]))
 
 (note-md "# R code generation from the Clojure forms")
 
