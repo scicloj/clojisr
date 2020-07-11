@@ -11,7 +11,7 @@
   (attributes [this])
   (close [this])
   (fruit-value->data [this fruit-value])
-  (data->fruit-value [this data]))
+  (data->fruit-value [this varname data]))
 
 (defn start [ground season-name]
   (let [season (ground/new-season ground

@@ -285,14 +285,18 @@
         :else (symbol-form->ast fs r ctx)))
     (let [->f-c-ast #(->function-call-ast % r ctx :prepare-ast-args)]
       (cond
-       (instance? vrksasana.tree.Tree f) (->f-c-ast
+        (instance? vrksasana.fruit.Fruit f) (->f-c-ast
+                                             (-> f
+                                                 :tree
+                                                 :tree-name))
+        (instance? vrksasana.tree.Tree f) (->f-c-ast
                                            (:tree-name f))
-        (string? f)                  (if (and (= (first f) \`)
-                                              (= (last f) \`))
-                                       (->f-c-ast f)
-                                       (vector->ast seq-form ctx))
-        (sequential? f)              (->f-c-ast (seq-form->ast f ctx))
-        :else                        (vector->ast seq-form ctx)))))
+        (string? f)                       (if (and (= (first f) \`)
+                                                   (= (last f) \`))
+                                            (->f-c-ast f)
+                                            (vector->ast seq-form ctx))
+        (sequential? f)                   (->f-c-ast (seq-form->ast f ctx))
+        :else                             (vector->ast seq-form ctx)))))
 
 (defn map->ast
   "Convert a map to an AST for generatign a named-list.
@@ -327,6 +331,9 @@
    (cond
      (vector? form) (vector->ast form ctx) ;; vector always is converted to datatype
      (sequential? form) (seq-form->ast form ctx) ;; sequence is usually call
+     (instance? vrksasana.fruit.Fruit form) (-> form
+                                                :tree
+                                                (form->ast ctx))
      (instance? vrksasana.tree.Tree form) (ast/->dep-ast form)
      (map? form) (map->ast form ctx) ;; map goes to a list
      (string? form) [:ast/string form]

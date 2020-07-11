@@ -13,10 +13,6 @@
   (doseq [season (catalog/seasons)]
     (season/end season)))
 
-(defn restart []
-  (end)
-  (start))
-
 (defn setup-ground
   ([ground]
    (setup-ground ground {}))
@@ -27,6 +23,15 @@
      (catalog/add-ground nam ground)
      (when make-default
        (catalog/set-default-ground-name nam)))))
+
+(defn restart
+  ([]
+   (restart nil))
+  ([& setup-args]
+   (end)
+   (start)
+   (when setup-args
+     (apply setup-ground setup-args))))
 
 (defn ground-to-use
   ([]
@@ -43,6 +48,29 @@
       (-> options
           ground-to-use
           (season/current-season)))))
+
+(defn fruit->data [fruit]
+  (let [fresh-fruit (fruit/get-fresh fruit)]
+    (season/fruit-value->data
+     (:season fresh-fruit)
+     (:value fresh-fruit))))
+
+(defn data->fruit
+  ([data]
+   (data->fruit data nil nil))
+  ([data predefined-tree options]
+   (let [season (season-to-use options)
+         ground (season/ground season)
+         tree   (or predefined-tree
+                    (-> data
+                        ast/->data-dep-ast
+                        tree/->tree))
+         varname (->> tree
+                      :tree-name
+                      (ground/tree-name->var-name ground))]
+     (->> data
+          (season/data->fruit-value season varname)
+          (fruit/->Fruit season tree)))))
 
 (defn plant
   ([seedling]
@@ -61,31 +89,24 @@
          refined-options (assoc options :season season)
          var-name (->> tree
                        :tree-name
-                       (ground/tree-name->var-name ground))]
-     (doseq [dep (ast/tree->deps tree)]
-       (pick dep refined-options))
+                       (ground/tree-name->var-name ground))
+         ast (:ast tree)]
      (catalog/add-tree-to-season tree season)
-     (->> tree
-          :ast
-          (ground/ast->code ground)
-          (ground/assignment-code ground var-name)
-          (season/eval-code season)
-          (fruit/->Fruit season tree)))))
+     (println [:ast ast])
+     (if (ast/data? ast)
+       ;; a tree of clojure data
+       (-> ast
+           second ; the data part
+           (data->fruit tree options))
+       ;; else -- not a tree of clojure data
+       (do
+         ;; handle dependencies
+         (doseq [dep (ast/tree->deps tree)]
+           (pick dep refined-options))
+         ;; generate code and evaluate it
+         (->> ast
+              (ground/ast->code ground)
+              (ground/assignment-code ground var-name)
+              (season/eval-code season)
+              (fruit/->Fruit season tree)))))))
 
-(defn fruit->data [fruit]
-  (let [fresh-fruit (fruit/get-fresh fruit)]
-    (season/fruit-value->data
-     (:season fresh-fruit)
-     (:value fresh-fruit))))
-
-(defn data->fruit
-  ([data]
-   (data->fruit data nil))
-  ([data options]
-   (let [season (season-to-use options)
-         tree (-> data
-                  ast/->data-dep-ast
-                  tree/->tree)]
-     (->> data
-          (season/data->fruit-value season)
-          (fruit/->Fruit season tree)))))

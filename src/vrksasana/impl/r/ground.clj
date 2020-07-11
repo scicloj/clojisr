@@ -2,8 +2,7 @@
   (:require [vrksasana.ground]
             [vrksasana.impl.r.season :as r-season]
             [vrksasana.impl.r.astgen :as r-astgen]
-            [vrksasana.impl.r.codegen :as r-codegen]
-            [vrksasana.catalog :as catalog]))
+            [vrksasana.impl.r.codegen :as r-codegen]))
 
 (defrecord Ground []
   vrksasana.ground/PGround
