@@ -98,7 +98,8 @@ So it has in a single place all dependencies and they do work together and no fu
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
 
 ```clj
-$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA13"}}}'
+$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA15"}}
+               :mvn/repos {"bedatadriven" {:url "https://nexus.bedatadriven.com/content/groups/public/"}}}'
 Clojure 1.10.1
 user=> (require '[clojisr.v1.r :refer [r]])
 
