@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [1.0.0-BETA14]
+## [1.0.0-BETA14] - 2020-07-11
 - `clojisr.v1.rserve` and `clojisr.v1.renjin` namespaces are deprecated now
 - setting default session type moved to `clojisr.v1.r/set-default-session-type!` function
 - refactoring of RServe process spawn and connection to mitigate (#62)
