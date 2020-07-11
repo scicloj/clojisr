@@ -33,16 +33,18 @@
       ast->deps))
 
 (defn ->dep-ast
-  "Create an AST of a dependency on another tree."
-  [tree]
-  (vrksasana.catalog/add-tree-when-missing tree)
-  [:ast/dep tree])
+  "Create an AST of a dependency on another tree or fruit."
+  [tree-or-fruit]
+  (let [tree (or (:tree tree-or-fruit)
+                 tree-or-fruit)]
+    (vrksasana.catalog/add-tree-when-missing tree)
+    [:ast/dep tree]))
 
 (defn data?
   "Does a given AST describe a reference to some Clojure data?"
   [ast]
   (and (vector? ast)
-       (-> ast first (= :ast/dep))))
+       (-> ast first (= :ast/data))))
 
 (defn ->data-ast
   "Create an AST refering to Clojure data."
