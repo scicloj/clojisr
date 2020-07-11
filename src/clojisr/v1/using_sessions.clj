@@ -39,14 +39,18 @@
 (defn r->java [{:keys [session object-name]}]
   (prot/eval-r->java session object-name))
 
-(defn java->r [java-object session]
-  (if (instance? RObject java-object)
-    java-object
-    (let [obj-name (random-object-name)]
-      (prot/java->r-set session
-                        obj-name
-                        java-object)
-      (->robject obj-name session nil))))
+(defn java->r
+  ([java-object session]
+   (java->r java-object nil session))
+  ([java-object predefined-obj-name session]
+   (if (instance? RObject java-object)
+     java-object
+     (let [obj-name (or predefined-obj-name
+                        (random-object-name))]
+       (prot/java->r-set session
+                         obj-name
+                         java-object)
+       (->robject obj-name session nil)))))
 
 (defn function? [r-object]
   (and (instance? RObject r-object)
