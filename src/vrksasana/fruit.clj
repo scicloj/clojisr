@@ -12,7 +12,11 @@
       catalog/active-season?))
 
 (defn refresh [fruit]
-  (throw (ex-info "not-implemented-yet" {})))
+  (->> fruit
+       :season
+       season/ground
+       (season/current-season)
+       (assoc fruit :season)))
 
 (defn get-fresh [fruit]
   (if (fresh? fruit)
@@ -33,6 +37,5 @@
 ;; Overriding pprint
 (defmethod pp/simple-dispatch Fruit [fruit]
   (->> fruit
-       :value
        string-to-print
        println))
