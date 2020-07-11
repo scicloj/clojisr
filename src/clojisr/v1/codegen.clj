@@ -4,7 +4,8 @@
             [clojisr.v1.impl.clj-to-java :refer [clj->java]]
             [clojisr.v1.impl.types :as t]
             [clojisr.v1.robject]
-            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]])
+            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
+            [tech.ml.protocols.dataset :as ds-prot])
   (:import [clojure.lang Named]
            [clojisr.v1.robject RObject]))
 
@@ -285,6 +286,7 @@
      (vector? form) (vector->code form session ctx) ;; vector always is converted to datatype
      (sequential? form) (seq-form->code form session ctx) ;; sequence is usually call
      (instance? RObject form) (:object-name form) ;; RObject is a R symbol
+     (satisfies? ds-prot/PColumnarDataset form) (form->java->code form session)
      (map? form) (map->code form session ctx) ;; map goes to a list
      (string? form) (format "\"%s\"" form) ;; string is string wrapped in double quotes
      (integer? form) (str form "L") ;; int is treated literally

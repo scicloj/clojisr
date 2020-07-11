@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA15] - 2020-07-12
+- [hot fix] datasets are not transfered as `data.frame` due to implementation of `map` interfaces in t.m.ds 3.01
+
 ## [1.0.0-BETA14] - 2020-07-11
 - `clojisr.v1.rserve` and `clojisr.v1.renjin` namespaces are deprecated now
 - setting default session type moved to `clojisr.v1.r/set-default-session-type!` function
