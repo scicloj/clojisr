@@ -15,7 +15,8 @@
   (and (vector? ast)
        (-> ast first (= :ast/dep))))
 
-;; TODO: Use tail recursion here.
+;; TODO: Reason about this code -- does it cover all AST cases?
+;; TODO Use tail recursion. 
 (defn ast->deps
   "Find which trees a given AST depends on, transitively."
   [ast]
@@ -23,8 +24,12 @@
     [(second ast)]
     (->> ast
          rest
-         (filter ast?)
-         (mapcat ast->deps)
+         (mapcat (fn [part]
+                   (cond (ast? part) (ast->deps part)
+                         (sequential? part) (->> part
+                                                 (filter ast?)
+                                                 (mapcat ast->deps))
+                         :else [])))
          distinct)))
 
 (defn tree->deps [tree]
