@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA16-SNAPSHOT] 
+- added vrksasna draft for session management
+- a very minor extension of clojisr internals to support that
+
 ## [1.0.0-BETA15] - 2020-07-12
 - [hot fix] datasets are not transfered as `data.frame` due to implementation of `map` interfaces in t.m.ds 3.01
 
