@@ -33,6 +33,12 @@
    (when setup-args
      (apply setup-ground setup-args))))
 
+(defn current-season [ground]
+  (season/current-season ground))
+
+(defn get-or-make-season [ground season-name]
+  (season/get-or-make ground season-name))
+
 (defn ground-to-use
   ([]
    (ground-to-use {}))
@@ -96,11 +102,11 @@
        ;; a tree of clojure data
        (-> ast
            second ; the data part
-           (data->fruit tree options))
+           (data->fruit tree refined-options))
        ;; else -- not a tree of clojure data
        (do
          ;; handle dependencies
-         (doseq [dep (ast/tree->deps tree)]
+         (doseq [dep (ast/ast->deps ast)]
            (pick dep refined-options))
          ;; generate code and evaluate it
          (->> ast
