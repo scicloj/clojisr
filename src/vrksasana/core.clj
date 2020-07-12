@@ -92,7 +92,6 @@
                        (ground/tree-name->var-name ground))
          ast (:ast tree)]
      (catalog/add-tree-to-season tree season)
-     (println [:ast ast])
      (if (ast/data? ast)
        ;; a tree of clojure data
        (-> ast
