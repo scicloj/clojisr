@@ -21,6 +21,17 @@ Then, some existing parts of Clojisr will become redundant.
 
 We use the name [Vrksasana](https://en.wikipedia.org/wiki/Vriksasana), beause it is about stability and ease with trees.")
 
+(note-md :glossary "## Glossary")
+
+(note-md "
+- `ground` - a computation backend (like R, Clojure, etc.)
+- `season` - a session, a connection, with a specific way to connect and compute (like an Rserve session, a Renjin session, an nREPL connection, etc.)
+- `planting` - creating an AST, representing future computation using a specific ground
+- `seedling` - the input of planting
+- `tree` - the output of planting -- the AST
+- `picking` - computing a given tree in a specific season
+- `fruit` - the output of picking, containing the whole computational context and the result value")
+
 (note-md :basic-demo "## Basic demo")
 
 (note-void (require '[notespace.v2.note :refer [check]]))
