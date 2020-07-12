@@ -125,7 +125,7 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
 (note-md "Trees, fruit and Clojure data can be mixed to create seedlings for new trees.")
 
 (note-void
- (def strange-fruit
+ (def exotic-fruit
    (let [season1    (v/get-or-make-season r/ground :s1)
          season2    (v/get-or-make-season r/ground :s2)
          tree1      (v/plant '(* 1 10))
@@ -138,13 +138,13 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
      (v/pick tree {:season season2}))))
 
 (note
- (->> strange-fruit
+ (->> exotic-fruit
       v/fruit->data
       (check = [543210.0])))
 
 (note
  (set! *print-length* 10)
- (:tree strange-fruit))
+ (:tree exotic-fruit))
 
 (note-md "We see that a tree's AST holds all dependencies as trees, whenever dependencies come from trees, fruit or big data (on the other hand, small data are included explicitly in the code, following the rules of Clojisr code generation). These dependencies, being trees and not fruits, live across seasons. Thus, we can pick their fruit on any season we wish.")
 
