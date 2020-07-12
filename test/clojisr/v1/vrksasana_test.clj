@@ -97,6 +97,8 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
 
 (note (-> fruit1 :value class))
 
+(note-md "### Changing seasons")
+
 (note-md "The fruit also knows on which season it was picked. The `season` is a representation of the computational session where things were computed (in this case, it is a Clojisr session, wrapping an Rserve session).")
 
 (note-void (def season1 (:season fruit1)))
@@ -106,8 +108,6 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
 (note (keys season1))
 
 (note (-> season1 :session class))
-
-(note-md "### Changing seasons")
 
 (note-md "We can pick our fruits on different seasons. In the context of the R ground, this means different R sessions.")
 
@@ -200,13 +200,6 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
 - other useful grounds (e.g., a Clojure ground supporting [sci](https://github.com/borkdude/sci) and nREPL backends).
 - mixing fruit from different grounds in the creation of a tree, computable using data conversions")
 
+(comment
+  (notespace.v2.note/compute-this-notespace!))
 
-(notespace.v2.note/compute-this-notespace!)
-
-
-;; rely on just two namespaces
-;; Renjin
-;; name pickplant
-;; short names
-;; make data-> rely on plant
-;; data
