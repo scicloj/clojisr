@@ -132,7 +132,7 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
          fruit1     (v/pick tree1 {:season season1})
          tree2      (v/plant '(* 2 100))
          small-data [3000]
-         big-data   (range 40000 40010)
+         big-data   (range 40000 40100)
          tree       (v/plant
                      `(+ ~fruit1 ~tree2 ~small-data (min ~big-data) 500000))]
      (v/pick tree {:season season2}))))
