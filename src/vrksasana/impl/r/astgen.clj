@@ -71,23 +71,19 @@
 
 (defn binary-or-unary-call->ast
   "Create the AST of a binary or unary operator function call."
-  [f [f1 & fr] ctx]
+  [f [fr1 & frr :as fr] ctx]
   (let [maybe-wrap (if (:flat ctx)
                      identity
                      ->parens-ast)
-        res (if-not f1
+        res (if-not fr1
               (throw (Exception. "Positive number of arguments is required."))
-              (let [f1-ast (form->ast f1 ctx)]
-                (if-not fr
+              (let [f1-ast (form->ast fr1 ctx)]
+                (if-not frr
                   (if (unary-operators f)
                     [:ast/unary-funcall f [:ast/parens f1-ast]]
                     f1-ast)
-                  (reduce (fn [a1 a2] (maybe-wrap
-                                       [:ast/binary-funcall
-                                        f
-                                        a1
-                                        (form->ast a2 ctx)]))
-                          f1-ast fr))))]
+                  (maybe-wrap
+                   [:ast/binary-funcall f (map form->ast fr)]))))]
     (if (and (wrapped-operators f)
              (not (ctx :unwrap))
              (ctx :flat))

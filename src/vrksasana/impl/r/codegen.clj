@@ -35,11 +35,10 @@
                               (map ast->code)
                               (string/join ",")
                               (format "%s(%s)" (ast->code body-first)))
-      "binary-funcall"   (->> body
-                              (take 3)
+      "binary-funcall"   (->> body-rest
+                              first
                               (map ast->code)
-                              ((fn [[f l r]]
-                                 (format "%s%s%s" l f r))))
+                              (string/join (ast->code body-first)))
       "unary-funcall"    (->> body
                               (take 2)
                               (map ast->code)
@@ -47,7 +46,7 @@
                                  (format "%s%s" f a))))
       "string"           (format "\"%s\"" body-first) ;; wrapping with double quotes
       "integer"          (str body-first "L")
-      "number"           (double->code body-first) 
+      "number"           (double->code body-first)
       "named-arg"        (format "%s=%s"
                                  body-first
                                  (-> body second ast->code))

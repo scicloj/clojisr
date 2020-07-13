@@ -159,8 +159,6 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
 
 (note-md "We see that a tree's AST holds all dependencies as trees, whenever dependencies come from trees, fruit or big data (on the other hand, small data are included explicitly in the code, following the rules of Clojisr code generation). These dependencies, being trees and not fruits, live across seasons. Thus, we can pick their fruit on any season we wish.")
 
-(note-md "We also see that the AST is a bit inefficient. This should improve soon.")
-
 (note-md :main-notions "## Internals")
 
 (note-md "Coming soon.")
@@ -195,12 +193,10 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
 (note-md "### Remaining tasks")
 
 (note-md "
-- update AST generation to match recent changes in Clojisr code generation
 - replacing the relevant parts of Clojisr with vrksasana-based parts (should be easy at this stage)
 - discuss desired usage patterns and adapt the API
 - garbage collection
-- Renjin support (almost nothing to do)
-- more efficient AST structures (e.g., avoid unnecessarily nesting binary operators at this stage)")
+- Renjin support (almost nothing to do)")
 
 (note-md "### Future directions")
 
