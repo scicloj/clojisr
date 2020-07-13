@@ -92,7 +92,7 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
 
 (note (->> fruit1
            v/fruit->data
-           (check = [40.0 30.0 20.0 10.0 0.0 10.0 20.0 30.0])))
+           (check = [40 30 20 10 0 10 20 30])))
 
 (note-md "### What does the fruit look like on the inside?")
 
@@ -151,7 +151,7 @@ Trees grow in the ground. More precisely, they grow in a `ground`. There can be 
 (note
  (->> exotic-fruit
       v/fruit->data
-      (check = [543210.0])))
+      (check = [543210])))
 
 (note
  (set! *print-length* 10)
