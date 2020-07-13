@@ -1,6 +1,7 @@
 (ns vrksasana.impl.r.astgen
   (:require [vrksasana.util]
-            [vrksasana.ast :as ast])
+            [vrksasana.ast :as ast]
+            [tech.ml.protocols.dataset :as ds-prot])
   (:import [clojure.lang Named]))
 
 ;; helpers
@@ -16,12 +17,11 @@
   (map #(some-> % f) xs))
 
 ;; all binary operators as set of strings
-(def binary-operators #{"$" "=" "<<-" "<-" "+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">" "%in%" "%%" "**"})
-(def binary-operators-flat #{"=" "<<-" "<-" "$"})
+(def binary-operators #{"$" "=" "<<-" "<-" "+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">" "**"})
+(def binary-operators-flat #{"=" "<<-" "<-" "$" "%>%"})
+(def binary-exclusions #{})
 (def unary-operators #{"+" "-"})
 (def wrapped-operators #{"+" "-" "/" "*" "&" "&&" "|" "||" "==" "!=" "<=" ">=" "<" ">"})
-
-
 
 (declare form->ast)
 
@@ -80,7 +80,7 @@
               (let [f1-ast (form->ast f1 ctx)]
                 (if-not fr
                   (if (unary-operators f)
-                    [:ast/unary-funcall f f1-ast]
+                    [:ast/unary-funcall f [:ast/parens f1-ast]]
                     f1-ast)
                   (reduce (fn [a1 a2] (maybe-wrap
                                        [:ast/binary-funcall
@@ -113,7 +113,9 @@
 
   Used for forms that are seqs where the first argument is a symbol."
   [f args ctx]
-  (if (binary-operators f)
+  (if (and (or (binary-operators f)
+               (re-matches #"^%.*%$" f))
+           (not (binary-exclusions f)))
     (if (binary-operators-flat f)
       (with-ctx [:flat] (binary-or-unary-call->ast f args ctx))
       (binary-or-unary-call->ast f args ctx))
@@ -218,7 +220,7 @@
 (defn vector->ast
   "Construct the AST corresponding to an R vector (using the `c` function.)
 
-  When the first element is a coersion symbol starting with `:!`, values are coerced to the required type.
+  When the first element is a coersion symbol starting with `:!`, values are coerced to the required type or create special structure not available in clojure (like partially named list or datetime).
   When the number of elements is big enough, the data is converted to an R object AST.
 
   `nil` is converted to `NA`"
@@ -244,6 +246,10 @@
             [(vector->ast r ctx)]
             ctx :plain)
       :!call (seq-form->ast r ctx)
+      :!wrap (-> r
+                 first
+                 (form->ast ctx)
+                 ->parens-ast)
       (if (< (count v-form) 80)
         (->function-call-ast
          'c v-form ctx :recurse-args)
@@ -335,14 +341,16 @@
                                                 :tree
                                                 (form->ast ctx))
      (instance? vrksasana.tree.Tree form) (ast/->dep-ast form)
+     (satisfies? ds-prot/PColumnarDataset form) (ast/->data-dep-ast form)
      (map? form) (map->ast form ctx) ;; map goes to a list
      (string? form) [:ast/string form]
-     (integer? form) form ;; int is treated literally
+     (integer? form) [:ast/integer form] ;; int is treated literally
      (rational? form) [:ast/parens form] ;; rational is wrapped in in case of used in calculations
-     (number? form) form ;; other numbers are treated literally
+     (number? form) [:ast/number form] ;; other numbers are treated literally
      (boolean? form) [:str/boolean form]
      (nil? form) (nil->ast ctx)
      (inst? form) [:ast/datetime form]
+     (instance? java.time.temporal.Temporal form) [:ast/temporal form]
      (instance? Named form) (name form)
      :else (ast/->data-dep-ast form))))
 

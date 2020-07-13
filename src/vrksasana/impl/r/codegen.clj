@@ -2,12 +2,10 @@
   (:require [clojure.walk :as walk]
             [clojure.string :as string]
             [vrksasana.catalog :as catalog]
-            [vrksasana.ground :as ground]))
+            [vrksasana.ground :as ground]
+            [clojisr.v1.impl.types :as t]))
 
-;; helpers
-
-;; Convert instant to date/time R string
-(defonce ^:private dt-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss"))
+(set! *warn-on-reflection* true)
 
 ;; working with ASTs
 
@@ -18,6 +16,15 @@
               (-> f namespace some?)))))
 
 (declare ast->code)
+
+(defn double->code
+  "Convert double with Infinity/NaN awerness"
+  [^double in]
+  (cond
+    (Double/isFinite in) (str in)
+    (Double/isNaN in)    "NaN"
+    (pos? in)            "Inf"
+    :else                "-Inf"))
 
 (defn astnode->code [[nodekind
                       & [body-first & body-rest :as body]]]
@@ -39,10 +46,14 @@
                               ((fn [[f a]]
                                  (format "%s%s" f a))))
       "string"           (format "\"%s\"" body-first) ;; wrapping with double quotes
+      "integer"          (str body-first "L")
+      "number"           (double->code body-first) 
       "named-arg"        (format "%s=%s"
                                  body-first
                                  (-> body second ast->code))
-      "datetime"         (format "'%s'" (.format dt-format body-first))
+      ;; date/time just as string, to be converted to time by the user
+      "datetime"         (format "'%s'" (t/->str body-first))
+      "temporal"         (format "'%s'" (t/->str body-first))
       "regular-symbol"   (ast->code body-first)
       "qualified-symbol" (str (ast->code body-first)
                               "::"
@@ -50,7 +61,8 @@
       "backtick"         (str "`" body-first "`")
       "block"            (->> body-first
                               (map ast->code)
-                              (string/join ";"))
+                              (string/join ";")
+                              (format "{%s}"))
       "for-loop"         (->> body
                               (take 3)
                               (map ast->code)
