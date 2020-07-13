@@ -1,7 +1,6 @@
 (ns vrksasana.season
   (:require [vrksasana.ground :as ground]
-            [vrksasana.catalog :as catalog]
-            [clojisr.v1.protocols]))
+            [vrksasana.catalog :as catalog]))
 
 (defprotocol PSeason
   (eval-code [this code])
