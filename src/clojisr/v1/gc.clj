@@ -5,10 +5,17 @@
 
 (ns clojisr.v1.gc
   (:import [java.util.concurrent ConcurrentHashMap ConcurrentLinkedDeque]
-           [java.lang.ref ReferenceQueue]
-           [tech.resource GCReference]))
+           [java.lang.ref ReferenceQueue WeakReference]))
 
 (set! *warn-on-reflection* true)
+
+(defn gcreference
+  [item queue dispose-fn]
+  (proxy [WeakReference Runnable] [item queue]
+    (run []
+      (locking this
+        (when dispose-fn
+          (dispose-fn this))))))
 
 (defonce ^:dynamic *stack-gc-context* nil)
 (defn stack-context
@@ -27,9 +34,9 @@
 
 (defn track
   [item dispose-fn]
-  (let [ptr-val (GCReference. item (reference-queue) (fn [ptr-val]
-                                                       (.remove (ptr-set) ptr-val)
-                                                       (dispose-fn)))
+  (let [ptr-val (gcreference item (reference-queue) (fn [ptr-val]
+                                                      (.remove (ptr-set) ptr-val)
+                                                      (dispose-fn)))
         ^ConcurrentLinkedDeque stack-context (stack-context)]
     ;;We have to keep track of the pointer.  If we do not the pointer gets gc'd then
     ;;it will not be put on the reference queue when the object itself is gc'd.
