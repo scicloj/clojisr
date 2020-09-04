@@ -42,7 +42,7 @@ The related problem, of calling Clojure from R, may be addressed too in the futu
 
   * Convenient wrappers for common use cases, such as visualization (Status: basic support for plots and Rmarkdown)
  
-  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: GNU R is supported through Rserve; Renjin has some basic support)
+  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: GNU R is supported through Rserve; Renjin has some basic support, moved to a separate library [ClojisRenjin](missing-link))
 
   * Convenient multi-session support (Status: basic support with some known issues)
 
@@ -125,8 +125,6 @@ Note however that:
 * [Intro](https://scicloj.github.io/clojisr/doc/clojisr/v1/tutorial-test/)
 
 * [A tutorial about generating R code from Clojure](https://scicloj.github.io/clojisr/doc/clojisr/v1/codegen-test/)
-
-* [Renjin backend](https://scicloj.github.io/clojisr/doc/clojisr/v1/renjin-test/)
 
 * [Titanic tutorial #0](https://scicloj.github.io/clojisr/doc/clojisr/v1/titanic0-test/)
 
