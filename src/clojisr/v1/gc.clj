@@ -13,8 +13,8 @@
   [item queue dispose-fn]
   (proxy [WeakReference Runnable] [item queue]
     (run []
-      (locking this
-        (when dispose-fn
+      (when dispose-fn
+        (locking this
           (dispose-fn this))))))
 
 (defonce ^:dynamic *stack-gc-context* nil)
