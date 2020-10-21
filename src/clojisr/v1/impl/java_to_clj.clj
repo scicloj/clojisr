@@ -1,11 +1,10 @@
 (ns clojisr.v1.impl.java-to-clj
-  (:require [tech.ml.dataset :as ds]
-            [tech.ml.dataset.column :as col]
-            [tech.v2.datatype :refer [->reader]]
+  (:require [tech.v3.dataset :as ds]
+            [tech.v3.dataset.column :as col]
+            [tech.v3.datatype :refer [->reader]]
 
-            [clojure.math.combinatorics :refer [cartesian-product]]
             [clojisr.v1.impl.protocols :as prot]
-            [clojisr.v1.impl.common :refer [tsp->reader first-step->java java->column]]))
+            [clojisr.v1.impl.common :refer [tsp->reader first-step->java java->column cartesian-product]]))
 
 (set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
@@ -63,7 +62,7 @@
   (let [cnt (count rest-names)]
     (->> rest-names
          (reverse)
-         (apply cartesian-product)
+         (cartesian-product)
          (map (fn [names]
                 (mapcat (fn [^long id n]
                           [(repeat rows n)
@@ -89,7 +88,7 @@
                    row-names (conj row-names :$row.names) ;; add row-names if available
                    extra-cols (add-additional-columns extra-cols) ;; maybe there is something else (mts case)
                    :always (->> (apply array-map) ;; convert to datasets
-                                (ds/name-values-seq->dataset))))
+                                (ds/->dataset))))
                (concat additional-cols (repeat nil)))
           (apply ds/concat)))))
 
@@ -127,7 +126,7 @@
         cols (->> dimnames
                   (vals)
                   (reverse)
-                  (apply cartesian-product)
+                  (cartesian-product)
                   (map reverse)
                   (map #(apply array-map (interleave %1 %2)) (repeat (keys dimnames))))]
     (ds/->dataset (map #(assoc %1 :$value %2) cols (prot/->clj exp)))))

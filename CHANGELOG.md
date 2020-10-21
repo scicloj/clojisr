@@ -2,12 +2,13 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [1.0.0-BETA16-SNAPSHOT] 
-- updated the tech.ml.dataset version
+- updated the tech.ml.dataset version (latest 5.0 alpha)
 - removed the Specter dependency
 - removed Renjin -- it will be supported in a separate library -- discussion [here](https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/removing.20dependencies)
 - ADDED vrksasna draft for session management
 - a very minor extension of clojisr internals to support that
 - removed GCReference (and tech.resource dependency) - replaced by `proxy` object.
+- added clojure.async latest dependency
 
 ## [1.0.0-BETA15] - 2020-07-12
 - [hot fix] datasets are not transfered as `data.frame` due to implementation of `map` interfaces in t.m.ds 3.01

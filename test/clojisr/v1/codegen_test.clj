@@ -1,7 +1,6 @@
 (ns clojisr.v1.codegen-test
   (:require [notespace.v2.note :as note
              :refer [note note-void note-md]]
-            [tech.ml.dataset :as dataset]
             [notespace.v2.live-reload]))
 
 (note-md "# R code generation from the Clojure forms")
@@ -22,7 +21,8 @@ First, require the necessary namespaces.")
 (note-md "Also, let us make sure we are using a clean session.")
 
 (note-void (require '[clojisr.v1.r :as r :refer [r ->code r->clj]]
-                    '[notespace.v2.note :refer [check]]))
+                    '[notespace.v2.note :refer [check]]
+                    '[tech.v3.dataset :as dataset]))
 
 (note-void
  (r/set-default-session-type! :rserve)
@@ -292,8 +292,8 @@ First, require the necessary namespaces.")
 (note (->> (r/->code '(rsymbol "package with spaces" name)) (check = "`package with spaces`::name")))
 
 (note (->> ((r/rsymbol 'base 'mean) [1 2 3 4]) r->clj (check = [2.5])))
-(note (->> ((r/rsymbol "[") 'iris 1) r->clj dataset/->flyweight first :Sepal.Length (check = 5.1)))
-(note (->> ((r/rsymbol 'base "[") 'iris 1) r->clj dataset/->flyweight first :Sepal.Length (check = 5.1)))
+(note (->> ((r/rsymbol "[") 'iris 1) r->clj dataset/mapseq-reader first :Sepal.Length (check = 5.1)))
+(note (->> ((r/rsymbol 'base "[") 'iris 1) r->clj dataset/mapseq-reader first :Sepal.Length (check = 5.1)))
 
 (note-md "All `bra...` functions accept `nil` or `empty-symbol` to mark empty selector.")
 

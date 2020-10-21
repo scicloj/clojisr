@@ -1,10 +1,10 @@
 (ns clojisr.v1.impl.clj-to-java
   (:require [clojisr.v1.impl.protocols :as prot]
             [clojisr.v1.impl.types :as types]
-            [tech.ml.protocols.dataset :as ds-prot]
-            [tech.ml.dataset.column :as col]
-            [tech.ml.dataset :as dataset]
-            [tech.v2.datatype :as dtype])
+            [tech.v3.protocols.dataset :as ds-prot]
+            [tech.v3.dataset.column :as col]
+            [tech.v3.dataset :as dataset]
+            [tech.v3.datatype :as dtype])
   (:import [clojisr.v1.robject RObject]))
 
 (set! *warn-on-reflection* true)

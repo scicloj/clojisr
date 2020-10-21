@@ -1,7 +1,7 @@
 (ns vrksasana.impl.r.astgen
   (:require [vrksasana.util]
             [vrksasana.ast :as ast]
-            [tech.ml.protocols.dataset :as ds-prot])
+            [tech.v3.protocols.dataset :as ds-prot])
   (:import [clojure.lang Named]))
 
 ;; helpers

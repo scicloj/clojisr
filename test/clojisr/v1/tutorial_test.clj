@@ -2,7 +2,7 @@
   (:require [notespace.v2.note :as note
              :refer [note note-void note-md note-hiccup note-as-hiccup check]]
             [notespace.v2.live-reload]
-            [tech.ml.dataset :as dataset]
+            [tech.v3.dataset :as dataset]
             [clojisr.v1.r :as r]))
 
 (note-md "# Clojisr tutorial")
@@ -15,7 +15,7 @@
  (require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon require-r]]
           '[clojisr.v1.robject :as robject]
           '[clojisr.v1.session :as session]
-          '[tech.ml.dataset :as dataset]))
+          '[tech.v3.dataset :as dataset]))
 
 (note-md "First, let us make sure that we use the Rserve backend (in case we were using another engine instead earlier), and that there are no R sessions currently running. This is typically not needed if you just started working. Here, we do it just in case.")
 
@@ -135,7 +135,7 @@ Let us create such a dataset, pass it to an R function to compute the row means,
  (let [row-means (r "function(data) rowMeans(data)")]
    (->> {:x [1 2 3]
          :y [4 5 6]}
-        dataset/name-values-seq->dataset
+        dataset/->dataset
         row-means
         r->clj
         (check = [2.5 3.5 4.5]))))
@@ -154,13 +154,14 @@ Let us create such a dataset, pass it to an R function to compute the row means,
        add-z-column (r "function(data) mutate(data, z=x+y)")]
    (->> {:x [1 2 3]
          :y [4 5 6]}
-        dataset/name-values-seq->dataset
+        dataset/->dataset
+
         filter-by-x
         add-z-column
         r->clj
         (check (fn [d]
                  (-> d
-                     dataset/->flyweight
+                     dataset/mapseq-reader
                      (= [{:x 2 :y 5 :z 7}
                          {:x 3 :y 6 :z 9}])))))))
 
@@ -181,7 +182,7 @@ Let us create such a dataset, pass it to an R function to compute the row means,
          :x [1 2 3]
          :y [4 5 6])
         r->clj
-        dataset/->flyweight
+        dataset/mapseq-reader
         (check = [{:x 1 :y 4}
                   {:x 2 :y 5}
                   {:x 3 :y 6}]))))
@@ -365,7 +366,7 @@ this time generating code rather than writing it as Strings.")
  (let [row-means (r '(function [data] (rowMeans data)))]
    (->> {:x [1 2 3]
          :y [4 5 6]}
-        dataset/name-values-seq->dataset
+        dataset/->dataset
         row-means
         r->clj
         (check = [2.5 3.5 4.5]))))
@@ -378,7 +379,7 @@ this time generating code rather than writing it as Strings.")
        add-z-column (r '(function [data] (mutate data (= z (+ x y)))))]
    (->> {:x [1 2 3]
          :y [4 5 6]}
-        dataset/name-values-seq->dataset
+        dataset/->dataset
         filter-by-x
         add-z-column
         r->clj)))
@@ -462,7 +463,7 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
                x
                (repeatedly 99 rand))]
     (-> {:x x :y y}
-        dataset/name-values-seq->dataset
+        dataset/->dataset
         (ggplot (aes :x x
                      :y y
                      :color '(+ x y)
@@ -587,13 +588,11 @@ To stress this, we write it explicitly in the following examples.")
       r
       r->java
       java->clj
-      dataset/->flyweight
-      (check = [{1 "1", :$value 2, 0 "a"}
-                {1 "1", :$value 2, 0 "b"}
-                {1 "2", :$value 1, 0 "a"}
-                {1 "2", :$value 1, 0 "b"}
-                {1 "3", :$value 1, 0 "a"}
-                {1 "3", :$value 1, 0 "b"}])))
+      dataset/mapseq-reader
+      set
+      (check = #{{0 "a", 1 "2", :$value 2} {0 "b", 1 "3", :$value 1}
+                 {0 "a", 1 "1", :$value 2} {0 "a", 1 "3", :$value 1}
+                 {0 "b", 1 "2", :$value 1} {0 "b", 1 "1", :$value 1}})))
 
 (note
  (->> {:a [1 2] :b "hi!"}

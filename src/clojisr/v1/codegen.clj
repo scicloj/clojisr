@@ -5,7 +5,7 @@
             [clojisr.v1.impl.types :as t]
             [clojisr.v1.robject]
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
-            [tech.ml.protocols.dataset :as ds-prot])
+            [tech.v3.protocols.dataset :as ds-prot])
   (:import [clojure.lang Named]
            [clojisr.v1.robject RObject]))
 

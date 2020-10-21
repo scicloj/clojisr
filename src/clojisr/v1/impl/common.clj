@@ -1,8 +1,8 @@
 (ns clojisr.v1.impl.common
   (:require [clojisr.v1.impl.protocols :as prot]
-            [tech.v2.datatype :refer [->reader]]
-            [tech.v2.datatype.functional :refer [argfilter]]
-            [tech.ml.dataset.column :refer [new-column]]))
+            [tech.v3.datatype :refer [->reader]]
+            [tech.v3.datatype.argops :refer [argfilter]]
+            [tech.v3.dataset.column :refer [new-column]]))
 
 (set! *warn-on-reflection* true)
 
@@ -165,3 +165,13 @@
 (defn java->column
   [exp name]
   (prot/->column (first-step->java exp) name))
+
+;; cartesian product
+
+(defn cartesian-product [colls]
+  (if (empty? colls)
+    '(())
+    (for [more (cartesian-product (rest colls))
+          x (first colls)]
+      (conj more x))))
+
