@@ -1,6 +1,5 @@
 (ns clojisr.v1.util
-  (:require [com.rpl.specter :as specter]
-            [clojure.string :as string])
+  (:require [clojure.string :as string])
   (:import [java.io File]))
 
 (set! *warn-on-reflection* true)
@@ -22,22 +21,6 @@
            (-> form count (= 1)))
     (first form)
     form))
-
-(defn fmap
-  "fmap updates the values of a given map
-  using a given function.
- 
-  (->> {:a 1
-        :b 2}
-       (fmap inc))
-  => {:a 2
-      :b 3}"
-  {:added "0.1"}
-  [f m]
-  (specter/transform [specter/MAP-VALS]
-                     f
-                     m))
-
 
 (defn starts-with?
   "starts-with? checks if a given object s

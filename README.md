@@ -42,7 +42,7 @@ The related problem, of calling Clojure from R, may be addressed too in the futu
 
   * Convenient wrappers for common use cases, such as visualization (Status: basic support for plots and Rmarkdown)
  
-  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: GNU R is supported through Rserve; Renjin has some basic support)
+  * Abstraction over different runtimes (GNUR R, Renjin, FastR) (Status: GNU R is supported through Rserve; Renjin has some basic support, moved to a separate library [ClojisRenjin](missing-link))
 
   * Convenient multi-session support (Status: basic support with some known issues)
 
@@ -84,13 +84,13 @@ The Dockerfile of the template adds as well python + libpython-clj for completen
 
 So it has in a single place all dependencies and they do work together and no further setup is required.
 
-* R: 4.0.0
+* R: 4.0.2
 * RServe: latest from rforge.net
-* python: 3.8.2
+* python: 3.8.5
 * java:  openjdk 11
 * clojure: 1.10.1
 * clj-python/libpython-clj 1.45
-* scicloj/clojisr 1.0.0-BETA11
+* scicloj/clojisr 1.0.0-BETA15
 * cider-nrepl 0.25.2
 
 ## Checking if it works
@@ -125,8 +125,6 @@ Note however that:
 * [Intro](https://scicloj.github.io/clojisr/doc/clojisr/v1/tutorial-test/)
 
 * [A tutorial about generating R code from Clojure](https://scicloj.github.io/clojisr/doc/clojisr/v1/codegen-test/)
-
-* [Renjin backend](https://scicloj.github.io/clojisr/doc/clojisr/v1/renjin-test/)
 
 * [Titanic tutorial #0](https://scicloj.github.io/clojisr/doc/clojisr/v1/titanic0-test/)
 

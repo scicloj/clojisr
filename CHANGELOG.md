@@ -2,7 +2,10 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## [1.0.0-BETA16-SNAPSHOT] 
-- added vrksasna draft for session management
+- updated the tech.ml.dataset version
+- removed the Specter dependency
+- removed Renjin -- it will be supported in a separate library -- discussion [here](https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/removing.20dependencies)
+- ADDED vrksasna draft for session management
 - a very minor extension of clojisr internals to support that
 - removed GCReference (and tech.resource dependency) - replaced by `proxy` object.
 

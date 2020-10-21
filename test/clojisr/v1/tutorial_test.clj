@@ -17,7 +17,7 @@
           '[clojisr.v1.session :as session]
           '[tech.ml.dataset :as dataset]))
 
-(note-md "First, let us make sure that we use the Rserve backend (in case we were using Renjin instead earlier), and that there are no R sessions currently running. This is typically not needed if you just started working. Here, we do it just in case.")
+(note-md "First, let us make sure that we use the Rserve backend (in case we were using another engine instead earlier), and that there are no R sessions currently running. This is typically not needed if you just started working. Here, we do it just in case.")
 
 (note-void
  (r/set-default-session-type! :rserve)
@@ -739,21 +739,5 @@ Now, we see some arguments that do have default values.")
           :ns r.base}
          {:arglists ([x]), :name sin, :ns r.base}
          {:arglists ([& {:keys [... na.rm]}]), :name sum, :ns r.base}))))
-
-(note-md :using-Renjin
-         "## Using Renjin")
-
-(note-md "In the followint example, we use a differnt R backend (the pure JVM Renjin) for reading a csv, without changing the default backend (which is the usual R using Rserve).")
-
-(note
- (let [path "/tmp/data.csv"]
-   (spit path "a,b,c\n1,2,3\n4,5,6\n")
-   (-> `(read.csv ~path)
-       (r :session-args {:session-type :renjin})
-       (r/r->clj)
-       (dataset/drop-columns [:$row.names])
-       (dataset/->flyweight)
-       (->> (check = [{:a 1, :b 2, :c 3}
-                      {:a 4, :b 5, :c 6}])))))
 
 (comment (notespace.v2.note/compute-this-notespace!))
