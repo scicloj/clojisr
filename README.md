@@ -14,6 +14,12 @@ The beginning of the pronunciation is the same as Clojure, but then it rhymes wi
 - not recommended for production yet
 - already used by several people in their data science explorations
 
+## Clojurists Together
+
+**Hurray!**
+
+We are happy to announce that `ClojisR` is selected by [Clojurists Together in Q4 2020](https://www.clojuriststogether.org/news/q4-2020-funding-announcement/)! Expect more information soon. 
+
 ## Scope of the project
 
 Libraries for Clojure-R interop are not new - see [this list](doc/existing_libraries.md).
@@ -98,8 +104,7 @@ So it has in a single place all dependencies and they do work together and no fu
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
 
 ```clj
-$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA15"}}
-               :mvn/repos {"bedatadriven" {:url "https://nexus.bedatadriven.com/content/groups/public/"}}}'
+$ clj -Sdeps '{:deps {scicloj/clojisr {:mvn/version "1.0.0-BETA16"}}}'
 Clojure 1.10.1
 user=> (require '[clojisr.v1.r :refer [r]])
 
