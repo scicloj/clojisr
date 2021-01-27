@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA17 - 2020-01-27]
+- updating the tech.ml.dataset dependency to version "5.00-beta-27"
+
 ## [1.0.0-BETA16]
 - updated the tech.ml.dataset version (latest 5.0 beta)
 - removed the Specter dependency
