@@ -28,7 +28,7 @@
   [(col/column-name col)
    (if (col/missing col)
      (seq col)
-     (dtype/->array-copy col))])
+     (dtype/->array col))])
 
 (defn ->data-frame
   [session dataset]
