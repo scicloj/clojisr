@@ -1,6 +1,9 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA19 - 2020-04-05]
+- depdendency updates (clojure: "1.10.2", tech.ml.dataset: "5.15")
+
 ## [1.0.0-BETA18 - 2020-02-19]
 - updating the tech.ml.dataset dependency to version "5.00-beta-28" (minor adaptation was required)
 
