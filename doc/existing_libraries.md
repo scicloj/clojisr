@@ -26,3 +26,5 @@ They differ in in several aspects: (a) the API and syntactic sugar offered; (b) 
 
 * [graalvm-interop](https://github.com/davidpham87/graalvm-rinterop) is an **active** project by David Pham, that allows to interoperate with [FastR](https://github.com/oracle/fastr) at [GraalVM](https://www.graalvm.org).
 
+* [rcaller](https://github.com/jbytecode/rcaller) is a Java library primarily for calling R from within Java. ```rcaller``` creates an R process, sends R data structures and codes to R process, and gets back the results in XML format. Sequential calls are processed using a single process. The package is also suitable for the other JVM languages including Clojure. Here is an [example usage](https://github.com/jbytecode/rcaller/blob/master/markdown/clojure.md). It is also citable using this [journal paper](https://joss.theoj.org/papers/10.21105/joss.02722).
+
