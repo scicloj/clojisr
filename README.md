@@ -90,15 +90,6 @@ The Dockerfile of the template adds as well python + libpython-clj for completen
 
 So it has in a single place all dependencies and they do work together and no further setup is required.
 
-* R: 4.0.2
-* RServe: latest from rforge.net
-* python: 3.8.5
-* java:  openjdk 11
-* clojure: 1.10.1
-* clj-python/libpython-clj 1.45
-* scicloj/clojisr 1.0.0-BETA15
-* cider-nrepl 0.25.2
-
 ## Checking if it works
 
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
