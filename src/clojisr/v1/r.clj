@@ -195,3 +195,24 @@
 (defonce ^:private shutdown-hook-registered
   (do (.addShutdownHook (Runtime/getRuntime) (Thread. #(locking session/sessions (discard-all-sessions))))
       true))
+
+
+(defn help
+  "Gets help for an R object or function"
+  ([r-object]
+   (let [symbol (second  (re-find #"\{(.*)\}" (:code r-object)))
+         split (string/split symbol #"::")]
+
+     (help (second split) (first split))))
+
+  ([function package]
+   (->>
+    (r (format  "capture.output(tools:::Rd2txt(utils:::.getHelpFile(as.character(help(%s,%s))), options=list(underline_titles=FALSE)))" (name function) (name package)))
+    r->clj
+    (string/join "\n"))))
+
+
+(defn print-help
+  "Prints help for an R object or function"
+  ([r-object] (println (help r-object)))
+  ([function package] (println (help function package))))
