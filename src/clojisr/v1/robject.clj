@@ -1,6 +1,5 @@
-(ns clojisr.v1.robject)
-
-(set! *warn-on-reflection* true)
+(ns clojisr.v1.robject
+  (:require [zprint.core]))
 
 ;; Since IFn is an interface, not a protocol, we need to implement it here.
 ;; To do that, we need to resolve something from another namespace,

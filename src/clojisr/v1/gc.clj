@@ -7,8 +7,6 @@
   (:import [java.util.concurrent ConcurrentHashMap ConcurrentLinkedDeque]
            [java.lang.ref ReferenceQueue WeakReference]))
 
-(set! *warn-on-reflection* true)
-
 (defn gcreference
   [item queue dispose-fn]
   (proxy [WeakReference Runnable] [item queue]

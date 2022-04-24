@@ -10,8 +10,6 @@
            [java.awt.image BufferedImage]
            [javax.swing ImageIcon]))
 
-(set! *warn-on-reflection* true)
-
 (require-r '[grDevices])
 
 (def ^:private files->fns (let [devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp])]

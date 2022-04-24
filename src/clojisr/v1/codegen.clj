@@ -9,8 +9,6 @@
   (:import [clojure.lang Named]
            [clojisr.v1.robject RObject]))
 
-(set! *warn-on-reflection* true)
-
 ;; Add context to a call, used to change formatting behaviour in certain cases
 (defmacro ^:private with-ctx
   [c & r]

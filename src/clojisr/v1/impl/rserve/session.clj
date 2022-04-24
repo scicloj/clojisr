@@ -12,8 +12,6 @@
   (:import [org.rosuda.REngine.Rserve RConnection]
            [java.io BufferedReader]))
 
-(set! *warn-on-reflection* true)
-
 (def defaults
   (atom
    {:host "localhost"
@@ -46,17 +44,17 @@
     (close! session))
   (closed? [session]
     (not (active?-or-close! session)))
-  (id [session]
+  (id [_session]
     id)
-  (session-args [session]
+  (session-args [_session]
     session-args)
-  (desc [session]
+  (desc [_session]
     session-args)
   (eval-r->java [session code]
     (log/debug [::eval-r->java {:code code
                                 :session-args (:session-args session)}])
     (call/try-eval-catching-errors code r-connection))
-  (java->r-set [session varname java-obj]
+  (java->r-set [_session varname java-obj]
     ;; Unlike (.assign r-connection ...), the following approach
     ;; allows for a varname like "abc$xyz".
     (locking r-connection

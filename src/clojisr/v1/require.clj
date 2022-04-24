@@ -9,8 +9,6 @@
             [clojisr.v1.impl.java-to-clj :refer [java->clj]]
             [clojure.tools.logging.readable :as log]))
 
-(set! *warn-on-reflection* true)
-
 (defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
                  (name package-symbol)

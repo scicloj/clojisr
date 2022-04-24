@@ -4,8 +4,6 @@
             [tech.v3.datatype.argops :refer [argfilter]]
             [tech.v3.dataset.column :refer [new-column]]))
 
-(set! *warn-on-reflection* true)
-
 (defn strange-name?
   "Is a given name invalid for a Clojure symbol or keyword?"
   [aname]
@@ -140,7 +138,7 @@
       prot/FactorProto
       (levels [_] (rest levels))
       (indexes [_] (seq ids))
-      (counts [obj] @freqs)
+      (counts [_] @freqs)
       prot/RProto
       (attribute [_ attr] (prot/attribute obj attr))
       (attribute-names [_] (prot/attribute-names obj))

@@ -4,8 +4,6 @@
             [clojisr.v1.refresh :as refresh]
             [clojure.pprint :as pp]))
 
-(set! *warn-on-reflection* true)
-
 (defn r-object->string-to-print
   ^String [obj]
   (if (refresh/fresh-object? obj)
