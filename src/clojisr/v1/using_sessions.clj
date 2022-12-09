@@ -9,8 +9,6 @@
             [clojure.tools.logging.readable :as log])
   (:import clojisr.v1.robject.RObject))
 
-(set! *warn-on-reflection* true)
-
 (defn random-object-name []
   (str mem/session-env "$" (util/rand-name)))
 

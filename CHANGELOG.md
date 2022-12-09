@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0-BETA20 - unreleased]
+- dependencies update (all libraries)
+- REngine updated (by using https://github.com/scicloj/clojisr-rengine)
+- `warn-on-reflection` removed
+
 ## [1.0.0-BETA19 - 2020-04-05]
 - depdendency updates (clojure: "1.10.2", tech.ml.dataset: "5.15")
 

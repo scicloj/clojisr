@@ -12,7 +12,6 @@
 ;; REXP -> Clojure
 ;;;;;;;;;;;;;;;;;;;;
 
-(set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 
 (defn rexp? [exp] (instance? REXP exp))
@@ -21,9 +20,9 @@
   prot/RProto
   (attribute [exp attr] (some-> (.getAttribute ^REXP exp ^String attr) prot/->clj))
   (attributes [exp] (some-> (._attr ^REXP exp) prot/->clj))
-  (set-attributes! [exp m] (do
-                             (.putAll (.asList (._attr ^REXP exp)) ^java.util.Map m)
-                             exp))
+  (set-attributes! [exp m]
+    (.putAll (.asList (._attr ^REXP exp)) ^java.util.Map m)
+    exp)
   (attribute-names [exp] (seq (.keys (.asList (._attr ^REXP exp)))))
   (inherits? [exp clss] (.inherits ^REXP exp ^String clss))
   prot/NAProto

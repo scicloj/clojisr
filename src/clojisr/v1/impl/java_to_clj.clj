@@ -6,7 +6,6 @@
             [clojisr.v1.impl.protocols :as prot]
             [clojisr.v1.impl.common :refer [tsp->reader first-step->java java->column cartesian-product]]))
 
-(set! *warn-on-reflection* true)
 (set! *unchecked-math* :warn-on-boxed)
 
 ;; regular timeseries

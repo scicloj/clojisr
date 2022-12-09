@@ -6,8 +6,6 @@
                                REngineException REXPMismatchException)
            (org.rosuda.REngine.Rserve RConnection)))
 
-(set! *warn-on-reflection* true)
-
 (defn rexp-symbol
   ^REXP [name]
   (REXPSymbol. name))
