@@ -13,14 +13,19 @@
 (set! *warn-on-reflection* true)
 
 (require-r '[grDevices])
-(require-r '[svglite])
 
-(def ^:private files->fns
- (-> (let [devices (select-keys (ns-publics 'r.grDevices) '[pdf png jpeg tiff bmp])]
-       (if-let [jpg (get devices 'jpeg)]
-         (assoc devices 'jpg jpg)
-         devices))
-     (assoc 'svg #'r.svglite/svglite)))
+(def files->fns (atom
+                 (let [devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp])]
+                  (if-let [jpg (get devices 'jpeg)]
+                    (assoc devices 'jpg jpg)
+                    devices))))
+
+
+(defn use-svglite! []
+  (swap! files->fns
+         (fn [m]
+           (assoc m
+                  'svg (requiring-resolve 'r.svglite/svglite)))))
 
 
 (def ^:private r-print (r "print")) ;; avoid importing `base` here
