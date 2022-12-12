@@ -3,8 +3,6 @@
             [clojure.string :as string])
   (:import (org.rosuda.REngine REXP)))
 
-(set! *warn-on-reflection* true)
-
 (defn print-to-string
   [session r-obj]
   (let [^REXP output (->> (:object-name r-obj)

@@ -10,8 +10,6 @@
            [java.awt.image BufferedImage]
            [javax.swing ImageIcon]))
 
-(set! *warn-on-reflection* true)
-
 (require-r '[grDevices])
 
 (def files->fns (atom

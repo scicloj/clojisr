@@ -2,8 +2,6 @@
   (:require [clojure.string :as string])
   (:import [java.io File]))
 
-(set! *warn-on-reflection* true)
-
 (defn first-if-one
   "Given a vector with a single element, first-if-one extracts that element; acts as identity otherwise.
   
@@ -73,7 +71,7 @@
 (defn lines-reducible
   [^java.io.BufferedReader rdr]
   (reify clojure.lang.IReduceInit
-    (reduce [this f init]
+    (reduce [_ f init]
       (try
         (loop [state init]
           (if (reduced? state)

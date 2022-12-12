@@ -1,7 +1,5 @@
 (ns clojisr.v1.robject)
 
-(set! *warn-on-reflection* true)
-
 ;; Since IFn is an interface, not a protocol, we need to implement it here.
 ;; To do that, we need to resolve something from another namespace,
 ;; that we cannot depend upon (to avoid circular dependency).
@@ -334,6 +332,7 @@
 
 (comment
   ;; Generating this code
+  (:require [zprint.core])
   (zprint.core/zprint
    (concat
     '(defrecord RObject [object-name session code]
@@ -343,9 +342,9 @@
     (for [i   (range 21)
           :let [args (for [j (range i)]
                        (symbol (str "arg" j)))]]
-     (list 'invoke
-           (into ['this] args)
-           (concat '((function this)) args)))
+      (list 'invoke
+            (into ['this] args)
+            (concat '((function this)) args)))
     [(let [args (concat (for [j (range 20)]
                           (symbol (str "arg" j)))
                         ['arg20-obj-array])]
