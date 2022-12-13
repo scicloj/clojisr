@@ -18,13 +18,9 @@
                     (assoc devices 'jpg jpg)
                     devices))))
 
-
 (defn use-svglite! []
   (swap! files->fns
-         (fn [m]
-           (assoc m
-                  'svg (requiring-resolve 'r.svglite/svglite)))))
-
+         assoc 'svg (requiring-resolve 'r.svglite/svglite)))
 
 (def ^:private r-print (r "print")) ;; avoid importing `base` here
 
@@ -32,8 +28,8 @@
   [^String filename plotting-function-or-object & device-params]
   (let [apath (.getAbsolutePath (File. filename))
         extension (symbol (or (second (re-find #"\.(\w+)$" apath)) :no))
-        device (files->fns extension)]
-    (if-not (contains? files->fns extension)
+        device (@files->fns extension)]
+    (if-not (contains? @files->fns extension)
       (log/warn [::plot->file {:message (format "%s filetype is not supported!" (name extension))}])
       (try
         (make-parents filename)
