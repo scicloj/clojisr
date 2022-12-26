@@ -1,5 +1,5 @@
 (ns clojisr.v1.applications.plotting
-  (:require [clojisr.v1.r :refer [r]]
+  (:require [clojisr.v1.r :refer [r r->clj rsymbol]]
             [clojisr.v1.util :refer [exception-cause]]
             [clojisr.v1.require :refer [require-r]]
             [clojure.tools.logging.readable :as log]
@@ -14,11 +14,16 @@
 
 (def ^:private files->fns (let [devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp])]
                             (if-let [jpg (get devices 'jpeg)]
-                              (assoc devices 'jpg jpg)
+                              (let [devices (assoc devices 'jpg jpg)]
+                                (if (-> '(%in% "svglite" (rownames (installed.packages))) ;; check if svglite is available
+                                        (r)
+                                        (r->clj)
+                                        (first))
+                                  (assoc devices 'svg (rsymbol "svglite" "svglite"))
+                                  (do (log/warn [::plotting {:messaage "We highly recommend installing of `svglite` package."}])
+                                      devices)))
                               devices)))
-
 (def ^:private r-print (r "print")) ;; avoid importing `base` here
-
 (defn plot->file
   [^String filename plotting-function-or-object & device-params]
   (let [apath (.getAbsolutePath (File. filename))
