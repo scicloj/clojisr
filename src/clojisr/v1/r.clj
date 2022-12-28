@@ -159,6 +159,14 @@
 
 ;;
 
+(defmacro defr
+  "Create Clojure and R bindings at the same time"
+  [name & r]
+  `(do
+     (def ~name ~@r)
+     ((r "`<-`") '~(symbol name) ~name)
+     '~name))
+
 (defn rsymbol
   "Create RObject representing symbol"
   ([string-or-symbol]

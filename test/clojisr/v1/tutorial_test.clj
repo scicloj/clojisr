@@ -740,3 +740,4 @@ Now, we see some arguments that do have default values.")
          {:arglists ([& {:keys [... na.rm]}]), :name sum, :ns r.base}))))
 
 (comment (notespace.v2.note/compute-this-notespace!))
+

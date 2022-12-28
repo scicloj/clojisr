@@ -1,7 +1,12 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [1.0.0-BETA20 - unreleased]
+## [1.0.0-BETA21 - 2022-12-28]
+- dependencies update
+- plotting to `svg` tries to load `svglite` by default and use it (#86, #69), there is an option to switch between both implementations (default and svglite)
+- `defr` implemented
+
+## [1.0.0-BETA20 - 2022-08-13]
 - dependencies update (all libraries)
 - REngine updated (by using https://github.com/scicloj/clojisr-rengine)
 - `warn-on-reflection` removed
