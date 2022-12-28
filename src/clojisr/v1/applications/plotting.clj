@@ -1,5 +1,5 @@
 (ns clojisr.v1.applications.plotting
-  (:require [clojisr.v1.r :refer [r]]
+  (:require [clojisr.v1.r :refer [r r->clj rsymbol]]
             [clojisr.v1.util :refer [exception-cause]]
             [clojisr.v1.require :refer [require-r]]
             [clojure.tools.logging.readable :as log]
@@ -12,10 +12,30 @@
 
 (require-r '[grDevices])
 
-(def ^:private files->fns (let [devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp])]
-                            (if-let [jpg (get devices 'jpeg)]
-                              (assoc devices 'jpg jpg)
-                              devices)))
+(def files->fns (atom (let [devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp])]
+                        (if-let [jpg (get devices 'jpeg)]
+                          (let [devices (assoc devices 'jpg jpg)]
+                            (if (-> '(%in% "svglite" (rownames (installed.packages))) ;; check if svglite is available
+                                    (r)
+                                    (r->clj)
+                                    (first))
+                              (assoc devices 'svg (rsymbol "svglite" "svglite"))
+                              (do (log/warn [::plotting {:messaage "We highly recommend installing of `svglite` package."}])
+                                  devices)))
+                          devices))))
+
+
+(defn use-svg!
+  "Use from now on build-in svg device for plotting svg."
+  []
+  (swap! files->fns assoc 'svg (get (ns-publics 'r.grDevices) 'svg)))
+
+(defn use-svglite!
+  "Use from now on svglite device for plotting svg.
+  Requires package `svglite` to be installed"
+  []
+  (swap! files->fns assoc 'svg (rsymbol "svglite" "svglite")))
+
 
 (def ^:private r-print (r "print")) ;; avoid importing `base` here
 
@@ -23,8 +43,8 @@
   [^String filename plotting-function-or-object & device-params]
   (let [apath (.getAbsolutePath (File. filename))
         extension (symbol (or (second (re-find #"\.(\w+)$" apath)) :no))
-        device (files->fns extension)]
-    (if-not (contains? files->fns extension)
+        device (@files->fns extension)]
+    (if-not (contains? @files->fns extension)
       (log/warn [::plot->file {:message (format "%s filetype is not supported!" (name extension))}])
       (try
         (make-parents filename)
