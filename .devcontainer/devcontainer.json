@@ -1,0 +1,31 @@
+{
+	"name": "my Clojure app",
+	"build": {
+		"dockerfile": "Dockerfile"
+
+		},
+
+
+    "features": {
+	    	"ghcr.io/devcontainers-contrib/features/clojure-asdf:2": {},
+		"ghcr.io/rocker-org/devcontainer-features/r-apt:0": {}
+
+
+},
+    "forwardPorts": ["12345","7777"],
+	"customizations": {
+		"vscode": {
+			"settings": { 
+			},
+			"extensions": 
+			[
+				"vscjava.vscode-java-pack",
+				"borkdude.clj-kondo",
+				"betterthantomorrow.calva"
+			]
+		}
+	},
+
+	"remoteUser": "vscode",
+	"onCreateCommand": "Rscript -e 'pak::pkg_install(c(\"ranger\",\"randomForest\",\"ggthemes\",\"ggplot2\",\"mice\",\"dplyr\",\"url::https://rforge.net/Rserve/snapshot/Rserve_1.8-12.tar.gz\"))'"
+}
