@@ -1,10 +1,11 @@
 (ns clojisr.v1.impl.clj-to-java
   (:require [clojisr.v1.impl.protocols :as prot]
             [clojisr.v1.impl.types :as types]
-            [tech.v3.protocols.dataset :as ds-prot]
+            [tech.v3.dataset.protocols :as ds-prot]
             [tech.v3.dataset.column :as col]
             [tech.v3.dataset :as dataset]
-            [tech.v3.datatype :as dtype])
+            [tech.v3.datatype :as dtype]
+            [tech.v3.dataset :as ds])
   (:import [clojisr.v1.robject RObject]))
 
 (declare clj->java)
@@ -84,7 +85,7 @@
       ;; we get here if ->primitive-vetor returned nil, which means: no inferrable primitive type
       (cond
         ;; a dataset
-        (satisfies? ds-prot/PColumnarDataset obj) (->data-frame session obj)
+        (ds-prot/is-dataset? obj) (->data-frame session obj)
         
         ;; a map
         (map? obj) (prot/->named-list session

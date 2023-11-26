@@ -1,10 +1,10 @@
 {:deps {org.clojure/clojure {:mvn/version "1.11.1"},
         org.clojure/tools.logging {:mvn/version "1.2.4"},
-        scicloj/tablecloth {:mvn/version "6.103.1"}
-        org.scicloj/clojisr-rengine {:mvn/version "0.1.1"}
+        scicloj/tablecloth {:mvn/version "7.021"}
+        org.scicloj/clojisr-rengine {:mvn/version "0.1.2"}
         ;; org.rosuda.REngine/Rserve {:mvn/version "1.8.1"},
-        hiccup/hiccup {:mvn/version "2.0.0-alpha2"}
-        org.clojure/core.async {:mvn/version "1.5.648"}}
+        hiccup/hiccup {:mvn/version "2.0.0-RC2"}
+        org.clojure/core.async {:mvn/version "1.6.681"}}
  :aliases {:dev {:extra-paths ["resources"]
                  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
                  :extra-deps {scicloj/notespace {:mvn/version "2.0.0-alpha5"}
