@@ -1,6 +1,0 @@
-#!/usr/bin/env bb
-
-(require '[lambdaisland.launchpad :as launchpad])
-
-(launchpad/main {})
-
