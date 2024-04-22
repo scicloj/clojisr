@@ -251,7 +251,7 @@
 
 (deftest
  test69
- (is ((fn* [p1__63637#] (Double/isNaN p1__63637#)) var68)))
+ (is ((fn* [p1__70267#] (Double/isNaN p1__70267#)) var68)))
 
 
 (def
@@ -478,7 +478,7 @@
  var131
  (->code
   (zipmap
-   (map (fn* [p1__63638#] (str "key" p1__63638#)) (range 100))
+   (map (fn* [p1__70268#] (str "key" p1__70268#)) (range 100))
    (range 1000 1100))))
 
 
@@ -487,7 +487,7 @@
  (->
   (r
    (zipmap
-    (map (fn* [p1__63639#] (str "key" p1__63639#)) (range 100))
+    (map (fn* [p1__70269#] (str "key" p1__70269#)) (range 100))
     (range 1000 1100)))
   r->clj
   :key23))
