@@ -2,7 +2,7 @@
 
 (ns dataset
   (:require [scicloj.kindly.v4.kind :as kind]
-            [nextjournal.clerk :as clerk]
+            #_[nextjournal.clerk :as clerk]
             [clojisr.v1.r :as r]))
 
 (comment (clerk/serve! {:browse? false :watch-paths ["notebooks"]})
@@ -17,10 +17,10 @@
 
 (require-r '[datasets])
 
-(clerk/html
+(kind/hiccup
  [:pre (printR/r-object->string-to-print r.datasets/BOD)])
 
-(clerk/html
+(kind/hiccup
  [:pre (printR/r-object->string-to-print (r '(array ~(range 60) :dim [2 5 1 3 2])))])
 
 (def robject-viewer
