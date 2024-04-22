@@ -1,6 +1,6 @@
 ;; # Dataset transfer from R to Clojure
 
-(ns clojisr.v1.dataset
+(ns clojisr.v1.tutorials.dataset
   (:require [clojisr.v1.r :as r :refer [r r->clj clj->r require-r]]
             [scicloj.kindly.v4.kind :as kind]
             [scicloj.kindly.v4.api :as kindly]))
