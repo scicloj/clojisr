@@ -738,32 +738,30 @@
 
 (def
  var167
- (r->clj
-  (plot->file
-   "notebooks/images/histogram.jpg"
-   (fn
-    []
-    (hist
-     [1 1 1 1 2 3 4 5]
-     :main
-     "Histogram"
-     :xlab
-     "data: [1 1 1 1 2 3 4 5]"))
-   :width
-   800
-   :height
-   400
-   :quality
-   50)))
+ (let
+  [path "notebooks/generated-images/histogram.jpg"]
+  (r->clj
+   (plot->file
+    path
+    (fn
+     []
+     (hist
+      [1 1 1 1 2 3 4 5]
+      :main
+      "Histogram"
+      :xlab
+      "data: [1 1 1 1 2 3 4 5]"))
+    :width
+    800
+    :height
+    400
+    :quality
+    50))
+  (kind/hiccup [:image {:src path}])))
 
 
 (def
  var168
- (kind/hiccup [:image {:src "notebooks/images/histogram.jpg"}]))
-
-
-(def
- var169
  (plot->buffered-image
   (fn [] (hist [1 1 1 1 2 3 4 5]))
   :width
@@ -772,74 +770,74 @@
   149))
 
 
-(def var170 (md "## Intermediary representation as Java objects."))
+(def var169 (md "## Intermediary representation as Java objects."))
 
 
 (def
- var171
+ var170
  (md
   "Clojisr relies on the fact of an intemediary representation of java, as Java objects. This is usually hidden from the user, but may be useful sometimes.\nIn the current implementation, this is based on [REngine](https://github.com/s-u/REngine)."))
 
 
-(def var172 (import (org.rosuda.REngine REXP REXPInteger REXPDouble)))
+(def var171 (import (org.rosuda.REngine REXP REXPInteger REXPDouble)))
 
 
-(def var173 (md "We can convert data between R and Java."))
+(def var172 (md "We can convert data between R and Java."))
 
 
-(def var174 (-> "1:9" r r->java class))
+(def var173 (-> "1:9" r r->java class))
 
 
-(deftest test175 (is (= var174 REXPInteger)))
+(deftest test174 (is (= var173 REXPInteger)))
 
 
-(def var176 (-> (REXPInteger. 1) java->r r->clj))
+(def var175 (-> (REXPInteger. 1) java->r r->clj))
 
 
-(deftest test177 (is (= var176 [1])))
+(deftest test176 (is (= var175 [1])))
 
 
 (def
- var178
+ var177
  (md
   "We can further convert data from the java representation to Clojure."))
 
 
-(def var179 (-> "1:9" r r->java java->clj))
+(def var178 (-> "1:9" r r->java java->clj))
 
 
-(deftest test180 (is (= var179 (range 1 10))))
+(deftest test179 (is (= var178 (range 1 10))))
 
 
 (def
- var181
+ var180
  (md
   "On the opposite direction, we can also convert Clojure data into the Java represenattion."))
 
 
-(def var182 (-> (range 1 10) clj->java class))
+(def var181 (-> (range 1 10) clj->java class))
 
 
-(deftest test183 (is (= var182 REXPInteger)))
+(deftest test182 (is (= var181 REXPInteger)))
 
 
-(def var184 (-> (range 1 10) clj->java java->clj))
+(def var183 (-> (range 1 10) clj->java java->clj))
 
 
-(deftest test185 (is (= var184 (range 1 10))))
+(deftest test184 (is (= var183 (range 1 10))))
 
 
 (def
- var186
+ var185
  (md
   "There is an alternative way of conversion from Java to Clojure, naively converting the internal Java representation to a Clojure data structure. It can be handy when one wants to have plain access to all the metadata (R attributes), etc. "))
 
 
-(def var187 (->> "1:9" r r->java java->native-clj))
+(def var186 (->> "1:9" r r->java java->native-clj))
 
 
 (def
- var188
+ var187
  (->>
   "data.frame(x=1:3,y=factor('a','a','b'))"
   r
@@ -848,49 +846,49 @@
 
 
 (def
- var189
+ var188
  (md
   "We can evaluate R code and immediately return the result as a java object, without ever creating a handle to an R object holding the result:"))
 
 
-(def var190 (-> "1+2" eval-r->java class))
+(def var189 (-> "1+2" eval-r->java class))
 
 
-(deftest test191 (is (= var190 REXPDouble)))
+(deftest test190 (is (= var189 REXPDouble)))
 
 
-(def var192 (-> "1+2" eval-r->java (.asDoubles) vec))
+(def var191 (-> "1+2" eval-r->java (.asDoubles) vec))
 
 
-(deftest test193 (is (= var192 [3.0])))
+(deftest test192 (is (= var191 [3.0])))
 
 
-(def var194 (md "## More data conversion examples"))
+(def var193 (md "## More data conversion examples"))
 
 
 (def
- var195
+ var194
  (md
   "Convertion between R and Clojure always passes through Java.\nTo stress this, we write it explicitly in the following examples."))
 
 
-(def var196 (-> "list(a=1:2,b='hi!')" r r->java java->clj))
+(def var195 (-> "list(a=1:2,b='hi!')" r r->java java->clj))
 
 
-(deftest test197 (is (= var196 {:a [1 2], :b ["hi!"]})))
+(deftest test196 (is (= var195 {:a [1 2], :b ["hi!"]})))
 
 
-(def var198 (md "Partially named lists are also supported"))
+(def var197 (md "Partially named lists are also supported"))
 
 
-(def var199 (-> "list(a=1:2,'hi!')" r r->java java->clj))
+(def var198 (-> "list(a=1:2,'hi!')" r r->java java->clj))
 
 
-(deftest test200 (is (= var199 {:a [1 2], 1 ["hi!"]})))
+(deftest test199 (is (= var198 {:a [1 2], 1 ["hi!"]})))
 
 
 (def
- var201
+ var200
  (->
   "table(c('a','b','a','b','a','b','a','b'), c(1,1,2,2,3,3,1,1))"
   r
@@ -901,10 +899,10 @@
 
 
 (deftest
- test202
+ test201
  (is
   (=
-   var201
+   var200
    #{{0 "a", 1 "2", :$value 2}
      {0 "b", 1 "3", :$value 1}
      {0 "a", 1 "1", :$value 2}
@@ -914,15 +912,15 @@
 
 
 (def
- var203
+ var202
  (-> {:a [1 2], :b "hi!"} clj->java java->r r->java java->clj))
 
 
-(deftest test204 (is (= var203 {:a [1 2], :b ["hi!"]})))
+(deftest test203 (is (= var202 {:a [1 2], :b ["hi!"]})))
 
 
 (def
- var205
+ var204
  (->>
   {:a [1 2], :b "hi!"}
   clj->java
@@ -932,163 +930,163 @@
   java->clj))
 
 
-(def var206 (md "### Basic types convertion clj->r->clj"))
+(def var205 (md "### Basic types convertion clj->r->clj"))
 
 
-(def var207 (def clj->r->clj (comp r->clj r)))
+(def var206 (def clj->r->clj (comp r->clj r)))
 
 
-(def var208 (clj->r->clj nil))
+(def var207 (clj->r->clj nil))
 
 
-(deftest test209 (is (= var208 nil)))
+(deftest test208 (is (= var207 nil)))
 
 
-(def var210 (clj->r->clj [10 11]))
+(def var209 (clj->r->clj [10 11]))
 
 
-(deftest test211 (is (= var210 [10 11])))
+(deftest test210 (is (= var209 [10 11])))
 
 
-(def var212 (clj->r->clj [10.0 11.0]))
+(def var211 (clj->r->clj [10.0 11.0]))
 
 
-(deftest test213 (is (= var212 [10.0 11.0])))
+(deftest test212 (is (= var211 [10.0 11.0])))
 
 
-(def var214 (clj->r->clj (list 10.0 11.0)))
+(def var213 (clj->r->clj (list 10.0 11.0)))
 
 
-(deftest test215 (is (= var214 [10.0 11.0])))
+(deftest test214 (is (= var213 [10.0 11.0])))
 
 
-(def var216 (clj->r->clj {:a 1, :b 2}))
+(def var215 (clj->r->clj {:a 1, :b 2}))
 
 
-(deftest test217 (is (= var216 {:a [1], :b [2]})))
+(deftest test216 (is (= var215 {:a [1], :b [2]})))
 
 
-(def var218 (md "### Various R objects"))
+(def var217 (md "### Various R objects"))
 
 
-(def var219 nil)
+(def var218 nil)
 
 
-(def var220 (-> "list(a=1L,b=c(10,20),c='hi!')" r r->clj))
+(def var219 (-> "list(a=1L,b=c(10,20),c='hi!')" r r->clj))
 
 
-(deftest test221 (is (= var220 {:a [1], :b [10.0 20.0], :c ["hi!"]})))
+(deftest test220 (is (= var219 {:a [1], :b [10.0 20.0], :c ["hi!"]})))
 
 
-(def var222 nil)
+(def var221 nil)
 
 
-(def var223 (-> "c(10,20,30)" r r->clj))
+(def var222 (-> "c(10,20,30)" r r->clj))
 
 
-(deftest test224 (is (= var223 [10.0 20.0 30.0])))
+(deftest test223 (is (= var222 [10.0 20.0 30.0])))
 
 
-(def var225 nil)
+(def var224 nil)
 
 
-(def var226 (-> "c(10L,20L,30L)" r r->clj))
+(def var225 (-> "c(10L,20L,30L)" r r->clj))
 
 
-(deftest test227 (is (= var226 [10 20 30])))
+(deftest test226 (is (= var225 [10 20 30])))
 
 
-(def var228 nil)
+(def var227 nil)
 
 
-(def var229 (-> 'euro r r->clj first))
+(def var228 (-> 'euro r r->clj first))
 
 
-(deftest test230 (is (= var229 13.7603)))
+(deftest test229 (is (= var228 13.7603)))
 
 
-(def var231 nil)
+(def var230 nil)
 
 
-(def var232 (-> r.stats/dnorm r.base/formals r->clj keys sort))
+(def var231 (-> r.stats/dnorm r.base/formals r->clj keys sort))
 
 
-(deftest test233 (is (= var232 '(:log :mean :sd :x))))
+(deftest test232 (is (= var231 '(:log :mean :sd :x))))
 
 
-(def var234 nil)
+(def var233 nil)
 
 
-(def var235 (-> "NULL" r r->clj))
+(def var234 (-> "NULL" r r->clj))
 
 
-(deftest test236 (is (= var235 nil)))
+(deftest test235 (is (= var234 nil)))
 
 
-(def var237 nil)
+(def var236 nil)
 
 
-(def var238 (-> "TRUE" r r->clj))
+(def var237 (-> "TRUE" r r->clj))
 
 
-(deftest test239 (is (= var238 [true])))
+(deftest test238 (is (= var237 [true])))
 
 
-(def var240 (md "## Inspecting R functions"))
+(def var239 (md "## Inspecting R functions"))
 
 
 (def
- var241
+ var240
  (md
   "The `mean` function is defined to expect arguments `x` and `...`.\nThese arguments have no default values (thus, its formals have empty symbols as values):"))
 
 
-(def var242 (-> 'mean r.base/formals r->clj))
+(def var241 (-> 'mean r.base/formals r->clj))
 
 
-(deftest test243 (is (= var242 {:x (symbol ""), :... (symbol "")})))
+(deftest test242 (is (= var241 {:x (symbol ""), :... (symbol "")})))
 
 
 (def
- var244
+ var243
  (md
   "It is an [S3 generic function](http://adv-r.had.co.nz/S3.html) function, which we can realize by printing it:"))
 
 
-(def var245 (r 'mean))
+(def var244 (r 'mean))
 
 
 (def
- var246
+ var245
  (md
   "So, we can expect possibly more details when inspecting its default implementation.\nNow, we see some arguments that do have default values."))
 
 
-(def var247 (-> 'mean.default r.base/formals r->clj))
+(def var246 (-> 'mean.default r.base/formals r->clj))
 
 
 (deftest
- test248
+ test247
  (is
   (=
-   var247
+   var246
    {:x (symbol ""), :trim [0.0], :na.rm [false], :... (symbol "")})))
 
 
-(def var249 (md "## R-function-arglists"))
+(def var248 (md "## R-function-arglists"))
 
 
 (def
- var250
+ var249
  (md
   "As we saw earlier, R functions are Clojure functions. The arglists of functions brought up by `require-r` match the expected arguments. Here are some examples:"))
 
 
-(def var251 (require-r '[base] '[stats] '[grDevices]))
+(def var250 (require-r '[base] '[stats] '[grDevices]))
 
 
 (def
- var252
+ var251
  (->>
   [#'r.base/mean
    #'r.base/mean-default
@@ -1102,10 +1100,10 @@
 
 
 (deftest
- test253
+ test252
  (is
   (=
-   var252
+   var251
    '({:arglists ([x & {:keys [...]}]), :name mean, :ns r.base}
      {:arglists ([x & {:keys [trim na.rm ...]}]),
       :name mean-default,
