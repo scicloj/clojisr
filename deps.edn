@@ -6,12 +6,13 @@
         hiccup/hiccup {:mvn/version "2.0.0-RC3"}
         org.clojure/core.async {:mvn/version "1.6.681"}
         org.scicloj/kindly {:mvn/version "4-beta4-SNAPSHOT"}}
+ :paths ["src"]
  :aliases {:dev {:extra-paths ["resources" "notebooks"]
                  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
                  :extra-deps {scicloj/notespace {:mvn/version "2.0.0-alpha5"}
                               org.scicloj/clay {:mvn/version "2-beta8-SNAPSHOT"}
                               io.github.nextjournal/clerk {:mvn/version "0.7.418"}}}
-           :test {:extra-paths ["notebooks"]
+           :test {:extra-paths ["notebooks" "test"]
                   :extra-deps {io.github.cognitect-labs/test-runner
                                {:git/tag "v0.5.0" :git/sha "b3fd0d2"}}
                   :main-opts ["-m" "cognitect.test-runner"]
