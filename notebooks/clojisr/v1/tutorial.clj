@@ -180,10 +180,10 @@ Let us create such a dataset, pass it to an R function to compute the row means,
 (r "library(tibble)")
 
 
- (let [tibble (r "tibble")]
-   (tibble
-    :x [1 2 3]
-    :y [4 5 6]))
+(let [tibble (r "tibble")]
+  (tibble
+   :x [1 2 3]
+   :y [4 5 6]))
 
 
 (let [tibble (r "tibble")]
@@ -306,23 +306,23 @@ Let us create such a dataset, pass it to an R function to compute the row means,
 (md "Some more examples, showing how these rules compose:")
 
 (->code '(function [x y] (f y)))
- (->code '(function [x y] (f ~y)))
+(->code '(function [x y] (f ~y)))
 
- (->code '(function [x y] (+ x y)))
- (->code (list 'function '[x y] (list '+ 'x 'y)))
+(->code '(function [x y] (+ x y)))
+(->code (list 'function '[x y] (list '+ 'x 'y)))
 
- (->code '(function [x y] (print x) (f x)))
+(->code '(function [x y] (print x) (f x)))
 
- (->code '(function [x y] (~abs x)))
+(->code '(function [x y] (~abs x)))
 
- (->code '(~abs ~minus-eleven))
+(->code '(~abs ~minus-eleven))
 
- (->code '(~abs -11))
+(->code '(~abs -11))
 
 (md "Use syntax quote ` in case you want to use local bindings.")
 
- (let [minus-ten -10]
-        (->code `(~abs ~minus-ten)))
+(let [minus-ten -10]
+  (->code `(~abs ~minus-ten)))
 
 (md "## Running generated code")
 
@@ -385,14 +385,14 @@ this time generating code rather than writing it as Strings.")
 (r '(library dplyr))
 
 
- (let [filter-by-x  (r '(function [data] (filter data (>= x 2))))
-       add-z-column (r '(function [data] (mutate data (= z (+ x y)))))]
-   (->> {:x [1 2 3]
-         :y [4 5 6]}
-        dataset/->dataset
-        filter-by-x
-        add-z-column
-        r->clj))
+(let [filter-by-x  (r '(function [data] (filter data (>= x 2))))
+      add-z-column (r '(function [data] (mutate data (= z (+ x y)))))]
+  (->> {:x [1 2 3]
+        :y [4 5 6]}
+       dataset/->dataset
+       filter-by-x
+       add-z-column
+       r->clj))
 
 (md "## Requiring R packages")
 
@@ -449,7 +449,7 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
 
 
 (require-r '[graphics :refer [plot hist]])
- (require-r '[ggplot2 :refer [ggplot aes geom_point xlab ylab labs]])
+(require-r '[ggplot2 :refer [ggplot aes geom_point xlab ylab labs]])
 (require '[clojisr.v1.applications.plotting :refer [plot->svg plot->file plot->buffered-image]])
 
 (md "First example, simple plotting function as SVG string.")
