@@ -3,5 +3,5 @@
  :quarto {:format {:html {:toc true
                           :toc-depth 4
                           :theme [:cosmo "notebooks/custom.scss"]}}
-          :fontsize "0.8em"
-          :title "ClojisR documentation"}}
+          :fontsize "0.8em"}
+ :base-target-path "temp"}
