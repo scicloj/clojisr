@@ -1,24 +1,21 @@
+;; # Clojisr tutorial
+
+;; ## Setup
+
 (ns clojisr.v1.tutorial
-  (:require [tech.v3.dataset :as dataset]
-            [clojisr.v1.r :as r]
+  (:require [clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon require-r]]
+            [clojisr.v1.robject :as robject]
+            [clojisr.v1.session :as session]
+            [tech.v3.dataset :as dataset]
             [scicloj.kindly.v4.kind :as kind]
             [scicloj.kindly.v4.api :as kindly]))
-
 
 ^:kindly/hide-code
 (def md (comp kindly/hide-code kind/md))
 
-(md "# Clojisr tutorial")
-
 (md "## Basic examples")
 
 (md "Let us start by some basic usage examples of Clojisr.")
-
-
-(require '[clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon require-r]]
-         '[clojisr.v1.robject :as robject]
-         '[clojisr.v1.session :as session]
-         '[tech.v3.dataset :as dataset])
 
 (md "First, let us make sure that we use the Rserve backend (in case we were using another engine instead earlier), and that there are no R sessions currently running. This is typically not needed if you just started working. Here, we do it just in case.")
 
