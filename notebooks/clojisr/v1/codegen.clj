@@ -182,7 +182,7 @@ dataset
 (md "Date/time is converted to a string.")
 
 (->code #inst "2031-02-03T11:22:33")
-(kindly/check re-matches #"'2031-02-03 1.:22:33'")
+(kindly/check (partial re-matches #"'2031-02-03 1.:22:33'"))
 
 (r #inst "2031-02-03T11:22:33")
 
@@ -570,13 +570,15 @@ l
 
 
 (def v (r '(+ 1 2 3 4)))
-(r '(* 22.0 ~v))
-(kindly/check = [220])
+(-> '(* 22.0 ~v)
+    r r->clj)
+(kindly/check = [220.0])
 
 (let [local-v (r '(+ 1 2 3 4))
       local-list [4 5 6]]
-  (r `(* 22.0 ~local-v ~@local-list)))
-(kindly/check = [26400])
+  (-> `(* 22.0 ~local-v ~@local-list)
+      r r->clj))
+(kindly/check = [26400.0])
 
 (md "## Calling R functions")
 
