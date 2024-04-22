@@ -1,11 +1,8 @@
 ;; # Something
 
 (ns dataset
-  (:require [scicloj.clay.v1.api :as clay]
-            [scicloj.clay.v1.tools :as tools]
-            [scicloj.kindly.v2.kind :as kind]
+  (:require [scicloj.kindly.v4.kind :as kind]
             [nextjournal.clerk :as clerk]
-            [scicloj.clay.v1.tool.scittle :as scittle]
             [clojisr.v1.r :as r]))
 
 (comment (clerk/serve! {:browse? false :watch-paths ["notebooks"]})
@@ -33,11 +30,11 @@
 
 r.datasets/BOD
 
-(kind/naive r.datasets/BOD)
+(kind/pprint r.datasets/BOD)
 
-(kind/naive r.datasets/co2)
+(kind/pprint r.datasets/co2)
 
-(kind/naive r.datasets/lh)
+(kind/pprint r.datasets/lh)
 
 (require '[clojure.test])
 
