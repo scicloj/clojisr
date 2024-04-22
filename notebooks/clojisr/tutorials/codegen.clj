@@ -1,6 +1,6 @@
-;; # R code generation from the Clojure forms
+;; # R code generation from Clojure forms
 
-(ns clojisr.v1.codegen
+(ns clojisr.v1.tutorials.codegen
   (:require [clojisr.v1.r :as r :refer [r ->code r->clj]]
             [tech.v3.dataset :as dataset]
             [scicloj.kindly.v4.kind :as kind]

@@ -2,7 +2,7 @@
 
 ;; ## Setup
 
-(ns clojisr.v1.tutorial
+(ns clojisr.v1.tutorials.main
   (:require [clojisr.v1.r :as r :refer [r eval-r->java r->java java->r java->clj java->native-clj clj->java r->clj clj->r ->code r+ colon require-r]]
             [clojisr.v1.robject :as robject]
             [clojisr.v1.session :as session]

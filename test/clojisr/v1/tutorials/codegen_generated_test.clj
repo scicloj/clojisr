@@ -2,7 +2,7 @@
 
 
 (ns
- clojisr.v1.codegen-generated-test
+ clojisr.v1.tutorials.codegen-generated-test
  (:require
   [clojisr.v1.r :as r :refer [r ->code r->clj]]
   [tech.v3.dataset :as dataset]
@@ -251,7 +251,7 @@
 
 (deftest
  test69
- (is ((fn* [p1__57956#] (Double/isNaN p1__57956#)) var68)))
+ (is ((fn* [p1__60549#] (Double/isNaN p1__60549#)) var68)))
 
 
 (def
@@ -478,7 +478,7 @@
  var131
  (->code
   (zipmap
-   (map (fn* [p1__57957#] (str "key" p1__57957#)) (range 100))
+   (map (fn* [p1__60550#] (str "key" p1__60550#)) (range 100))
    (range 1000 1100))))
 
 
@@ -487,7 +487,7 @@
  (->
   (r
    (zipmap
-    (map (fn* [p1__57958#] (str "key" p1__57958#)) (range 100))
+    (map (fn* [p1__60551#] (str "key" p1__60551#)) (range 100))
     (range 1000 1100)))
   r->clj
   :key23))

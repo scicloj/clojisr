@@ -2,7 +2,7 @@
 
 
 (ns
- clojisr.v1.tutorial-generated-test
+ clojisr.v1.tutorials.main-generated-test
  (:require
   [clojisr.v1.r
    :as
