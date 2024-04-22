@@ -10,3 +10,8 @@ pom.xml.asc
 /.nrepl-port
 .hgignore
 .hg/
+/.RData
+/.Rhistory
+/.clj-kondo/
+/.cpcache/
+/.lsp/
