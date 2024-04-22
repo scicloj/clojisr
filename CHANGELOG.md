@@ -1,6 +1,13 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [1.0.0 not released]
+- `require-r` creates namespace as `r.namespace`, also `namespace` as an alias
+- dependencies update, TMD 7.029
+
+## [1.0.0-BETA22 - 2023-11-26]
+- dependencies update, TMD 7.021
+
 ## [1.0.0-BETA21 - 2022-12-28]
 - dependencies update
 - plotting to `svg` tries to load `svglite` by default and use it (#86, #69), there is an option to switch between both implementations (default and svglite)

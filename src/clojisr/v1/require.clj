@@ -86,8 +86,7 @@
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (try
     (let [session (session/fetch-or-make nil)]
-      (evl/eval-form `(library ~package-symbol)
-                     session))
+      (evl/eval-form `(library ~package-symbol) session))
     (let [r-ns-symbol (->> package-symbol
                            (str "r.")
                            symbol)
@@ -97,10 +96,10 @@
       (find-or-create-ns r-ns-symbol)
       (symbols->add-to-ns r-ns-symbol r-symbols)
 
-      ;; alias namespace
-      (when as
-        (find-or-create-ns as)
-        (symbols->add-to-ns as r-symbols))
+      ;; alias namespaces
+      ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/require-r.20vs.20-require-python
+      (alias package-symbol r-ns-symbol)
+      (when as (alias as r-ns-symbol))
 
       ;; inject symbol into current namespace
       (when refer
