@@ -8,5 +8,4 @@
   :middleware [lein-tools-deps.plugin/resolve-dependencies-with-deps-edn]
   ;; :repositories {"bedatadriven" {:url "https://nexus.bedatadriven.com/content/groups/public/"}}
   :lein-tools-deps/config {:config-files [:install :user :project]}
-  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
-  :profiles {:dev {:dependencies [[scicloj/notespace "2.0.0-alpha5"]]}})
+  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"])
