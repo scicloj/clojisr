@@ -152,7 +152,7 @@ Also we run [a stream](https://clojurians.zulipchat.com/#narrow/stream/224816-cl
 
 ## Testing
 
-The tests are genedated from the tutorials by Clay.
+The tests are regular clojure.test tests, but are auto-genedated from the tutorials.
 
 ## Tools used
 
@@ -162,7 +162,7 @@ Working on this project, we enjoyed the following tools (partial list):
 
 * [clj-kondo](https://github.com/borkdude/clj-kondo) for code quality control
 
-* [notespace](https://github.com/scicloj/notespace) for documentation and tests
+* [Clay](https://scicloj.github.io/clay/) for documentation and test generation
 
 ## License
 
