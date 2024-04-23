@@ -1,9 +1,11 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [1.0.0 not released]
+## [1.0.0]
 - `require-r` creates namespace as `r.namespace`, also `namespace` as an alias
 - dependencies update, TMD 7.029
+- SVG plots are annotated with `kind/html`
+- documentation migrated to Clay (partially)
 
 ## [1.0.0-BETA22 - 2023-11-26]
 - dependencies update, TMD 7.021
