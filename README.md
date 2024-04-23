@@ -152,7 +152,7 @@ Also we run [a stream](https://clojurians.zulipchat.com/#narrow/stream/224816-cl
 
 ## Testing
 
-The code tests are embedded in the [tutorials](#tutorials) and are run when they are rendered (using [notespace](https://github.com/scicloj/notespace)). This way we make sure that tests and documentation are in sync.
+The tests are genedated from the tutorials by Clay.
 
 ## Tools used
 
