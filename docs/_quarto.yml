@@ -1,0 +1,10 @@
+format:
+  html:
+    toc: true
+    toc-depth: 4
+    theme: [cosmo, notebooks/custom.scss]
+  revealjs: {theme: solarized, navigation-mode: vertical, transition: slide, background-transition: fade, incremental: true}
+project: {type: book}
+book:
+  title: ClojisR Documentation
+  chapters: [index.qmd, clojisr.v1.tutorials.main.qmd, clojisr.v1.tutorials.codegen.qmd, clojisr.v1.tutorials.dataset.qmd, clojisr.v1.tutorials.titanic0.qmd]

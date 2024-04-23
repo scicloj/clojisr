@@ -1,0 +1,7 @@
+{:remote-repo {:git-url "https://github.com/scicloj/clojisr"
+               :branch "master"}
+ :quarto {:format {:html {:toc true
+                          :toc-depth 4
+                          :theme [:cosmo "notebooks/custom.scss"]}}
+          :fontsize "0.8em"}
+ :base-target-path "temp"}

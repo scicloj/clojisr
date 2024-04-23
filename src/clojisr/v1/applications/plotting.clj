@@ -3,7 +3,8 @@
             [clojisr.v1.util :refer [exception-cause]]
             [clojisr.v1.require :refer [require-r]]
             [clojure.tools.logging.readable :as log]
-            [clojure.java.io :refer [make-parents]])
+            [clojure.java.io :refer [make-parents]]
+            [scicloj.kindly.v4.kind :as kind])
   (:import [java.io File]
            [clojisr.v1.robject RObject]
            [java.awt Graphics2D Image]
@@ -69,7 +70,7 @@
     (apply plot->file path plotting-function-or-object svg-params)
     (let [result (slurp path)]
       (.delete tempfile)
-      result)))
+      (kind/html result))))
 
 (defn- force-argb-image
   "Create ARGB buffered image from given image."

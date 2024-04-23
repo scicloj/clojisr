@@ -3,11 +3,14 @@
         scicloj/tablecloth {:mvn/version "7.029.1"}
         org.scicloj/clojisr-rengine {:mvn/version "0.1.2"}
         ;; org.rosuda.REngine/Rserve {:mvn/version "1.8.1"},
+        hiccup/hiccup {:mvn/version "2.0.0-RC3"}
+        org.clojure/core.async {:mvn/version "1.6.681"}
+        org.scicloj/kindly {:mvn/version "4-beta4"}}
  :paths ["src"]
- :aliases {:dev {:extra-paths ["resources"]
+ :aliases {:dev {:extra-paths ["resources" "notebooks"]
                  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
                  :extra-deps {scicloj/notespace {:mvn/version "2.0.0-alpha5"}
-                              org.scicloj/clay {:mvn/version "1-alpha11"}
+                              org.scicloj/clay {:mvn/version "2-beta8"}
                               io.github.nextjournal/clerk {:mvn/version "0.7.418"}}}
            :test {:extra-paths ["notebooks" "test"]
                   :extra-deps {io.github.cognitect-labs/test-runner
