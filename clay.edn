@@ -4,7 +4,7 @@
                           :toc-depth 4
                           :theme [:cosmo "notebooks/custom.scss"]}}
           :fontsize "0.8em"
-          :include-in-header {:text "<meta property=\"og:image\" content=\"https://github.com/scicloj/clojisr/blob/master/resources/ClojisR.svg.png?raw=true\"/>
+          :include-in-header {:text "<meta property=\"og:image\" content=\"https://scicloj.github.io/sci-cloj-logo-transparent.png\"/>
 <meta property=\"og:title\" content=\"ClojisR tutorials\"/>
 <meta property=\"og:description\" content=\"A bridge from Clojure to R\"/>
 <link rel = \"icon\" href = \"data:,\" />"}}

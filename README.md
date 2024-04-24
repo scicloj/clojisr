@@ -1,7 +1,5 @@
 # ClojisR
 
-![ClojisR logo](resources/ClojisR.svg)
-
 Clojure speaks statistics - a [jisr](https://en.wiktionary.org/wiki/جسر) between Clojure and R
 
 [![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)

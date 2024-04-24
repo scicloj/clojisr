@@ -1,10 +1,3 @@
-^{:kindly/hide-code true
-  :kindly/kind :kind/hiccup}
-[:img
- {:style {:width "100px"}
-  :src "https://github.com/scicloj/clojisr/blob/master/resources/ClojisR.svg.png?raw=true"
-  :alt "ClojisR logo"}]
-
 ;; # Preface
 
 ^:kindly/hide-code
