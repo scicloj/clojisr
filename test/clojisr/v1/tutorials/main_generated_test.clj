@@ -739,7 +739,7 @@
 (def
  var167
  (let
-  [path "notebooks/generated-images/histogram.jpg"]
+  [path "/tmp/histogram.jpg"]
   (r->clj
    (plot->file
     path
@@ -757,7 +757,7 @@
     400
     :quality
     50))
-  (kind/hiccup [:image {:src path}])))
+  (-> (clojure.java.shell/sh "ls" path) :out kind/code)))
 
 
 (def

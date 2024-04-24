@@ -485,7 +485,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb44"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>(<span class="at">:object-name</span> one+two)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb45"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x4f49d349b16e43e8"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$xcc9c677e02ae4da3"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="generating-code" class="level2" data-number="2.6">
@@ -579,14 +579,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb69"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code '(<span class="at">~abs</span> x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb70"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$xa2e664dc3e3b4064(x)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(x)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>All other sequential things (that is, those not beginning with a symbol or R function) are intepreted as data, converted implicitly R data representation.</p>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb71"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code `(<span class="at">~abs</span> (<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb72"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$xa2e664dc3e3b4064(c(1L,2L,3L))"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(c(1L,2L,3L))"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Some more examples, showing how these rules compose:</p>
 <div class="sourceClojure">
@@ -623,19 +623,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb83"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code '(function [x y] (<span class="at">~abs</span> x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb84"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="st">"function(x,y) {.MEM$xa2e664dc3e3b4064(x)}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="st">"function(x,y) {.MEM$x12b17e103f894d6e(x)}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb85"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code '(<span class="at">~abs</span> <span class="at">~minus-eleven</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb86"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$xa2e664dc3e3b4064(.MEM$x72252f254fbd4e4d)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(.MEM$x02374ec85cb348ae)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb87"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code '(<span class="at">~abs</span> -<span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb88"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$xa2e664dc3e3b4064(-11L)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(-11L)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Use syntax quote ` in case you want to use local bindings.</p>
 <div class="sourceClojure">
@@ -643,7 +643,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  (-&gt;code `(<span class="at">~abs</span> <span class="at">~minus-ten</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb90"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$xa2e664dc3e3b4064(-10L)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(-10L)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="running-generated-code" class="level2" data-number="2.7">
@@ -888,7 +888,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </clippath>
 </defs>
 <g clip-path="url(#cpNTkuMDR8Njg5Ljc2fDU5LjA0fDUwMi41Ng==)">
-<polyline points="82.40,486.13 102.54,467.73 122.68,462.26 142.81,452.39 162.95,432.39 183.09,405.78 203.23,384.02 223.37,370.25 243.50,355.67 263.64,342.20 283.78,329.88 303.92,323.72 324.06,318.06 344.19,290.34 364.33,288.66 384.47,283.25 404.61,277.87 424.74,274.51 444.88,250.95 465.02,239.87 485.16,226.08 505.30,225.46 525.43,207.60 545.57,180.42 565.71,159.84 585.85,152.21 605.99,132.64 626.12,109.56 646.26,82.13 666.40,75.47 " style="stroke-width: 0.75;"></polyline>
+<polyline points="82.40,486.13 102.54,470.17 122.68,468.15 142.81,458.99 162.95,446.45 183.09,446.08 203.23,427.29 223.37,409.26 243.50,383.71 263.64,375.32 283.78,352.95 303.92,342.35 324.06,316.23 344.19,313.74 364.33,303.03 384.47,279.74 404.61,268.37 424.74,250.07 444.88,224.02 465.02,204.43 485.16,181.32 505.30,165.11 525.43,150.36 545.57,145.86 565.71,129.25 585.85,121.92 605.99,117.05 626.12,91.37 646.26,84.71 666.40,75.47 " style="stroke-width: 0.75;"></polyline>
 </g>
 <g clip-path="url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)">
 <line x1="62.26" y1="502.56" x2="666.40" y2="502.56" style="stroke-width: 0.75;"></line>
@@ -906,23 +906,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <text x="465.02" y="528.48" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">20</text>
 <text x="565.71" y="528.48" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">25</text>
 <text x="666.40" y="528.48" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">30</text>
-<line x1="59.04" y1="488.20" x2="59.04" y2="87.14" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="488.20" x2="51.84" y2="488.20" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="430.91" x2="51.84" y2="430.91" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="373.61" x2="51.84" y2="373.61" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="316.32" x2="51.84" y2="316.32" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="259.02" x2="51.84" y2="259.02" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="201.73" x2="51.84" y2="201.73" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="144.43" x2="51.84" y2="144.43" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="87.14" x2="51.84" y2="87.14" style="stroke-width: 0.75;"></line>
-<text transform="translate(41.76,488.20) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">0</text>
-<text transform="translate(41.76,430.91) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">2</text>
-<text transform="translate(41.76,373.61) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">4</text>
-<text transform="translate(41.76,316.32) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">6</text>
-<text transform="translate(41.76,259.02) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">8</text>
-<text transform="translate(41.76,201.73) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">10</text>
-<text transform="translate(41.76,144.43) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">12</text>
-<text transform="translate(41.76,87.14) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">14</text>
+<line x1="59.04" y1="500.00" x2="59.04" y2="89.98" style="stroke-width: 0.75;"></line>
+<line x1="59.04" y1="500.00" x2="51.84" y2="500.00" style="stroke-width: 0.75;"></line>
+<line x1="59.04" y1="363.32" x2="51.84" y2="363.32" style="stroke-width: 0.75;"></line>
+<line x1="59.04" y1="226.65" x2="51.84" y2="226.65" style="stroke-width: 0.75;"></line>
+<line x1="59.04" y1="89.98" x2="51.84" y2="89.98" style="stroke-width: 0.75;"></line>
+<text transform="translate(41.76,500.00) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">0</text>
+<text transform="translate(41.76,363.32) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">5</text>
+<text transform="translate(41.76,226.65) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">10</text>
+<text transform="translate(41.76,89.98) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">15</text>
 <polygon points="59.04,502.56 689.76,502.56 689.76,59.04 59.04,59.04 " style="stroke-width: 0.75;"></polygon>
 <text x="374.40" y="557.28" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="4.71px" lengthadjust="spacingAndGlyphs">t</text>
 <text transform="translate(12.96,280.80) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.11px" lengthadjust="spacingAndGlyphs">y</text>
@@ -978,186 +970,184 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </defs>
 <g clip-path="url(#cpMzcuNDR8NjUwLjI3fDUuNDh8NTQ0LjI5)">
 <rect x="37.44" y="5.48" width="612.82" height="538.82" style="stroke-width: 1.07; stroke: none; fill: #EBEBEB;"></rect>
-<polyline points="37.44,519.76 650.27,519.76 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,353.84 650.27,353.84 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,187.92 650.27,187.92 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,21.99 650.27,21.99 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="133.07,544.29 133.07,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="273.48,544.29 273.48,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="413.89,544.29 413.89,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="554.30,544.29 554.30,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,436.80 650.27,436.80 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,270.88 650.27,270.88 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,104.95 650.27,104.95 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="62.87,544.29 62.87,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="203.28,544.29 203.28,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="343.69,544.29 343.69,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="484.10,544.29 484.10,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="624.51,544.29 624.51,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<circle cx="242.03" cy="278.59" r="4.49" style="stroke-width: 0.71; stroke: #2D5F89; fill: #2D5F89;"></circle>
-<circle cx="477.98" cy="95.28" r="5.17" style="stroke-width: 0.71; stroke: #4997D4; fill: #4997D4;"></circle>
-<circle cx="503.16" cy="226.69" r="5.91" style="stroke-width: 0.71; stroke: #3F82B8; fill: #3F82B8;"></circle>
-<circle cx="619.21" cy="191.44" r="6.25" style="stroke-width: 0.71; stroke: #4895D1; fill: #4895D1;"></circle>
-<circle cx="262.68" cy="192.52" r="4.30" style="stroke-width: 0.71; stroke: #356F9F; fill: #356F9F;"></circle>
-<circle cx="169.49" cy="429.83" r="4.67" style="stroke-width: 0.71; stroke: #1D3F5F; fill: #1D3F5F;"></circle>
-<circle cx="382.41" cy="369.22" r="6.28" style="stroke-width: 0.71; stroke: #2C5E87; fill: #2C5E87;"></circle>
-<circle cx="65.30" cy="277.80" r="1.42" style="stroke-width: 0.71; stroke: #254E72; fill: #254E72;"></circle>
-<circle cx="398.27" cy="106.62" r="4.82" style="stroke-width: 0.71; stroke: #448CC6; fill: #448CC6;"></circle>
-<circle cx="236.24" cy="177.06" r="4.05" style="stroke-width: 0.71; stroke: #356F9F; fill: #356F9F;"></circle>
-<circle cx="239.73" cy="200.51" r="4.16" style="stroke-width: 0.71; stroke: #346C9A; fill: #346C9A;"></circle>
-<circle cx="110.43" cy="300.96" r="3.03" style="stroke-width: 0.71; stroke: #254E73; fill: #254E73;"></circle>
-<circle cx="339.43" cy="305.53" r="5.42" style="stroke-width: 0.71; stroke: #306490; fill: #306490;"></circle>
-<circle cx="181.79" cy="316.87" r="4.08" style="stroke-width: 0.71; stroke: #275378; fill: #275378;"></circle>
-<circle cx="575.54" cy="168.65" r="5.93" style="stroke-width: 0.71; stroke: #4894D0; fill: #4894D0;"></circle>
-<circle cx="381.35" cy="164.85" r="4.95" style="stroke-width: 0.71; stroke: #3E80B6; fill: #3E80B6;"></circle>
-<circle cx="589.72" cy="151.73" r="5.90" style="stroke-width: 0.71; stroke: #4A99D6; fill: #4A99D6;"></circle>
-<circle cx="159.73" cy="489.20" r="5.25" style="stroke-width: 0.71; stroke: #183551; fill: #183551;"></circle>
-<circle cx="173.41" cy="519.80" r="6.21" style="stroke-width: 0.71; stroke: #17324D; fill: #17324D;"></circle>
-<circle cx="258.32" cy="296.07" r="4.72" style="stroke-width: 0.71; stroke: #2C5D87; fill: #2C5D87;"></circle>
-<circle cx="410.24" cy="303.04" r="5.89" style="stroke-width: 0.71; stroke: #336B9A; fill: #336B9A;"></circle>
-<circle cx="603.58" cy="272.20" r="6.73" style="stroke-width: 0.71; stroke: #4085BB; fill: #4085BB;"></circle>
-<circle cx="622.41" cy="174.76" r="6.17" style="stroke-width: 0.71; stroke: #4A98D6; fill: #4A98D6;"></circle>
-<circle cx="573.40" cy="179.58" r="5.98" style="stroke-width: 0.71; stroke: #4792CD; fill: #4792CD;"></circle>
-<circle cx="414.29" cy="145.30" r="5.05" style="stroke-width: 0.71; stroke: #4187BF; fill: #4187BF;"></circle>
-<circle cx="550.90" cy="180.78" r="5.88" style="stroke-width: 0.71; stroke: #458FCA; fill: #458FCA;"></circle>
-<circle cx="251.72" cy="401.32" r="5.43" style="stroke-width: 0.71; stroke: #244C6F; fill: #244C6F;"></circle>
-<circle cx="226.13" cy="201.56" r="4.05" style="stroke-width: 0.71; stroke: #336A98; fill: #336A98;"></circle>
-<circle cx="292.98" cy="268.40" r="4.85" style="stroke-width: 0.71; stroke: #306692; fill: #306692;"></circle>
-<circle cx="201.30" cy="225.79" r="3.92" style="stroke-width: 0.71; stroke: #30648F; fill: #30648F;"></circle>
-<circle cx="322.81" cy="130.50" r="4.49" style="stroke-width: 0.71; stroke: #3E80B6; fill: #3E80B6;"></circle>
-<circle cx="347.07" cy="242.80" r="5.10" style="stroke-width: 0.71; stroke: #356F9F; fill: #356F9F;"></circle>
-<circle cx="265.07" cy="401.15" r="5.57" style="stroke-width: 0.71; stroke: #244D71; fill: #244D71;"></circle>
-<circle cx="470.63" cy="345.33" r="6.65" style="stroke-width: 0.71; stroke: #336A98; fill: #336A98;"></circle>
-<circle cx="410.25" cy="128.60" r="4.96" style="stroke-width: 0.71; stroke: #438AC2; fill: #438AC2;"></circle>
-<circle cx="136.04" cy="246.56" r="3.27" style="stroke-width: 0.71; stroke: #2B5A82; fill: #2B5A82;"></circle>
-<circle cx="382.44" cy="310.33" r="5.76" style="stroke-width: 0.71; stroke: #316794; fill: #316794;"></circle>
-<circle cx="306.93" cy="216.72" r="4.71" style="stroke-width: 0.71; stroke: #36709F; fill: #36709F;"></circle>
-<circle cx="480.61" cy="218.20" r="5.74" style="stroke-width: 0.71; stroke: #3E81B7; fill: #3E81B7;"></circle>
-<circle cx="94.70" cy="518.41" r="3.95" style="stroke-width: 0.71; stroke: #132B44; fill: #132B44;"></circle>
-<circle cx="387.53" cy="384.42" r="6.48" style="stroke-width: 0.71; stroke: #2B5B84; fill: #2B5B84;"></circle>
-<circle cx="537.38" cy="105.76" r="5.47" style="stroke-width: 0.71; stroke: #4B9BDA; fill: #4B9BDA;"></circle>
-<circle cx="360.88" cy="123.22" r="4.68" style="stroke-width: 0.71; stroke: #4086BD; fill: #4086BD;"></circle>
-<circle cx="430.96" cy="345.09" r="6.38" style="stroke-width: 0.71; stroke: #316693; fill: #316693;"></circle>
-<circle cx="151.24" cy="447.51" r="4.54" style="stroke-width: 0.71; stroke: #1B3B59; fill: #1B3B59;"></circle>
-<circle cx="128.20" cy="261.90" r="3.21" style="stroke-width: 0.71; stroke: #29567D; fill: #29567D;"></circle>
-<circle cx="345.61" cy="409.54" r="6.44" style="stroke-width: 0.71; stroke: #275379; fill: #275379;"></circle>
-<circle cx="525.95" cy="322.26" r="6.76" style="stroke-width: 0.71; stroke: #3874A5; fill: #3874A5;"></circle>
-<circle cx="298.55" cy="160.79" r="4.44" style="stroke-width: 0.71; stroke: #3A79AB; fill: #3A79AB;"></circle>
-<circle cx="85.72" cy="515.81" r="3.52" style="stroke-width: 0.71; stroke: #132B43; fill: #132B43;"></circle>
-<circle cx="93.03" cy="490.43" r="3.55" style="stroke-width: 0.71; stroke: #152F49; fill: #152F49;"></circle>
-<circle cx="439.94" cy="341.34" r="6.41" style="stroke-width: 0.71; stroke: #326895; fill: #326895;"></circle>
-<circle cx="523.07" cy="220.94" r="5.98" style="stroke-width: 0.71; stroke: #4085BC; fill: #4085BC;"></circle>
-<circle cx="599.66" cy="242.93" r="6.49" style="stroke-width: 0.71; stroke: #4289C2; fill: #4289C2;"></circle>
-<circle cx="401.93" cy="123.91" r="4.90" style="stroke-width: 0.71; stroke: #438AC2; fill: #438AC2;"></circle>
-<circle cx="518.98" cy="284.59" r="6.39" style="stroke-width: 0.71; stroke: #3B7AAD; fill: #3B7AAD;"></circle>
-<circle cx="533.31" cy="80.16" r="5.35" style="stroke-width: 0.71; stroke: #4DA0E0; fill: #4DA0E0;"></circle>
-<circle cx="198.00" cy="349.36" r="4.44" style="stroke-width: 0.71; stroke: #254F73; fill: #254F73;"></circle>
-<circle cx="245.48" cy="375.50" r="5.13" style="stroke-width: 0.71; stroke: #254F74; fill: #254F74;"></circle>
-<circle cx="359.48" cy="356.09" r="5.97" style="stroke-width: 0.71; stroke: #2C5D87; fill: #2C5D87;"></circle>
-<circle cx="289.43" cy="357.10" r="5.40" style="stroke-width: 0.71; stroke: #29567D; fill: #29567D;"></circle>
-<circle cx="206.25" cy="474.85" r="5.81" style="stroke-width: 0.71; stroke: #1C3C5A; fill: #1C3C5A;"></circle>
-<circle cx="112.67" cy="518.28" r="4.60" style="stroke-width: 0.71; stroke: #142D46; fill: #142D46;"></circle>
-<circle cx="213.11" cy="465.60" r="5.76" style="stroke-width: 0.71; stroke: #1D3E5D; fill: #1D3E5D;"></circle>
-<circle cx="261.01" cy="354.03" r="5.12" style="stroke-width: 0.71; stroke: #28547A; fill: #28547A;"></circle>
-<circle cx="533.85" cy="38.22" r="5.21" style="stroke-width: 0.71; stroke: #51A7EA; fill: #51A7EA;"></circle>
-<circle cx="383.00" cy="117.49" r="4.78" style="stroke-width: 0.71; stroke: #4289C1; fill: #4289C1;"></circle>
-<circle cx="191.94" cy="238.66" r="3.87" style="stroke-width: 0.71; stroke: #2E618B; fill: #2E618B;"></circle>
-<circle cx="330.15" cy="176.63" r="4.70" style="stroke-width: 0.71; stroke: #3A79AC; fill: #3A79AC;"></circle>
-<circle cx="471.07" cy="301.91" r="6.26" style="stroke-width: 0.71; stroke: #3772A2; fill: #3772A2;"></circle>
-<circle cx="449.38" cy="116.79" r="5.12" style="stroke-width: 0.71; stroke: #4690CB; fill: #4690CB;"></circle>
-<circle cx="75.46" cy="397.22" r="2.39" style="stroke-width: 0.71; stroke: #1C3C5A; fill: #1C3C5A;"></circle>
-<circle cx="598.16" cy="194.81" r="6.17" style="stroke-width: 0.71; stroke: #4792CD; fill: #4792CD;"></circle>
-<circle cx="347.77" cy="152.52" r="4.71" style="stroke-width: 0.71; stroke: #3D7FB4; fill: #3D7FB4;"></circle>
-<circle cx="513.41" cy="227.08" r="5.96" style="stroke-width: 0.71; stroke: #3F83BA; fill: #3F83BA;"></circle>
-<circle cx="414.85" cy="115.58" r="4.94" style="stroke-width: 0.71; stroke: #448DC6; fill: #448DC6;"></circle>
-<circle cx="192.42" cy="372.25" r="4.52" style="stroke-width: 0.71; stroke: #234B6E; fill: #234B6E;"></circle>
-<circle cx="607.33" cy="29.97" r="5.46" style="stroke-width: 0.71; stroke: #56B1F7; fill: #56B1F7;"></circle>
-<circle cx="254.53" cy="372.38" r="5.20" style="stroke-width: 0.71; stroke: #265176; fill: #265176;"></circle>
-<circle cx="154.15" cy="387.45" r="4.11" style="stroke-width: 0.71; stroke: #204566; fill: #204566;"></circle>
-<circle cx="420.90" cy="167.18" r="5.18" style="stroke-width: 0.71; stroke: #4084BB; fill: #4084BB;"></circle>
-<circle cx="605.97" cy="65.22" r="5.59" style="stroke-width: 0.71; stroke: #53AAEE; fill: #53AAEE;"></circle>
-<circle cx="509.39" cy="175.26" r="5.66" style="stroke-width: 0.71; stroke: #448CC5; fill: #448CC5;"></circle>
-<circle cx="169.00" cy="376.59" r="4.25" style="stroke-width: 0.71; stroke: #22486A; fill: #22486A;"></circle>
-<circle cx="227.09" cy="204.87" r="4.07" style="stroke-width: 0.71; stroke: #336A97; fill: #336A97;"></circle>
-<circle cx="149.69" cy="222.30" r="3.38" style="stroke-width: 0.71; stroke: #2D5F89; fill: #2D5F89;"></circle>
-<circle cx="197.11" cy="254.21" r="3.98" style="stroke-width: 0.71; stroke: #2D5E88; fill: #2D5E88;"></circle>
-<circle cx="360.48" cy="105.15" r="4.62" style="stroke-width: 0.71; stroke: #4289C1; fill: #4289C1;"></circle>
-<circle cx="121.48" cy="451.08" r="3.98" style="stroke-width: 0.71; stroke: #1A3854; fill: #1A3854;"></circle>
-<circle cx="181.80" cy="450.98" r="5.09" style="stroke-width: 0.71; stroke: #1C3D5C; fill: #1C3D5C;"></circle>
-<circle cx="524.21" cy="311.03" r="6.64" style="stroke-width: 0.71; stroke: #3976A7; fill: #3976A7;"></circle>
-<circle cx="547.32" cy="102.61" r="5.50" style="stroke-width: 0.71; stroke: #4C9DDC; fill: #4C9DDC;"></circle>
-<circle cx="576.69" cy="68.96" r="5.49" style="stroke-width: 0.71; stroke: #51A6E9; fill: #51A6E9;"></circle>
-<circle cx="297.67" cy="349.78" r="5.41" style="stroke-width: 0.71; stroke: #2A5880; fill: #2A5880;"></circle>
-<circle cx="561.04" cy="103.36" r="5.56" style="stroke-width: 0.71; stroke: #4D9EDE; fill: #4D9EDE;"></circle>
-<circle cx="375.88" cy="86.61" r="4.64" style="stroke-width: 0.71; stroke: #448EC8; fill: #448EC8;"></circle>
-<circle cx="110.31" cy="325.80" r="3.11" style="stroke-width: 0.71; stroke: #234A6D; fill: #234A6D;"></circle>
-<circle cx="451.66" cy="327.70" r="6.36" style="stroke-width: 0.71; stroke: #336B9A; fill: #336B9A;"></circle>
-<circle cx="435.53" cy="271.63" r="5.82" style="stroke-width: 0.71; stroke: #3773A4; fill: #3773A4;"></circle>
+<polyline points="37.44,461.92 650.27,461.92 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,325.18 650.27,325.18 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,188.44 650.27,188.44 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,51.70 650.27,51.70 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="131.00,544.29 131.00,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="271.49,544.29 271.49,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="411.97,544.29 411.97,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="552.46,544.29 552.46,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,530.29 650.27,530.29 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,393.55 650.27,393.55 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,256.81 650.27,256.81 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,120.07 650.27,120.07 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="60.76,544.29 60.76,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="201.25,544.29 201.25,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="341.73,544.29 341.73,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="482.22,544.29 482.22,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="622.70,544.29 622.70,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<circle cx="293.60" cy="350.92" r="5.66" style="stroke-width: 0.71; stroke: #2B5A83; fill: #2B5A83;"></circle>
+<circle cx="295.50" cy="402.15" r="6.48" style="stroke-width: 0.71; stroke: #265177; fill: #265177;"></circle>
+<circle cx="245.21" cy="318.20" r="4.86" style="stroke-width: 0.71; stroke: #2C5C85; fill: #2C5C85;"></circle>
+<circle cx="357.94" cy="259.90" r="5.31" style="stroke-width: 0.71; stroke: #3671A1; fill: #3671A1;"></circle>
+<circle cx="601.52" cy="220.01" r="6.36" style="stroke-width: 0.71; stroke: #458FC9; fill: #458FC9;"></circle>
+<circle cx="402.10" cy="335.25" r="6.37" style="stroke-width: 0.71; stroke: #316793; fill: #316793;"></circle>
+<circle cx="586.06" cy="143.50" r="5.76" style="stroke-width: 0.71; stroke: #4C9DDC; fill: #4C9DDC;"></circle>
+<circle cx="367.03" cy="170.56" r="4.82" style="stroke-width: 0.71; stroke: #3F82B9; fill: #3F82B9;"></circle>
+<circle cx="226.02" cy="199.09" r="3.97" style="stroke-width: 0.71; stroke: #3670A0; fill: #3670A0;"></circle>
+<circle cx="95.03" cy="511.98" r="6.54" style="stroke-width: 0.71; stroke: #152E47; fill: #152E47;"></circle>
+<circle cx="252.69" cy="263.09" r="4.53" style="stroke-width: 0.71; stroke: #316793; fill: #316793;"></circle>
+<circle cx="95.81" cy="403.23" r="3.23" style="stroke-width: 0.71; stroke: #1E4060; fill: #1E4060;"></circle>
+<circle cx="192.33" cy="451.39" r="6.24" style="stroke-width: 0.71; stroke: #1E405F; fill: #1E405F;"></circle>
+<circle cx="181.29" cy="205.32" r="3.58" style="stroke-width: 0.71; stroke: #336B99; fill: #336B99;"></circle>
+<circle cx="436.02" cy="235.25" r="5.61" style="stroke-width: 0.71; stroke: #3C7DB1; fill: #3C7DB1;"></circle>
+<circle cx="402.32" cy="192.88" r="5.14" style="stroke-width: 0.71; stroke: #3E81B7; fill: #3E81B7;"></circle>
+<circle cx="531.45" cy="284.12" r="6.60" style="stroke-width: 0.71; stroke: #3C7CB0; fill: #3C7CB0;"></circle>
+<circle cx="274.10" cy="320.47" r="5.15" style="stroke-width: 0.71; stroke: #2D5E88; fill: #2D5E88;"></circle>
+<circle cx="157.88" cy="322.06" r="3.87" style="stroke-width: 0.71; stroke: #28547A; fill: #28547A;"></circle>
+<circle cx="77.25" cy="252.02" r="1.83" style="stroke-width: 0.71; stroke: #2A5981; fill: #2A5981;"></circle>
+<circle cx="90.24" cy="354.87" r="2.74" style="stroke-width: 0.71; stroke: #22486A; fill: #22486A;"></circle>
+<circle cx="595.72" cy="160.65" r="5.90" style="stroke-width: 0.71; stroke: #4B9AD8; fill: #4B9AD8;"></circle>
+<circle cx="522.70" cy="151.37" r="5.52" style="stroke-width: 0.71; stroke: #4895D1; fill: #4895D1;"></circle>
+<circle cx="289.74" cy="373.97" r="5.93" style="stroke-width: 0.71; stroke: #29567D; fill: #29567D;"></circle>
+<circle cx="595.72" cy="156.00" r="5.88" style="stroke-width: 0.71; stroke: #4B9BD9; fill: #4B9BD9;"></circle>
+<circle cx="477.32" cy="140.32" r="5.25" style="stroke-width: 0.71; stroke: #4793CE; fill: #4793CE;"></circle>
+<circle cx="119.83" cy="244.75" r="2.93" style="stroke-width: 0.71; stroke: #2D5E88; fill: #2D5E88;"></circle>
+<circle cx="160.19" cy="435.54" r="5.21" style="stroke-width: 0.71; stroke: #1E4060; fill: #1E4060;"></circle>
+<circle cx="180.99" cy="449.14" r="5.96" style="stroke-width: 0.71; stroke: #1D405F; fill: #1D405F;"></circle>
+<circle cx="573.70" cy="119.70" r="5.58" style="stroke-width: 0.71; stroke: #4EA0E0; fill: #4EA0E0;"></circle>
+<circle cx="289.64" cy="153.34" r="4.26" style="stroke-width: 0.71; stroke: #3D7FB3; fill: #3D7FB3;"></circle>
+<circle cx="382.07" cy="147.97" r="4.80" style="stroke-width: 0.71; stroke: #4288C0; fill: #4288C0;"></circle>
+<circle cx="494.42" cy="221.20" r="5.83" style="stroke-width: 0.71; stroke: #4085BC; fill: #4085BC;"></circle>
+<circle cx="216.55" cy="400.63" r="5.49" style="stroke-width: 0.71; stroke: #234B6E; fill: #234B6E;"></circle>
+<circle cx="333.02" cy="207.35" r="4.80" style="stroke-width: 0.71; stroke: #3A78AB; fill: #3A78AB;"></circle>
+<circle cx="486.43" cy="152.01" r="5.36" style="stroke-width: 0.71; stroke: #4691CC; fill: #4691CC;"></circle>
+<circle cx="517.90" cy="295.50" r="6.64" style="stroke-width: 0.71; stroke: #3A79AB; fill: #3A79AB;"></circle>
+<circle cx="576.70" cy="253.89" r="6.53" style="stroke-width: 0.71; stroke: #4186BD; fill: #4186BD;"></circle>
+<circle cx="534.46" cy="74.35" r="5.19" style="stroke-width: 0.71; stroke: #50A5E7; fill: #50A5E7;"></circle>
+<circle cx="208.61" cy="352.77" r="4.78" style="stroke-width: 0.71; stroke: #275378; fill: #275378;"></circle>
+<circle cx="372.73" cy="161.13" r="4.81" style="stroke-width: 0.71; stroke: #4085BC; fill: #4085BC;"></circle>
+<circle cx="282.52" cy="197.46" r="4.40" style="stroke-width: 0.71; stroke: #3876A7; fill: #3876A7;"></circle>
+<circle cx="102.57" cy="311.64" r="2.86" style="stroke-width: 0.71; stroke: #265176; fill: #265176;"></circle>
+<circle cx="384.85" cy="278.14" r="5.64" style="stroke-width: 0.71; stroke: #36709F; fill: #36709F;"></circle>
+<circle cx="320.84" cy="154.15" r="4.46" style="stroke-width: 0.71; stroke: #3E81B7; fill: #3E81B7;"></circle>
+<circle cx="65.30" cy="434.53" r="1.42" style="stroke-width: 0.71; stroke: #1A3955; fill: #1A3955;"></circle>
+<circle cx="312.05" cy="381.17" r="6.27" style="stroke-width: 0.71; stroke: #29567E; fill: #29567E;"></circle>
+<circle cx="70.74" cy="364.67" r="1.85" style="stroke-width: 0.71; stroke: #204566; fill: #204566;"></circle>
+<circle cx="538.66" cy="202.81" r="5.92" style="stroke-width: 0.71; stroke: #448CC6; fill: #448CC6;"></circle>
+<circle cx="550.01" cy="29.97" r="5.08" style="stroke-width: 0.71; stroke: #55B0F5; fill: #55B0F5;"></circle>
+<circle cx="231.92" cy="406.52" r="5.80" style="stroke-width: 0.71; stroke: #234B6E; fill: #234B6E;"></circle>
+<circle cx="200.72" cy="203.47" r="3.76" style="stroke-width: 0.71; stroke: #346D9C; fill: #346D9C;"></circle>
+<circle cx="76.91" cy="433.51" r="2.73" style="stroke-width: 0.71; stroke: #1A3A57; fill: #1A3A57;"></circle>
+<circle cx="490.25" cy="173.18" r="5.49" style="stroke-width: 0.71; stroke: #448EC7; fill: #448EC7;"></circle>
+<circle cx="100.47" cy="413.56" r="3.47" style="stroke-width: 0.71; stroke: #1D3F5E; fill: #1D3F5E;"></circle>
+<circle cx="84.53" cy="307.24" r="2.34" style="stroke-width: 0.71; stroke: #265075; fill: #265075;"></circle>
+<circle cx="302.88" cy="319.25" r="5.40" style="stroke-width: 0.71; stroke: #2E618B; fill: #2E618B;"></circle>
+<circle cx="76.78" cy="517.66" r="5.61" style="stroke-width: 0.71; stroke: #132C44; fill: #132C44;"></circle>
+<circle cx="574.74" cy="232.25" r="6.33" style="stroke-width: 0.71; stroke: #438AC3; fill: #438AC3;"></circle>
+<circle cx="150.62" cy="422.84" r="4.79" style="stroke-width: 0.71; stroke: #1E4261; fill: #1E4261;"></circle>
+<circle cx="280.36" cy="299.82" r="5.03" style="stroke-width: 0.71; stroke: #2F628E; fill: #2F628E;"></circle>
+<circle cx="602.86" cy="149.62" r="5.87" style="stroke-width: 0.71; stroke: #4C9DDC; fill: #4C9DDC;"></circle>
+<circle cx="271.36" cy="364.86" r="5.62" style="stroke-width: 0.71; stroke: #29567D; fill: #29567D;"></circle>
+<circle cx="323.05" cy="130.18" r="4.38" style="stroke-width: 0.71; stroke: #4186BD; fill: #4186BD;"></circle>
+<circle cx="341.72" cy="367.77" r="6.33" style="stroke-width: 0.71; stroke: #2B5B84; fill: #2B5B84;"></circle>
+<circle cx="339.44" cy="380.49" r="6.52" style="stroke-width: 0.71; stroke: #2A5981; fill: #2A5981;"></circle>
+<circle cx="337.19" cy="160.73" r="4.59" style="stroke-width: 0.71; stroke: #3E82B7; fill: #3E82B7;"></circle>
+<circle cx="417.58" cy="221.13" r="5.41" style="stroke-width: 0.71; stroke: #3C7DB2; fill: #3C7DB2;"></circle>
+<circle cx="464.54" cy="96.25" r="4.98" style="stroke-width: 0.71; stroke: #4B9AD8; fill: #4B9AD8;"></circle>
+<circle cx="100.19" cy="404.50" r="3.38" style="stroke-width: 0.71; stroke: #1E4060; fill: #1E4060;"></circle>
+<circle cx="203.70" cy="440.18" r="6.12" style="stroke-width: 0.71; stroke: #1F4363; fill: #1F4363;"></circle>
+<circle cx="91.70" cy="480.79" r="4.30" style="stroke-width: 0.71; stroke: #17334E; fill: #17334E;"></circle>
+<circle cx="435.04" cy="345.87" r="6.76" style="stroke-width: 0.71; stroke: #326895; fill: #326895;"></circle>
+<circle cx="86.13" cy="245.45" r="2.19" style="stroke-width: 0.71; stroke: #2B5B84; fill: #2B5B84;"></circle>
+<circle cx="287.81" cy="344.04" r="5.52" style="stroke-width: 0.71; stroke: #2B5B84; fill: #2B5B84;"></circle>
+<circle cx="519.70" cy="295.61" r="6.66" style="stroke-width: 0.71; stroke: #3A79AC; fill: #3A79AC;"></circle>
+<circle cx="492.55" cy="187.54" r="5.59" style="stroke-width: 0.71; stroke: #438BC4; fill: #438BC4;"></circle>
+<circle cx="85.13" cy="393.05" r="2.79" style="stroke-width: 0.71; stroke: #1E4161; fill: #1E4161;"></circle>
+<circle cx="569.39" cy="200.47" r="6.05" style="stroke-width: 0.71; stroke: #4590CA; fill: #4590CA;"></circle>
+<circle cx="551.03" cy="171.87" r="5.78" style="stroke-width: 0.71; stroke: #4794D0; fill: #4794D0;"></circle>
+<circle cx="165.32" cy="217.57" r="3.45" style="stroke-width: 0.71; stroke: #316794; fill: #316794;"></circle>
+<circle cx="69.38" cy="519.80" r="4.76" style="stroke-width: 0.71; stroke: #132B43; fill: #132B43;"></circle>
+<circle cx="412.56" cy="185.69" r="5.16" style="stroke-width: 0.71; stroke: #4084BA; fill: #4084BA;"></circle>
+<circle cx="480.90" cy="197.11" r="5.60" style="stroke-width: 0.71; stroke: #4288C0; fill: #4288C0;"></circle>
+<circle cx="454.03" cy="332.36" r="6.70" style="stroke-width: 0.71; stroke: #346C9A; fill: #346C9A;"></circle>
+<circle cx="622.41" cy="79.23" r="5.57" style="stroke-width: 0.71; stroke: #54ADF2; fill: #54ADF2;"></circle>
+<circle cx="80.57" cy="280.25" r="2.10" style="stroke-width: 0.71; stroke: #28547B; fill: #28547B;"></circle>
+<circle cx="291.06" cy="364.74" r="5.81" style="stroke-width: 0.71; stroke: #2A587F; fill: #2A587F;"></circle>
+<circle cx="611.15" cy="130.80" r="5.79" style="stroke-width: 0.71; stroke: #4EA1E2; fill: #4EA1E2;"></circle>
+<circle cx="519.77" cy="168.22" r="5.61" style="stroke-width: 0.71; stroke: #4691CC; fill: #4691CC;"></circle>
+<circle cx="601.30" cy="48.71" r="5.35" style="stroke-width: 0.71; stroke: #56B1F7; fill: #56B1F7;"></circle>
+<circle cx="151.17" cy="435.34" r="5.03" style="stroke-width: 0.71; stroke: #1D3F5F; fill: #1D3F5F;"></circle>
+<circle cx="572.88" cy="130.37" r="5.63" style="stroke-width: 0.71; stroke: #4D9EDD; fill: #4D9EDD;"></circle>
+<circle cx="166.96" cy="429.53" r="5.22" style="stroke-width: 0.71; stroke: #1F4262; fill: #1F4262;"></circle>
+<circle cx="466.45" cy="189.14" r="5.47" style="stroke-width: 0.71; stroke: #4288C0; fill: #4288C0;"></circle>
+<circle cx="434.61" cy="152.79" r="5.10" style="stroke-width: 0.71; stroke: #448CC6; fill: #448CC6;"></circle>
+<circle cx="572.69" cy="205.38" r="6.11" style="stroke-width: 0.71; stroke: #458FCA; fill: #458FCA;"></circle>
+<circle cx="70.56" cy="495.78" r="3.26" style="stroke-width: 0.71; stroke: #152F48; fill: #152F48;"></circle>
+<circle cx="151.04" cy="278.22" r="3.53" style="stroke-width: 0.71; stroke: #2B5B83; fill: #2B5B83;"></circle>
 </g>
 <g clip-path="url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)">
-<text x="32.51" y="440.01" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">0.5</text>
-<text x="32.51" y="274.09" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.0</text>
-<text x="32.51" y="108.16" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.5</text>
-<polyline points="34.70,436.80 37.44,436.80 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="34.70,270.88 37.44,270.88 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="34.70,104.95 37.44,104.95 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="62.87,547.03 62.87,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="203.28,547.03 203.28,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="343.69,547.03 343.69,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="484.10,547.03 484.10,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="624.51,547.03 624.51,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<text x="62.87" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.00</text>
-<text x="203.28" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.25</text>
-<text x="343.69" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.50</text>
-<text x="484.10" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.75</text>
-<text x="624.51" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">1.00</text>
+<text x="32.51" y="533.50" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">0.0</text>
+<text x="32.51" y="396.76" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">0.5</text>
+<text x="32.51" y="260.02" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.0</text>
+<text x="32.51" y="123.28" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.5</text>
+<polyline points="34.70,530.29 37.44,530.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="34.70,393.55 37.44,393.55 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="34.70,256.81 37.44,256.81 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="34.70,120.07 37.44,120.07 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="60.76,547.03 60.76,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="201.25,547.03 201.25,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="341.73,547.03 341.73,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="482.22,547.03 482.22,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="622.70,547.03 622.70,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<text x="60.76" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.00</text>
+<text x="201.25" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.25</text>
+<text x="341.73" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.50</text>
+<text x="482.22" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.75</text>
+<text x="622.70" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">1.00</text>
 <text x="343.85" y="568.23" text-anchor="middle" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="6.51px" lengthadjust="spacingAndGlyphs">x</text>
 <text transform="translate(13.50,274.89) rotate(-90)" text-anchor="middle" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="6.51px" lengthadjust="spacingAndGlyphs">y</text>
-<rect x="661.23" y="173.54" width="48.77" height="113.15" style="stroke-width: 1.07; stroke: none; fill: #FFFFFF;"></rect>
-<image width="17.28" height="86.40" x="666.70" y="194.81" preserveaspectratio="none" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAEsCAYAAAACUNnVAAAAmElEQVQ4ja2UQRLDMAgDd3hk/tnX5agcknFaCoa0vnkMCEnGsL12GQhDYDpPwoDrpBFlRDWi/9Wu6AHC9FkLYLrzlhD3oJ3mDvRHRYy7IC8A7bCK8gpWKYDzeQVArDcDyD2YAnSofZvzaOA6Q7Oahp/dmRuVTQ0xU5TGP2o8Waool1obVuv1q8qP9xPvg633XlGLDtfIhNUBcBeA5ss0BXMAAAAASUVORK5CYII="></image>
-<text x="689.46" y="277.17" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">0.5</text>
-<text x="689.46" y="259.17" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.0</text>
-<text x="689.46" y="241.18" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.5</text>
-<text x="689.46" y="223.19" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">2.0</text>
-<text x="689.46" y="205.19" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">2.5</text>
-<text x="666.70" y="188.18" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="37.81px" lengthadjust="spacingAndGlyphs">(x + y)</text>
-<line x1="666.70" y1="273.96" x2="670.16" y2="273.96" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="666.70" y1="255.97" x2="670.16" y2="255.97" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="666.70" y1="237.97" x2="670.16" y2="237.97" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="666.70" y1="219.98" x2="670.16" y2="219.98" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="666.70" y1="201.98" x2="670.16" y2="201.98" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="680.53" y1="273.96" x2="683.98" y2="273.96" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="680.53" y1="255.97" x2="683.98" y2="255.97" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="680.53" y1="237.97" x2="683.98" y2="237.97" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="680.53" y1="219.98" x2="683.98" y2="219.98" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="680.53" y1="201.98" x2="683.98" y2="201.98" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<rect x="661.23" y="297.65" width="53.30" height="78.59" style="stroke-width: 1.07; stroke: none; fill: #FFFFFF;"></rect>
-<text x="666.70" y="312.29" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="25.31px" lengthadjust="spacingAndGlyphs">(x/y)</text>
-<rect x="666.70" y="318.92" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
-<circle cx="675.34" cy="327.56" r="4.10" style="stroke-width: 0.71; fill: #000000;"></circle>
-<rect x="666.70" y="336.20" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
-<circle cx="675.34" cy="344.84" r="5.23" style="stroke-width: 0.71; fill: #000000;"></circle>
-<rect x="666.70" y="353.48" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
-<circle cx="675.34" cy="362.12" r="6.10" style="stroke-width: 0.71; fill: #000000;"></circle>
-<text x="689.46" y="330.76" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.25</text>
-<text x="689.46" y="348.04" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.50</text>
-<text x="689.46" y="365.32" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.75</text>
+<rect x="661.23" y="173.54" width="53.30" height="78.59" style="stroke-width: 1.07; stroke: none; fill: #FFFFFF;"></rect>
+<text x="666.70" y="188.18" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="25.31px" lengthadjust="spacingAndGlyphs">(x/y)</text>
+<rect x="666.70" y="194.81" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
+<circle cx="675.34" cy="203.45" r="4.01" style="stroke-width: 0.71; fill: #000000;"></circle>
+<rect x="666.70" y="212.09" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
+<circle cx="675.34" cy="220.73" r="5.17" style="stroke-width: 0.71; fill: #000000;"></circle>
+<rect x="666.70" y="229.37" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
+<circle cx="675.34" cy="238.01" r="6.05" style="stroke-width: 0.71; fill: #000000;"></circle>
+<text x="689.46" y="206.66" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.25</text>
+<text x="689.46" y="223.94" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.50</text>
+<text x="689.46" y="241.22" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.75</text>
+<rect x="661.23" y="263.09" width="48.77" height="113.15" style="stroke-width: 1.07; stroke: none; fill: #FFFFFF;"></rect>
+<image width="17.28" height="86.40" x="666.70" y="284.36" preserveaspectratio="none" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAEsCAYAAAACUNnVAAAAmElEQVQ4ja2UQRLDMAgDd3hk/tnX5agcknFaCoa0vnkMCEnGsL12GQhDYDpPwoDrpBFlRDWi/9Wu6AHC9FkLYLrzlhD3oJ3mDvRHRYy7IC8A7bCK8gpWKYDzeQVArDcDyD2YAnSofZvzaOA6Q7Oahp/dmRuVTQ0xU5TGP2o8Waool1obVuv1q8qP9xPvg633XlGLDtfIhNUBcBeA5ss0BXMAAAAASUVORK5CYII="></image>
+<text x="689.46" y="343.29" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="5.59px" lengthadjust="spacingAndGlyphs">1</text>
+<text x="689.46" y="311.03" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="5.59px" lengthadjust="spacingAndGlyphs">2</text>
+<text x="666.70" y="277.73" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="37.81px" lengthadjust="spacingAndGlyphs">(x + y)</text>
+<line x1="666.70" y1="340.08" x2="670.16" y2="340.08" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
+<line x1="666.70" y1="307.82" x2="670.16" y2="307.82" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
+<line x1="680.53" y1="340.08" x2="683.98" y2="340.08" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
+<line x1="680.53" y1="307.82" x2="683.98" y2="307.82" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
 </g>
 </svg>
 
 <p>Any plot (function or object) can be saved to file or converted to BufferedImage object.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb131"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">let</span> [<span class="kw">path</span> <span class="st">"notebooks/generated-images/histogram.jpg"</span>]</span>
+<div class="sourceCode" id="cb131"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb131-1"><a href="#cb131-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">let</span> [<span class="kw">path</span> <span class="st">"/tmp/histogram.jpg"</span>]</span>
 <span id="cb131-2"><a href="#cb131-2" aria-hidden="true" tabindex="-1"></a>  (r-&gt;clj (plot-&gt;file <span class="kw">path</span></span>
 <span id="cb131-3"><a href="#cb131-3" aria-hidden="true" tabindex="-1"></a>                      (<span class="kw">fn</span> [] (hist [<span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>]</span>
 <span id="cb131-4"><a href="#cb131-4" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">:main</span> <span class="st">"Histogram"</span></span>
 <span id="cb131-5"><a href="#cb131-5" aria-hidden="true" tabindex="-1"></a>                                   <span class="at">:xlab</span> <span class="st">"data: [1 1 1 1 2 3 4 5]"</span>))</span>
 <span id="cb131-6"><a href="#cb131-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">:width</span> <span class="dv">800</span> <span class="at">:height</span> <span class="dv">400</span> <span class="at">:quality</span> <span class="dv">50</span>))</span>
-<span id="cb131-7"><a href="#cb131-7" aria-hidden="true" tabindex="-1"></a>  (kind/hiccup [<span class="at">:image</span> {<span class="at">:src</span> <span class="kw">path</span>}]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb131-7"><a href="#cb131-7" aria-hidden="true" tabindex="-1"></a>  (<span class="kw">-&gt;</span> (clojure.java.shell/sh <span class="st">"ls"</span> <span class="kw">path</span>)</span>
+<span id="cb131-8"><a href="#cb131-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">:out</span></span>
+<span id="cb131-9"><a href="#cb131-9" aria-hidden="true" tabindex="-1"></a>      kind/code))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<img src="notebooks/generated-images/histogram.jpg">
 <div class="sourceClojure">
-<div class="sourceCode" id="cb132"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>(plot-&gt;buffered-image (<span class="kw">fn</span> [] (hist [<span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>])) <span class="at">:width</span> <span class="dv">222</span> <span class="at">:height</span> <span class="dv">149</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb132"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb132-1"><a href="#cb132-1" aria-hidden="true" tabindex="-1"></a>/tmp/histogram.jpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="sourceClojure">
+<div class="sourceCode" id="cb133"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>(plot-&gt;buffered-image (<span class="kw">fn</span> [] (hist [<span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span>])) <span class="at">:width</span> <span class="dv">222</span> <span class="at">:height</span> <span class="dv">149</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="clay-image">
 <img src="clojisr.v1.tutorials.main_files/0.png">
@@ -1167,256 +1157,256 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2.10" class="anchored" data-anchor-id="intermediary-representation-as-java-objects."><span class="header-section-number">2.10</span> Intermediary representation as Java objects.</h2>
 <p>Clojisr relies on the fact of an intemediary representation of java, as Java objects. This is usually hidden from the user, but may be useful sometimes. In the current implementation, this is based on <a href="https://github.com/s-u/REngine">REngine</a>.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb133"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb133-1"><a href="#cb133-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">import</span> (org.rosuda.REngine REXP REXPInteger REXPDouble))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb134"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">import</span> (org.rosuda.REngine REXP REXPInteger REXPDouble))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb134"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb134-1"><a href="#cb134-1" aria-hidden="true" tabindex="-1"></a>org.rosuda.REngine.REXPDouble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb135"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a>org.rosuda.REngine.REXPDouble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can convert data between R and Java.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb135"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"1:9"</span></span>
-<span id="cb135-2"><a href="#cb135-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb135-3"><a href="#cb135-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
-<span id="cb135-4"><a href="#cb135-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb136"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"1:9"</span></span>
+<span id="cb136-2"><a href="#cb136-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb136-3"><a href="#cb136-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
+<span id="cb136-4"><a href="#cb136-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb136"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb136-1"><a href="#cb136-1" aria-hidden="true" tabindex="-1"></a>org.rosuda.REngine.REXPInteger</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb137"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a>org.rosuda.REngine.REXPInteger</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb137"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb137-1"><a href="#cb137-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> (REXPInteger. <span class="dv">1</span>)</span>
-<span id="cb137-2"><a href="#cb137-2" aria-hidden="true" tabindex="-1"></a>    java-&gt;r</span>
-<span id="cb137-3"><a href="#cb137-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb138"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> (REXPInteger. <span class="dv">1</span>)</span>
+<span id="cb138-2"><a href="#cb138-2" aria-hidden="true" tabindex="-1"></a>    java-&gt;r</span>
+<span id="cb138-3"><a href="#cb138-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb138"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb138-1"><a href="#cb138-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb139"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can further convert data from the java representation to Clojure.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb139"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb139-1"><a href="#cb139-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"1:9"</span></span>
-<span id="cb139-2"><a href="#cb139-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb139-3"><a href="#cb139-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
-<span id="cb139-4"><a href="#cb139-4" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"1:9"</span></span>
+<span id="cb140-2"><a href="#cb140-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb140-3"><a href="#cb140-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
+<span id="cb140-4"><a href="#cb140-4" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb140"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb140-1"><a href="#cb140-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb141"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>On the opposite direction, we can also convert Clojure data into the Java represenattion.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb141"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb141-1"><a href="#cb141-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> (<span class="kw">range</span> <span class="dv">1</span> <span class="dv">10</span>)</span>
-<span id="cb141-2"><a href="#cb141-2" aria-hidden="true" tabindex="-1"></a>    clj-&gt;java</span>
-<span id="cb141-3"><a href="#cb141-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb142"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> (<span class="kw">range</span> <span class="dv">1</span> <span class="dv">10</span>)</span>
+<span id="cb142-2"><a href="#cb142-2" aria-hidden="true" tabindex="-1"></a>    clj-&gt;java</span>
+<span id="cb142-3"><a href="#cb142-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb142"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb142-1"><a href="#cb142-1" aria-hidden="true" tabindex="-1"></a>org.rosuda.REngine.REXPInteger</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb143"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a>org.rosuda.REngine.REXPInteger</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb143"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb143-1"><a href="#cb143-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> (<span class="kw">range</span> <span class="dv">1</span> <span class="dv">10</span>)</span>
-<span id="cb143-2"><a href="#cb143-2" aria-hidden="true" tabindex="-1"></a>    clj-&gt;java</span>
-<span id="cb143-3"><a href="#cb143-3" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb144"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> (<span class="kw">range</span> <span class="dv">1</span> <span class="dv">10</span>)</span>
+<span id="cb144-2"><a href="#cb144-2" aria-hidden="true" tabindex="-1"></a>    clj-&gt;java</span>
+<span id="cb144-3"><a href="#cb144-3" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb144"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb144-1"><a href="#cb144-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span> <span class="dv">4</span> <span class="dv">5</span> <span class="dv">6</span> <span class="dv">7</span> <span class="dv">8</span> <span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>There is an alternative way of conversion from Java to Clojure, naively converting the internal Java representation to a Clojure data structure. It can be handy when one wants to have plain access to all the metadata (R attributes), etc.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb145"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb145-1"><a href="#cb145-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;&gt;</span> <span class="st">"1:9"</span></span>
-<span id="cb145-2"><a href="#cb145-2" aria-hidden="true" tabindex="-1"></a>     r</span>
-<span id="cb145-3"><a href="#cb145-3" aria-hidden="true" tabindex="-1"></a>     r-&gt;java</span>
-<span id="cb145-4"><a href="#cb145-4" aria-hidden="true" tabindex="-1"></a>     java-&gt;native-clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb146"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;&gt;</span> <span class="st">"1:9"</span></span>
+<span id="cb146-2"><a href="#cb146-2" aria-hidden="true" tabindex="-1"></a>     r</span>
+<span id="cb146-3"><a href="#cb146-3" aria-hidden="true" tabindex="-1"></a>     r-&gt;java</span>
+<span id="cb146-4"><a href="#cb146-4" aria-hidden="true" tabindex="-1"></a>     java-&gt;native-clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb146"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb146-1"><a href="#cb146-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb147"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb147"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb147-1"><a href="#cb147-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;&gt;</span> <span class="st">"data.frame(x=1:3,y=factor('a','a','b'))"</span></span>
-<span id="cb147-2"><a href="#cb147-2" aria-hidden="true" tabindex="-1"></a>     r</span>
-<span id="cb147-3"><a href="#cb147-3" aria-hidden="true" tabindex="-1"></a>     r-&gt;java</span>
-<span id="cb147-4"><a href="#cb147-4" aria-hidden="true" tabindex="-1"></a>     java-&gt;native-clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb148"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;&gt;</span> <span class="st">"data.frame(x=1:3,y=factor('a','a','b'))"</span></span>
+<span id="cb148-2"><a href="#cb148-2" aria-hidden="true" tabindex="-1"></a>     r</span>
+<span id="cb148-3"><a href="#cb148-3" aria-hidden="true" tabindex="-1"></a>     r-&gt;java</span>
+<span id="cb148-4"><a href="#cb148-4" aria-hidden="true" tabindex="-1"></a>     java-&gt;native-clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb148"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb148-1"><a href="#cb148-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:x</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], <span class="at">:y</span> [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb149"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:x</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], <span class="at">:y</span> [<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We can evaluate R code and immediately return the result as a java object, without ever creating a handle to an R object holding the result:</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb149"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb149-1"><a href="#cb149-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"1+2"</span></span>
-<span id="cb149-2"><a href="#cb149-2" aria-hidden="true" tabindex="-1"></a>    eval-r-&gt;java</span>
-<span id="cb149-3"><a href="#cb149-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb150"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"1+2"</span></span>
+<span id="cb150-2"><a href="#cb150-2" aria-hidden="true" tabindex="-1"></a>    eval-r-&gt;java</span>
+<span id="cb150-3"><a href="#cb150-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">class</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb150"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb150-1"><a href="#cb150-1" aria-hidden="true" tabindex="-1"></a>org.rosuda.REngine.REXPDouble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb151"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a>org.rosuda.REngine.REXPDouble</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb151"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb151-1"><a href="#cb151-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"1+2"</span></span>
-<span id="cb151-2"><a href="#cb151-2" aria-hidden="true" tabindex="-1"></a>    eval-r-&gt;java</span>
-<span id="cb151-3"><a href="#cb151-3" aria-hidden="true" tabindex="-1"></a>    (.asDoubles)</span>
-<span id="cb151-4"><a href="#cb151-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">vec</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"1+2"</span></span>
+<span id="cb152-2"><a href="#cb152-2" aria-hidden="true" tabindex="-1"></a>    eval-r-&gt;java</span>
+<span id="cb152-3"><a href="#cb152-3" aria-hidden="true" tabindex="-1"></a>    (.asDoubles)</span>
+<span id="cb152-4"><a href="#cb152-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">vec</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb152"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb152-1"><a href="#cb152-1" aria-hidden="true" tabindex="-1"></a>[<span class="fl">3.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb153"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a>[<span class="fl">3.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="more-data-conversion-examples" class="level2" data-number="2.11">
 <h2 data-number="2.11" class="anchored" data-anchor-id="more-data-conversion-examples"><span class="header-section-number">2.11</span> More data conversion examples</h2>
 <p>Convertion between R and Clojure always passes through Java. To stress this, we write it explicitly in the following examples.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb153"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb153-1"><a href="#cb153-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"list(a=1:2,b='hi!')"</span></span>
-<span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb153-3"><a href="#cb153-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
-<span id="cb153-4"><a href="#cb153-4" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb154"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"list(a=1:2,b='hi!')"</span></span>
+<span id="cb154-2"><a href="#cb154-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb154-3"><a href="#cb154-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
+<span id="cb154-4"><a href="#cb154-4" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb154"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb154-1"><a href="#cb154-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>], <span class="at">:b</span> [<span class="st">"hi!"</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb155"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>], <span class="at">:b</span> [<span class="st">"hi!"</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Partially named lists are also supported</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb155"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb155-1"><a href="#cb155-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"list(a=1:2,'hi!')"</span></span>
-<span id="cb155-2"><a href="#cb155-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb155-3"><a href="#cb155-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
-<span id="cb155-4"><a href="#cb155-4" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb156"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"list(a=1:2,'hi!')"</span></span>
+<span id="cb156-2"><a href="#cb156-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb156-3"><a href="#cb156-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
+<span id="cb156-4"><a href="#cb156-4" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb156"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb156-1"><a href="#cb156-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>], <span class="dv">1</span> [<span class="st">"hi!"</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb157"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>], <span class="dv">1</span> [<span class="st">"hi!"</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb157"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb157-1"><a href="#cb157-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"table(c('a','b','a','b','a','b','a','b'), c(1,1,2,2,3,3,1,1))"</span></span>
-<span id="cb157-2"><a href="#cb157-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb157-3"><a href="#cb157-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
-<span id="cb157-4"><a href="#cb157-4" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj</span>
-<span id="cb157-5"><a href="#cb157-5" aria-hidden="true" tabindex="-1"></a>    dataset/mapseq-reader</span>
-<span id="cb157-6"><a href="#cb157-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb158"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"table(c('a','b','a','b','a','b','a','b'), c(1,1,2,2,3,3,1,1))"</span></span>
+<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
+<span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj</span>
+<span id="cb158-5"><a href="#cb158-5" aria-hidden="true" tabindex="-1"></a>    dataset/mapseq-reader</span>
+<span id="cb158-6"><a href="#cb158-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">set</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb158"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb158-1"><a href="#cb158-1" aria-hidden="true" tabindex="-1"></a>#{{<span class="dv">0</span> <span class="st">"a"</span>, <span class="dv">1</span> <span class="st">"2"</span>, :$value <span class="dv">2</span>}</span>
-<span id="cb158-2"><a href="#cb158-2" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"b"</span>, <span class="dv">1</span> <span class="st">"3"</span>, :$value <span class="dv">1</span>}</span>
-<span id="cb158-3"><a href="#cb158-3" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"a"</span>, <span class="dv">1</span> <span class="st">"1"</span>, :$value <span class="dv">2</span>}</span>
-<span id="cb158-4"><a href="#cb158-4" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"a"</span>, <span class="dv">1</span> <span class="st">"3"</span>, :$value <span class="dv">1</span>}</span>
-<span id="cb158-5"><a href="#cb158-5" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"b"</span>, <span class="dv">1</span> <span class="st">"2"</span>, :$value <span class="dv">1</span>}</span>
-<span id="cb158-6"><a href="#cb158-6" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"b"</span>, <span class="dv">1</span> <span class="st">"1"</span>, :$value <span class="dv">1</span>}}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb159"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a>#{{<span class="dv">0</span> <span class="st">"a"</span>, <span class="dv">1</span> <span class="st">"2"</span>, :$value <span class="dv">2</span>}</span>
+<span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"b"</span>, <span class="dv">1</span> <span class="st">"3"</span>, :$value <span class="dv">1</span>}</span>
+<span id="cb159-3"><a href="#cb159-3" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"a"</span>, <span class="dv">1</span> <span class="st">"1"</span>, :$value <span class="dv">2</span>}</span>
+<span id="cb159-4"><a href="#cb159-4" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"a"</span>, <span class="dv">1</span> <span class="st">"3"</span>, :$value <span class="dv">1</span>}</span>
+<span id="cb159-5"><a href="#cb159-5" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"b"</span>, <span class="dv">1</span> <span class="st">"2"</span>, :$value <span class="dv">1</span>}</span>
+<span id="cb159-6"><a href="#cb159-6" aria-hidden="true" tabindex="-1"></a>  {<span class="dv">0</span> <span class="st">"b"</span>, <span class="dv">1</span> <span class="st">"1"</span>, :$value <span class="dv">1</span>}}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb159"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb159-1"><a href="#cb159-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> {<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>] <span class="at">:b</span> <span class="st">"hi!"</span>}</span>
-<span id="cb159-2"><a href="#cb159-2" aria-hidden="true" tabindex="-1"></a>    clj-&gt;java</span>
-<span id="cb159-3"><a href="#cb159-3" aria-hidden="true" tabindex="-1"></a>    java-&gt;r</span>
-<span id="cb159-4"><a href="#cb159-4" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
-<span id="cb159-5"><a href="#cb159-5" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> {<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>] <span class="at">:b</span> <span class="st">"hi!"</span>}</span>
+<span id="cb160-2"><a href="#cb160-2" aria-hidden="true" tabindex="-1"></a>    clj-&gt;java</span>
+<span id="cb160-3"><a href="#cb160-3" aria-hidden="true" tabindex="-1"></a>    java-&gt;r</span>
+<span id="cb160-4"><a href="#cb160-4" aria-hidden="true" tabindex="-1"></a>    r-&gt;java</span>
+<span id="cb160-5"><a href="#cb160-5" aria-hidden="true" tabindex="-1"></a>    java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb160"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb160-1"><a href="#cb160-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>], <span class="at">:b</span> [<span class="st">"hi!"</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb161"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb161-1"><a href="#cb161-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>], <span class="at">:b</span> [<span class="st">"hi!"</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb161"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb161-1"><a href="#cb161-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;&gt;</span> {<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>] <span class="at">:b</span> <span class="st">"hi!"</span>}</span>
-<span id="cb161-2"><a href="#cb161-2" aria-hidden="true" tabindex="-1"></a>     clj-&gt;java</span>
-<span id="cb161-3"><a href="#cb161-3" aria-hidden="true" tabindex="-1"></a>     java-&gt;r</span>
-<span id="cb161-4"><a href="#cb161-4" aria-hidden="true" tabindex="-1"></a>     ((r <span class="st">"deparse"</span>))</span>
-<span id="cb161-5"><a href="#cb161-5" aria-hidden="true" tabindex="-1"></a>     r-&gt;java</span>
-<span id="cb161-6"><a href="#cb161-6" aria-hidden="true" tabindex="-1"></a>     java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;&gt;</span> {<span class="at">:a</span> [<span class="dv">1</span> <span class="dv">2</span>] <span class="at">:b</span> <span class="st">"hi!"</span>}</span>
+<span id="cb162-2"><a href="#cb162-2" aria-hidden="true" tabindex="-1"></a>     clj-&gt;java</span>
+<span id="cb162-3"><a href="#cb162-3" aria-hidden="true" tabindex="-1"></a>     java-&gt;r</span>
+<span id="cb162-4"><a href="#cb162-4" aria-hidden="true" tabindex="-1"></a>     ((r <span class="st">"deparse"</span>))</span>
+<span id="cb162-5"><a href="#cb162-5" aria-hidden="true" tabindex="-1"></a>     r-&gt;java</span>
+<span id="cb162-6"><a href="#cb162-6" aria-hidden="true" tabindex="-1"></a>     java-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb162"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb162-1"><a href="#cb162-1" aria-hidden="true" tabindex="-1"></a>[<span class="st">"list(a = 1:2, b = </span><span class="sc">\"</span><span class="st">hi!</span><span class="sc">\"</span><span class="st">)"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a>[<span class="st">"list(a = 1:2, b = </span><span class="sc">\"</span><span class="st">hi!</span><span class="sc">\"</span><span class="st">)"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <section id="basic-types-convertion-clj-r-clj" class="level3" data-number="2.11.1">
 <h3 data-number="2.11.1" class="anchored" data-anchor-id="basic-types-convertion-clj-r-clj"><span class="header-section-number">2.11.1</span> Basic types convertion clj-&gt;r-&gt;clj</h3>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb163"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb163-1"><a href="#cb163-1" aria-hidden="true" tabindex="-1"></a>(<span class="bu">def</span><span class="fu"> clj-&gt;r-&gt;clj </span>(<span class="kw">comp</span> r-&gt;clj r))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb164"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a>(<span class="bu">def</span><span class="fu"> clj-&gt;r-&gt;clj </span>(<span class="kw">comp</span> r-&gt;clj r))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb164"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb164-1"><a href="#cb164-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj <span class="va">nil</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb165"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj <span class="va">nil</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb165"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb165-1"><a href="#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="va">nil</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb166"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a><span class="va">nil</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb166"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb166-1"><a href="#cb166-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj [<span class="dv">10</span> <span class="dv">11</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb167"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj [<span class="dv">10</span> <span class="dv">11</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb167"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb167-1"><a href="#cb167-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">10</span> <span class="dv">11</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb168"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">10</span> <span class="dv">11</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb168"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb168-1"><a href="#cb168-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj [<span class="fl">10.0</span> <span class="fl">11.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb169"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj [<span class="fl">10.0</span> <span class="fl">11.0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb169"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb169-1"><a href="#cb169-1" aria-hidden="true" tabindex="-1"></a>[<span class="fl">10.0</span> <span class="fl">11.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a>[<span class="fl">10.0</span> <span class="fl">11.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb170"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb170-1"><a href="#cb170-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj (<span class="kw">list</span> <span class="fl">10.0</span> <span class="fl">11.0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb171"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj (<span class="kw">list</span> <span class="fl">10.0</span> <span class="fl">11.0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb171"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb171-1"><a href="#cb171-1" aria-hidden="true" tabindex="-1"></a>[<span class="fl">10.0</span> <span class="fl">11.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb172"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a>[<span class="fl">10.0</span> <span class="fl">11.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb172"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb172-1"><a href="#cb172-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj {<span class="at">:a</span> <span class="dv">1</span> <span class="at">:b</span> <span class="dv">2</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb173"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a>(clj-&gt;r-&gt;clj {<span class="at">:a</span> <span class="dv">1</span> <span class="at">:b</span> <span class="dv">2</span>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb173"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb173-1"><a href="#cb173-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span>], <span class="at">:b</span> [<span class="dv">2</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb174"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span>], <span class="at">:b</span> [<span class="dv">2</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="various-r-objects" class="level3" data-number="2.11.2">
 <h3 data-number="2.11.2" class="anchored" data-anchor-id="various-r-objects"><span class="header-section-number">2.11.2</span> Various R objects</h3>
 <p>Named list</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb174"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb174-1"><a href="#cb174-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"list(a=1L,b=c(10,20),c='hi!')"</span></span>
-<span id="cb174-2"><a href="#cb174-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb174-3"><a href="#cb174-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb175"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"list(a=1L,b=c(10,20),c='hi!')"</span></span>
+<span id="cb175-2"><a href="#cb175-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb175-3"><a href="#cb175-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb175"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb175-1"><a href="#cb175-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span>], <span class="at">:b</span> [<span class="fl">10.0</span> <span class="fl">20.0</span>], <span class="at">:c</span> [<span class="st">"hi!"</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb176"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:a</span> [<span class="dv">1</span>], <span class="at">:b</span> [<span class="fl">10.0</span> <span class="fl">20.0</span>], <span class="at">:c</span> [<span class="st">"hi!"</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Array of doubles</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb176"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb176-1"><a href="#cb176-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"c(10,20,30)"</span></span>
-<span id="cb176-2"><a href="#cb176-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb176-3"><a href="#cb176-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb177"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"c(10,20,30)"</span></span>
+<span id="cb177-2"><a href="#cb177-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb177-3"><a href="#cb177-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb177"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb177-1"><a href="#cb177-1" aria-hidden="true" tabindex="-1"></a>[<span class="fl">10.0</span> <span class="fl">20.0</span> <span class="fl">30.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb178"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a>[<span class="fl">10.0</span> <span class="fl">20.0</span> <span class="fl">30.0</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Array of longs</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb178"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb178-1"><a href="#cb178-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"c(10L,20L,30L)"</span></span>
-<span id="cb178-2"><a href="#cb178-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb178-3"><a href="#cb178-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb179"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"c(10L,20L,30L)"</span></span>
+<span id="cb179-2"><a href="#cb179-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb179-3"><a href="#cb179-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb179"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb179-1"><a href="#cb179-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">10</span> <span class="dv">20</span> <span class="dv">30</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb180"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">10</span> <span class="dv">20</span> <span class="dv">30</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Timeseries</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb180"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb180-1"><a href="#cb180-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="at">'euro</span></span>
-<span id="cb180-2"><a href="#cb180-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb180-3"><a href="#cb180-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj</span>
-<span id="cb180-4"><a href="#cb180-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">first</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb181"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="at">'euro</span></span>
+<span id="cb181-2"><a href="#cb181-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb181-3"><a href="#cb181-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj</span>
+<span id="cb181-4"><a href="#cb181-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">first</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb181"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="fl">13.7603</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb182"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="fl">13.7603</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Pairlist</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb182"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb182-1"><a href="#cb182-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> r.stats/dnorm</span>
-<span id="cb182-2"><a href="#cb182-2" aria-hidden="true" tabindex="-1"></a>    r.base/formals</span>
-<span id="cb182-3"><a href="#cb182-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj</span>
-<span id="cb182-4"><a href="#cb182-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">keys</span></span>
-<span id="cb182-5"><a href="#cb182-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">sort</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb183"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> r.stats/dnorm</span>
+<span id="cb183-2"><a href="#cb183-2" aria-hidden="true" tabindex="-1"></a>    r.base/formals</span>
+<span id="cb183-3"><a href="#cb183-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj</span>
+<span id="cb183-4"><a href="#cb183-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">keys</span></span>
+<span id="cb183-5"><a href="#cb183-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">sort</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb183"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb183-1"><a href="#cb183-1" aria-hidden="true" tabindex="-1"></a>(<span class="at">:log</span> <span class="at">:mean</span> <span class="at">:sd</span> <span class="at">:x</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb184"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a>(<span class="at">:log</span> <span class="at">:mean</span> <span class="at">:sd</span> <span class="at">:x</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>NULL</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb184"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb184-1"><a href="#cb184-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"NULL"</span></span>
-<span id="cb184-2"><a href="#cb184-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb184-3"><a href="#cb184-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb185"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"NULL"</span></span>
+<span id="cb185-2"><a href="#cb185-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb185-3"><a href="#cb185-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb185"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb185-1"><a href="#cb185-1" aria-hidden="true" tabindex="-1"></a><span class="va">nil</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb186"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="va">nil</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>TRUE/FALSE</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb186"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb186-1"><a href="#cb186-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"TRUE"</span></span>
-<span id="cb186-2"><a href="#cb186-2" aria-hidden="true" tabindex="-1"></a>    r</span>
-<span id="cb186-3"><a href="#cb186-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb187"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="st">"TRUE"</span></span>
+<span id="cb187-2"><a href="#cb187-2" aria-hidden="true" tabindex="-1"></a>    r</span>
+<span id="cb187-3"><a href="#cb187-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb187"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb187-1"><a href="#cb187-1" aria-hidden="true" tabindex="-1"></a>[<span class="va">true</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb188"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a>[<span class="va">true</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>
@@ -1424,85 +1414,85 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 data-number="2.12" class="anchored" data-anchor-id="inspecting-r-functions"><span class="header-section-number">2.12</span> Inspecting R functions</h2>
 <p>The <code>mean</code> function is defined to expect arguments <code>x</code> and <code>...</code>. These arguments have no default values (thus, its formals have empty symbols as values):</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb188"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb188-1"><a href="#cb188-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="at">'mean</span></span>
-<span id="cb188-2"><a href="#cb188-2" aria-hidden="true" tabindex="-1"></a>    r.base/formals</span>
-<span id="cb188-3"><a href="#cb188-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb189"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="at">'mean</span></span>
+<span id="cb189-2"><a href="#cb189-2" aria-hidden="true" tabindex="-1"></a>    r.base/formals</span>
+<span id="cb189-3"><a href="#cb189-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb189"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb189-1"><a href="#cb189-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:x</span> , <span class="at">:...</span> }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb190"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:x</span> , <span class="at">:...</span> }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>It is an <a href="http://adv-r.had.co.nz/S3.html">S3 generic function</a> function, which we can realize by printing it:</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb190"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb190-1"><a href="#cb190-1" aria-hidden="true" tabindex="-1"></a>(r <span class="at">'mean</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb191"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a>(r <span class="at">'mean</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb191"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb191-1"><a href="#cb191-1" aria-hidden="true" tabindex="-1"></a>function (x, ...) </span>
-<span id="cb191-2"><a href="#cb191-2" aria-hidden="true" tabindex="-1"></a>UseMethod(<span class="st">"mean"</span>)</span>
-<span id="cb191-3"><a href="#cb191-3" aria-hidden="true" tabindex="-1"></a>&lt;bytecode: <span class="bn">0x55cba93db7a0</span>&gt;</span>
-<span id="cb191-4"><a href="#cb191-4" aria-hidden="true" tabindex="-1"></a>&lt;environment: namespace<span class="at">:base</span>&gt;</span>
-<span id="cb191-5"><a href="#cb191-5" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb192"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a>function (x, ...) </span>
+<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a>UseMethod(<span class="st">"mean"</span>)</span>
+<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a>&lt;bytecode: <span class="bn">0x601cd0aa27a0</span>&gt;</span>
+<span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a>&lt;environment: namespace<span class="at">:base</span>&gt;</span>
+<span id="cb192-5"><a href="#cb192-5" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>So, we can expect possibly more details when inspecting its default implementation. Now, we see some arguments that do have default values.</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb192"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="at">'mean.default</span></span>
-<span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a>    r.base/formals</span>
-<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb193"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;</span> <span class="at">'mean.default</span></span>
+<span id="cb193-2"><a href="#cb193-2" aria-hidden="true" tabindex="-1"></a>    r.base/formals</span>
+<span id="cb193-3"><a href="#cb193-3" aria-hidden="true" tabindex="-1"></a>    r-&gt;clj)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb193"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb193-1"><a href="#cb193-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:x</span> , <span class="at">:trim</span> [<span class="fl">0.0</span>], <span class="at">:na.rm</span> [<span class="va">false</span>], <span class="at">:...</span> }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb194"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a>{<span class="at">:x</span> , <span class="at">:trim</span> [<span class="fl">0.0</span>], <span class="at">:na.rm</span> [<span class="va">false</span>], <span class="at">:...</span> }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="r-function-arglists" class="level2" data-number="2.13">
 <h2 data-number="2.13" class="anchored" data-anchor-id="r-function-arglists"><span class="header-section-number">2.13</span> R-function-arglists</h2>
 <p>As we saw earlier, R functions are Clojure functions. The arglists of functions brought up by <code>require-r</code> match the expected arguments. Here are some examples:</p>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb194"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb194-1"><a href="#cb194-1" aria-hidden="true" tabindex="-1"></a>(require-r</span>
-<span id="cb194-2"><a href="#cb194-2" aria-hidden="true" tabindex="-1"></a> '[base]</span>
-<span id="cb194-3"><a href="#cb194-3" aria-hidden="true" tabindex="-1"></a> '[stats]</span>
-<span id="cb194-4"><a href="#cb194-4" aria-hidden="true" tabindex="-1"></a> '[grDevices])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb195"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a>(require-r</span>
+<span id="cb195-2"><a href="#cb195-2" aria-hidden="true" tabindex="-1"></a> '[base]</span>
+<span id="cb195-3"><a href="#cb195-3" aria-hidden="true" tabindex="-1"></a> '[stats]</span>
+<span id="cb195-4"><a href="#cb195-4" aria-hidden="true" tabindex="-1"></a> '[grDevices])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb195"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb195-1"><a href="#cb195-1" aria-hidden="true" tabindex="-1"></a><span class="va">nil</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb196"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="va">nil</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
-<div class="sourceCode" id="cb196"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb196-1"><a href="#cb196-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;&gt;</span> [<span class="va">#'r.base/mean,</span> <span class="va">#'r.base/mean-default,</span> <span class="va">#'r.stats/arima0,</span></span>
-<span id="cb196-2"><a href="#cb196-2" aria-hidden="true" tabindex="-1"></a>      <span class="va">#'r.grDevices/dev-off,</span> <span class="va">#'r.base/Sys-info,</span> <span class="va">#'r.base/summary-default</span></span>
-<span id="cb196-3"><a href="#cb196-3" aria-hidden="true" tabindex="-1"></a>      <span class="co">;; Primitive functions:</span></span>
-<span id="cb196-4"><a href="#cb196-4" aria-hidden="true" tabindex="-1"></a>      <span class="va">#'r.base/sin,</span> <span class="va">#'r.base/sum</span>]</span>
-<span id="cb196-5"><a href="#cb196-5" aria-hidden="true" tabindex="-1"></a>     (<span class="kw">map</span> (<span class="kw">fn</span> [f]</span>
-<span id="cb196-6"><a href="#cb196-6" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">-&gt;</span> f</span>
-<span id="cb196-7"><a href="#cb196-7" aria-hidden="true" tabindex="-1"></a>                <span class="kw">meta</span></span>
-<span id="cb196-8"><a href="#cb196-8" aria-hidden="true" tabindex="-1"></a>                (<span class="kw">update</span> <span class="at">:ns</span> (<span class="kw">comp</span> <span class="kw">symbol</span> <span class="kw">str</span>))))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a>(<span class="kw">-&gt;&gt;</span> [<span class="va">#'r.base/mean,</span> <span class="va">#'r.base/mean-default,</span> <span class="va">#'r.stats/arima0,</span></span>
+<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a>      <span class="va">#'r.grDevices/dev-off,</span> <span class="va">#'r.base/Sys-info,</span> <span class="va">#'r.base/summary-default</span></span>
+<span id="cb197-3"><a href="#cb197-3" aria-hidden="true" tabindex="-1"></a>      <span class="co">;; Primitive functions:</span></span>
+<span id="cb197-4"><a href="#cb197-4" aria-hidden="true" tabindex="-1"></a>      <span class="va">#'r.base/sin,</span> <span class="va">#'r.base/sum</span>]</span>
+<span id="cb197-5"><a href="#cb197-5" aria-hidden="true" tabindex="-1"></a>     (<span class="kw">map</span> (<span class="kw">fn</span> [f]</span>
+<span id="cb197-6"><a href="#cb197-6" aria-hidden="true" tabindex="-1"></a>            (<span class="kw">-&gt;</span> f</span>
+<span id="cb197-7"><a href="#cb197-7" aria-hidden="true" tabindex="-1"></a>                <span class="kw">meta</span></span>
+<span id="cb197-8"><a href="#cb197-8" aria-hidden="true" tabindex="-1"></a>                (<span class="kw">update</span> <span class="at">:ns</span> (<span class="kw">comp</span> <span class="kw">symbol</span> <span class="kw">str</span>))))))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb197"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb197-1"><a href="#cb197-1" aria-hidden="true" tabindex="-1"></a>({<span class="at">:arglists</span> ([x &amp; {<span class="at">:keys</span> [...]}]), <span class="at">:name</span> mean, <span class="at">:ns</span> r.base}</span>
-<span id="cb197-2"><a href="#cb197-2" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([x &amp; {<span class="at">:keys</span> [trim na.rm ...]}]),</span>
-<span id="cb197-3"><a href="#cb197-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">:name</span> mean-default,</span>
-<span id="cb197-4"><a href="#cb197-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">:ns</span> r.base}</span>
-<span id="cb197-5"><a href="#cb197-5" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span></span>
-<span id="cb197-6"><a href="#cb197-6" aria-hidden="true" tabindex="-1"></a>  ([x</span>
-<span id="cb197-7"><a href="#cb197-7" aria-hidden="true" tabindex="-1"></a>    &amp;</span>
-<span id="cb197-8"><a href="#cb197-8" aria-hidden="true" tabindex="-1"></a>    {<span class="at">:keys</span></span>
-<span id="cb197-9"><a href="#cb197-9" aria-hidden="true" tabindex="-1"></a>     [order</span>
-<span id="cb197-10"><a href="#cb197-10" aria-hidden="true" tabindex="-1"></a>      seasonal</span>
-<span id="cb197-11"><a href="#cb197-11" aria-hidden="true" tabindex="-1"></a>      xreg</span>
-<span id="cb197-12"><a href="#cb197-12" aria-hidden="true" tabindex="-1"></a>      include.mean</span>
-<span id="cb197-13"><a href="#cb197-13" aria-hidden="true" tabindex="-1"></a>      delta</span>
-<span id="cb197-14"><a href="#cb197-14" aria-hidden="true" tabindex="-1"></a>      transform.pars</span>
-<span id="cb197-15"><a href="#cb197-15" aria-hidden="true" tabindex="-1"></a>      fixed</span>
-<span id="cb197-16"><a href="#cb197-16" aria-hidden="true" tabindex="-1"></a>      init</span>
-<span id="cb197-17"><a href="#cb197-17" aria-hidden="true" tabindex="-1"></a>      method</span>
-<span id="cb197-18"><a href="#cb197-18" aria-hidden="true" tabindex="-1"></a>      n.<span class="kw">cond</span></span>
-<span id="cb197-19"><a href="#cb197-19" aria-hidden="true" tabindex="-1"></a>      optim.control]}]),</span>
-<span id="cb197-20"><a href="#cb197-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">:name</span> arima0,</span>
-<span id="cb197-21"><a href="#cb197-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">:ns</span> r.stats}</span>
-<span id="cb197-22"><a href="#cb197-22" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([&amp; {<span class="at">:keys</span> [which]}]), <span class="at">:name</span> dev-off, <span class="at">:ns</span> r.grDevices}</span>
-<span id="cb197-23"><a href="#cb197-23" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([]), <span class="at">:name</span> Sys-info, <span class="at">:ns</span> r.base}</span>
-<span id="cb197-24"><a href="#cb197-24" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([object &amp; {<span class="at">:keys</span> [... digits quantile.<span class="kw">type</span>]}]),</span>
-<span id="cb197-25"><a href="#cb197-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">:name</span> summary-default,</span>
-<span id="cb197-26"><a href="#cb197-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">:ns</span> r.base}</span>
-<span id="cb197-27"><a href="#cb197-27" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([x]), <span class="at">:name</span> sin, <span class="at">:ns</span> r.base}</span>
-<span id="cb197-28"><a href="#cb197-28" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([&amp; {<span class="at">:keys</span> [... na.rm]}]), <span class="at">:name</span> sum, <span class="at">:ns</span> r.base})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb198"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb198-1"><a href="#cb198-1" aria-hidden="true" tabindex="-1"></a>({<span class="at">:arglists</span> ([x &amp; {<span class="at">:keys</span> [...]}]), <span class="at">:name</span> mean, <span class="at">:ns</span> r.base}</span>
+<span id="cb198-2"><a href="#cb198-2" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([x &amp; {<span class="at">:keys</span> [trim na.rm ...]}]),</span>
+<span id="cb198-3"><a href="#cb198-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">:name</span> mean-default,</span>
+<span id="cb198-4"><a href="#cb198-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">:ns</span> r.base}</span>
+<span id="cb198-5"><a href="#cb198-5" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span></span>
+<span id="cb198-6"><a href="#cb198-6" aria-hidden="true" tabindex="-1"></a>  ([x</span>
+<span id="cb198-7"><a href="#cb198-7" aria-hidden="true" tabindex="-1"></a>    &amp;</span>
+<span id="cb198-8"><a href="#cb198-8" aria-hidden="true" tabindex="-1"></a>    {<span class="at">:keys</span></span>
+<span id="cb198-9"><a href="#cb198-9" aria-hidden="true" tabindex="-1"></a>     [order</span>
+<span id="cb198-10"><a href="#cb198-10" aria-hidden="true" tabindex="-1"></a>      seasonal</span>
+<span id="cb198-11"><a href="#cb198-11" aria-hidden="true" tabindex="-1"></a>      xreg</span>
+<span id="cb198-12"><a href="#cb198-12" aria-hidden="true" tabindex="-1"></a>      include.mean</span>
+<span id="cb198-13"><a href="#cb198-13" aria-hidden="true" tabindex="-1"></a>      delta</span>
+<span id="cb198-14"><a href="#cb198-14" aria-hidden="true" tabindex="-1"></a>      transform.pars</span>
+<span id="cb198-15"><a href="#cb198-15" aria-hidden="true" tabindex="-1"></a>      fixed</span>
+<span id="cb198-16"><a href="#cb198-16" aria-hidden="true" tabindex="-1"></a>      init</span>
+<span id="cb198-17"><a href="#cb198-17" aria-hidden="true" tabindex="-1"></a>      method</span>
+<span id="cb198-18"><a href="#cb198-18" aria-hidden="true" tabindex="-1"></a>      n.<span class="kw">cond</span></span>
+<span id="cb198-19"><a href="#cb198-19" aria-hidden="true" tabindex="-1"></a>      optim.control]}]),</span>
+<span id="cb198-20"><a href="#cb198-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">:name</span> arima0,</span>
+<span id="cb198-21"><a href="#cb198-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">:ns</span> r.stats}</span>
+<span id="cb198-22"><a href="#cb198-22" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([&amp; {<span class="at">:keys</span> [which]}]), <span class="at">:name</span> dev-off, <span class="at">:ns</span> r.grDevices}</span>
+<span id="cb198-23"><a href="#cb198-23" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([]), <span class="at">:name</span> Sys-info, <span class="at">:ns</span> r.base}</span>
+<span id="cb198-24"><a href="#cb198-24" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([object &amp; {<span class="at">:keys</span> [... digits quantile.<span class="kw">type</span>]}]),</span>
+<span id="cb198-25"><a href="#cb198-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">:name</span> summary-default,</span>
+<span id="cb198-26"><a href="#cb198-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">:ns</span> r.base}</span>
+<span id="cb198-27"><a href="#cb198-27" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([x]), <span class="at">:name</span> sin, <span class="at">:ns</span> r.base}</span>
+<span id="cb198-28"><a href="#cb198-28" aria-hidden="true" tabindex="-1"></a> {<span class="at">:arglists</span> ([&amp; {<span class="at">:keys</span> [... na.rm]}]), <span class="at">:name</span> sum, <span class="at">:ns</span> r.base})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div style="background-color:grey;height:2px;width:100%;"></div>
 <div><pre><small><small>source: <a href="https://github.com/scicloj/clojisr/blob/master/notebooks/clojisr/v1/tutorials/main.clj">notebooks/clojisr/v1/tutorials/main.clj</a></small></small></pre></div>
