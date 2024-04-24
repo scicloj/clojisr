@@ -118,13 +118,7 @@ Note however that:
 
 ## Tutorials
 
-* [Intro](https://scicloj.github.io/clojisr/doc/clojisr/v1/tutorial-test/)
-
-* [A tutorial about generating R code from Clojure](https://scicloj.github.io/clojisr/doc/clojisr/v1/codegen-test/)
-
-* [Titanic tutorial #0](https://scicloj.github.io/clojisr/doc/clojisr/v1/titanic0-test/)
-
-* [Dataset transfer](https://scicloj.github.io/clojisr/doc/clojisr/v1/dataset-test/)
+* The tutorials are now organized in [a book](https://scicloj.github.io/clojisr).
 
 * More examples -- see the [clojisr-examples repo](https://github.com/scicloj/clojisr-examples#list-of-examples)
 
@@ -158,7 +152,7 @@ Also we run [a stream](https://clojurians.zulipchat.com/#narrow/stream/224816-cl
 
 ## Testing
 
-The code tests are embedded in the [tutorials](#tutorials) and are run when they are rendered (using [notespace](https://github.com/scicloj/notespace)). This way we make sure that tests and documentation are in sync.
+The tests are regular clojure.test tests, but are auto-genedated from the tutorials.
 
 ## Tools used
 
@@ -168,7 +162,7 @@ Working on this project, we enjoyed the following tools (partial list):
 
 * [clj-kondo](https://github.com/borkdude/clj-kondo) for code quality control
 
-* [notespace](https://github.com/scicloj/notespace) for documentation and tests
+* [Clay](https://scicloj.github.io/clay/) for documentation and test generation
 
 ## License
 

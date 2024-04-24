@@ -243,7 +243,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>In this first, naive version, the corresponding Clojure functions are rather simple. They expect a varying number of arguments, and pass those arguments to R function calls by a rather generic way (as defined by Clojisrs)</p>
 <p>We do not try to replace the rather imperative style of the original tutorial. Rather, we try to write something that is as close as possible to the original.</p>
 <p>We have leanred a lot from this use case. It did expose lots of issues and open questions about the Clojisr API and implementation. Note, however, that the piece of R code that we are mimicing here is not so typical to the current tidyverse trends – there is no heavy use of dplyr, tidy evaluation, etc. It may be a good idea to study other examples that have more of those.</p>
-<p>This notebook has been written in <a href="https://github.com/scicloj/notespace">notespace</a> – an experimental Clojure library that allows one to use regular Clojure namespaces as notebooks, thus enabling interactive literate programming from ones’ favourite Clojure editor and REPL.</p>
 <p>daslu, Jan.&nbsp;2020</p>
 <hr>
 <section id="bringing-the-neecessary-r-functions" class="level2" data-number="5.1">

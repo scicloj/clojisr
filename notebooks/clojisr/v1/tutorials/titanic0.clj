@@ -18,8 +18,6 @@ We do not try to replace the rather imperative style of the original tutorial. R
 
 We have leanred a lot from this use case. It did expose lots of issues and open questions about the Clojisr API and implementation. Note, however, that the piece of R code that we are mimicing here is not so typical to the current tidyverse trends -- there is no heavy use of dplyr, tidy evaluation, etc. It may be a good idea to study other examples that have more of those.
 
-This notebook has been written in [notespace](https://github.com/scicloj/notespace) -- an experimental Clojure library that allows one to use regular Clojure namespaces as notebooks, thus enabling interactive literate programming from ones' favourite Clojure editor and REPL.
-
 daslu, Jan. 2020
 
 ------------
