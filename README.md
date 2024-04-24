@@ -4,6 +4,8 @@ Clojure speaks statistics - a [jisr](https://en.wiktionary.org/wiki/جسر) betw
 
 [![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
 
+[Documentation](scicloj.github.io/clojisr/)
+
 ## How to pronounce it?
 
 The beginning of the pronunciation is the same as Clojure, but then it rhymes with 'kisser'. Actually, the last vowel is nonexistent, so you may try to pronounce it with less movement between s and r, like 'yesssr!'.
