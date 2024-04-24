@@ -18,7 +18,7 @@ Clojure speaks statistics - a [jisr](https://en.wiktionary.org/wiki/جسر) betw
 
 **Source:** [![(GitHub repo)](https://img.shields.io/badge/github-%23121011.svg?style=for-the-badge&logo=github&logoColor=white)](https://github.com/scicloj/clojisr)
 
-**Status:** still evolving; not recommended for production yet; already used by several people in their data science explorations
+**Status:** still evolving; have been tested and used for few years
 
 ## Existing chapters in this book:
 ")
