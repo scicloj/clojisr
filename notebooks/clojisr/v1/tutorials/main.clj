@@ -479,13 +479,15 @@ of [libpython-clj](https://github.com/cnuernber/libpython-clj)
 
 (md "Any plot (function or object) can be saved to file or converted to BufferedImage object.")
 
-(let [path "notebooks/generated-images/histogram.jpg"]
+(let [path "/tmp/histogram.jpg"]
   (r->clj (plot->file path
                       (fn [] (hist [1 1 1 1 2 3 4 5]
                                    :main "Histogram"
                                    :xlab "data: [1 1 1 1 2 3 4 5]"))
                       :width 800 :height 400 :quality 50))
-  (kind/hiccup [:image {:src path}]))
+  (-> (clojure.java.shell/sh "ls" path)
+      :out
+      kind/code))
 
 (plot->buffered-image (fn [] (hist [1 1 1 1 2 3 4 5])) :width 222 :height 149)
 
