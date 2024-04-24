@@ -4,7 +4,7 @@ Clojure speaks statistics - a [jisr](https://en.wiktionary.org/wiki/جسر) betw
 
 [![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
 
-[Documentation](scicloj.github.io/clojisr/)
+[Documentation](https://scicloj.github.io/clojisr/)
 
 ## How to pronounce it?
 
