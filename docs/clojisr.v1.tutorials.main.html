@@ -247,6 +247,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>            [scicloj.kindly.v4.kind <span class="at">:as</span> kind]</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>            [scicloj.kindly.v4.api <span class="at">:as</span> kindly]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<style>
+img {max-width: 100%;}
+svg {max-width: 100%;}
+</style>
 </section>
 <section id="basic-examples" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="basic-examples"><span class="header-section-number">2.2</span> Basic examples</h2>
@@ -485,7 +489,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb44"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>(<span class="at">:object-name</span> one+two)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb45"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$xcc9c677e02ae4da3"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x7a9289ee40e04192"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="generating-code" class="level2" data-number="2.6">
@@ -579,14 +583,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb69"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code '(<span class="at">~abs</span> x))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb70"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(x)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x122c42652d2c44ea(x)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>All other sequential things (that is, those not beginning with a symbol or R function) are intepreted as data, converted implicitly R data representation.</p>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb71"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code `(<span class="at">~abs</span> (<span class="dv">1</span> <span class="dv">2</span> <span class="dv">3</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb72"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(c(1L,2L,3L))"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x122c42652d2c44ea(c(1L,2L,3L))"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Some more examples, showing how these rules compose:</p>
 <div class="sourceClojure">
@@ -623,19 +627,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode" id="cb83"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code '(function [x y] (<span class="at">~abs</span> x)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb84"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="st">"function(x,y) {.MEM$x12b17e103f894d6e(x)}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb84"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="st">"function(x,y) {.MEM$x122c42652d2c44ea(x)}"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb85"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code '(<span class="at">~abs</span> <span class="at">~minus-eleven</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb86"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(.MEM$x02374ec85cb348ae)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb86-1"><a href="#cb86-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x122c42652d2c44ea(.MEM$x28987055e359432e)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="sourceClojure">
 <div class="sourceCode" id="cb87"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>(-&gt;code '(<span class="at">~abs</span> -<span class="dv">11</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb88"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(-11L)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb88"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb88-1"><a href="#cb88-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x122c42652d2c44ea(-11L)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Use syntax quote ` in case you want to use local bindings.</p>
 <div class="sourceClojure">
@@ -643,7 +647,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>  (-&gt;code `(<span class="at">~abs</span> <span class="at">~minus-ten</span>)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="printedClojure">
-<div class="sourceCode" id="cb90"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x12b17e103f894d6e(-10L)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="st">".MEM$x122c42652d2c44ea(-10L)"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="running-generated-code" class="level2" data-number="2.7">
@@ -888,7 +892,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </clippath>
 </defs>
 <g clip-path="url(#cpNTkuMDR8Njg5Ljc2fDU5LjA0fDUwMi41Ng==)">
-<polyline points="82.40,486.13 102.54,470.17 122.68,468.15 142.81,458.99 162.95,446.45 183.09,446.08 203.23,427.29 223.37,409.26 243.50,383.71 263.64,375.32 283.78,352.95 303.92,342.35 324.06,316.23 344.19,313.74 364.33,303.03 384.47,279.74 404.61,268.37 424.74,250.07 444.88,224.02 465.02,204.43 485.16,181.32 505.30,165.11 525.43,150.36 545.57,145.86 565.71,129.25 585.85,121.92 605.99,117.05 626.12,91.37 646.26,84.71 666.40,75.47 " style="stroke-width: 0.75;"></polyline>
+<polyline points="82.40,486.13 102.54,474.46 122.68,471.57 142.81,450.06 162.95,445.56 183.09,431.02 203.23,412.26 223.37,397.54 243.50,379.30 263.64,365.81 283.78,347.02 303.92,337.13 324.06,327.09 344.19,313.56 364.33,292.32 384.47,269.71 404.61,250.23 424.74,238.44 444.88,217.15 465.02,215.11 485.16,202.36 505.30,193.19 525.43,167.72 545.57,156.90 565.71,156.48 585.85,132.04 605.99,129.55 626.12,119.73 646.26,96.96 666.40,75.47 " style="stroke-width: 0.75;"></polyline>
 </g>
 <g clip-path="url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)">
 <line x1="62.26" y1="502.56" x2="666.40" y2="502.56" style="stroke-width: 0.75;"></line>
@@ -906,15 +910,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <text x="465.02" y="528.48" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">20</text>
 <text x="565.71" y="528.48" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">25</text>
 <text x="666.40" y="528.48" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">30</text>
-<line x1="59.04" y1="500.00" x2="59.04" y2="89.98" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="500.00" x2="51.84" y2="500.00" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="363.32" x2="51.84" y2="363.32" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="226.65" x2="51.84" y2="226.65" style="stroke-width: 0.75;"></line>
-<line x1="59.04" y1="89.98" x2="51.84" y2="89.98" style="stroke-width: 0.75;"></line>
-<text transform="translate(41.76,500.00) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">0</text>
-<text transform="translate(41.76,363.32) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">5</text>
-<text transform="translate(41.76,226.65) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">10</text>
-<text transform="translate(41.76,89.98) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">15</text>
+<line x1="59.04" y1="498.25" x2="59.04" y2="108.75" style="stroke-width: 0.75;"></line>
+<line x1="59.04" y1="498.25" x2="51.84" y2="498.25" style="stroke-width: 0.75;"></line>
+<line x1="59.04" y1="368.42" x2="51.84" y2="368.42" style="stroke-width: 0.75;"></line>
+<line x1="59.04" y1="238.58" x2="51.84" y2="238.58" style="stroke-width: 0.75;"></line>
+<line x1="59.04" y1="108.75" x2="51.84" y2="108.75" style="stroke-width: 0.75;"></line>
+<text transform="translate(41.76,498.25) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">0</text>
+<text transform="translate(41.76,368.42) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.64px" lengthadjust="spacingAndGlyphs">5</text>
+<text transform="translate(41.76,238.58) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">10</text>
+<text transform="translate(41.76,108.75) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="15.28px" lengthadjust="spacingAndGlyphs">15</text>
 <polygon points="59.04,502.56 689.76,502.56 689.76,59.04 59.04,59.04 " style="stroke-width: 0.75;"></polygon>
 <text x="374.40" y="557.28" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="4.71px" lengthadjust="spacingAndGlyphs">t</text>
 <text transform="translate(12.96,280.80) rotate(-90)" text-anchor="middle" style="font-size: 12.00px; font-family: &quot;Liberation Sans&quot;;" textlength="7.11px" lengthadjust="spacingAndGlyphs">y</text>
@@ -970,164 +974,164 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </defs>
 <g clip-path="url(#cpMzcuNDR8NjUwLjI3fDUuNDh8NTQ0LjI5)">
 <rect x="37.44" y="5.48" width="612.82" height="538.82" style="stroke-width: 1.07; stroke: none; fill: #EBEBEB;"></rect>
-<polyline points="37.44,461.92 650.27,461.92 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,325.18 650.27,325.18 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,188.44 650.27,188.44 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,51.70 650.27,51.70 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="131.00,544.29 131.00,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="271.49,544.29 271.49,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="411.97,544.29 411.97,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="552.46,544.29 552.46,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,530.29 650.27,530.29 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,393.55 650.27,393.55 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,256.81 650.27,256.81 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="37.44,120.07 650.27,120.07 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="60.76,544.29 60.76,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="201.25,544.29 201.25,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="341.73,544.29 341.73,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="482.22,544.29 482.22,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<polyline points="622.70,544.29 622.70,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
-<circle cx="293.60" cy="350.92" r="5.66" style="stroke-width: 0.71; stroke: #2B5A83; fill: #2B5A83;"></circle>
-<circle cx="295.50" cy="402.15" r="6.48" style="stroke-width: 0.71; stroke: #265177; fill: #265177;"></circle>
-<circle cx="245.21" cy="318.20" r="4.86" style="stroke-width: 0.71; stroke: #2C5C85; fill: #2C5C85;"></circle>
-<circle cx="357.94" cy="259.90" r="5.31" style="stroke-width: 0.71; stroke: #3671A1; fill: #3671A1;"></circle>
-<circle cx="601.52" cy="220.01" r="6.36" style="stroke-width: 0.71; stroke: #458FC9; fill: #458FC9;"></circle>
-<circle cx="402.10" cy="335.25" r="6.37" style="stroke-width: 0.71; stroke: #316793; fill: #316793;"></circle>
-<circle cx="586.06" cy="143.50" r="5.76" style="stroke-width: 0.71; stroke: #4C9DDC; fill: #4C9DDC;"></circle>
-<circle cx="367.03" cy="170.56" r="4.82" style="stroke-width: 0.71; stroke: #3F82B9; fill: #3F82B9;"></circle>
-<circle cx="226.02" cy="199.09" r="3.97" style="stroke-width: 0.71; stroke: #3670A0; fill: #3670A0;"></circle>
-<circle cx="95.03" cy="511.98" r="6.54" style="stroke-width: 0.71; stroke: #152E47; fill: #152E47;"></circle>
-<circle cx="252.69" cy="263.09" r="4.53" style="stroke-width: 0.71; stroke: #316793; fill: #316793;"></circle>
-<circle cx="95.81" cy="403.23" r="3.23" style="stroke-width: 0.71; stroke: #1E4060; fill: #1E4060;"></circle>
-<circle cx="192.33" cy="451.39" r="6.24" style="stroke-width: 0.71; stroke: #1E405F; fill: #1E405F;"></circle>
-<circle cx="181.29" cy="205.32" r="3.58" style="stroke-width: 0.71; stroke: #336B99; fill: #336B99;"></circle>
-<circle cx="436.02" cy="235.25" r="5.61" style="stroke-width: 0.71; stroke: #3C7DB1; fill: #3C7DB1;"></circle>
-<circle cx="402.32" cy="192.88" r="5.14" style="stroke-width: 0.71; stroke: #3E81B7; fill: #3E81B7;"></circle>
-<circle cx="531.45" cy="284.12" r="6.60" style="stroke-width: 0.71; stroke: #3C7CB0; fill: #3C7CB0;"></circle>
-<circle cx="274.10" cy="320.47" r="5.15" style="stroke-width: 0.71; stroke: #2D5E88; fill: #2D5E88;"></circle>
-<circle cx="157.88" cy="322.06" r="3.87" style="stroke-width: 0.71; stroke: #28547A; fill: #28547A;"></circle>
-<circle cx="77.25" cy="252.02" r="1.83" style="stroke-width: 0.71; stroke: #2A5981; fill: #2A5981;"></circle>
-<circle cx="90.24" cy="354.87" r="2.74" style="stroke-width: 0.71; stroke: #22486A; fill: #22486A;"></circle>
-<circle cx="595.72" cy="160.65" r="5.90" style="stroke-width: 0.71; stroke: #4B9AD8; fill: #4B9AD8;"></circle>
-<circle cx="522.70" cy="151.37" r="5.52" style="stroke-width: 0.71; stroke: #4895D1; fill: #4895D1;"></circle>
-<circle cx="289.74" cy="373.97" r="5.93" style="stroke-width: 0.71; stroke: #29567D; fill: #29567D;"></circle>
-<circle cx="595.72" cy="156.00" r="5.88" style="stroke-width: 0.71; stroke: #4B9BD9; fill: #4B9BD9;"></circle>
-<circle cx="477.32" cy="140.32" r="5.25" style="stroke-width: 0.71; stroke: #4793CE; fill: #4793CE;"></circle>
-<circle cx="119.83" cy="244.75" r="2.93" style="stroke-width: 0.71; stroke: #2D5E88; fill: #2D5E88;"></circle>
-<circle cx="160.19" cy="435.54" r="5.21" style="stroke-width: 0.71; stroke: #1E4060; fill: #1E4060;"></circle>
-<circle cx="180.99" cy="449.14" r="5.96" style="stroke-width: 0.71; stroke: #1D405F; fill: #1D405F;"></circle>
-<circle cx="573.70" cy="119.70" r="5.58" style="stroke-width: 0.71; stroke: #4EA0E0; fill: #4EA0E0;"></circle>
-<circle cx="289.64" cy="153.34" r="4.26" style="stroke-width: 0.71; stroke: #3D7FB3; fill: #3D7FB3;"></circle>
-<circle cx="382.07" cy="147.97" r="4.80" style="stroke-width: 0.71; stroke: #4288C0; fill: #4288C0;"></circle>
-<circle cx="494.42" cy="221.20" r="5.83" style="stroke-width: 0.71; stroke: #4085BC; fill: #4085BC;"></circle>
-<circle cx="216.55" cy="400.63" r="5.49" style="stroke-width: 0.71; stroke: #234B6E; fill: #234B6E;"></circle>
-<circle cx="333.02" cy="207.35" r="4.80" style="stroke-width: 0.71; stroke: #3A78AB; fill: #3A78AB;"></circle>
-<circle cx="486.43" cy="152.01" r="5.36" style="stroke-width: 0.71; stroke: #4691CC; fill: #4691CC;"></circle>
-<circle cx="517.90" cy="295.50" r="6.64" style="stroke-width: 0.71; stroke: #3A79AB; fill: #3A79AB;"></circle>
-<circle cx="576.70" cy="253.89" r="6.53" style="stroke-width: 0.71; stroke: #4186BD; fill: #4186BD;"></circle>
-<circle cx="534.46" cy="74.35" r="5.19" style="stroke-width: 0.71; stroke: #50A5E7; fill: #50A5E7;"></circle>
-<circle cx="208.61" cy="352.77" r="4.78" style="stroke-width: 0.71; stroke: #275378; fill: #275378;"></circle>
-<circle cx="372.73" cy="161.13" r="4.81" style="stroke-width: 0.71; stroke: #4085BC; fill: #4085BC;"></circle>
-<circle cx="282.52" cy="197.46" r="4.40" style="stroke-width: 0.71; stroke: #3876A7; fill: #3876A7;"></circle>
-<circle cx="102.57" cy="311.64" r="2.86" style="stroke-width: 0.71; stroke: #265176; fill: #265176;"></circle>
-<circle cx="384.85" cy="278.14" r="5.64" style="stroke-width: 0.71; stroke: #36709F; fill: #36709F;"></circle>
-<circle cx="320.84" cy="154.15" r="4.46" style="stroke-width: 0.71; stroke: #3E81B7; fill: #3E81B7;"></circle>
-<circle cx="65.30" cy="434.53" r="1.42" style="stroke-width: 0.71; stroke: #1A3955; fill: #1A3955;"></circle>
-<circle cx="312.05" cy="381.17" r="6.27" style="stroke-width: 0.71; stroke: #29567E; fill: #29567E;"></circle>
-<circle cx="70.74" cy="364.67" r="1.85" style="stroke-width: 0.71; stroke: #204566; fill: #204566;"></circle>
-<circle cx="538.66" cy="202.81" r="5.92" style="stroke-width: 0.71; stroke: #448CC6; fill: #448CC6;"></circle>
-<circle cx="550.01" cy="29.97" r="5.08" style="stroke-width: 0.71; stroke: #55B0F5; fill: #55B0F5;"></circle>
-<circle cx="231.92" cy="406.52" r="5.80" style="stroke-width: 0.71; stroke: #234B6E; fill: #234B6E;"></circle>
-<circle cx="200.72" cy="203.47" r="3.76" style="stroke-width: 0.71; stroke: #346D9C; fill: #346D9C;"></circle>
-<circle cx="76.91" cy="433.51" r="2.73" style="stroke-width: 0.71; stroke: #1A3A57; fill: #1A3A57;"></circle>
-<circle cx="490.25" cy="173.18" r="5.49" style="stroke-width: 0.71; stroke: #448EC7; fill: #448EC7;"></circle>
-<circle cx="100.47" cy="413.56" r="3.47" style="stroke-width: 0.71; stroke: #1D3F5E; fill: #1D3F5E;"></circle>
-<circle cx="84.53" cy="307.24" r="2.34" style="stroke-width: 0.71; stroke: #265075; fill: #265075;"></circle>
-<circle cx="302.88" cy="319.25" r="5.40" style="stroke-width: 0.71; stroke: #2E618B; fill: #2E618B;"></circle>
-<circle cx="76.78" cy="517.66" r="5.61" style="stroke-width: 0.71; stroke: #132C44; fill: #132C44;"></circle>
-<circle cx="574.74" cy="232.25" r="6.33" style="stroke-width: 0.71; stroke: #438AC3; fill: #438AC3;"></circle>
-<circle cx="150.62" cy="422.84" r="4.79" style="stroke-width: 0.71; stroke: #1E4261; fill: #1E4261;"></circle>
-<circle cx="280.36" cy="299.82" r="5.03" style="stroke-width: 0.71; stroke: #2F628E; fill: #2F628E;"></circle>
-<circle cx="602.86" cy="149.62" r="5.87" style="stroke-width: 0.71; stroke: #4C9DDC; fill: #4C9DDC;"></circle>
-<circle cx="271.36" cy="364.86" r="5.62" style="stroke-width: 0.71; stroke: #29567D; fill: #29567D;"></circle>
-<circle cx="323.05" cy="130.18" r="4.38" style="stroke-width: 0.71; stroke: #4186BD; fill: #4186BD;"></circle>
-<circle cx="341.72" cy="367.77" r="6.33" style="stroke-width: 0.71; stroke: #2B5B84; fill: #2B5B84;"></circle>
-<circle cx="339.44" cy="380.49" r="6.52" style="stroke-width: 0.71; stroke: #2A5981; fill: #2A5981;"></circle>
-<circle cx="337.19" cy="160.73" r="4.59" style="stroke-width: 0.71; stroke: #3E82B7; fill: #3E82B7;"></circle>
-<circle cx="417.58" cy="221.13" r="5.41" style="stroke-width: 0.71; stroke: #3C7DB2; fill: #3C7DB2;"></circle>
-<circle cx="464.54" cy="96.25" r="4.98" style="stroke-width: 0.71; stroke: #4B9AD8; fill: #4B9AD8;"></circle>
-<circle cx="100.19" cy="404.50" r="3.38" style="stroke-width: 0.71; stroke: #1E4060; fill: #1E4060;"></circle>
-<circle cx="203.70" cy="440.18" r="6.12" style="stroke-width: 0.71; stroke: #1F4363; fill: #1F4363;"></circle>
-<circle cx="91.70" cy="480.79" r="4.30" style="stroke-width: 0.71; stroke: #17334E; fill: #17334E;"></circle>
-<circle cx="435.04" cy="345.87" r="6.76" style="stroke-width: 0.71; stroke: #326895; fill: #326895;"></circle>
-<circle cx="86.13" cy="245.45" r="2.19" style="stroke-width: 0.71; stroke: #2B5B84; fill: #2B5B84;"></circle>
-<circle cx="287.81" cy="344.04" r="5.52" style="stroke-width: 0.71; stroke: #2B5B84; fill: #2B5B84;"></circle>
-<circle cx="519.70" cy="295.61" r="6.66" style="stroke-width: 0.71; stroke: #3A79AC; fill: #3A79AC;"></circle>
-<circle cx="492.55" cy="187.54" r="5.59" style="stroke-width: 0.71; stroke: #438BC4; fill: #438BC4;"></circle>
-<circle cx="85.13" cy="393.05" r="2.79" style="stroke-width: 0.71; stroke: #1E4161; fill: #1E4161;"></circle>
-<circle cx="569.39" cy="200.47" r="6.05" style="stroke-width: 0.71; stroke: #4590CA; fill: #4590CA;"></circle>
-<circle cx="551.03" cy="171.87" r="5.78" style="stroke-width: 0.71; stroke: #4794D0; fill: #4794D0;"></circle>
-<circle cx="165.32" cy="217.57" r="3.45" style="stroke-width: 0.71; stroke: #316794; fill: #316794;"></circle>
-<circle cx="69.38" cy="519.80" r="4.76" style="stroke-width: 0.71; stroke: #132B43; fill: #132B43;"></circle>
-<circle cx="412.56" cy="185.69" r="5.16" style="stroke-width: 0.71; stroke: #4084BA; fill: #4084BA;"></circle>
-<circle cx="480.90" cy="197.11" r="5.60" style="stroke-width: 0.71; stroke: #4288C0; fill: #4288C0;"></circle>
-<circle cx="454.03" cy="332.36" r="6.70" style="stroke-width: 0.71; stroke: #346C9A; fill: #346C9A;"></circle>
-<circle cx="622.41" cy="79.23" r="5.57" style="stroke-width: 0.71; stroke: #54ADF2; fill: #54ADF2;"></circle>
-<circle cx="80.57" cy="280.25" r="2.10" style="stroke-width: 0.71; stroke: #28547B; fill: #28547B;"></circle>
-<circle cx="291.06" cy="364.74" r="5.81" style="stroke-width: 0.71; stroke: #2A587F; fill: #2A587F;"></circle>
-<circle cx="611.15" cy="130.80" r="5.79" style="stroke-width: 0.71; stroke: #4EA1E2; fill: #4EA1E2;"></circle>
-<circle cx="519.77" cy="168.22" r="5.61" style="stroke-width: 0.71; stroke: #4691CC; fill: #4691CC;"></circle>
-<circle cx="601.30" cy="48.71" r="5.35" style="stroke-width: 0.71; stroke: #56B1F7; fill: #56B1F7;"></circle>
-<circle cx="151.17" cy="435.34" r="5.03" style="stroke-width: 0.71; stroke: #1D3F5F; fill: #1D3F5F;"></circle>
-<circle cx="572.88" cy="130.37" r="5.63" style="stroke-width: 0.71; stroke: #4D9EDD; fill: #4D9EDD;"></circle>
-<circle cx="166.96" cy="429.53" r="5.22" style="stroke-width: 0.71; stroke: #1F4262; fill: #1F4262;"></circle>
-<circle cx="466.45" cy="189.14" r="5.47" style="stroke-width: 0.71; stroke: #4288C0; fill: #4288C0;"></circle>
-<circle cx="434.61" cy="152.79" r="5.10" style="stroke-width: 0.71; stroke: #448CC6; fill: #448CC6;"></circle>
-<circle cx="572.69" cy="205.38" r="6.11" style="stroke-width: 0.71; stroke: #458FCA; fill: #458FCA;"></circle>
-<circle cx="70.56" cy="495.78" r="3.26" style="stroke-width: 0.71; stroke: #152F48; fill: #152F48;"></circle>
-<circle cx="151.04" cy="278.22" r="3.53" style="stroke-width: 0.71; stroke: #2B5B83; fill: #2B5B83;"></circle>
+<polyline points="37.44,463.19 650.27,463.19 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,320.92 650.27,320.92 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,178.65 650.27,178.65 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,36.38 650.27,36.38 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="129.18,544.29 129.18,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="270.51,544.29 270.51,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="411.84,544.29 411.84,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="553.17,544.29 553.17,5.48 " style="stroke-width: 0.53; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,534.32 650.27,534.32 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,392.05 650.27,392.05 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,249.78 650.27,249.78 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="37.44,107.51 650.27,107.51 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="58.51,544.29 58.51,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="199.84,544.29 199.84,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="341.18,544.29 341.18,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="482.51,544.29 482.51,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<polyline points="623.84,544.29 623.84,5.48 " style="stroke-width: 1.07; stroke: #FFFFFF; stroke-linecap: butt;"></polyline>
+<circle cx="267.21" cy="152.59" r="4.17" style="stroke-width: 0.71; stroke: #3A79AC; fill: #3A79AC;"></circle>
+<circle cx="616.01" cy="33.88" r="5.41" style="stroke-width: 0.71; stroke: #56B1F7; fill: #56B1F7;"></circle>
+<circle cx="186.81" cy="200.47" r="3.70" style="stroke-width: 0.71; stroke: #326997; fill: #326997;"></circle>
+<circle cx="405.38" cy="349.05" r="6.62" style="stroke-width: 0.71; stroke: #2F638E; fill: #2F638E;"></circle>
+<circle cx="333.79" cy="327.01" r="5.78" style="stroke-width: 0.71; stroke: #2E608B; fill: #2E608B;"></circle>
+<circle cx="477.69" cy="246.90" r="6.00" style="stroke-width: 0.71; stroke: #3B7CAF; fill: #3B7CAF;"></circle>
+<circle cx="371.55" cy="147.29" r="4.80" style="stroke-width: 0.71; stroke: #4084BB; fill: #4084BB;"></circle>
+<circle cx="363.94" cy="228.47" r="5.19" style="stroke-width: 0.71; stroke: #3874A6; fill: #3874A6;"></circle>
+<circle cx="397.52" cy="124.68" r="4.84" style="stroke-width: 0.71; stroke: #438BC4; fill: #438BC4;"></circle>
+<circle cx="277.73" cy="390.83" r="6.11" style="stroke-width: 0.71; stroke: #265075; fill: #265075;"></circle>
+<circle cx="65.30" cy="308.88" r="1.42" style="stroke-width: 0.71; stroke: #244C70; fill: #244C70;"></circle>
+<circle cx="100.26" cy="400.58" r="3.45" style="stroke-width: 0.71; stroke: #1E405F; fill: #1E405F;"></circle>
+<circle cx="476.75" cy="78.15" r="5.03" style="stroke-width: 0.71; stroke: #4B9BD9; fill: #4B9BD9;"></circle>
+<circle cx="383.33" cy="165.26" r="4.95" style="stroke-width: 0.71; stroke: #3F82B8; fill: #3F82B8;"></circle>
+<circle cx="373.74" cy="125.44" r="4.72" style="stroke-width: 0.71; stroke: #4288C0; fill: #4288C0;"></circle>
+<circle cx="88.75" cy="391.63" r="3.05" style="stroke-width: 0.71; stroke: #1E4060; fill: #1E4060;"></circle>
+<circle cx="441.70" cy="105.03" r="4.98" style="stroke-width: 0.71; stroke: #4792CE; fill: #4792CE;"></circle>
+<circle cx="372.05" cy="255.93" r="5.43" style="stroke-width: 0.71; stroke: #3670A0; fill: #3670A0;"></circle>
+<circle cx="392.55" cy="207.38" r="5.23" style="stroke-width: 0.71; stroke: #3B7BAE; fill: #3B7BAE;"></circle>
+<circle cx="164.33" cy="448.31" r="5.62" style="stroke-width: 0.71; stroke: #1C3D5C; fill: #1C3D5C;"></circle>
+<circle cx="334.60" cy="384.46" r="6.58" style="stroke-width: 0.71; stroke: #29567D; fill: #29567D;"></circle>
+<circle cx="325.31" cy="354.76" r="6.04" style="stroke-width: 0.71; stroke: #2B5B83; fill: #2B5B83;"></circle>
+<circle cx="134.62" cy="214.74" r="3.17" style="stroke-width: 0.71; stroke: #2F628D; fill: #2F628D;"></circle>
+<circle cx="576.72" cy="96.11" r="5.53" style="stroke-width: 0.71; stroke: #4EA1E2; fill: #4EA1E2;"></circle>
+<circle cx="392.63" cy="193.64" r="5.15" style="stroke-width: 0.71; stroke: #3C7DB2; fill: #3C7DB2;"></circle>
+<circle cx="522.30" cy="174.45" r="5.72" style="stroke-width: 0.71; stroke: #448DC7; fill: #448DC7;"></circle>
+<circle cx="493.52" cy="97.34" r="5.18" style="stroke-width: 0.71; stroke: #4A99D7; fill: #4A99D7;"></circle>
+<circle cx="492.27" cy="166.74" r="5.53" style="stroke-width: 0.71; stroke: #438CC5; fill: #438CC5;"></circle>
+<circle cx="281.11" cy="206.13" r="4.50" style="stroke-width: 0.71; stroke: #3671A1; fill: #3671A1;"></circle>
+<circle cx="207.75" cy="245.21" r="4.09" style="stroke-width: 0.71; stroke: #2F638F; fill: #2F638F;"></circle>
+<circle cx="386.71" cy="167.37" r="4.98" style="stroke-width: 0.71; stroke: #3F82B8; fill: #3F82B8;"></circle>
+<circle cx="340.83" cy="174.13" r="4.75" style="stroke-width: 0.71; stroke: #3C7CB0; fill: #3C7CB0;"></circle>
+<circle cx="577.86" cy="238.14" r="6.45" style="stroke-width: 0.71; stroke: #4186BE; fill: #4186BE;"></circle>
+<circle cx="205.89" cy="277.51" r="4.24" style="stroke-width: 0.71; stroke: #2D5E87; fill: #2D5E87;"></circle>
+<circle cx="408.56" cy="171.21" r="5.12" style="stroke-width: 0.71; stroke: #3F83B9; fill: #3F83B9;"></circle>
+<circle cx="413.08" cy="133.04" r="4.96" style="stroke-width: 0.71; stroke: #438BC3; fill: #438BC3;"></circle>
+<circle cx="80.28" cy="505.61" r="4.69" style="stroke-width: 0.71; stroke: #142E46; fill: #142E46;"></circle>
+<circle cx="160.69" cy="414.82" r="4.90" style="stroke-width: 0.71; stroke: #1F4263; fill: #1F4263;"></circle>
+<circle cx="416.96" cy="230.33" r="5.53" style="stroke-width: 0.71; stroke: #3A79AC; fill: #3A79AC;"></circle>
+<circle cx="127.44" cy="407.23" r="4.16" style="stroke-width: 0.71; stroke: #1E4161; fill: #1E4161;"></circle>
+<circle cx="173.23" cy="369.93" r="4.55" style="stroke-width: 0.71; stroke: #234B6E; fill: #234B6E;"></circle>
+<circle cx="545.30" cy="29.97" r="5.12" style="stroke-width: 0.71; stroke: #53ABEF; fill: #53ABEF;"></circle>
+<circle cx="100.86" cy="403.45" r="3.50" style="stroke-width: 0.71; stroke: #1D3F5F; fill: #1D3F5F;"></circle>
+<circle cx="265.15" cy="429.50" r="6.76" style="stroke-width: 0.71; stroke: #22496B; fill: #22496B;"></circle>
+<circle cx="501.50" cy="74.32" r="5.12" style="stroke-width: 0.71; stroke: #4D9EDE; fill: #4D9EDE;"></circle>
+<circle cx="503.68" cy="242.98" r="6.11" style="stroke-width: 0.71; stroke: #3D7FB3; fill: #3D7FB3;"></circle>
+<circle cx="411.08" cy="317.25" r="6.26" style="stroke-width: 0.71; stroke: #326996; fill: #326996;"></circle>
+<circle cx="438.00" cy="123.87" r="5.04" style="stroke-width: 0.71; stroke: #458FC9; fill: #458FC9;"></circle>
+<circle cx="294.17" cy="302.22" r="5.22" style="stroke-width: 0.71; stroke: #2E618C; fill: #2E618C;"></circle>
+<circle cx="253.63" cy="261.28" r="4.59" style="stroke-width: 0.71; stroke: #306591; fill: #306591;"></circle>
+<circle cx="485.85" cy="170.31" r="5.52" style="stroke-width: 0.71; stroke: #438AC3; fill: #438AC3;"></circle>
+<circle cx="588.65" cy="35.24" r="5.31" style="stroke-width: 0.71; stroke: #55AEF3; fill: #55AEF3;"></circle>
+<circle cx="608.52" cy="222.61" r="6.46" style="stroke-width: 0.71; stroke: #448CC6; fill: #448CC6;"></circle>
+<circle cx="527.92" cy="264.50" r="6.43" style="stroke-width: 0.71; stroke: #3C7DB1; fill: #3C7DB1;"></circle>
+<circle cx="107.97" cy="289.54" r="3.01" style="stroke-width: 0.71; stroke: #275379; fill: #275379;"></circle>
+<circle cx="201.35" cy="297.58" r="4.32" style="stroke-width: 0.71; stroke: #2B5A82; fill: #2B5A82;"></circle>
+<circle cx="75.73" cy="519.80" r="5.54" style="stroke-width: 0.71; stroke: #132B43; fill: #132B43;"></circle>
+<circle cx="150.60" cy="365.84" r="4.17" style="stroke-width: 0.71; stroke: #234A6C; fill: #234A6C;"></circle>
+<circle cx="346.49" cy="259.31" r="5.28" style="stroke-width: 0.71; stroke: #346D9C; fill: #346D9C;"></circle>
+<circle cx="348.34" cy="136.93" r="4.62" style="stroke-width: 0.71; stroke: #4084BA; fill: #4084BA;"></circle>
+<circle cx="615.72" cy="121.88" r="5.82" style="stroke-width: 0.71; stroke: #4EA0E0; fill: #4EA0E0;"></circle>
+<circle cx="336.92" cy="120.30" r="4.49" style="stroke-width: 0.71; stroke: #4186BD; fill: #4186BD;"></circle>
+<circle cx="265.15" cy="208.60" r="4.40" style="stroke-width: 0.71; stroke: #356F9F; fill: #356F9F;"></circle>
+<circle cx="271.10" cy="316.56" r="5.15" style="stroke-width: 0.71; stroke: #2C5D86; fill: #2C5D86;"></circle>
+<circle cx="157.03" cy="238.80" r="3.53" style="stroke-width: 0.71; stroke: #2E608A; fill: #2E608A;"></circle>
+<circle cx="137.17" cy="347.25" r="3.81" style="stroke-width: 0.71; stroke: #244C6F; fill: #244C6F;"></circle>
+<circle cx="158.34" cy="439.45" r="5.29" style="stroke-width: 0.71; stroke: #1D3E5D; fill: #1D3E5D;"></circle>
+<circle cx="122.98" cy="261.57" r="3.16" style="stroke-width: 0.71; stroke: #2A5981; fill: #2A5981;"></circle>
+<circle cx="418.16" cy="156.25" r="5.10" style="stroke-width: 0.71; stroke: #4187BE; fill: #4187BE;"></circle>
+<circle cx="375.00" cy="355.92" r="6.48" style="stroke-width: 0.71; stroke: #2D5F89; fill: #2D5F89;"></circle>
+<circle cx="434.23" cy="274.59" r="5.98" style="stroke-width: 0.71; stroke: #3773A3; fill: #3773A3;"></circle>
+<circle cx="159.07" cy="237.49" r="3.55" style="stroke-width: 0.71; stroke: #2E608B; fill: #2E608B;"></circle>
+<circle cx="284.99" cy="388.17" r="6.14" style="stroke-width: 0.71; stroke: #265177; fill: #265177;"></circle>
+<circle cx="218.07" cy="308.29" r="4.57" style="stroke-width: 0.71; stroke: #2A5981; fill: #2A5981;"></circle>
+<circle cx="104.59" cy="274.74" r="2.89" style="stroke-width: 0.71; stroke: #28557C; fill: #28557C;"></circle>
+<circle cx="367.95" cy="320.16" r="5.98" style="stroke-width: 0.71; stroke: #306490; fill: #306490;"></circle>
+<circle cx="296.89" cy="194.65" r="4.56" style="stroke-width: 0.71; stroke: #3874A6; fill: #3874A6;"></circle>
+<circle cx="622.41" cy="100.97" r="5.74" style="stroke-width: 0.71; stroke: #50A5E6; fill: #50A5E6;"></circle>
+<circle cx="112.80" cy="451.80" r="4.45" style="stroke-width: 0.71; stroke: #1A3955; fill: #1A3955;"></circle>
+<circle cx="159.07" cy="271.57" r="3.70" style="stroke-width: 0.71; stroke: #2B5B83; fill: #2B5B83;"></circle>
+<circle cx="365.20" cy="231.23" r="5.22" style="stroke-width: 0.71; stroke: #3874A5; fill: #3874A5;"></circle>
+<circle cx="201.41" cy="232.17" r="3.97" style="stroke-width: 0.71; stroke: #306591; fill: #306591;"></circle>
+<circle cx="478.27" cy="51.07" r="4.93" style="stroke-width: 0.71; stroke: #4EA0E1; fill: #4EA0E1;"></circle>
+<circle cx="121.74" cy="310.55" r="3.35" style="stroke-width: 0.71; stroke: #265176; fill: #265176;"></circle>
+<circle cx="124.84" cy="466.01" r="5.14" style="stroke-width: 0.71; stroke: #193754; fill: #193754;"></circle>
+<circle cx="304.94" cy="303.72" r="5.32" style="stroke-width: 0.71; stroke: #2F628D; fill: #2F628D;"></circle>
+<circle cx="163.58" cy="349.60" r="4.23" style="stroke-width: 0.71; stroke: #254E72; fill: #254E72;"></circle>
+<circle cx="98.76" cy="348.54" r="3.08" style="stroke-width: 0.71; stroke: #22486A; fill: #22486A;"></circle>
+<circle cx="154.74" cy="431.64" r="5.07" style="stroke-width: 0.71; stroke: #1D3F5E; fill: #1D3F5E;"></circle>
+<circle cx="619.60" cy="54.95" r="5.51" style="stroke-width: 0.71; stroke: #54ADF2; fill: #54ADF2;"></circle>
+<circle cx="231.66" cy="393.81" r="5.62" style="stroke-width: 0.71; stroke: #244C6F; fill: #244C6F;"></circle>
+<circle cx="396.28" cy="240.38" r="5.47" style="stroke-width: 0.71; stroke: #3875A7; fill: #3875A7;"></circle>
+<circle cx="182.48" cy="200.39" r="3.66" style="stroke-width: 0.71; stroke: #326997; fill: #326997;"></circle>
+<circle cx="96.75" cy="285.72" r="2.77" style="stroke-width: 0.71; stroke: #275379; fill: #275379;"></circle>
+<circle cx="260.82" cy="212.71" r="4.38" style="stroke-width: 0.71; stroke: #356E9D; fill: #356E9D;"></circle>
+<circle cx="89.87" cy="327.42" r="2.76" style="stroke-width: 0.71; stroke: #234B6E; fill: #234B6E;"></circle>
+<circle cx="140.80" cy="328.46" r="3.75" style="stroke-width: 0.71; stroke: #254F74; fill: #254F74;"></circle>
+<circle cx="66.13" cy="313.75" r="1.68" style="stroke-width: 0.71; stroke: #234B6F; fill: #234B6F;"></circle>
+<circle cx="174.26" cy="291.45" r="3.98" style="stroke-width: 0.71; stroke: #2A5880; fill: #2A5880;"></circle>
 </g>
 <g clip-path="url(#cpMC4wMHw3MjAuMDB8MC4wMHw1NzYuMDA=)">
-<text x="32.51" y="533.50" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">0.0</text>
-<text x="32.51" y="396.76" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">0.5</text>
-<text x="32.51" y="260.02" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.0</text>
-<text x="32.51" y="123.28" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.5</text>
-<polyline points="34.70,530.29 37.44,530.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="34.70,393.55 37.44,393.55 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="34.70,256.81 37.44,256.81 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="34.70,120.07 37.44,120.07 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="60.76,547.03 60.76,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="201.25,547.03 201.25,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="341.73,547.03 341.73,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="482.22,547.03 482.22,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<polyline points="622.70,547.03 622.70,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
-<text x="60.76" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.00</text>
-<text x="201.25" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.25</text>
-<text x="341.73" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.50</text>
-<text x="482.22" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.75</text>
-<text x="622.70" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">1.00</text>
+<text x="32.51" y="537.53" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">0.0</text>
+<text x="32.51" y="395.26" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">0.5</text>
+<text x="32.51" y="252.99" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.0</text>
+<text x="32.51" y="110.72" text-anchor="end" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="13.98px" lengthadjust="spacingAndGlyphs">1.5</text>
+<polyline points="34.70,534.32 37.44,534.32 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="34.70,392.05 37.44,392.05 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="34.70,249.78 37.44,249.78 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="34.70,107.51 37.44,107.51 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="58.51,547.03 58.51,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="199.84,547.03 199.84,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="341.18,547.03 341.18,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="482.51,547.03 482.51,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<polyline points="623.84,547.03 623.84,544.29 " style="stroke-width: 1.07; stroke: #333333; stroke-linecap: butt;"></polyline>
+<text x="58.51" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.00</text>
+<text x="199.84" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.25</text>
+<text x="341.18" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.50</text>
+<text x="482.51" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.75</text>
+<text x="623.84" y="555.64" text-anchor="middle" style="font-size: 8.80px;fill: #4D4D4D; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">1.00</text>
 <text x="343.85" y="568.23" text-anchor="middle" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="6.51px" lengthadjust="spacingAndGlyphs">x</text>
 <text transform="translate(13.50,274.89) rotate(-90)" text-anchor="middle" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="6.51px" lengthadjust="spacingAndGlyphs">y</text>
-<rect x="661.23" y="173.54" width="53.30" height="78.59" style="stroke-width: 1.07; stroke: none; fill: #FFFFFF;"></rect>
-<text x="666.70" y="188.18" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="25.31px" lengthadjust="spacingAndGlyphs">(x/y)</text>
-<rect x="666.70" y="194.81" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
-<circle cx="675.34" cy="203.45" r="4.01" style="stroke-width: 0.71; fill: #000000;"></circle>
-<rect x="666.70" y="212.09" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
-<circle cx="675.34" cy="220.73" r="5.17" style="stroke-width: 0.71; fill: #000000;"></circle>
-<rect x="666.70" y="229.37" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
-<circle cx="675.34" cy="238.01" r="6.05" style="stroke-width: 0.71; fill: #000000;"></circle>
-<text x="689.46" y="206.66" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.25</text>
-<text x="689.46" y="223.94" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.50</text>
-<text x="689.46" y="241.22" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.75</text>
-<rect x="661.23" y="263.09" width="48.77" height="113.15" style="stroke-width: 1.07; stroke: none; fill: #FFFFFF;"></rect>
-<image width="17.28" height="86.40" x="666.70" y="284.36" preserveaspectratio="none" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAEsCAYAAAACUNnVAAAAmElEQVQ4ja2UQRLDMAgDd3hk/tnX5agcknFaCoa0vnkMCEnGsL12GQhDYDpPwoDrpBFlRDWi/9Wu6AHC9FkLYLrzlhD3oJ3mDvRHRYy7IC8A7bCK8gpWKYDzeQVArDcDyD2YAnSofZvzaOA6Q7Oahp/dmRuVTQ0xU5TGP2o8Waool1obVuv1q8qP9xPvg633XlGLDtfIhNUBcBeA5ss0BXMAAAAASUVORK5CYII="></image>
-<text x="689.46" y="343.29" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="5.59px" lengthadjust="spacingAndGlyphs">1</text>
-<text x="689.46" y="311.03" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="5.59px" lengthadjust="spacingAndGlyphs">2</text>
-<text x="666.70" y="277.73" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="37.81px" lengthadjust="spacingAndGlyphs">(x + y)</text>
-<line x1="666.70" y1="340.08" x2="670.16" y2="340.08" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="666.70" y1="307.82" x2="670.16" y2="307.82" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="680.53" y1="340.08" x2="683.98" y2="340.08" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
-<line x1="680.53" y1="307.82" x2="683.98" y2="307.82" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
+<rect x="661.23" y="173.54" width="48.77" height="113.15" style="stroke-width: 1.07; stroke: none; fill: #FFFFFF;"></rect>
+<image width="17.28" height="86.40" x="666.70" y="194.81" preserveaspectratio="none" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAEsCAYAAAACUNnVAAAAmElEQVQ4ja2UQRLDMAgDd3hk/tnX5agcknFaCoa0vnkMCEnGsL12GQhDYDpPwoDrpBFlRDWi/9Wu6AHC9FkLYLrzlhD3oJ3mDvRHRYy7IC8A7bCK8gpWKYDzeQVArDcDyD2YAnSofZvzaOA6Q7Oahp/dmRuVTQ0xU5TGP2o8Waool1obVuv1q8qP9xPvg633XlGLDtfIhNUBcBeA5ss0BXMAAAAASUVORK5CYII="></image>
+<text x="689.46" y="254.58" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="5.59px" lengthadjust="spacingAndGlyphs">1</text>
+<text x="689.46" y="222.24" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="5.59px" lengthadjust="spacingAndGlyphs">2</text>
+<text x="666.70" y="188.18" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="37.81px" lengthadjust="spacingAndGlyphs">(x + y)</text>
+<line x1="666.70" y1="251.37" x2="670.16" y2="251.37" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
+<line x1="666.70" y1="219.04" x2="670.16" y2="219.04" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
+<line x1="680.53" y1="251.37" x2="683.98" y2="251.37" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
+<line x1="680.53" y1="219.04" x2="683.98" y2="219.04" style="stroke-width: 0.38; stroke: #FFFFFF; stroke-linecap: butt;"></line>
+<rect x="661.23" y="297.65" width="53.30" height="78.59" style="stroke-width: 1.07; stroke: none; fill: #FFFFFF;"></rect>
+<text x="666.70" y="312.29" style="font-size: 11.00px; font-family: &quot;Liberation Sans&quot;;" textlength="25.31px" lengthadjust="spacingAndGlyphs">(x/y)</text>
+<rect x="666.70" y="318.92" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
+<circle cx="675.34" cy="327.56" r="4.04" style="stroke-width: 0.71; fill: #000000;"></circle>
+<rect x="666.70" y="336.20" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
+<circle cx="675.34" cy="344.84" r="5.18" style="stroke-width: 0.71; fill: #000000;"></circle>
+<rect x="666.70" y="353.48" width="17.28" height="17.28" style="stroke-width: 1.07; stroke: none; fill: #F2F2F2;"></rect>
+<circle cx="675.34" cy="362.12" r="6.05" style="stroke-width: 0.71; fill: #000000;"></circle>
+<text x="689.46" y="330.76" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.25</text>
+<text x="689.46" y="348.04" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.50</text>
+<text x="689.46" y="365.32" style="font-size: 8.80px; font-family: &quot;Liberation Sans&quot;;" textlength="19.58px" lengthadjust="spacingAndGlyphs">0.75</text>
 </g>
 </svg>
 
@@ -1428,7 +1432,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="printedClojure">
 <div class="sourceCode" id="cb192"><pre class="sourceCode clojure code-with-copy"><code class="sourceCode clojure"><span id="cb192-1"><a href="#cb192-1" aria-hidden="true" tabindex="-1"></a>function (x, ...) </span>
 <span id="cb192-2"><a href="#cb192-2" aria-hidden="true" tabindex="-1"></a>UseMethod(<span class="st">"mean"</span>)</span>
-<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a>&lt;bytecode: <span class="bn">0x601cd0aa27a0</span>&gt;</span>
+<span id="cb192-3"><a href="#cb192-3" aria-hidden="true" tabindex="-1"></a>&lt;bytecode: <span class="bn">0x647b13f877a0</span>&gt;</span>
 <span id="cb192-4"><a href="#cb192-4" aria-hidden="true" tabindex="-1"></a>&lt;environment: namespace<span class="at">:base</span>&gt;</span>
 <span id="cb192-5"><a href="#cb192-5" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

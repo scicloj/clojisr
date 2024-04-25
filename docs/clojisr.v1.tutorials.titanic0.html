@@ -241,6 +241,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  (<span class="at">:require</span> [scicloj.kindly.v4.kind <span class="at">:as</span> kind]</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>            [scicloj.kindly.v4.api <span class="at">:as</span> kindly]))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<style>
+img {max-width: 100%;}
+svg {max-width: 100%;}
+</style>
 <p>This notebook is a variation of Pradeep Tripathi’s Titanic <a href="https://www.kaggle.com/pradeeptripathi/prediction-of-titanic-survival-using-r/code">Kaggle solution</a> in R. Instead of writing it in R as the original, we write it in Clojure, and call R from Clojure.</p>
 <p>The goal is to study the Clojure-R interop, and expecially experiment with various ways to define Clojure functions corresponding to R functions.</p>
 <p>In this first, naive version, the corresponding Clojure functions are rather simple. They expect a varying number of arguments, and pass those arguments to R function calls by a rather generic way (as defined by Clojisrs)</p>
