@@ -7,6 +7,12 @@
 ^:kindly/hide-code
 (def md (comp kindly/hide-code kind/md))
 
+^:kindly/hide-code
+(kind/hiccup [:style "
+img {max-width: 100%;}
+svg {max-width: 100%;}
+"])
+
 (md "
 This notebook is a variation of Pradeep Tripathi's Titanic [Kaggle solution](https://www.kaggle.com/pradeeptripathi/prediction-of-titanic-survival-using-r/code) in R. Instead of writing it in R as the original, we write it in Clojure, and call R from Clojure.
 

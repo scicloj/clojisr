@@ -13,6 +13,12 @@
 ^:kindly/hide-code
 (def md (comp kindly/hide-code kind/md))
 
+^:kindly/hide-code
+(kind/hiccup [:style "
+img {max-width: 100%;}
+svg {max-width: 100%;}
+"])
+
 (md "## Basic examples")
 
 (md "Let us start by some basic usage examples of Clojisr.")
