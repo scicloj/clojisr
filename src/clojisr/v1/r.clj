@@ -124,15 +124,20 @@
      (r (format fmt n (name package)))
      (intern *ns* ns (r ns)))))
 
-(defn- intern-r [clj-op op]
+(defn- intern-r-binary [clj-op op]
   (intern *ns* (symbol clj-op)
-               (fn [e1 e2]
-                 ((clojisr.v1.r/r (format  "`%s`" op)) e1 e2))))
+          (fn [e1 e2]
+            ((clojisr.v1.r/r (format  "`%s`" op)) e1 e2))))
 
 (run!
- (fn [op] (intern-r (str "r" op) op))
- ["==", "!=" "<" ">" "<=" ">=" "r&" "r&&" "r|" "r||" "r!" "r$" "-"])
+ (fn [op] (intern-r-binary (str "r" op) op))
+ ["==", "!=" "<" ">" "<=" ">=" "&" "&&" "|" "||" 
+  ;"r!" 
+  "$" "-"])
 
+(intern *ns* (symbol "r!")
+        (fn [e]
+          ((clojisr.v1.r/r   "`!`") e)))
 
 
 ;; (def r== (r "`==`"))
@@ -148,23 +153,24 @@
 ;; (def r! (r "`!`"))
 ;; (def r$ (r "`$`"))
 
-;; (def captured-str
-;;   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
-;;   (r "function(x) capture.output(str(x))"))
+ (def captured-str
+   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
+   (r "function(x) capture.output(str(x))"))
 
-;; (def println-captured-str (comp println-r-lines captured-str))
+ (def println-captured-str (comp println-r-lines captured-str))
 
-;; (def str-md (comp r-lines->md captured-str))
+ (def str-md (comp r-lines->md captured-str))
 
-(intern-r "r**" "^")
+(intern-r-binary "r**" "^")
 
 ;; (def r** (r "`^`"))
-(intern-r "rdiv" "/")
+(intern-r-binary "rdiv" "/")
 ;; (def rdiv (r "`/`"))
 
 ;; (def r- (r "`-`"))
 
 (defn r* [& args] (reduce (r "`*`") args))
+
 (defn r+
   "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments."
   [& args]
@@ -172,7 +178,7 @@
 
 ;; Some special characters will get a name in letters.
 ;; (def colon (r "`:`"))
-(intern-r "colon" ":")
+(intern-r-binary "colon" ":")
 ;;
 
 (defmacro defr
@@ -210,7 +216,7 @@
                 (let [fixed# (prepare-args-for-bra pars# ~all?)]
                   (apply bra# fixed#)))))))
 
-;(make-bras)
+(make-bras)
 
 ;; register shutdown hook
 ;; should be called once
