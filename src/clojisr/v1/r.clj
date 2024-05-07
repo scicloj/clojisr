@@ -9,7 +9,7 @@
             [clojisr.v1.impl.java-to-clj :as java2clj]
             [clojisr.v1.impl.clj-to-java :as clj2java]
             [clojure.string :as string]
-            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
+            [clojisr.v1.util :refer [maybe-wrap-backtick]]
             [clojisr.v1.require :refer [require-r-package]]
             [clojisr.v1.engines :refer [engines]])
   (:import clojisr.v1.robject.RObject))

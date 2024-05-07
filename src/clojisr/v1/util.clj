@@ -144,6 +144,11 @@
     (.close socket)
     (.getLocalPort socket)))
 
+(def bracket-data {"bra" ["`[`" true]
+                   "brabra" ["`[[`" true]
+                   "bra<-" ["`[<-`" false]
+                   "brabra<-" ["`[[<-`" false]})
+
 (defn maybe-wrap-backtick
   [string-or-symbol]
   (if (symbol? string-or-symbol)
