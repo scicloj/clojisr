@@ -125,33 +125,9 @@
      (intern *ns* ns (r ns)))))
 
 (defn- intern-r-binary [clj-op op]
-  (intern *ns* (symbol clj-op)
+  (intern *ns*  (symbol clj-op)
           (fn [e1 e2]
             ((clojisr.v1.r/r (format  "`%s`" op)) e1 e2))))
-
-(run!
- (fn [op] (intern-r-binary (str "r" op) op))
- ["==", "!=" "<" ">" "<=" ">=" "&" "&&" "|" "||"  "$" "-"])
-
-(intern *ns* (symbol "r!")
-        (fn [e]
-          ((clojisr.v1.r/r "`!`") e)))
-
-
-;; (def r== (r "`==`"))
-;; (def r!= (r "`!=`"))
-;; (def r< (r "`<`"))
-;; (def r> (r "`>`"))
-;; (def r<= (r "`<=`"))
-;; (def r>= (r "`>=`"))
-;; (def r& (r "`&`"))
-;; (def r&& (r "`&&`"))
-;; (def r| (r "`||`"))
-;; (def r|| (r "`||`"))
-;; (def r! (r "`!`"))
-;; (def r$ (r "`$`"))
-
-
 
 
  (defn- captured-str []
@@ -173,15 +149,6 @@
     r-lines->md))
 
 
- 
-
-(intern-r-binary "r**" "^")
-
-;; (def r** (r "`^`"))
-(intern-r-binary "rdiv" "/")
-;; (def rdiv (r "`/`"))
-
-;; (def r- (r "`-`"))
 
 (defn r* [& args] (reduce (r "`*`") args))
 
@@ -190,10 +157,7 @@
   [& args]
   (reduce (r "`+`") args))
 
-;; Some special characters will get a name in letters.
-;; (def colon (r "`:`"))
-(intern-r-binary "colon" ":")
-;;
+
 
 (defmacro defr
   "Create Clojure and R bindings at the same time"
@@ -262,3 +226,14 @@
   ([function package] (println (help function package))))
 
 
+(run!
+ (fn [op] (intern-r-binary (str "r" op) op))
+ ["==", "!=" "<" ">" "<=" ">=" "&" "&&" "|" "||"  "$" "-"])
+
+(intern *ns* (symbol "r!")
+        (fn [e]
+          ((clojisr.v1.r/r "`!`") e)))
+(intern-r-binary "r**" "^")
+(intern-r-binary "rdiv" "/")
+;; Some special characters will get a name in letters.
+(intern-r-binary "colon" ":")
