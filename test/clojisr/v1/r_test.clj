@@ -42,8 +42,13 @@
            ]))))
 
 (deftest unary 
+  
+  (is (= 9.0 (-> (r/r** 3 2) r/r->clj first)))
   (is (not
-       (first (r/r->clj (r/r! true))))))
+       (-> (r/r! true) r/r->clj first)
+       )))
+
+
 
 (deftest bra-colon
   (is  (= [21.0]
