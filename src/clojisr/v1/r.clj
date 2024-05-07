@@ -124,30 +124,38 @@
      (r (format fmt n (name package)))
      (intern *ns* ns (r ns)))))
 
-(def r== (r "`==`"))
-(def r!= (r "`!=`"))
-(def r< (r "`<`"))
-(def r> (r "`>`"))
-(def r<= (r "`<=`"))
-(def r>= (r "`>=`"))
-(def r& (r "`&`"))
-(def r&& (r "`&&`"))
-(def r| (r "`||`"))
-(def r|| (r "`||`"))
-(def r! (r "`!`"))
-(def r$ (r "`$`"))
+(run!
+ (fn [op] (intern *ns* (symbol (format "r%s" op))
+                (fn [e1 e2]
+                  ((clojisr.v1.r/r (format  "`%s`" op)) e1 e2))))
+ ["==", "!=" "<" ">" "<=" ">=" "r&" "r&&" "r|" "r||" "r!" "r$"])
 
-(def captured-str
-  "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
-  (r "function(x) capture.output(str(x))"))
 
-(def println-captured-str (comp println-r-lines captured-str))
 
-(def str-md (comp r-lines->md captured-str))
+;; (def r== (r "`==`"))
+;; (def r!= (r "`!=`"))
+;; (def r< (r "`<`"))
+;; (def r> (r "`>`"))
+;; (def r<= (r "`<=`"))
+;; (def r>= (r "`>=`"))
+;; (def r& (r "`&`"))
+;; (def r&& (r "`&&`"))
+;; (def r| (r "`||`"))
+;; (def r|| (r "`||`"))
+;; (def r! (r "`!`"))
+;; (def r$ (r "`$`"))
 
-(def r** (r "`^`"))
-(def rdiv (r "`/`"))
-(def r- (r "`-`"))
+;; (def captured-str
+;;   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
+;;   (r "function(x) capture.output(str(x))"))
+
+;; (def println-captured-str (comp println-r-lines captured-str))
+
+;; (def str-md (comp r-lines->md captured-str))
+
+;; (def r** (r "`^`"))
+;; (def rdiv (r "`/`"))
+;; (def r- (r "`-`"))
 (defn r* [& args] (reduce (r "`*`") args))
 (defn r+
   "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments."
@@ -155,7 +163,7 @@
   (reduce (r "`+`") args))
 
 ;; Some special characters will get a name in letters.
-(def colon (r "`:`"))
+;; (def colon (r "`:`"))
 
 ;;
 
@@ -194,7 +202,7 @@
                 (let [fixed# (prepare-args-for-bra pars# ~all?)]
                   (apply bra# fixed#)))))))
 
-(make-bras)
+;; (make-bras)
 
 ;; register shutdown hook
 ;; should be called once
@@ -222,3 +230,7 @@
   "Prints help for an R object or function"
   ([r-object] (println (help r-object)))
   ([function package] (println (help function package))))
+
+
+(println  (r<= 1 1))
+(println "success")
