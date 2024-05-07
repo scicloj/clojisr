@@ -1,11 +1,11 @@
 (ns clojisr.v1.r-test
   (:require [clojisr.v1.r :as r]
-
+            [tech.v3.dataset :as ds]
             [clojisr.v1.require :as require-r]
             [clojure.test :refer [is deftest] :as t])) 
 
 (require-r/require-r '[datasets])
-
+(require-r/require-r '[base])
 
 (def v [1 2 3])
  
@@ -62,5 +62,28 @@
   (is (= 
        "```\n'data.frame':\t32 obs. of  11 variables:\n $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...\n $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...\n $ disp: num  160 160 108 258 360 ...\n $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...\n $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...\n $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...\n $ qsec: num  16.5 17 18.6 19.4 17 ...\n $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...\n $ am  : num  1 1 1 0 0 0 0 0 0 0 ...\n $ gear: num  4 4 4 3 3 3 3 4 4 4 ...\n $ carb: num  4 4 1 1 2 1 4 2 2 4 ...\n```"
        (r/str-md r.datasets/mtcars))))
+
+
+
+(deftest brabra<- 
+  (is (= 8
+         (->
+          (r/brabra<-
+           (base/matrix (r/colon 1 12))
+           1 8)
+          r/r->clj
+          (ds/column 1)
+          first))))
+
+(deftest bra<-
+  (is (= 8
+         (->
+          (r/bra<-
+           (range 5)
+           1 8)
+          r/r->clj
+          first)
+         )))
+
 
 

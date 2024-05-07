@@ -161,7 +161,6 @@
    (r "function(x) capture.output(str(x))")  )
 
  (defn println-captured-str[x] 
-   (def x x)
    (->
     (apply-function
      (captured-str)
