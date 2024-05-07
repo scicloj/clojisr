@@ -124,11 +124,14 @@
      (r (format fmt n (name package)))
      (intern *ns* ns (r ns)))))
 
+(defn- intern-r [clj-op op]
+  (intern *ns* (symbol clj-op)
+               (fn [e1 e2]
+                 ((clojisr.v1.r/r (format  "`%s`" op)) e1 e2))))
+
 (run!
- (fn [op] (intern *ns* (symbol (format "r%s" op))
-                (fn [e1 e2]
-                  ((clojisr.v1.r/r (format  "`%s`" op)) e1 e2))))
- ["==" "!=" "<" ">" "<=" ">=" "&" "&&" "|" "||" "!" "$"])
+ (fn [op] (intern-r (str "r" op) op))
+ ["==", "!=" "<" ">" "<=" ">=" "r&" "r&&" "r|" "r||" "r!" "r$" "-"])
 
 
 
@@ -153,9 +156,14 @@
 
 ;; (def str-md (comp r-lines->md captured-str))
 
+(intern-r "r**" "^")
+
 ;; (def r** (r "`^`"))
+(intern-r "rdiv" "/")
 ;; (def rdiv (r "`/`"))
+
 ;; (def r- (r "`-`"))
+
 (defn r* [& args] (reduce (r "`*`") args))
 (defn r+
   "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments."
@@ -164,7 +172,7 @@
 
 ;; Some special characters will get a name in letters.
 ;; (def colon (r "`:`"))
-
+(intern-r "colon" ":")
 ;;
 
 (defmacro defr
