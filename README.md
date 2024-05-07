@@ -1,8 +1,12 @@
+
+[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
+[![cljdoc badge](https://cljdoc.org/badge/scicloj/clojisr)](https://cljdoc.org/d/scicloj/clojisr)
+
 # ClojisR
 
 Clojure speaks statistics - a [jisr](https://en.wiktionary.org/wiki/جسر) between Clojure and R
 
-[![Clojars Project](https://img.shields.io/clojars/v/scicloj/clojisr.svg)](https://clojars.org/scicloj/clojisr)
+
 
 [Documentation](https://scicloj.github.io/clojisr/)
 

@@ -1,4 +1,4 @@
-(ns clojisr.v1.applications.plotting
+(ns ^:no-doc clojisr.v1.applications.plotting
   (:require [clojisr.v1.r :refer [r r->clj rsymbol]]
             [clojisr.v1.util :refer [exception-cause]]
             [clojisr.v1.require :refer [require-r]]
