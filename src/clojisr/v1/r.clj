@@ -128,7 +128,7 @@
  (fn [op] (intern *ns* (symbol (format "r%s" op))
                 (fn [e1 e2]
                   ((clojisr.v1.r/r (format  "`%s`" op)) e1 e2))))
- ["==", "!=" "<" ">" "<=" ">=" "r&" "r&&" "r|" "r||" "r!" "r$"])
+ ["==" "!=" "<" ">" "<=" ">=" "&" "&&" "|" "||" "!" "$"])
 
 
 
@@ -202,7 +202,7 @@
                 (let [fixed# (prepare-args-for-bra pars# ~all?)]
                   (apply bra# fixed#)))))))
 
-;; (make-bras)
+;(make-bras)
 
 ;; register shutdown hook
 ;; should be called once
@@ -232,5 +232,5 @@
   ([function package] (println (help function package))))
 
 
-(println  (r<= 1 1))
+
 (println "success")
