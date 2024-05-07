@@ -1,13 +1,16 @@
 (ns clojisr.v1.require
-  (:require [clojisr.v1.session :as session]
-            [clojisr.v1.using-sessions :as using-sessions]
-            [clojisr.v1.eval :as evl]
-            [clojisr.v1.protocols :as prot]
-            [clojisr.v1.known-classes :as known-classes]
-            [clojisr.v1.util :as util :refer [clojurize-r-symbol exception-cause]]
-            [clojisr.v1.impl.common :refer [strange-symbol-name?]]
-            [clojisr.v1.impl.java-to-clj :refer [java->clj]]
-            [clojure.tools.logging.readable :as log]))
+  (:require
+   [clojisr.v1.eval :as evl]
+   [clojisr.v1.impl.common :refer [strange-symbol-name?]]
+   [clojisr.v1.impl.java-to-clj :refer [java->clj]]
+   [clojisr.v1.known-classes :as known-classes]
+   [clojisr.v1.protocols :as prot]
+   [clojisr.v1.session :as session]
+   [clojisr.v1.impl.java-to-clj :as java2clj]
+   [clojisr.v1.using-sessions :as using-sessions]
+   [clojisr.v1.util :as util :refer [clojurize-r-symbol exception-cause]]
+   [clojure.string :as string]
+   [clojure.tools.logging.readable :as log]))
 
 (defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
@@ -69,9 +72,34 @@
         (seq opt) (list ['& {:keys opt}])
         :else '([])))))
 
+
+(defn r->java [r-object]
+  (using-sessions/r->java r-object))
+
+(defn help
+  "Gets help for an R object or function"
+  ([r-object]
+   (let [symbol (second  (re-find #"\{(.*)\}" (:code r-object)))
+         split (string/split symbol #"::")]
+
+     (help (second split) (first split))))
+
+  ([function package]
+   (->>
+    (evl/r (format  "capture.output(tools:::Rd2txt(utils:::.getHelpFile(as.character(help(%s,%s))), options=list(underline_titles=FALSE)))"
+                    (name function) (name package))
+           (session/fetch-or-make nil))
+    r->java
+    java2clj/java->clj
+    (string/join "\n"))))
+
+
 (defn r-symbol->clj-symbol [r-symbol r-object]
   (if-let [arglists (r-object->arglists r-object)]
-    (vary-meta r-symbol assoc :arglists arglists)
+    (vary-meta r-symbol assoc
+               :arglists arglists
+               :doc (help r-object))
+
     r-symbol))
 
 (defn add-to-ns [ns-symbol r-symbol r-object]
