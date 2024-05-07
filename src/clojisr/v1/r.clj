@@ -185,16 +185,30 @@
      (prepare-args-for-bra pars)
      (conj (prepare-args-for-bra (butlast pars)) (last pars)))))
 
-(defmacro ^:private make-bras
-  []
-  `(do ~@(for [[bra-sym-name [bra-str all?]] bracket-data
-               :let [bra-sym (symbol bra-sym-name)]]
-           `(let [bra# (r ~bra-str)]
-              (defn ~bra-sym [& pars#]
-                (let [fixed# (prepare-args-for-bra pars# ~all?)]
-                  (apply bra# fixed#)))))))
 
-(make-bras)
+(defn bra [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[`")
+    fixed (prepare-args-for-bra pars true)]
+    (clojure.core/apply bra fixed)))
+
+(defn brabra [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[[`")
+    fixed (prepare-args-for-bra pars true)]
+    (clojure.core/apply bra fixed)))
+
+(defn bra<- [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[<-`")
+    fixed (prepare-args-for-bra pars false)]
+    (clojure.core/apply bra fixed)))
+
+(defn brabra<- [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[[<-`")
+    fixed (prepare-args-for-bra pars false)]
+    (clojure.core/apply bra fixed)))
 
 
 
