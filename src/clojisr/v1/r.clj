@@ -153,13 +153,30 @@
 ;; (def r! (r "`!`"))
 ;; (def r$ (r "`$`"))
 
- (def captured-str
+
+
+
+ (defn- captured-str []
    "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
-   (r "function(x) capture.output(str(x))"))
+   (r "function(x) capture.output(str(x))")  )
 
- (def println-captured-str (comp println-r-lines captured-str))
+ (defn println-captured-str[x] 
+   (def x x)
+   (->
+    (apply-function
+     (captured-str)
+     [x])
+    println-r-lines))
 
- (def str-md (comp r-lines->md captured-str))
+ (defn str-md [x]
+   (->
+    (apply-function
+     (captured-str)
+     [x])
+    r-lines->md))
+
+
+ 
 
 (intern-r-binary "r**" "^")
 
@@ -218,6 +235,8 @@
 
 (make-bras)
 
+
+
 ;; register shutdown hook
 ;; should be called once
 (defonce ^:private shutdown-hook-registered
@@ -246,5 +265,3 @@
   ([function package] (println (help function package))))
 
 
-
-(println "success")
