@@ -78,6 +78,10 @@
         (seq opt) (list ['& {:keys opt}])
         :else '([])))))
 
+(defn safe-help [r-object session]
+  (try 
+    (help/help r-object session)
+    (catch Exception e "")))
 
 (defn r-symbol->clj-symbol [session r-symbol r-object] 
   (let [arglists (r-object->arglists r-object)]
@@ -91,7 +95,7 @@
       @attach-help-as-docstring-to-vars
       (if-assoc-meta :doc (do 
                                  (println :attach-help r-symbol)
-                                 (help/help r-object session))))))
+                                 (safe-help r-object session))))))
 
 (defn add-to-ns [session ns-symbol r-symbol r-object]
   (intern ns-symbol

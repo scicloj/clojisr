@@ -1087,11 +1087,10 @@
  (md
   "As we saw earlier, R functions are Clojure functions. The arglists of functions brought up by `require-r` match the expected arguments. Here are some examples:"))
 
-
+(reset! clojisr.v1.require/attach-help-as-docstring-to-vars false)
 (def var251 (require-r '[base] '[stats] '[grDevices]))
 
-
-(def
+ (def
  var252
  (->>
   [#'r.base/mean
@@ -1102,7 +1101,7 @@
    #'r.base/summary-default
    #'r.base/sin
    #'r.base/sum]
-  (map (fn [f] (-> f meta (update :ns (comp symbol str)))))))
+  (mapv (fn [f] (-> f meta (update :ns (comp symbol str)))))))
 
 
 (deftest

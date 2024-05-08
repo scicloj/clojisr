@@ -218,3 +218,4 @@
   "Prints help for an R object or function"
   ([r-object] (println (help r-object)))
   ([function package] (println (help function package))))
+
