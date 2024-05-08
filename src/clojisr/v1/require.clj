@@ -13,6 +13,9 @@
    [clojisr.v1.help :as help]
    [clojure.tools.logging.readable :as log]))
 
+
+(def attach-help-as-docstring-to-vars (atom false))
+
 (defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
                  (name package-symbol)
@@ -76,11 +79,15 @@
 
 
 (defn r-symbol->clj-symbol [session r-symbol r-object]
-  (println :add-symbol r-symbol)
+  
   (if-let [arglists (r-object->arglists r-object)]
     (vary-meta r-symbol assoc
                :arglists arglists
-               :doc (help/help r-object session)
+               :doc (if @attach-help-as-docstring-to-vars 
+                      (do
+                        (println :attach-help r-symbol)
+                        (help/help r-object session))
+                      "no help was attached, as *attach-help-as-docstring-to-vars* is false" )
                )
 
     r-symbol))

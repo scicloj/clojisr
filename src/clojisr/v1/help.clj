@@ -6,13 +6,13 @@
             ))
 
 
-(defn help
+(defn _help
   "Gets help for an R object or function"
   ([r-object session]
    (let [symbol (second  (re-find #"\{(.*)\}" (:code r-object)))
          split (str/split symbol #"::")]
 
-     (help (second split) (first split) session)))
+     (_help (second split) (first split) session)))
 
   ([function package session]
    
@@ -24,3 +24,5 @@
     (using-sessions/r->java)
     (java2clj/java->clj)
     (str/join "\n"))))
+
+(def help (memoize _help))
