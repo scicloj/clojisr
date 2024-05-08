@@ -1,4 +1,4 @@
-(ns clojisr.v1.tutorials.help-test
+(ns clojisr.v1.help-test
   (:require 
    [clojure.string :as str] 
    [clojure.test :refer [is deftest]]
