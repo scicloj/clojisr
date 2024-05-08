@@ -1,0 +1,26 @@
+name: Clojure CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Run make ci-build in dev container
+      uses: devcontainers/ci@v0.3
+      with:    
+              # [Optional] If you have a separate workflow like the one above
+              # to pre-build your container image, you can reference it here
+              # to speed up your application build workflows as well!
+                           #cacheFrom: ghcr.io/example/example-devcontainer
+
+               push: never
+               runCmd: clj -X:test
