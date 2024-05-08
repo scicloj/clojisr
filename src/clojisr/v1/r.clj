@@ -9,9 +9,11 @@
             [clojisr.v1.impl.java-to-clj :as java2clj]
             [clojisr.v1.impl.clj-to-java :as clj2java]
             [clojure.string :as string]
+            [clojisr.v1.help :as help]
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
             [clojisr.v1.require :refer [require-r-package]]
-            [clojisr.v1.engines :refer [engines]])
+            [clojisr.v1.engines :refer [engines]]
+            [clojisr.v1.robject :as robject])
   (:import clojisr.v1.robject.RObject))
 
 (defn init [& {:keys [session-args]}]
@@ -206,16 +208,10 @@
 (defn help
   "Gets help for an R object or function"
   ([r-object]
-   (let [symbol (second  (re-find #"\{(.*)\}" (:code r-object)))
-         split (string/split symbol #"::")]
-
-     (help (second split) (first split))))
+   (help/help r-object (session/fetch nil)))
 
   ([function package]
-   (->>
-    (r (format  "capture.output(tools:::Rd2txt(utils:::.getHelpFile(as.character(help(%s,%s))), options=list(underline_titles=FALSE)))" (name function) (name package)))
-    r->clj
-    (string/join "\n"))))
+   (help/help function package (session/fetch nil))))
 
 
 (defn print-help

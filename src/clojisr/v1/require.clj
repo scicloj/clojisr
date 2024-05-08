@@ -6,10 +6,11 @@
    [clojisr.v1.known-classes :as known-classes]
    [clojisr.v1.protocols :as prot]
    [clojisr.v1.session :as session]
-   [clojisr.v1.impl.java-to-clj :as java2clj]
+   
    [clojisr.v1.using-sessions :as using-sessions]
    [clojisr.v1.util :as util :refer [clojurize-r-symbol exception-cause]]
-   [clojure.string :as string]
+   
+   [clojisr.v1.help :as help]
    [clojure.tools.logging.readable :as log]))
 
 (defn package-r-object [package-symbol object-symbol]
@@ -73,69 +74,53 @@
         :else '([])))))
 
 
-(defn r->java [r-object]
-  (using-sessions/r->java r-object))
 
-(defn help
-  "Gets help for an R object or function"
-  ([r-object]
-   (let [symbol (second  (re-find #"\{(.*)\}" (:code r-object)))
-         split (string/split symbol #"::")]
-
-     (help (second split) (first split))))
-
-  ([function package]
-   (->>
-    (evl/r (format  "capture.output(tools:::Rd2txt(utils:::.getHelpFile(as.character(help(%s,%s))), options=list(underline_titles=FALSE)))"
-                    (name function) (name package))
-           (session/fetch-or-make nil))
-    r->java
-    java2clj/java->clj
-    (string/join "\n"))))
-
-
-(defn r-symbol->clj-symbol [r-symbol r-object]
+(defn r-symbol->clj-symbol [session r-symbol r-object]
+  (println :add-symbol r-symbol)
   (if-let [arglists (r-object->arglists r-object)]
     (vary-meta r-symbol assoc
                :arglists arglists
-               :doc (help r-object))
+               :doc (help/help r-object session)
+               )
 
     r-symbol))
 
-(defn add-to-ns [ns-symbol r-symbol r-object]
+(defn add-to-ns [session ns-symbol r-symbol r-object]
   (intern ns-symbol
-          (r-symbol->clj-symbol r-symbol r-object)
+          (r-symbol->clj-symbol session r-symbol r-object)
           r-object))
 
-(defn symbols->add-to-ns [ns-symbol r-symbols]
+(defn symbols->add-to-ns [session ns-symbol r-symbols]
   (doseq [[r-symbol r-object] r-symbols]
-    (add-to-ns ns-symbol r-symbol r-object)))
+    (add-to-ns session ns-symbol r-symbol r-object)))
 
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (try
     (let [session (session/fetch-or-make nil)]
-      (evl/eval-form `(library ~package-symbol) session))
-    (let [r-ns-symbol (->> package-symbol
-                           (str "r.")
-                           symbol)
-          r-symbols (all-r-symbols-map package-symbol)]
+      (evl/eval-form `(library ~package-symbol) session)
+      (let [r-ns-symbol (->> package-symbol
+                             (str "r.")
+                             symbol)
+            r-symbols (all-r-symbols-map package-symbol)]
 
       ;; r.package namespace
-      (find-or-create-ns r-ns-symbol)
-      (symbols->add-to-ns r-ns-symbol r-symbols)
+        (find-or-create-ns r-ns-symbol)
+        (symbols->add-to-ns session r-ns-symbol r-symbols)
 
       ;; alias namespaces
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/require-r.20vs.20-require-python
-      (alias package-symbol r-ns-symbol)
-      (when as (alias as r-ns-symbol))
+        (alias package-symbol r-ns-symbol)
+        (when as (alias as r-ns-symbol))
 
       ;; inject symbol into current namespace
-      (when refer
-        (let [this-ns-symbol (-> *ns* str symbol)]
-          (symbols->add-to-ns this-ns-symbol
-                              (if (= refer :all)
-                                r-symbols
-                                (select-keys r-symbols refer))))))
+        (when refer
+          (let [this-ns-symbol (-> *ns* str symbol)]
+            (symbols->add-to-ns
+             session
+             this-ns-symbol
+             (if (= refer :all)
+               r-symbols
+               (select-keys r-symbols refer)))))))
     (catch Exception e
       (log/warn [::require-r-package {:package-symbol package-symbol
                                       :cause (exception-cause e)}])
