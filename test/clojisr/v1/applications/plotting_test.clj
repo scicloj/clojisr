@@ -2,9 +2,9 @@
   (:require [clojisr.v1.applications.plotting :as plot]
             [clojisr.v1.r :as r]
             [clojure.string :as str]
+            [clojisr.v1.applications.plotting :refer [plot->svg plot->file plot->buffered-image]]
             [clojure.test :refer [is deftest]]))
 
-(require '[clojisr.v1.applications.plotting :refer [plot->svg plot->file plot->buffered-image]])
 (r/require-r '[graphics :refer [plot hist]])
 
 (deftest plot-svg 
