@@ -11,9 +11,7 @@
    [clojisr.v1.util :refer [clojurize-r-symbol exception-cause if-assoc-meta]]
    
    [clojisr.v1.help :as help]
-   [clojure.tools.logging.readable :as log]
-   [vrksasana.util :as util]
-   [clojisr.v1.robject :as robject]))
+   [clojure.tools.logging.readable :as log]))
 
 
 (def attach-help-as-docstring-to-vars (atom false))
@@ -78,12 +76,12 @@
         (seq opt) (list ['& {:keys opt}])
         :else '([])))))
 
-(defn safe-help [r-object session]
+(defn safe-help [r-object]
   (try 
-    (help/help r-object session)
+    (help/help r-object)
     (catch Exception e "")))
 
-(defn r-symbol->clj-symbol [session r-symbol r-object] 
+(defn r-symbol->clj-symbol [ r-symbol r-object] 
   (let [arglists (r-object->arglists r-object)]
 
     (cond-> r-symbol
@@ -93,18 +91,16 @@
 
 
       @attach-help-as-docstring-to-vars
-      (if-assoc-meta :doc (do 
-                                 (println :attach-help r-symbol)
-                                 (safe-help r-object session))))))
+      (if-assoc-meta :doc (safe-help r-object )))))
 
-(defn add-to-ns [session ns-symbol r-symbol r-object]
+(defn add-to-ns [ ns-symbol r-symbol r-object]
   (intern ns-symbol
-          (r-symbol->clj-symbol session r-symbol r-object)
+          (r-symbol->clj-symbol r-symbol r-object)
           r-object))
 
-(defn symbols->add-to-ns [session ns-symbol r-symbols]
+(defn symbols->add-to-ns [ns-symbol r-symbols]
   (doseq [[r-symbol r-object] r-symbols]
-    (add-to-ns session ns-symbol r-symbol r-object)))
+    (add-to-ns ns-symbol r-symbol r-object)))
 
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (try
@@ -117,7 +113,7 @@
 
       ;; r.package namespace
         (find-or-create-ns r-ns-symbol)
-        (symbols->add-to-ns session r-ns-symbol r-symbols)
+        (symbols->add-to-ns r-ns-symbol r-symbols)
 
       ;; alias namespaces
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/require-r.20vs.20-require-python
@@ -128,7 +124,6 @@
         (when refer
           (let [this-ns-symbol (-> *ns* str symbol)]
             (symbols->add-to-ns
-             session
              this-ns-symbol
              (if (= refer :all)
                r-symbols

@@ -4,12 +4,12 @@
    [clojure.test :refer [is deftest]]
    [clojisr.v1.r  :as r]))
 
-
+(reset! clojisr.v1.require/attach-help-as-docstring-to-vars true)  
 (r/require-r '[randomForest])
 
 
 (deftest help-with-docstring
-(reset! clojisr.v1.require/attach-help-as-docstring-to-vars true)  
+  (reset! clojisr.v1.require/attach-help-as-docstring-to-vars true)  
   (r/require-r '[randomForest])
   (is (str/starts-with? 
        (:doc (meta (var r.randomForest/randomForest)))
