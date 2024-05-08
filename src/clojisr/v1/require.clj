@@ -8,10 +8,12 @@
    [clojisr.v1.session :as session]
    
    [clojisr.v1.using-sessions :as using-sessions]
-   [clojisr.v1.util :as util :refer [clojurize-r-symbol exception-cause]]
+   [clojisr.v1.util :refer [clojurize-r-symbol exception-cause if-assoc-meta]]
    
    [clojisr.v1.help :as help]
-   [clojure.tools.logging.readable :as log]))
+   [clojure.tools.logging.readable :as log]
+   [vrksasana.util :as util]
+   [clojisr.v1.robject :as robject]))
 
 
 (def attach-help-as-docstring-to-vars (atom false))
@@ -77,20 +79,19 @@
         :else '([])))))
 
 
+(defn r-symbol->clj-symbol [session r-symbol r-object] 
+  (let [arglists (r-object->arglists r-object)]
 
-(defn r-symbol->clj-symbol [session r-symbol r-object]
-  
-  (if-let [arglists (r-object->arglists r-object)]
-    (vary-meta r-symbol assoc
-               :arglists arglists
-               :doc (if @attach-help-as-docstring-to-vars 
-                      (do
-                        (println :attach-help r-symbol)
-                        (help/help r-object session))
-                      "no help was attached, as *attach-help-as-docstring-to-vars* is false" )
-               )
+    (cond-> r-symbol
+      arglists (vary-meta 
+                 assoc
+                 :arglists arglists)
 
-    r-symbol))
+
+      @attach-help-as-docstring-to-vars
+      (if-assoc-meta :doc (do 
+                                 (println :attach-help r-symbol)
+                                 (help/help r-object session))))))
 
 (defn add-to-ns [session ns-symbol r-symbol r-object]
   (intern ns-symbol
