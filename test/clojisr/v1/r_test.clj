@@ -18,7 +18,7 @@
 
 
 (deftest binaries 
-  (is (= [true false false false true true true true true true 0 2 1 1.0 1]
+  (is (= [true false false false true true true true true true 0 2 1 1.0 1 1]
          
          (map 
           (fn [f]
@@ -39,6 +39,7 @@
            r/r*
            r/rdiv
            r/colon
+           r/rcolon
            ]))))
 
 (deftest unary 

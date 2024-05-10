@@ -124,11 +124,6 @@
      (r (format fmt n (name package)))
      (intern *ns* ns (r ns)))))
 
-(defn- intern-r-binary [clj-op op]
-  (intern *ns*  (symbol clj-op)
-          (fn [e1 e2]
-            ((clojisr.v1.r/r (format  "`%s`" op)) e1 e2))))
-
 
  (defn- captured-str []
    "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
@@ -149,16 +144,6 @@
     r-lines->md))
 
 
-
-(defn r* [& args] (reduce (r "`*`") args))
-
-(defn r+
-  "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments."
-  [& args]
-  (reduce (r "`+`") args))
-
-
-
 (defmacro defr
   "Create Clojure and R bindings at the same time"
   [name & r]
@@ -174,7 +159,7 @@
   ([package string-or-symbol]
    (r (str (maybe-wrap-backtick package) "::" (maybe-wrap-backtick string-or-symbol)))))
 
-;; brackets!
+
 
 ;; FIXME! Waiting for session management.
 (defn- prepare-args-for-bra
@@ -185,30 +170,6 @@
      (prepare-args-for-bra pars)
      (conj (prepare-args-for-bra (butlast pars)) (last pars)))))
 
-
-(defn bra [& pars]
-  (let
-   [bra (clojisr.v1.r/r "`[`")
-    fixed (prepare-args-for-bra pars true)]
-    (clojure.core/apply bra fixed)))
-
-(defn brabra [& pars]
-  (let
-   [bra (clojisr.v1.r/r "`[[`")
-    fixed (prepare-args-for-bra pars true)]
-    (clojure.core/apply bra fixed)))
-
-(defn bra<- [& pars]
-  (let
-   [bra (clojisr.v1.r/r "`[<-`")
-    fixed (prepare-args-for-bra pars false)]
-    (clojure.core/apply bra fixed)))
-
-(defn brabra<- [& pars]
-  (let
-   [bra (clojisr.v1.r/r "`[[<-`")
-    fixed (prepare-args-for-bra pars false)]
-    (clojure.core/apply bra fixed)))
 
 
 
@@ -240,14 +201,120 @@
   ([function package] (println (help function package))))
 
 
-(run!
- (fn [op] (intern-r-binary (str "r" op) op))
- ["==", "!=" "<" ">" "<=" ">=" "&" "&&" "|" "||"  "$" "-"])
+;; arithmetic operators
+(defn r- 
+  "R arithmetic operator `-`"
+  [e1 e2] ((r "`-`") e1 e2))
 
-(intern *ns* (symbol "r!")
-        (fn [e]
-          ((clojisr.v1.r/r "`!`") e)))
-(intern-r-binary "r**" "^")
-(intern-r-binary "rdiv" "/")
-;; Some special characters will get a name in letters.
-(intern-r-binary "colon" ":")
+(defn rdiv 
+  "R arithmetic operator `/`"
+  [e1 e2] ((r "`/`") e1 e2))
+
+(defn r* 
+  "R arithmetic operator `*`, but can be used on an arbitraty number of arguments."
+  [& args] 
+  (reduce (r "`*`") args))
+
+(defn r+
+  "R arithmetic operator `+`, but can be used on an arbitraty number of arguments."
+  [& args]
+  (reduce (r "`+`") args))
+
+(defn r** 
+  "R arithmetic operator `^`"
+  [e1 e2] 
+  ((r "`^`") e1 e2)) 
+
+
+;; relational operators
+(defn r== 
+  "R relational operator `==`"
+  [e1 e2] ( (r "`==`") e1 e2))
+
+(defn r!= 
+  "R relational operator `=!`"
+  [e1 e2] ((r "`!=`") e1 e2))
+
+(defn r< 
+  "R relational operator `<`"
+  [e1 e2] ((r "`<`") e1 e2))
+
+(defn r> 
+  "R relational operator `>`"
+  [e1 e2] ((r "`>`") e1 e2))
+
+(defn r<= 
+  "R relational operator `<=`" 
+  [e1 e2] ((r "`<=`") e1 e2))
+
+(defn r>= 
+  "R relational operator `>=`" 
+  [e1 e2] ((r "`>=`") e1 e2))
+
+;; logical operators
+(defn r& 
+  "R logical operator `&`"
+  [e1 e2] ((r "`&`") e1 e2))
+
+(defn r&& 
+  "R logical operator `&&`"
+  [e1 e2] ((r "`&&`") e1 e2))
+
+(defn r| 
+  "R logical operator `|`"
+  [e1 e2] ((r "`|`") e1 e2))
+
+(defn r||
+  "R logical operator `||`"
+  [e1 e2] ((r "`||`") e1 e2))
+
+(defn r! 
+  "R logical operator `!`"
+  [e] ((r "`!`") e))
+
+;; colon operators
+(defn colon 
+  "R colon operator `:`"
+  [e1 e2] ((r "`:`") e1 e2))
+(defn rcolon 
+  "R colon operator `:`"
+  [e1 e2] (colon e1 e2))
+
+;; extract/replace operators
+(defn r$
+  "R extract operator `$`"
+  [e1 e2] ((r "`$`") e1 e2))
+
+
+(defn bra 
+  "R extract operator `[`"
+  [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[`")
+    fixed (prepare-args-for-bra pars true)]
+    (clojure.core/apply bra fixed)))
+
+(defn brabra 
+  "R extract operator `[[`"
+  [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[[`")
+    fixed (prepare-args-for-bra pars true)]
+    (clojure.core/apply bra fixed)))
+
+(defn bra<- 
+  "R replace operator `[<-`"
+  [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[<-`")
+    fixed (prepare-args-for-bra pars false)]
+    (clojure.core/apply bra fixed)))
+
+(defn brabra<- 
+  "R replace operator `[[<-`"
+  [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[[<-`")
+    fixed (prepare-args-for-bra pars false)]
+    (clojure.core/apply bra fixed)))
+
