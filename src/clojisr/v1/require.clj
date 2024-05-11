@@ -14,7 +14,7 @@
    [clojure.tools.logging.readable :as log]))
 
 
-(def attach-help-as-docstring-to-vars (atom false))
+
 
 (defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
@@ -81,7 +81,7 @@
     (help/help r-object)
     (catch Exception e "")))
 
-(defn r-symbol->clj-symbol [ r-symbol r-object] 
+(defn r-symbol->clj-symbol [ r-symbol r-object load-help?] 
   (let [arglists (r-object->arglists r-object)]
 
     (cond-> r-symbol
@@ -90,19 +90,19 @@
                  :arglists arglists)
 
 
-      @attach-help-as-docstring-to-vars
+      load-help?
       (if-assoc-meta :doc (safe-help r-object )))))
 
-(defn add-to-ns [ ns-symbol r-symbol r-object]
+(defn add-to-ns [ ns-symbol r-symbol r-object load-help?]
   (intern ns-symbol
-          (r-symbol->clj-symbol r-symbol r-object)
+          (r-symbol->clj-symbol r-symbol r-object load-help?)
           r-object))
 
-(defn symbols->add-to-ns [ns-symbol r-symbols]
+(defn symbols->add-to-ns [ns-symbol r-symbols load-help?]
   (doseq [[r-symbol r-object] r-symbols]
-    (add-to-ns ns-symbol r-symbol r-object)))
+    (add-to-ns ns-symbol r-symbol r-object load-help?)))
 
-(defn require-r-package [[package-symbol & {:keys [as refer]}]]
+(defn require-r-package [[package-symbol & {:keys [as refer load-help?]}]]
   (try
     (let [session (session/fetch-or-make nil)]
       (evl/eval-form `(library ~package-symbol) session)
@@ -113,7 +113,7 @@
 
       ;; r.package namespace
         (find-or-create-ns r-ns-symbol)
-        (symbols->add-to-ns r-ns-symbol r-symbols)
+        (symbols->add-to-ns r-ns-symbol r-symbols load-help?)
 
       ;; alias namespaces
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/require-r.20vs.20-require-python
