@@ -127,7 +127,8 @@
              this-ns-symbol
              (if (= refer :all)
                r-symbols
-               (select-keys r-symbols refer)))))))
+               (select-keys r-symbols refer))
+             load-help?)))))
     (catch Exception e
       (log/warn [::require-r-package {:package-symbol package-symbol
                                       :cause (exception-cause e)}])
