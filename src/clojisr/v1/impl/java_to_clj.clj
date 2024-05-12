@@ -153,7 +153,7 @@
 
 (defn java->clj
   "Perform high level data conversion"
-  [exp]
+  [exp & options]
   (let [exp (first-step->java exp)]
     (cond
       (data-frame? exp) (data-frame->dataset exp)
