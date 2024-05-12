@@ -1,6 +1,8 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## unreleased
+- added more operators `%/%`, `%%` ,`%in%`, `xor`
 ## [1.0.0]
 - `require-r` creates namespace as `r.namespace`, also `namespace` as an alias
 - dependencies update, TMD 7.029

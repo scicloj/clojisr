@@ -225,6 +225,15 @@
   [e1 e2] 
   ((r "`^`") e1 e2)) 
 
+(defn r%div%
+  "R arithmetic operator `%/%`"
+  [e1 e2]
+  ((r "`%/%`") e1 e2))
+
+(defn r%%
+  "R arithmetic operator `%%`"
+  [e1 e2]
+  ((r "`%%`") e1 e2))
 
 ;; relational operators
 (defn r== 
@@ -268,9 +277,14 @@
   "R logical operator `||`"
   [e1 e2] ((r "`||`") e1 e2))
 
-(defn r! 
+(defn r!
   "R logical operator `!`"
   [e] ((r "`!`") e))
+
+(defn rxor
+  "R logical operator `xor`"
+  [e1 e2] ((r "`xor`") e1 e2))
+
 
 ;; colon operators
 (defn colon 
@@ -284,6 +298,12 @@
 (defn r$
   "R extract operator `$`"
   [e1 e2] ((r "`$`") e1 e2))
+
+
+(defn r%in%
+  "R match operator `%in%`"
+  [e1 e2] ((r "`%in%`") e1 e2))
+
 
 
 (defn bra 

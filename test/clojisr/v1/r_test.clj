@@ -18,9 +18,9 @@
 
 
 (deftest binaries 
-  (is (= [true false false false true true true true true true 0 2 1 1.0 1 1]
+  (is (= [true false false false true true true true true true 0 2 1 1.0 1 1 1 0 false true]
          
-         (map 
+         (mapv 
           (fn [f]
             (first (r/r->clj (f 1 1))))
           
@@ -40,7 +40,12 @@
            r/rdiv
            r/colon
            r/rcolon
+           r/r%div%
+           r/r%%
+           r/rxor
+           r/r%in%
            ]))))
+
 
 (deftest unary 
   
