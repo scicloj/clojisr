@@ -8,7 +8,7 @@
 
 (deftest help-docstring
   (r/require-r '[randomForest])
-  (Thread/sleep 10000)
+  (Thread/sleep 30000)
   (is (str/starts-with? 
        (:doc (meta (var r.randomForest/randomForest)))
        "Classification and Regression with Random Forest")))
