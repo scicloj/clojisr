@@ -81,12 +81,7 @@
     (functions/apply-function r-function args session)))
 
 (defn require-r [& packages]
-  (run! require-r-package packages)
-  (future (run! #(require-r-package 
-                  (concat % [ :load-help? true]))
-                packages))
-  nil
-  )
+  (run! require-r-package packages))
 
 (def function functions/function)
 

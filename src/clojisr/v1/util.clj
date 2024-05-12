@@ -97,12 +97,6 @@
       x)))
 
 
-(defn if-assoc-meta 
-  "If value non-nil, assoc it to meta with key"
-  [s k v]
-  (if ( some? v)
-    (vary-meta s assoc k v)
-    s))
 
 (comment
   (-|> 4

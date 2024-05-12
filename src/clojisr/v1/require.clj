@@ -8,7 +8,7 @@
    [clojisr.v1.session :as session]
    
    [clojisr.v1.using-sessions :as using-sessions]
-   [clojisr.v1.util :refer [clojurize-r-symbol exception-cause if-assoc-meta]]
+   [clojisr.v1.util :refer [clojurize-r-symbol exception-cause]]
    
    [clojisr.v1.help :as help]
    [clojure.tools.logging.readable :as log]))
@@ -76,33 +76,39 @@
         (seq opt) (list ['& {:keys opt}])
         :else '([])))))
 
-(defn safe-help [r-object]
+(defn- safe-help [r-object]
   (try 
     (help/help r-object)
     (catch Exception e "")))
 
-(defn r-symbol->clj-symbol [ r-symbol r-object load-help?] 
-  (let [arglists (r-object->arglists r-object)]
-
-    (cond-> r-symbol
-      arglists (vary-meta 
-                 assoc
-                 :arglists arglists)
+(defn r-symbol->clj-symbol [ r-symbol r-object] 
+  
+  (if-let [arglists (r-object->arglists r-object)]
+    (vary-meta r-symbol assoc :arglists arglists)
+    r-symbol))
 
 
-      load-help?
-      (if-assoc-meta :doc (safe-help r-object )))))
+(defn- alter-meta-doc-in-future! [ns-symbol r-symbol r-object]
+  (future
+    (Thread/sleep 5000)
+    (alter-meta!
+     (get (ns-publics ns-symbol) r-symbol)
+     assoc :doc (safe-help r-object))))
 
-(defn add-to-ns [ ns-symbol r-symbol r-object load-help?]
+(defn add-to-ns [ ns-symbol r-symbol r-object]
   (intern ns-symbol
-          (r-symbol->clj-symbol r-symbol r-object load-help?)
-          r-object))
+          (r-symbol->clj-symbol r-symbol r-object)
+          r-object)
+  
+  (alter-meta-doc-in-future! ns-symbol r-symbol r-object)
+  ns-symbol)
 
-(defn symbols->add-to-ns [ns-symbol r-symbols load-help?]
+
+(defn symbols->add-to-ns [ns-symbol r-symbols]
   (doseq [[r-symbol r-object] r-symbols]
-    (add-to-ns ns-symbol r-symbol r-object load-help?)))
+    (add-to-ns ns-symbol r-symbol r-object)))
 
-(defn require-r-package [[package-symbol & {:keys [as refer load-help?]}]]
+(defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (try
     (let [session (session/fetch-or-make nil)]
       (evl/eval-form `(library ~package-symbol) session)
@@ -113,7 +119,7 @@
 
       ;; r.package namespace
         (find-or-create-ns r-ns-symbol)
-        (symbols->add-to-ns r-ns-symbol r-symbols load-help?)
+        (symbols->add-to-ns r-ns-symbol r-symbols)
 
       ;; alias namespaces
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/require-r.20vs.20-require-python
@@ -127,8 +133,7 @@
              this-ns-symbol
              (if (= refer :all)
                r-symbols
-               (select-keys r-symbols refer))
-             load-help?)))))
+               (select-keys r-symbols refer)))))))
     (catch Exception e
       (log/warn [::require-r-package {:package-symbol package-symbol
                                       :cause (exception-cause e)}])
