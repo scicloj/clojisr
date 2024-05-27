@@ -94,6 +94,8 @@ The Dockerfile of the template adds as well python + libpython-clj for completen
 
 So it has in a single place all dependencies and they do work together and no further setup is required.
 
+There is as well a `devcontainer` setup in this GitHub [template](https://github.com/behrica/clojure-datascience-devcontainer). It provides as well an out-of-the box working environment and template for projects using ClojisR (and [libpythion-clj](https://github.com/clj-python/libpython-clj)
+
 ## Checking if it works
 
 This should work for you (assuming you have the [clj tool](https://clojure.org/guides/getting_started)):
