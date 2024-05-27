@@ -30,8 +30,10 @@
   (let [session (session/fetch-or-make session-args)]
     (prot/eval-r->java session r-code)))
 
-(defn r->java [r-object]
-  (using-sessions/r->java r-object))
+(defn r->java [r-object & options]
+  (using-sessions/r->java 
+   (assoc r-object :options options)
+   ))
 
 (defn java->r [java-object & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
@@ -40,7 +42,7 @@
 (defn java->native-clj [java-object]
   (java2clj/java->native java-object))
 
-(defn java->clj [java-object] (java2clj/java->clj java-object))
+(defn java->clj [java-object & options] (java2clj/java->clj java-object options))
 
 (defn clj->java [clj-object & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
@@ -49,7 +51,11 @@
 (def clj->java->r (comp java->r clj->java))
 (def clj->r clj->java->r)
 
-(defn r->java->clj [r-object] (-> r-object r r->java java2clj/java->clj))
+(defn r->java->clj [r-object & options] 
+  (-> r-object 
+      (r options) 
+      (r->java options) 
+      (java2clj/java->clj options)))
 (def r->clj r->java->clj)
 
 (defn r->java->native-clj [r-object] (-> r r-object r->java java2clj/java->native))
