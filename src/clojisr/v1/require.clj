@@ -98,8 +98,10 @@
 
       ;; alias namespaces
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/require-r.20vs.20-require-python
-      (alias package-symbol r-ns-symbol)
-      (when as (alias as r-ns-symbol))
+      ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/clojisr.201.2E1.2E0/near/441026754
+      (if as
+        (alias as r-ns-symbol)
+        (alias package-symbol r-ns-symbol))
 
       ;; inject symbol into current namespace
       (when refer
