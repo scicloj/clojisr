@@ -4,22 +4,21 @@
    [clojure.test :refer [is deftest]]
    [clojisr.v1.r  :as r]))
 
-(r/require-r '[randomForest])
 
 (deftest help-docstring
-  (r/require-r '[randomForest])
-  (Thread/sleep 30000)
+  (r/require-r '[stats])
+  (Thread/sleep 10000)
   (is (str/starts-with? 
-       (:doc (meta (var r.randomForest/randomForest)))
-       "Classification and Regression with Random Forest")))
+       (:doc (meta (var r.stats/lm)))
+       "Fitting Linear")))
   
 (deftest help-function 
   (is (str/starts-with? 
-       (r/help "randomForest" "randomForest")
-       "Classification and Regression with Random Forest")))
+       (r/help "lm" "stats")
+       "Fitting Linear")))
 
 (deftest require-defauls-should-not-throws-exception 
-  
+
   ; should not crash
   (r/require-r '[base])
   (r/require-r '[stats])
