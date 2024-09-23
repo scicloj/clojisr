@@ -11,7 +11,8 @@
             [clojure.string :as string]
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
             [clojisr.v1.require :refer [require-r-package]]
-            [clojisr.v1.engines :refer [engines]])
+            [clojisr.v1.engines :refer [engines]]
+            [tech.v3.tensor :as dtt])
   (:import clojisr.v1.robject.RObject))
 
 (defn init [& {:keys [session-args]}]
@@ -234,43 +235,39 @@
   
   (require-r '[base])
   
-  (r "m <- array(seq(1, 365*5*4), dim=c(365, 5, 4))")
+  (r "m <- array(seq(1, 10*5*4*7), dim=c(10, 5, 4,7))")
   
 
+  ( r)
+  
+  (def m (-> (r "m")
+             ( r->clj {:as-tensor true})))
 
-  (-> (r "m")
-      ( r->clj {:as-tensor true}))
-  ;;=> #tech.v3.tensor<object>[365 5 4]
-  ;;   [[[   1    2    3    4]
-  ;;     [   5    6    7    8]
-  ;;     [   9   10   11   12]
-  ;;     [  13   14   15   16]
-  ;;     [  17   18   19   20]]
-  ;;    [[  21   22   23   24]
-  ;;     [  25   26   27   28]
-  ;;     [  29   30   31   32]
-  ;;     [  33   34   35   36]
-  ;;     [  37   38   39   40]]
-  ;;    [[  41   42   43   44]
-  ;;     [  45   46   47   48]
-  ;;     [  49   50   51   52]
-  ;;     [  53   54   55   56]
-  ;;     [  57   58   59   60]]
-  ;;    ...
-  ;;    [[7241 7242 7243 7244]
-  ;;     [7245 7246 7247 7248]
-  ;;     [7249 7250 7251 7252]
-  ;;     [7253 7254 7255 7256]
-  ;;     [7257 7258 7259 7260]]
-  ;;    [[7261 7262 7263 7264]
-  ;;     [7265 7266 7267 7268]
-  ;;     [7269 7270 7271 7272]
-  ;;     [7273 7274 7275 7276]
-  ;;     [7277 7278 7279 7280]]
-  ;;    [[7281 7282 7283 7284]
-  ;;     [7285 7286 7287 7288]
-  ;;     [7289 7290 7291 7292]
-  ;;     [7293 7294 7295 7296]
-  ;;     [7297 7298 7299 7300]]]
+  (r "dim(m)")
   
   )
+
+(require '[tech.v3.tensor :as dtt])
+
+(r "m[10,5,4,7]")
+;;=> [1] 1400
+(dtt/mget m 9 4 3 6)
+;;=> 1400
+
+
+(r "m[1,1,1,1]")
+;;=> [1] 1
+(dtt/mget m 0 0 0 0)
+;;=> 1
+
+(r "m[3,3,3,3]")
+;;=> [1] 523
+;;   
+
+;;   
+(dtt/mget m 2 2 2 2)
+;;=> 353
+
+(r "print(.MEM$xe6ab3051a83d48f3)")
+
+(r "capture.output(print(.MEM$x9cd80e7a0ca4471b))")
