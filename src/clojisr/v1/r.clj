@@ -11,7 +11,8 @@
             [clojure.string :as string]
             [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
             [clojisr.v1.require :refer [require-r-package]]
-            [clojisr.v1.engines :refer [engines]])
+            [clojisr.v1.engines :refer [engines]]
+            [tech.v3.tensor :as dtt])
   (:import clojisr.v1.robject.RObject))
 
 (defn init [& {:keys [session-args]}]
@@ -40,7 +41,7 @@
 (defn java->native-clj [java-object]
   (java2clj/java->native java-object))
 
-(defn java->clj [java-object] (java2clj/java->clj java-object))
+(defn java->clj [java-object & options] (java2clj/java->clj java-object options))
 
 (defn clj->java [clj-object & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
@@ -49,7 +50,13 @@
 (def clj->java->r (comp java->r clj->java))
 (def clj->r clj->java->r)
 
-(defn r->java->clj [r-object] (-> r-object r r->java java2clj/java->clj))
+(defn r->java->clj 
+  ([r-object options] 
+   (-> r-object 
+       (r) 
+       (r->java) 
+       (java2clj/java->clj options)))
+  ( [r-object] (r->java->clj r-object nil)))
 (def r->clj r->java->clj)
 
 (defn r->java->native-clj [r-object] (-> r r-object r->java java2clj/java->native))
@@ -222,3 +229,45 @@
   "Prints help for an R object or function"
   ([r-object] (println (help r-object)))
   ([function package] (println (help function package))))
+
+(comment
+  (require-r '[datasets])
+  
+  (require-r '[base])
+  
+  (r "m <- array(seq(1, 10*5*4*7), dim=c(10, 5, 4,7))")
+  
+
+  ( r)
+  
+  (def m (-> (r "m")
+             ( r->clj {:as-tensor true})))
+
+  (r "dim(m)")
+  
+  )
+
+(require '[tech.v3.tensor :as dtt])
+
+(r "m[10,5,4,7]")
+;;=> [1] 1400
+(dtt/mget m 9 4 3 6)
+;;=> 1400
+
+
+(r "m[1,1,1,1]")
+;;=> [1] 1
+(dtt/mget m 0 0 0 0)
+;;=> 1
+
+(r "m[3,3,3,3]")
+;;=> [1] 523
+;;   
+
+;;   
+(dtt/mget m 2 2 2 2)
+;;=> 353
+
+(r "print(.MEM$xe6ab3051a83d48f3)")
+
+(r "capture.output(print(.MEM$x9cd80e7a0ca4471b))")

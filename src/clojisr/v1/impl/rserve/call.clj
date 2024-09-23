@@ -31,12 +31,18 @@
 
 (defn try-eval-catching-errors [expression ^RConnection r-connection]
   ;; Using the technique of https://stackoverflow.com/a/40447542/1723677, the way it is used in Rojure.
+  (def expression expression)
   (try
     (let [expression-str (-> expression
                              (string/escape char-escape-string)
                              (->> (format "try(eval(parse(text=\"%s\")),silent=TRUE)")))
           ^REXP rexp (locking r-connection
                        (.parseAndEval r-connection expression-str))]
+           (def rexp rexp)
+      
+      (clojure.reflect/reflect rexp)
+      (.asIntegers rexp)
+
       (if (.inherits rexp "try-error")
         (do (log/error [::try-eval-catching-errors {:message (format "Error in R evaluating expression: %s. R exception: %s"
                                                                      expression (.asString rexp))}])
