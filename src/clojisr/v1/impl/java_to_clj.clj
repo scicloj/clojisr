@@ -153,18 +153,22 @@
 
 (defn java->clj
   "Perform high level data conversion"
-  [exp & options]
-  (let [exp (first-step->java exp)]
-    (cond
-      (data-frame? exp) (data-frame->dataset exp)
-      (mts? exp) (mts->dataset exp)
-      (timeseries? exp) (timeseries->dataset exp)
-      (dist? exp) (dist->dataset exp)
-      (table? exp) (table->dataset exp)
-      (multidim? exp) (multidim->dataset exp)
-      :else (prot/->clj exp))))
+  
+  ([exp options]
+   (println :options options)
+   (def options options)
+   (let [exp (first-step->java exp)]
+     (cond
+       (data-frame? exp) (data-frame->dataset exp)
+       (mts? exp) (mts->dataset exp)
+       (timeseries? exp) (timeseries->dataset exp)
+       (dist? exp) (dist->dataset exp)
+       (table? exp) (table->dataset exp)
+       (multidim? exp) (multidim->dataset exp)
+       :else (prot/->clj exp))))
+  ( [exp] (java->clj exp nil)))
 
-(defn java->native
-  [exp]
-  (prot/->native exp))
+  (defn java->native
+    [exp]
+    (prot/->native exp))
 

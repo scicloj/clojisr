@@ -30,10 +30,8 @@
   (let [session (session/fetch-or-make session-args)]
     (prot/eval-r->java session r-code)))
 
-(defn r->java [r-object & options]
-  (using-sessions/r->java 
-   (assoc r-object :options options)
-   ))
+(defn r->java [r-object]
+  (using-sessions/r->java r-object))
 
 (defn java->r [java-object & {:keys [session-args]}]
   (let [session (session/fetch-or-make session-args)]
@@ -51,11 +49,13 @@
 (def clj->java->r (comp java->r clj->java))
 (def clj->r clj->java->r)
 
-(defn r->java->clj [r-object & options] 
-  (-> r-object 
-      (r options) 
-      (r->java options) 
-      (java2clj/java->clj options)))
+(defn r->java->clj 
+  ([r-object options] 
+   (-> r-object 
+       (r) 
+       (r->java) 
+       (java2clj/java->clj options)))
+  ( [r-object] (r->java->clj r-object nil)))
 (def r->clj r->java->clj)
 
 (defn r->java->native-clj [r-object] (-> r r-object r->java java2clj/java->native))
@@ -228,3 +228,16 @@
   "Prints help for an R object or function"
   ([r-object] (println (help r-object)))
   ([function package] (println (help function package))))
+
+(comment
+  (require-r '[datasets])
+  
+  (require-r '[base])
+  
+  (r "m <- array(rep(1, 365*5*4), dim=c(365, 5, 4))")
+  
+
+
+  (-> (r "m")
+      ( r->clj {:as-tensor true}))
+  )
