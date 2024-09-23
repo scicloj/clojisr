@@ -2,9 +2,11 @@
   (:require [tech.v3.dataset :as ds]
             [tech.v3.dataset.column :as col]
             [tech.v3.datatype :refer [->reader]]
-
+            [tech.v3.tensor :as dtt]
             [clojisr.v1.impl.protocols :as prot]
-            [clojisr.v1.impl.common :refer [tsp->reader first-step->java java->column cartesian-product]]))
+            [clojisr.v1.impl.common :refer [tsp->reader first-step->java java->column cartesian-product]]
+            [tech.v3.datatype :as dtype]
+            [ tech.v3.tensor.dimensions :as tdim]))
 
 (set! *unchecked-math* :warn-on-boxed)
 
@@ -92,12 +94,28 @@
           (apply ds/concat)))))
 
 (defn multidim? [obj] (prot/attribute obj "dim"))
-(defn multidim->dataset
-  ([exp] (multidim->dataset exp nil))
-  ([exp extra]
-   (let [dims (fix-dims (prot/attribute exp "dim"))
-         dimnames (fix-dimnames dims (prot/attribute exp "dimnames"))]
-     (make-nd exp extra dims dimnames))))
+
+(defn- make-tensor [exp dims]
+  
+  (def exp exp)
+  (def dims dims)
+  
+  (dtt/construct-tensor (prot/->clj exp) 
+                        (tdim/dimensions dims)))
+  ;; (dtt/->tensor [[7 4 6 8 8 7 5 9 7 8]
+  ;;                [4 1 3 6 5 2 3 5 4 2]
+  ;;                [3 8 5 1 7 9 3 8 5 2]] :datatype :float64))
+(defn multidim->dataset-or-tensor
+  ([exp] (multidim->dataset-or-tensor exp nil nil))
+  ([exp extra] (multidim->dataset-or-tensor exp extra nil))
+  ([exp extra options]
+   
+     
+     (let [dims (fix-dims (prot/attribute exp "dim"))
+           dimnames (fix-dimnames dims (prot/attribute exp "dimnames"))]
+       (if (:as-tensor options)
+         (make-tensor exp dims)
+         (make-nd exp extra dims dimnames)))))
 
 (defn mts? [obj] (prot/inherits? obj "mts"))
 (defn mts->dataset
@@ -105,7 +123,7 @@
   (let [tsp (-> exp
                 (prot/attribute "tsp")
                 (tsp->reader))]
-    (multidim->dataset exp [tsp :$time])))
+    (multidim->dataset-or-tensor exp [tsp :$time])))
 
 
 ;; table
@@ -155,7 +173,7 @@
   "Perform high level data conversion"
   
   ([exp options]
-   (println :options options)
+   ;(println :options options)
    (def options options)
    (let [exp (first-step->java exp)]
      (cond
@@ -164,7 +182,7 @@
        (timeseries? exp) (timeseries->dataset exp)
        (dist? exp) (dist->dataset exp)
        (table? exp) (table->dataset exp)
-       (multidim? exp) (multidim->dataset exp)
+       (multidim? exp) (multidim->dataset-or-tensor exp nil options)
        :else (prot/->clj exp))))
   ( [exp] (java->clj exp nil)))
 
