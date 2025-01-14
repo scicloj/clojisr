@@ -89,9 +89,10 @@
 
 
 (defn- assoc-doc-to-meta! [ns-symbol r-symbol r-object]
-  (alter-meta!
-   (get (ns-publics ns-symbol) r-symbol)
-   assoc :doc (safe-help r-object)))
+  (.start (Thread. (fn []
+                     (alter-meta!
+                      (get (ns-publics ns-symbol) r-symbol)
+                      assoc :doc (safe-help r-object))))))
 
 (defn add-to-ns [ns-symbol r-symbol r-object]
   (intern ns-symbol
@@ -103,10 +104,11 @@
 (defn symbols->add-to-ns [ns-symbol r-symbols]
   (doseq [[r-symbol r-object] r-symbols]
     (add-to-ns ns-symbol r-symbol r-object))
-  (future
-    (Thread/sleep 5000) ;; this has the effect that the evaluatin of r-require "returns immidiately" during interactive work
-    (doseq [[r-symbol r-object] r-symbols]
-      (assoc-doc-to-meta! ns-symbol r-symbol r-object))))
+  (run!
+   (fn [[r-symbol r-object]]
+     (assoc-doc-to-meta! ns-symbol r-symbol r-object))
+   r-symbols))
+
 
 (defn require-r-package [[package-symbol & {:keys [as refer]}]]
   (try
