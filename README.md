@@ -86,6 +86,8 @@ Installing R with Rserve on MacOS can be problematic due to issues related to op
 
 ### Docker image
 
+
+
 Thanks to Carsten Behring we have a Docker template prepared
 
 https://github.com/behrica/clj-py-r-template
@@ -94,7 +96,8 @@ The Dockerfile of the template adds as well python + libpython-clj for completen
 
 So it has in a single place all dependencies and they do work together and no further setup is required.
 
-There is as well a `devcontainer` setup in this GitHub [template](https://github.com/behrica/clojure-datascience-devcontainer). It provides as well an out-of-the box working environment and template for projects using ClojisR (and [libpythion-clj](https://github.com/clj-python/libpython-clj)
+### devcontainer 
+The scicloj community is maintaining a `devcontainer` [template](https://github.com/scicloj/devcontainer-templates/tree/main/src/scicloj) on which `clojisr` is known to work out of the box.
 
 ## Checking if it works
 

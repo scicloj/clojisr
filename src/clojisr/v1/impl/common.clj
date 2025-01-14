@@ -48,6 +48,13 @@
   (->clj [obj] obj)
   (->native [obj] obj))
 
+(extend-type nil
+  prot/RProto
+  (inherits? [_ _] false)
+  prot/Clojable
+  (->clj [obj] obj)
+  (->native [obj] obj))
+
 (defn ->seq-with-missing
   [xs missing]
   (mapv (fn [d na] (when-not na d)) xs missing))
