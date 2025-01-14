@@ -208,10 +208,10 @@
 (defn help
   "Gets help for an R object or function"
   ([r-object]
-   (help/help r-object ))
+   (help/help r-object))
 
   ([function package]
-   (help/get-help function package )))
+   (help/get-help function package)))
 
 
 (defn print-help

@@ -89,10 +89,12 @@
 
 
 (defn- assoc-doc-to-meta! [ns-symbol r-symbol r-object]
-  (.start (Thread. (fn []
+  (let [t (Thread. (fn []
                      (alter-meta!
                       (get (ns-publics ns-symbol) r-symbol)
-                      assoc :doc (safe-help r-object))))))
+                      assoc :doc (safe-help r-object))))]
+    (.setDaemon t true)
+    (.start t)))
 
 (defn add-to-ns [ns-symbol r-symbol r-object]
   (intern ns-symbol
