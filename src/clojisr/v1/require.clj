@@ -99,8 +99,7 @@
 (defn add-to-ns [ns-symbol r-symbol r-object]
   (intern ns-symbol
           (r-symbol->clj-symbol r-symbol r-object)
-          r-object)
-  ns-symbol)
+          r-object))
 
 
 (defn symbols->add-to-ns [ns-symbol r-symbols]
