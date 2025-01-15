@@ -2,9 +2,8 @@
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
 ## unreleased
-
+- added more operators `%/%`, `%%` ,`%in%`, `xor`
 - use devcontainer setup following template
-
 
 ## [1.0.0]
 - `require-r` creates namespace as `r.namespace`, also `namespace` as an alias
