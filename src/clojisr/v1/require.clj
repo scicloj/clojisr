@@ -89,12 +89,9 @@
 
 
 (defn- assoc-doc-to-meta! [ns-symbol r-symbol r-object]
-  (let [t (Thread. (fn []
-                     (alter-meta!
-                      (get (ns-publics ns-symbol) r-symbol)
-                      assoc :doc (safe-help r-object))))]
-    (.setDaemon t true)
-    (.start t)))
+  (alter-meta!
+   (get (ns-publics ns-symbol) r-symbol)
+   assoc :doc (safe-help r-object)))
 
 (defn add-to-ns [ns-symbol r-symbol r-object]
   (intern ns-symbol
@@ -102,16 +99,18 @@
           r-object))
 
 
-(defn symbols->add-to-ns [ns-symbol r-symbols]
+(defn symbols->add-to-ns [ns-symbol r-symbols generate-doc-strings?]
   (doseq [[r-symbol r-object] r-symbols]
     (add-to-ns ns-symbol r-symbol r-object))
-  (run!
-   (fn [[r-symbol r-object]]
-     (assoc-doc-to-meta! ns-symbol r-symbol r-object))
-   r-symbols))
+  
+  (when generate-doc-strings?
+    (run!
+     (fn [[r-symbol r-object]]
+       (assoc-doc-to-meta! ns-symbol r-symbol r-object))
+     r-symbols)))
 
 
-(defn require-r-package [[package-symbol & {:keys [as refer]}]]
+(defn require-r-package [[package-symbol & {:keys [as refer generate-doc-strings?]}]]
   (try
     (let [session (session/fetch-or-make nil)]
       (evl/eval-form `(library ~package-symbol) session)
@@ -122,14 +121,14 @@
 
       ;; r.package namespace
         (find-or-create-ns r-ns-symbol)
-        (symbols->add-to-ns r-ns-symbol r-symbols)
+        (symbols->add-to-ns r-ns-symbol r-symbols generate-doc-strings?)
 
       ;; alias namespaces
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/require-r.20vs.20-require-python
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/clojisr.201.2E1.2E0/near/441026754
-      (if as
-        (alias as r-ns-symbol)
-        (alias package-symbol r-ns-symbol))
+        (if as
+          (alias as r-ns-symbol)
+          (alias package-symbol r-ns-symbol))
 
       ;; inject symbol into current namespace
         (when refer
@@ -138,7 +137,8 @@
              this-ns-symbol
              (if (= refer :all)
                r-symbols
-               (select-keys r-symbols refer)))))))
+               (select-keys r-symbols refer))
+             generate-doc-strings?)))))
     (catch Exception e
       (log/warn [::require-r-package {:package-symbol package-symbol
                                       :cause (exception-cause e)}])
