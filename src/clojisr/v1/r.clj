@@ -126,40 +126,25 @@
      (r (format fmt n (name package)))
      (intern *ns* ns (r ns)))))
 
-(def r== (r "`==`"))
-(def r!= (r "`!=`"))
-(def r< (r "`<`"))
-(def r> (r "`>`"))
-(def r<= (r "`<=`"))
-(def r>= (r "`>=`"))
-(def r& (r "`&`"))
-(def r&& (r "`&&`"))
-(def r| (r "`||`"))
-(def r|| (r "`||`"))
-(def r! (r "`!`"))
-(def r$ (r "`$`"))
 
-(def captured-str
-  "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
-  (r "function(x) capture.output(str(x))"))
+ (defn- captured-str []
+   "For the R function [str](https://www.rdocumentation.org/packages/utils/versions/3.6.1/topics/str), we capture the standard output and return the corresponding string."
+   (r "function(x) capture.output(str(x))")  )
 
-(def println-captured-str (comp println-r-lines captured-str))
+ (defn println-captured-str[x] 
+   (->
+    (apply-function
+     (captured-str)
+     [x])
+    println-r-lines))
 
-(def str-md (comp r-lines->md captured-str))
+ (defn str-md [x]
+   (->
+    (apply-function
+     (captured-str)
+     [x])
+    r-lines->md))
 
-(def r** (r "`^`"))
-(def rdiv (r "`/`"))
-(def r- (r "`-`"))
-(defn r* [& args] (reduce (r "`*`") args))
-(defn r+
-  "The plus operator is a binary one, and we want to use it on an arbitraty number of arguments."
-  [& args]
-  (reduce (r "`+`") args))
-
-;; Some special characters will get a name in letters.
-(def colon (r "`:`"))
-
-;;
 
 (defmacro defr
   "Create Clojure and R bindings at the same time"
@@ -176,7 +161,7 @@
   ([package string-or-symbol]
    (r (str (maybe-wrap-backtick package) "::" (maybe-wrap-backtick string-or-symbol)))))
 
-;; brackets!
+
 
 ;; FIXME! Waiting for session management.
 (defn- prepare-args-for-bra
@@ -187,16 +172,8 @@
      (prepare-args-for-bra pars)
      (conj (prepare-args-for-bra (butlast pars)) (last pars)))))
 
-(defmacro ^:private make-bras
-  []
-  `(do ~@(for [[bra-sym-name [bra-str all?]] bracket-data
-               :let [bra-sym (symbol bra-sym-name)]]
-           `(let [bra# (r ~bra-str)]
-              (defn ~bra-sym [& pars#]
-                (let [fixed# (prepare-args-for-bra pars# ~all?)]
-                  (apply bra# fixed#)))))))
 
-(make-bras)
+
 
 ;; register shutdown hook
 ;; should be called once
@@ -218,4 +195,142 @@
   "Prints help for an R object or function"
   ([r-object] (println (help r-object)))
   ([function package] (println (help function package))))
+
+
+;; arithmetic operators
+(defn r- 
+  "R arithmetic operator `-`"
+  [e1 e2] ((r "`-`") e1 e2))
+
+(defn rdiv 
+  "R arithmetic operator `/`"
+  [e1 e2] ((r "`/`") e1 e2))
+
+(defn r* 
+  "R arithmetic operator `*`, but can be used on an arbitraty number of arguments."
+  [& args] 
+  (reduce (r "`*`") args))
+
+(defn r+
+  "R arithmetic operator `+`, but can be used on an arbitraty number of arguments."
+  [& args]
+  (reduce (r "`+`") args))
+
+(defn r** 
+  "R arithmetic operator `^`"
+  [e1 e2] 
+  ((r "`^`") e1 e2)) 
+
+(defn r%div%
+  "R arithmetic operator `%/%`"
+  [e1 e2]
+  ((r "`%/%`") e1 e2))
+
+(defn r%%
+  "R arithmetic operator `%%`"
+  [e1 e2]
+  ((r "`%%`") e1 e2))
+
+;; relational operators
+(defn r== 
+  "R relational operator `==`"
+  [e1 e2] ( (r "`==`") e1 e2))
+
+(defn r!= 
+  "R relational operator `=!`"
+  [e1 e2] ((r "`!=`") e1 e2))
+
+(defn r< 
+  "R relational operator `<`"
+  [e1 e2] ((r "`<`") e1 e2))
+
+(defn r> 
+  "R relational operator `>`"
+  [e1 e2] ((r "`>`") e1 e2))
+
+(defn r<= 
+  "R relational operator `<=`" 
+  [e1 e2] ((r "`<=`") e1 e2))
+
+(defn r>= 
+  "R relational operator `>=`" 
+  [e1 e2] ((r "`>=`") e1 e2))
+
+;; logical operators
+(defn r& 
+  "R logical operator `&`"
+  [e1 e2] ((r "`&`") e1 e2))
+
+(defn r&& 
+  "R logical operator `&&`"
+  [e1 e2] ((r "`&&`") e1 e2))
+
+(defn r| 
+  "R logical operator `|`"
+  [e1 e2] ((r "`|`") e1 e2))
+
+(defn r||
+  "R logical operator `||`"
+  [e1 e2] ((r "`||`") e1 e2))
+
+(defn r!
+  "R logical operator `!`"
+  [e] ((r "`!`") e))
+
+(defn rxor
+  "R logical operator `xor`"
+  [e1 e2] ((r "`xor`") e1 e2))
+
+
+;; colon operators
+(defn colon 
+  "R colon operator `:`"
+  [e1 e2] ((r "`:`") e1 e2))
+(defn rcolon 
+  "R colon operator `:`"
+  [e1 e2] (colon e1 e2))
+
+;; extract/replace operators
+(defn r$
+  "R extract operator `$`"
+  [e1 e2] ((r "`$`") e1 e2))
+
+
+(defn r%in%
+  "R match operator `%in%`"
+  [e1 e2] ((r "`%in%`") e1 e2))
+
+
+
+(defn bra 
+  "R extract operator `[`"
+  [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[`")
+    fixed (prepare-args-for-bra pars true)]
+    (clojure.core/apply bra fixed)))
+
+(defn brabra 
+  "R extract operator `[[`"
+  [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[[`")
+    fixed (prepare-args-for-bra pars true)]
+    (clojure.core/apply bra fixed)))
+
+(defn bra<- 
+  "R replace operator `[<-`"
+  [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[<-`")
+    fixed (prepare-args-for-bra pars false)]
+    (clojure.core/apply bra fixed)))
+
+(defn brabra<- 
+  "R replace operator `[[<-`"
+  [& pars]
+  (let
+   [bra (clojisr.v1.r/r "`[[<-`")
+    fixed (prepare-args-for-bra pars false)]
+    (clojure.core/apply bra fixed)))
 

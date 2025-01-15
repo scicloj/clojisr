@@ -13,7 +13,8 @@
                  :extra-deps {org.scicloj/clay {:mvn/version "2-beta16"}
                               io.github.nextjournal/clerk {:mvn/version "0.7.418"}}}
            :test {:extra-paths ["test"]
-                  :extra-deps {io.github.cognitect-labs/test-runner
+                  :extra-deps {org.scicloj/clay {:mvn/version "2-beta8"}
+                               io.github.cognitect-labs/test-runner
                                {:git/tag "v0.5.0" :git/sha "b3fd0d2"}}
                   :jvm-opts ["-Djava.awt.headless=true"]
                   :main-opts ["-m" "cognitect.test-runner"]
