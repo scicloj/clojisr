@@ -80,7 +80,27 @@
   (let [session (session/fetch-or-make session-args)]
     (functions/apply-function r-function args session)))
 
-(defn require-r [& packages]
+(defn require-r 
+  "
+   Requires R packages and creates 2 clojure namespaces with functions for each R object per package.
+   The 2 namespaces get names of 'package-name' and 'r.package-name'.
+
+   It supports as well :as and :refer as clojure.core/require does.
+   The function can as well attach the R help of  R objects as doc string to the created clojure vars,
+   so IDEs can show it. 
+   
+   As this is slow (several seconds for larger packages), it is not enabled by default. It can be enabled
+   using ':generate-doc-strings?' true in the package spec.
+   
+   Examples:
+
+   (r/require-r '[base])             
+   (r/require-r '[stats] :as statistics)
+   (r/require-r '[base :as my-base :generate-doc-strings? true])
+
+
+   "
+  [& packages]
   (run! require-r-package packages))
 
 (def function functions/function)
