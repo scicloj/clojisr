@@ -11,7 +11,10 @@
                  :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"
                             "-Djava.awt.headless=true"]
                  :extra-deps {org.scicloj/clay {:mvn/version "2-beta16"}
-                              io.github.nextjournal/clerk {:mvn/version "0.7.418"}}}
+                              io.github.nextjournal/clerk {:mvn/version "0.7.418"}
+                              org.scicloj/kind-portal {:mvn/version "1-beta3"}
+                              djblue/portal {:mvn/version "0.58.5"}
+                              }}
            :test {:extra-paths ["test"]
                   :extra-deps {org.scicloj/clay {:mvn/version "2-beta8"}
                                io.github.cognitect-labs/test-runner
