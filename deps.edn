@@ -8,13 +8,17 @@
         org.scicloj/kindly {:mvn/version "4-beta12"}}
  :paths ["src"]
  :aliases {:dev {:extra-paths ["resources" "notebooks"]
-                 :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"]
+                 :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/jul-factory"
+                            "-Djava.awt.headless=true"]
                  :extra-deps {org.scicloj/clay {:mvn/version "2-beta16"}
-                              io.github.nextjournal/clerk {:mvn/version "0.7.418"}}}
+                              io.github.nextjournal/clerk {:mvn/version "0.7.418"}
+                              org.scicloj/kind-portal {:mvn/version "1-beta3"}
+                              djblue/portal {:mvn/version "0.58.5"}
+                              }}
            :test {:extra-paths ["test"]
                   :extra-deps {org.scicloj/clay {:mvn/version "2-beta8"}
                                io.github.cognitect-labs/test-runner
                                {:git/tag "v0.5.0" :git/sha "b3fd0d2"}}
+                  :jvm-opts ["-Djava.awt.headless=true"]
                   :main-opts ["-m" "cognitect.test-runner"]
-                  :jvm-opts ["-Djava.awt.headless=true" ]
                   :exec-fn cognitect.test-runner.api/test}}}

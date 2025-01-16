@@ -9,9 +9,11 @@
             [clojisr.v1.impl.java-to-clj :as java2clj]
             [clojisr.v1.impl.clj-to-java :as clj2java]
             [clojure.string :as string]
-            [clojisr.v1.util :refer [maybe-wrap-backtick]]
+            [clojisr.v1.help :as help]
+            [clojisr.v1.util :refer [bracket-data maybe-wrap-backtick]]
             [clojisr.v1.require :refer [require-r-package]]
-            [clojisr.v1.engines :refer [engines]])
+            [clojisr.v1.engines :refer [engines]]
+            [clojisr.v1.robject :as robject])
   (:import clojisr.v1.robject.RObject))
 
 (defn init [& {:keys [session-args]}]
@@ -78,7 +80,27 @@
   (let [session (session/fetch-or-make session-args)]
     (functions/apply-function r-function args session)))
 
-(defn require-r [& packages]
+(defn require-r 
+  "
+   Requires R packages and creates 2 clojure namespaces with functions for each R object per package.
+   The 2 namespaces get names of 'package-name' and 'r.package-name'.
+
+   It supports as well :as and :refer as clojure.core/require does.
+   The function can as well attach the R help of  R objects as doc string to the created clojure vars,
+   so IDEs can show it. 
+   
+   As this is slow (several seconds for larger packages), it is not enabled by default. It can be enabled
+   using ':generate-doc-strings?' true in the package spec.
+   
+   Examples:
+
+   (r/require-r '[base])             
+   (r/require-r '[stats] :as statistics)
+   (r/require-r '[base :as my-base :generate-doc-strings? true])
+
+
+   "
+  [& packages]
   (run! require-r-package packages))
 
 (def function functions/function)
@@ -183,16 +205,10 @@
 (defn help
   "Gets help for an R object or function"
   ([r-object]
-   (let [symbol (second  (re-find #"\{(.*)\}" (:code r-object)))
-         split (string/split symbol #"::")]
-
-     (help (second split) (first split))))
+   (help/help r-object))
 
   ([function package]
-   (->>
-    (r (format  "capture.output(tools:::Rd2txt(utils:::.getHelpFile(as.character(help(%s,%s))), options=list(underline_titles=FALSE)))" (name function) (name package)))
-    r->clj
-    (string/join "\n"))))
+   (help/get-help function package)))
 
 
 (defn print-help
