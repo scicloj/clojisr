@@ -24,7 +24,7 @@
                                       (r->clj)
                                       (first))
                                 (assoc devices 'svg (rsymbol "svglite" "svglite"))
-                                (do (log/warn [::plotting {:messaage "We highly recommend installing of `svglite` package."}])
+                                (do (log/warn [::plotting {:message "We highly recommend installing of `svglite` package."}])
                                     devices)))
                             devices)))))
 
