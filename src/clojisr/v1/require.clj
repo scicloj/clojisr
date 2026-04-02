@@ -1,13 +1,20 @@
 (ns clojisr.v1.require
-  (:require [clojisr.v1.session :as session]
-            [clojisr.v1.using-sessions :as using-sessions]
-            [clojisr.v1.eval :as evl]
-            [clojisr.v1.protocols :as prot]
-            [clojisr.v1.known-classes :as known-classes]
-            [clojisr.v1.util :as util :refer [clojurize-r-symbol exception-cause]]
-            [clojisr.v1.impl.common :refer [strange-symbol-name?]]
-            [clojisr.v1.impl.java-to-clj :refer [java->clj]]
-            [clojure.tools.logging.readable :as log]))
+  (:require
+   [clojisr.v1.eval :as evl]
+   [clojisr.v1.impl.common :refer [strange-symbol-name?]]
+   [clojisr.v1.impl.java-to-clj :refer [java->clj]]
+   [clojisr.v1.known-classes :as known-classes]
+   [clojisr.v1.protocols :as prot]
+   [clojisr.v1.session :as session]
+   
+   [clojisr.v1.using-sessions :as using-sessions]
+   [clojisr.v1.util :refer [clojurize-r-symbol exception-cause]]
+   
+   [clojisr.v1.help :as help]
+   [clojure.tools.logging.readable :as log]))
+
+
+
 
 (defn package-r-object [package-symbol object-symbol]
   (evl/r (format "{%s::`%s`}"
@@ -69,47 +76,69 @@
         (seq opt) (list ['& {:keys opt}])
         :else '([])))))
 
-(defn r-symbol->clj-symbol [r-symbol r-object]
+(defn- safe-help [r-object]
+  (try 
+    (help/help r-object)
+    (catch Exception e "")))
+
+(defn r-symbol->clj-symbol [ r-symbol r-object] 
+  
   (if-let [arglists (r-object->arglists r-object)]
     (vary-meta r-symbol assoc :arglists arglists)
     r-symbol))
+
+
+(defn- assoc-doc-to-meta! [ns-symbol r-symbol r-object]
+  (alter-meta!
+   (get (ns-publics ns-symbol) r-symbol)
+   assoc :doc (safe-help r-object)))
 
 (defn add-to-ns [ns-symbol r-symbol r-object]
   (intern ns-symbol
           (r-symbol->clj-symbol r-symbol r-object)
           r-object))
 
-(defn symbols->add-to-ns [ns-symbol r-symbols]
-  (doseq [[r-symbol r-object] r-symbols]
-    (add-to-ns ns-symbol r-symbol r-object)))
 
-(defn require-r-package [[package-symbol & {:keys [as refer]}]]
+(defn symbols->add-to-ns [ns-symbol r-symbols generate-doc-strings?]
+  (doseq [[r-symbol r-object] r-symbols]
+    (add-to-ns ns-symbol r-symbol r-object))
+  
+  (when generate-doc-strings?
+    (run!
+     (fn [[r-symbol r-object]]
+       (assoc-doc-to-meta! ns-symbol r-symbol r-object))
+     r-symbols)))
+
+
+(defn require-r-package [[package-symbol & {:keys [as refer generate-doc-strings?]}]]
   (try
     (let [session (session/fetch-or-make nil)]
-      (evl/eval-form `(library ~package-symbol) session))
-    (let [r-ns-symbol (->> package-symbol
-                           (str "r.")
-                           symbol)
-          r-symbols (all-r-symbols-map package-symbol)]
+      (evl/eval-form `(library ~package-symbol) session)
+      (let [r-ns-symbol (->> package-symbol
+                             (str "r.")
+                             symbol)
+            r-symbols (all-r-symbols-map package-symbol)]
 
       ;; r.package namespace
-      (find-or-create-ns r-ns-symbol)
-      (symbols->add-to-ns r-ns-symbol r-symbols)
+        (find-or-create-ns r-ns-symbol)
+        (symbols->add-to-ns r-ns-symbol r-symbols generate-doc-strings?)
 
       ;; alias namespaces
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/require-r.20vs.20-require-python
       ;; https://clojurians.zulipchat.com/#narrow/stream/224816-clojisr-dev/topic/clojisr.201.2E1.2E0/near/441026754
-      (if as
-        (alias as r-ns-symbol)
-        (alias package-symbol r-ns-symbol))
+        (if as
+          (alias as r-ns-symbol)
+          (alias package-symbol r-ns-symbol))
 
       ;; inject symbol into current namespace
-      (when refer
-        (let [this-ns-symbol (-> *ns* str symbol)]
-          (symbols->add-to-ns this-ns-symbol
-                              (if (= refer :all)
-                                r-symbols
-                                (select-keys r-symbols refer))))))
+        (when refer
+          (let [this-ns-symbol (-> *ns* str symbol)]
+            (symbols->add-to-ns
+             this-ns-symbol
+             (if (= refer :all)
+               r-symbols
+               (select-keys r-symbols refer))
+             generate-doc-strings?)))))
     (catch Exception e
       (log/warn [::require-r-package {:package-symbol package-symbol
                                       :cause (exception-cause e)}])
