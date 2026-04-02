@@ -1,4 +1,4 @@
-FROM clojure:temurin-21-tools-deps-1.11.3.1456-jammy
+FROM clojure:temurin-21-tools-deps-1.12.4.1618-jammy
 
 ARG USERNAME=vscode
 ARG USER_UID=1000
@@ -13,7 +13,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && apt-get install -y sudo \
     && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
-
+RUN mkdir -p /usr/local/lib/R/site-library && chmod 777 /usr/local/lib/R/site-library
 # ********************************************************
 # * Anything else you want to do like clean up goes here *
 # ********************************************************
