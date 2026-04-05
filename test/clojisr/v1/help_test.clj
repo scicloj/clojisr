@@ -6,7 +6,7 @@
 
 
 (deftest help-docstring
-  (r/require-r '[stats :generate-doc-strings? true])
+  (r/require-r '[stats :docstrings? true])
   (is (str/starts-with? 
        (->
         (ns-publics 'r.stats)
@@ -22,9 +22,7 @@
        "Fitting Linear")))
 
 (deftest require-defauls-should-not-throws-exception
-
-  ; should not crash
-  (r/require-r '[base :generate-doc-strings? true])
+  (r/require-r '[base :docstrings? true])
   (r/require-r '[stats])
   (r/require-r '[utils])
   (r/require-r '[graphics])

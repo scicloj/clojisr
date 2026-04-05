@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file. This change
 - use devcontainer setup following template
 - generate docs for r-required symbols
 - TMD bump to 8.x
+- :err and :out messages are redirected to `*err*` and `*out*` (was `*out*` always)
 
 ## [1.0.0]
 - `require-r` creates namespace as `r.namespace`, also `namespace` as an alias

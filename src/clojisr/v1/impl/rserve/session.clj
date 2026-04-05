@@ -6,34 +6,30 @@
             [clojisr.v1.impl.rserve.call :as call]
             [clojisr.v1.impl.rserve.packages :as packages]
             [clojisr.v1.impl.rserve.printing :as printing]
-            [clojure.core.async :as async]
             [clojure.tools.logging.readable :as log]
             [clojisr.v1.util :refer [exception-cause get-free-port]])
   (:import [org.rosuda.REngine.Rserve RConnection]
            [java.io BufferedReader]))
 
-(def defaults
-  (atom
-   {:host "localhost"
-    :spawn-rserve? true}))
+(def defaults (atom {:host "localhost"
+                   :spawn-rserve? true}))
 
 (defn close! [{:keys [^RConnection r-connection rserve]}]
   (when r-connection
     (.close r-connection))
   (when rserve
-    (proc/close rserve))
-  nil)
+    (proc/close rserve)))
 
 ;; Session is valid when there is connection, also when we have rserve, process should be active
 ;; if something is not true, ensure cleaning the rest and close the session
 (defn active?-or-close! [{:keys [^RConnection r-connection rserve]
-                          :as sess}]
+                       :as session}]
   (let [state (and r-connection
                    (.isConnected r-connection)
                    (if-not rserve
                      true
                      (proc/alive? rserve)))]
-    (or state (close! sess))))
+    (or state (close! session))))
 
 (defrecord RserveSession [id
                           session-args
@@ -44,12 +40,9 @@
     (close! session))
   (closed? [session]
     (not (active?-or-close! session)))
-  (id [_session]
-    id)
-  (session-args [_session]
-    session-args)
-  (desc [_session]
-    session-args)
+  (id [_session] id)
+  (session-args [_session] session-args)
+  (desc [_session] session-args)
   (eval-r->java [session code]
     (log/debug [::eval-r->java {:code code
                                 :session-args (:session-args session)}])
@@ -58,16 +51,11 @@
     ;; Unlike (.assign r-connection ...), the following approach
     ;; allows for a varname like "abc$xyz".
     (locking r-connection
-      (.eval
-       r-connection
-       (call/assignment varname java-obj)
-       nil
-       true)))
+      (.eval r-connection (call/assignment varname java-obj) nil true)))
   (print-to-string [session r-obj]
     (printing/print-to-string session r-obj))
   (package-symbol->r-symbol-names [session package-symbol]
-    (packages/package-symbol->r-symbol-names
-     session package-symbol))
+    (packages/package-symbol->r-symbol-names session package-symbol))
 
   iprot/Engine
   (->nil [_] (rexp/->rexp-nil))
@@ -82,33 +70,37 @@
   (->named-list [_ ks vs] (rexp/->rexp-named-list ks vs))
   (native? [_ x] (rexp/rexp? x)))
 
-(defn rserve-print-loop [{:keys [rserve]
-                          :as session}]
-  (log/info [::rserve-print-loop {:action :started
-                                  :session-args (:session-args session)}])
-  (async/go-loop []
-    (doseq [^BufferedReader reader
-            (-> rserve
-                ((juxt :out :err)))]
-      (loop []
-        (when (.ready reader)
-          (let [line (.readLine reader)]
-            (when-not
-                (re-find
-                 ;; Just avoidingg this confusing message.
-                 #"(This session will block until Rserve is shut down)" line)
-              (println line)))
-          (recur))))
+(defn print-loop-task
+  [{:keys [rserve] :as session}]
+  (fn [] (doseq [[k output-stream] [[:out *out*] [:err *err*]]]
+          (let [^BufferedReader reader (-> rserve k)]
+            (binding [*out* output-stream]
+              (loop []
+                (when (.ready reader)
+                  (let [line (.readLine reader)]
+                    (when-not
+                        (re-find
+                         ;; Just avoidingg this confusing message.
+                         #"(This session will block until Rserve is shut down)" line)
+                      (println line)))
+                  (recur))))))
     (Thread/sleep 100)
     (if (not (prot/closed? session))
       (recur)
       (log/info [::rserve-print-loop {:action :stopped
                                       :session-args (:session-args session)}]))))
 
+(defn rserve-print-loop [session]
+  (log/info [::rserve-print-loop {:action :started
+                                  :session-args (:session-args session)}])
+  (.start (Thread. (print-loop-task session))))
 
-(defn make [id session-args]
-  (let [{:keys [host port spawn-rserve? init-r]} (merge @defaults
-                                                        session-args)
+(defn make 
+  "Creates RServe session.
+
+  Process is spawned (optionally), then connection is established."
+  [id session-args]
+  (let [{:keys [host port spawn-rserve? init-r] :as args} (merge @defaults session-args)
         port (or port (get-free-port))
         rserve (when spawn-rserve?
                  (proc/start-rserve port init-r))]
@@ -119,14 +111,14 @@
         (if (or (zero? attempts)
                 (proc/alive? rserve))
           (when-not (proc/alive? rserve)
-            (throw (Exception. "Can't create RServe process.")))
+            (throw (ex-info "Can't create RServe process." args)))
           (do
             (log/warn [::rserve-spawn {:message "Rserve is not alive yet, waiting 0.5s"}])
             (recur (dec attempts))))))
 
     (let [conn (loop [attempts (int 1)] ;; try 5 times to connect
                  (when (> attempts 5) ;; throw an Exception when can't connect
-                   (throw (Exception. "Can't connect to RServe, please check host/port settings.")))
+                   (throw (ex-info "Can't connect to RServe, please check host/port settings." args)))
                  (Thread/sleep (* attempts 200))
                  (let [conn (try
                               (RConnection. host port)
@@ -142,6 +134,6 @@
           session (->RserveSession id
                                    session-args
                                    conn
-                                   rserve)]      
+                                   rserve)]   
       (when rserve (rserve-print-loop session))
       session)))

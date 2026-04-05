@@ -46,6 +46,7 @@
 
 (defonce ^:private ^java.text.SimpleDateFormat date-format (java.text.SimpleDateFormat. "yyyy-MM-dd HH:mm:ss"))
 (defonce ^:private ^DateTimeFormatter java-time-date-format (DateTimeFormatter/ofPattern "yyyy-MM-dd HH:mm:ss"))
+
 (def ^:private java-time-formatters
   {ZonedDateTime java-time-date-format
    LocalDateTime java-time-date-format

@@ -3,6 +3,7 @@
 
 (ns clojisr.v1.impl.rserve.proc
   (:require [clojure.java.io :refer [reader writer]]
+            [clojure.string :as str]
             [clojure.java.shell :refer [sh]]
             [clojisr.v1.util :refer [file-exists?]]
             [clojure.tools.logging.readable :as log])
@@ -31,10 +32,9 @@
   "Find path to R executable"
   []
   {:post [(not= % "")]}
-  (apply str
-         (-> (sh "which" "R")
-             (get :out)
-             (butlast)))) ; avoid trailing newline
+  (-> (sh "which" "R")
+      (get :out)
+      (str/trim)))
 
 (defn alive? [rserve]
   (when rserve
@@ -60,8 +60,8 @@
                rstr-temp)]
     
     (spawn (r-path)
-           "--no-save" ; don't save workspace when quitting
+           "--no-save"            ; don't save workspace when quitting
            "--no-restore-data"
            "--slave"
-           "-e" ; evaluate (boot server)
+           "-e"                         ; evaluate (boot server)
            rstr)))

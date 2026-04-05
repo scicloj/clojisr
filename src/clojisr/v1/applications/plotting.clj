@@ -1,9 +1,8 @@
 (ns ^:no-doc clojisr.v1.applications.plotting
-  (:require [clojisr.v1.r :refer [r r->clj rsymbol]]
+  (:require [clojisr.v1.r :as r :refer [r r->clj rsymbol require-r]]
             [clojisr.v1.util :refer [exception-cause]]
-            [clojisr.v1.require :refer [require-r]]
             [clojure.tools.logging.readable :as log]
-            [clojure.java.io :refer [make-parents]]
+            [clojure.java.io :as io]
             [scicloj.kindly.v4.kind :as kind])
   (:import [java.io File]
            [clojisr.v1.robject RObject]
@@ -11,23 +10,24 @@
            [java.awt.image BufferedImage]
            [javax.swing ImageIcon]))
 
-
-
+(defn- svglite-installed?
+  "Check if svglite is available."
+  []
+  (-> '(%in% "svglite" (rownames (installed.packages)))
+      (r)
+      (r->clj)
+      (first)))
 
 (def files->fns (delay
-                  (atom (let [_ (require-r '[grDevices])
-                              devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp])]
-                          (if-let [jpg (get devices 'jpeg)]
-                            (let [devices (assoc devices 'jpg jpg)]
-                              (if (-> '(%in% "svglite" (rownames (installed.packages))) ;; check if svglite is available
-                                      (r)
-                                      (r->clj)
-                                      (first))
-                                (assoc devices 'svg (rsymbol "svglite" "svglite"))
-                                (do (log/warn [::plotting {:message "We highly recommend installing of `svglite` package."}])
-                                    devices)))
-                            devices)))))
-
+                (atom (let [_ (require-r '[grDevices])
+                            devices (select-keys (ns-publics 'r.grDevices) '[pdf png svg jpeg tiff bmp xfig postscript])
+                            svglite? (svglite-installed?)]
+                        (when-not svglite?
+                          (log/warn [::plotting {:message "We highly recommend installing of `svglite` package."}]))
+                        (cond-> devices
+                          (devices 'postscript) (assoc 'ps (devices 'postscript))
+                          (devices 'jpeg) (assoc 'jpg (devices 'jpeg))
+                          svglite? (assoc 'svg (rsymbol "svglite" "svglite")))))))
 
 (defn use-svg!
   "Use from now on build-in svg device for plotting svg."
@@ -40,9 +40,6 @@
   []
   (swap! @files->fns assoc 'svg (rsymbol "svglite" "svglite")))
 
-
-
-
 (defn plot->file
   [^String filename plotting-function-or-object & device-params]
   (let [r-print (delay (r "print"))
@@ -52,7 +49,7 @@
     (if-not (contains? @@files->fns extension)
       (log/warn [::plot->file {:message (format "%s filetype is not supported!" (name extension))}])
       (try
-        (make-parents filename)
+        (io/make-parents filename)
         (apply device :filename apath device-params)
         (let [the-plot-robject (try
                                  (if (instance? RObject plotting-function-or-object)
