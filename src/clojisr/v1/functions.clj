@@ -24,15 +24,15 @@
     (let [autorefreshing (refresh/auto-refresing-object
                           r-object)]
       (fn ([& args]
-           (let [explicit-session-args
-                 (when (some-> args butlast last (= :session-args))
-                   (last args))]
-             (apply-function
-              @autorefreshing
-              (if explicit-session-args
-                (-> args butlast butlast)
-                args)
-              (session/fetch-or-make explicit-session-args))))))))
+          (let [explicit-session-args
+                (when (some-> args butlast last (= :session-args))
+                  (last args))]
+            (apply-function
+             @autorefreshing
+             (if explicit-session-args
+               (-> args butlast butlast)
+               args)
+             (session/fetch-or-make explicit-session-args))))))))
 
 (defn function
   [r-object]

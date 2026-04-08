@@ -124,8 +124,14 @@
   [vs session ctx]
   (let [[pred f1 f2] (map #(form->code % session ctx) (take 3 vs))]
     (if f2
-      (format "if(%s) {%s} else {%s}"  pred f1 f2)
+      (format "if(%s) {%s} else {%s}" pred f1 f2)
       (format "if(%s) {%s}" pred f1))))
+
+(defn switch->code
+  "Create switch"
+  [vs session ctx]
+  (let [forms (map #(form->code % session ctx) (take 3 vs))]
+    (format "switch(%s)" (join "," forms))))
 
 (defn for-loop->code
   "Create for loop"
@@ -232,6 +238,7 @@
         (= "do" fs) (format "{%s}" (join ";" (map #(form->code % session ctx) r)))
         (= "for" fs) (for-loop->code (first r) (rest r) session ctx)
         (= "while" fs) (while-loop->code (first r) (rest r) session ctx)
+        (= "switch" fs) (switch->code r session ctx)
         (contains? bracket-data fs) (bracket-call->code (bracket-data fs) r session ctx)
         (= 'clojure.core/unquote f) (unquote-form->code r session ctx)
         :else (symbol-form->code fs r session ctx)))

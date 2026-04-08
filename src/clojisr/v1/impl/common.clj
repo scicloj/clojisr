@@ -37,7 +37,7 @@
   "Create key names for partially named lists"
   [names]
   (map-indexed (fn [^long id k]
-                 (if (empty? k) id (usually-keyword k))) names))
+                 (if (empty? k) (inc id) (usually-keyword k))) names))
 
 ;; REXP/SEXP helpers for dataset conversion
 
@@ -52,8 +52,8 @@
   prot/RProto
   (inherits? [_ _] false)
   prot/Clojable
-  (->clj [obj] obj)
-  (->native [obj] obj))
+  (->clj [_] nil)
+  (->native [_] nil))
 
 (defn ->seq-with-missing
   [xs missing]

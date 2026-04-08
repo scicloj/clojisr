@@ -1,6 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
+## [unreleased]
+- all operators are added
+- support for `switch` in codegen
+- `vrkrasana` moved out of `src` (also `vrkrasana` branch is created)
+- set of not used or internal functions deprecated in the main namespace (`function`, `apply-function`, `print-help`, `str-md`, `println-r-lines`, `r-lines->md`, `println-captured-str`)
+- `object-structure` - function returning result of `utils::str` as a string.
+- fixed: partially named list conversion to a map had wrong id for unnamed values
+
 ## [1.1.0]
 - added more operators `%/%`, `%%` ,`%in%`, `xor`
 - use devcontainer setup following template

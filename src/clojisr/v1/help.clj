@@ -6,21 +6,22 @@
             [clojisr.v1.session :as session]
             
             [clojisr.v1.help :as help]))
+
 (defn- un-back-quote [s]
   (str/replace s  "`" "" ))
 
 
 (defn _get-help[function package]
- ;(println :obtain-help (format  "%s/%s " (name package) (un-back-quote (name function))))
- (->>
-  (evl/r (format  
-          "tryCatch(capture.output(tools:::Rd2txt(utils:::.getHelpFile(as.character(help(%s,%s))), options=list(underline_titles=FALSE))),error=function(e) {return( \"no doc available\")})"
-                  (name function) (name package))
-         (session/fetch-or-make nil))
+                                        ;(println :obtain-help (format  "%s/%s " (name package) (un-back-quote (name function))))
+  (->>
+   (evl/r (format  
+           "tryCatch(capture.output(tools:::Rd2txt(utils:::.getHelpFile(as.character(help(%s,%s))), options=list(underline_titles=FALSE))),error=function(e) {return( \"no doc available\")})"
+           (name function) (name package))
+          (session/fetch-or-make nil))
 
-  (using-sessions/r->java)
-  (java2clj/java->clj)
-  (str/join "\n")))
+   (using-sessions/r->java)
+   (java2clj/java->clj)
+   (str/join "\n")))
 
 (def get-help (memoize _get-help))
 

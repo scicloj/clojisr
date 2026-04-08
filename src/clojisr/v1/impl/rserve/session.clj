@@ -104,7 +104,7 @@
         port (or port (get-free-port))
         rserve (when spawn-rserve?
                  (proc/start-rserve port init-r))]
-
+    
     (when rserve ;; be sure the process is spawned
       (loop [attempts (int 5)]
         (Thread/sleep 500)

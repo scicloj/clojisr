@@ -4,8 +4,7 @@
             [tech.v3.dataset.protocols :as ds-prot]
             [tech.v3.dataset.column :as col]
             [tech.v3.dataset :as dataset]
-            [tech.v3.datatype :as dtype]
-            [tech.v3.dataset :as ds])
+            [tech.v3.datatype :as dtype])
   (:import [clojisr.v1.robject RObject]))
 
 (declare clj->java)

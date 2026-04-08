@@ -5,7 +5,7 @@
                                             valid-list-names]]
             [clojisr.v1.impl.types :as types])
   (:import (org.rosuda.REngine REXP REXPDouble REXPInteger REXPLogical REXPString REXPFactor REXPSymbol REXPNull
-                               REXPUnknown REXPGenericVector REXPList
+                               REXPLanguage REXPUnknown REXPGenericVector REXPList
                                RFactor RList)))
 
 ;;;;;;;;;;;;;;;;;;;;
@@ -97,6 +97,12 @@
   (->column [exp _] (prot/->clj exp)) ;; same as above
   (->columns [exp] (list->columns exp)))
 
+;; probably needs to be treated differently...
+(extend-type REXPLanguage
+  prot/Clojable
+  (->clj [exp] (list->map-or-vector exp prot/->clj))
+  (->native [exp] (list->map-or-vector exp prot/->native)))
+
 ;;;;;;;;;;;;;;;;;;;;
 ;; Clojure -> REXP
 ;;;;;;;;;;;;;;;;;;;;
@@ -130,6 +136,6 @@
       (REXPGenericVector. (REXPList. nil))))
 
 (defn ->rexp-named-list [^java.util.Collection ks
-                         ^java.util.Collection vs]
+                      ^java.util.Collection vs]
   (-> (RList. vs ks)
       (REXPGenericVector.))) ;; named list creates attr already 
