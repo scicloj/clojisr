@@ -194,9 +194,8 @@
   (t/is (not (r/function? (r/r '(+ 1 2))))))
 
 (t/deftest load-data
-  (t/is (= 5 (tc/column-count (do
-                                (r/data 'iris 'datasets)
-                                (r/r->clj iris))))))
+  (r/data 'iris 'datasets)
+  (t/is (= 5 (tc/column-count (r/r->clj iris)))))
 
 ;; ensure you have svglite installed
 (t/deftest load-library

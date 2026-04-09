@@ -135,15 +135,22 @@
   [libname]
   (->> libname (format "library(%s)") r))
 
-(defn data
+(defn- maybe-unquote-name
+  [nm]
+  (if (sequential? nm) (name (second nm)) (name nm)))
+
+(defmacro data
   "Load R dataset and def a global var."
-  ([dataset-name] (data dataset-name nil))
+  ([dataset-name] `(data ~dataset-name nil))
   ([dataset-name package]
-   (let [n (name dataset-name)
+   (let [n (maybe-unquote-name dataset-name)
          ns (symbol n)
-         fmt (if package "data(%s,package=\"%s\")" "data(%s)")]
-     (r (format fmt n (name package)))
-     (intern *ns* ns (r ns)))))
+         call (if package
+                (format "data(%s,package=\"%s\")" n (maybe-unquote-name package))
+                (format "data(%s)" n))]
+     `(do
+        (r ~call)
+        (def ~ns (r ~(str ns)))))))
 
 (defn function?
   "Checks if given r-object is a function."

@@ -890,31 +890,30 @@
 (def var199 (-> "list(a=1:2,'hi!')" r r->java java->clj))
 
 
-(deftest test200 (is (= var199 {:a [1 2], 1 ["hi!"]})))
+(deftest test200 (is (= var199 {:a [1 2], 2 ["hi!"]})))
 
 
 (def
- var201
- (->
-  "table(c('a','b','a','b','a','b','a','b'), c(1,1,2,2,3,3,1,1))"
-  r
-  r->java
-  java->clj
-  dataset/mapseq-reader
-  set))
-
+  var201
+  (->
+   "table(c('a','b','a','b','a','b','a','b'), c(1,1,2,2,3,3,1,1))"
+   r
+   r->java
+   java->clj
+   dataset/mapseq-reader
+   set))
 
 (deftest
- test202
- (is
-  (=
-   var201
-   #{{0 "a", 1 "2", :$value 2}
-     {0 "b", 1 "3", :$value 1}
-     {0 "a", 1 "1", :$value 2}
-     {0 "a", 1 "3", :$value 1}
-     {0 "b", 1 "2", :$value 1}
-     {0 "b", 1 "1", :$value 1}})))
+  test202
+  (is
+   (=
+    var201
+    #{{1 "a", 2 "2", :$value 2}
+      {1 "b", 2 "3", :$value 1}
+      {1 "a", 2 "1", :$value 2}
+      {1 "a", 2 "3", :$value 1}
+      {1 "b", 2 "2", :$value 1}
+      {1 "b", 2 "1", :$value 1}})))
 
 
 (def
