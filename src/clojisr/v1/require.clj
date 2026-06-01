@@ -138,6 +138,7 @@
                                   r-symbols
                                   (select-keys r-symbols refer))
                                 docstrings?)))))
+    (catch java.lang.IllegalStateException e (throw e))
     (catch Exception e
       (log/warn [::require-r-package {:package-symbol package-symbol
                                       :cause (exception-cause e)}])
@@ -147,3 +148,4 @@
 (defn require-r [& packages]
   {:deprecated "Please use `require-r` function from `clojisr.v1.r` directly."}
   (run! require-r-package packages))
+

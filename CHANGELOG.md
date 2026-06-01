@@ -1,7 +1,7 @@
 # Change Log
 All notable changes to this project will be documented in this file. This change log follows the conventions of [keepachangelog.com](http://keepachangelog.com/).
 
-## [unreleased]
+## [1.2.0]
 - all operators are added
 - support for `switch` in codegen
 - `vrkrasana` moved out of `src` (also `vrkrasana` branch is created)
@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file. This change
 - `object-structure` - function returning result of `utils::str` as a string.
 - fixed: partially named list conversion to a map had wrong id for unnamed values
 - `data` - changed to a macro emmiting `defn`, there was a problem with testing interning a symbol.
+- fixed: reused alias rethrows Clojure exception now
 
 ## [1.1.0]
 - added more operators `%/%`, `%%` ,`%in%`, `xor`
