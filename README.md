@@ -4,6 +4,8 @@
 ![example workflow](https://github.com/scicloj/clojisr/actions/workflows/ci.yml/badge.svg)
 # ClojisR
 
+<img src="notebooks/clojisr.svg" alt="clojisr logo" width="100" align="right"/>
+
 Clojure speaks statistics - a [jisr](https://en.wiktionary.org/wiki/جسر) between Clojure and R
 
 

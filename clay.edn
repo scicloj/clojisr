@@ -1,5 +1,6 @@
 {:remote-repo {:git-url "https://github.com/scicloj/clojisr"
                :branch "master"}
+ :favicon "clojisr.png"
  :quarto {:format {:html {:toc true
                           :toc-depth 4
                           :theme [:cosmo "notebooks/custom.scss"]}}
